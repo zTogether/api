@@ -47,6 +47,4 @@ public class TUser {
     @Setter
     private String isUsed;
 
-
-
 }
