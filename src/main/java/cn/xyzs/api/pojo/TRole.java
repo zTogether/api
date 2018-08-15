@@ -21,4 +21,5 @@ public class TRole {
     @Getter
     @Setter
     private String ROLE_ID;
+
 }
