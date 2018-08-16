@@ -1,11 +1,13 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.TUser;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.jdbc.SQL;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +30,15 @@ public interface UserMapper extends Mapper<TUser> {
             }}.toString();
         }
     }
+
+    /**
+     * 根据userid获取用户身份
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/10 17:10
+     * @param: [userId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("SELECT * FROM XY_USER_ROLE xyro,XY_ROLE xr WHERE xyro.ROLE_ID = xr.ROLE_ID AND xyro.USER_ID = #{userId}")
+    public List<Map<String,Object>> getUserRole(String userId) throws SQLException;
 }
