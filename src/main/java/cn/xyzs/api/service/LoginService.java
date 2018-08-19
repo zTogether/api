@@ -10,6 +10,8 @@ import cn.xyzs.api.util.MD5Util;
 import org.apache.catalina.core.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -84,6 +86,9 @@ public class LoginService {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+                    //用户信息
+                    obj.put("tUser",tUser);
+                    //用户角色信息集合（USER_ID：用户id；ROLE_ID：角色id；ROLE_NAME：角色名称；ROLE_TYPE）
                     obj.put("roleList",roleList);
                 } else {
                     code = "401";
@@ -110,6 +115,36 @@ public class LoginService {
                 }
             }
         }
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
+        resultMap.put("resultData",obj);
+        return resultMap;
+    }
+
+    /**
+     * 根据用户角色id获取用户菜单信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/16 14:25
+     * @param: [roleId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getMenuByRole(String roleId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String ,Object> resultMap = new HashMap<>();
+        Map<String ,Object> obj = new HashMap<>();
+        //菜单信息（ROLE_ID,COMPO_ID,OP_ID,COMPO_CODE,COMPO_NAME）
+        List<Map<String, Object>> menuList = null;
+        try {
+            menuList = userMapper.getMenuByRole(roleId);
+            code = "200";
+            msg = "登陆成功";
+            obj.put("menuList",menuList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         resultMap.put("code",code);
         resultMap.put("msg",msg);
         resultMap.put("resultData",obj);
