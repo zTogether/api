@@ -41,4 +41,25 @@ public interface UserMapper extends Mapper<TUser> {
      */
     @Select("SELECT * FROM XY_USER_ROLE xyro,XY_ROLE xr WHERE xyro.ROLE_ID = xr.ROLE_ID AND xyro.USER_ID = #{userId}")
     public List<Map<String,Object>> getUserRole(String userId) throws SQLException;
+
+    /**
+     * 根据角色id查询对应的菜单信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/16 14:10
+     * @param: [roleId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("SELECT \n" +
+            "\txrf.* ,\n" +
+            "\tXY_COMPO.*\n" +
+            "FROM \n" +
+            "\tXY_ROLE_FUC xrf,\n" +
+            "\t(SELECT XY_ROLE.ROLE_ID FROM XY_ROLE WHERE XY_ROLE.ROLE_ID = #{roleId} ) xy,\n" +
+            "\tXY_COMPO\n" +
+            "WHERE \n" +
+            "\txrf.ROLE_ID = xy.ROLE_ID\n" +
+            "AND\n" +
+            "\txrf.COMPO_ID = XY_COMPO.COMPO_ID")
+    public List<Map<String, Object>> getMenuByRole(String roleId) throws SQLException;
 }

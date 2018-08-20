@@ -6,6 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 @Controller
@@ -25,8 +31,21 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping("/login")
-    public Map<String,Object> login(String userTel,String password,String verificationCode,String roleFlag){
-
+    public Map<String,Object> login(String userTel, String password, String verificationCode, String roleFlag){
         return loginService.login(userTel,password,verificationCode,roleFlag);
+    }
+
+    /**
+     * 根据用户角色id获取用户菜单信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/16 14:43
+     * @param: [roleId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getMenuByRole")
+    public Map<String ,Object> getMenuByRole(String roleId){
+        return loginService.getMenuByRole(roleId);
     }
 }
