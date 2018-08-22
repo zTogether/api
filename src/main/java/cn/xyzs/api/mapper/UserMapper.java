@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.TUser;
+import cn.xyzs.api.pojo.XyUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -64,7 +65,26 @@ public interface UserMapper extends Mapper<TUser> {
             "\txrf.COMPO_ID = XY_COMPO.COMPO_ID")
     public List<Map<String, Object>> getMenuByRole(String roleId) throws SQLException;
 
-    @Select("UPDATE FROM XY_USER SET PASSWORD=#{password} WHERE USER_TEL=#{userTel}")
+    //修改密码
+    @Select("UPDATE XY_USER SET PASSWORD=#{password} WHERE USER_TEL=#{userTel}")
     public int changePassword(@Param("userTel") String userTel,@Param("password") String password);
 
+    /**
+     *
+     * @Description:修改个人资料
+     * @author: GeWeiliang
+     * @date: 2018\8\22 0022 9:46
+     * @param: [userTel, userSex, userBthd, idCard, bankIdBc, bankIdIcbc, bankIdCmbc]
+     * @return: int
+     */
+    @Select("UPDATE XY_USER SET USER_TEL=#{userTel} AND  USER_SEX=#{userSex} AND \n"+
+            "\tUSER_BTHD=#{userBthd} AND ID_CARD=#{idCard} AND BANK_ID_BC=#{bankIdBc} \n"+
+            "\tBANK_ID_ICBC=#{bankIdIcbc} AND BANK_ID_CMBC=#{bankIdCmbc}")
+    public int changePersonalInfo(@Param("userTel") String userTel,@Param("userSex") String userSex,
+                                  @Param("userBthd") String userBthd,@Param("idCard") String idCard,
+                                  @Param("bankIdBc") String bankIdBc,@Param("bankIdIcbc") String bankIdIcbc,
+                                  @Param("bankIdCmbc") String bankIdCmbc);
+
+    @Select("SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}")
+    public Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 }
