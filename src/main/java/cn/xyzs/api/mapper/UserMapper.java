@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.TUser;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.jdbc.SQL;
@@ -62,4 +63,8 @@ public interface UserMapper extends Mapper<TUser> {
             "AND\n" +
             "\txrf.COMPO_ID = XY_COMPO.COMPO_ID")
     public List<Map<String, Object>> getMenuByRole(String roleId) throws SQLException;
+
+    @Select("UPDATE FROM XY_USER SET PASSWORD=#{password} WHERE USER_TEL=#{userTel}")
+    public int changePassword(@Param("userTel") String userTel,@Param("password") String password);
+
 }
