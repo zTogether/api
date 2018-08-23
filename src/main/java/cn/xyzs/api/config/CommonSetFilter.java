@@ -19,7 +19,7 @@ public class CommonSetFilter implements Filter{
         // 指定允许其他域名访问
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         // 响应类型
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST,GET");
         // 响应头设置
         httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type");
 

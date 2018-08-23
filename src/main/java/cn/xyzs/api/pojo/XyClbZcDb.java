@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.util.List;
 
 @Table(name = "XY_CLB_ZC_DB")
 public class XyClbZcDb {
@@ -23,19 +24,19 @@ public class XyClbZcDb {
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_IN")
-    private Integer zcPriceIn;
+    private String zcPriceIn;
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_LOOK")
-    private Integer zcPirceLook;
+    private String zcPirceLook;
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_OUT")
-    private Integer zcPriceOut;
+    private String zcPriceOut;
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_HD")
-    private Integer zcPriceHd;
+    private String zcPriceHd;
     @Setter
     @Getter
     @Column(name = "ZC_BRAND")
@@ -96,6 +97,10 @@ public class XyClbZcDb {
     @Getter
     @Column(name = "ZC_VERSION")
     private String zcVersion;
+
+    @Setter
+    @Getter
+    private List<XyVal> xyZcAreas;
 
 
 }
