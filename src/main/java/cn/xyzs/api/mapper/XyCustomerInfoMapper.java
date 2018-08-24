@@ -58,35 +58,6 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
     public List<Map<String, Object>> getCustomerEngineeringInfo(String ctrTel) throws SQLException;
 
     /**
-     *
-     * @Description: 根据客户号获取客户信息
-     * @author: GeWeiliang
-     * @date: 2018\8\23 0023 11:13
-     * @param: [ctrCode]
-     * @return: java.util.Map<java.lang.String,java.lang.Object>
-     */
-    @Select("SELECT " +
-            "xci.CTR_CODE ctrCode,xci.CTR_CRT_DATE ctrCrtDate,\"NVL\"(xci.CTR_NAME,'-') ctrName," +
-            "xci.CTR_TEL ctrTel,\"NVL\"(xci.CTR_CARDID,'-') ctr_cardid,\"NVL\"(xci.CTR_ADDR,'-') ctrAddr," +
-            "\"NVL\"(xci.CTR_AREA,-1) ctrArea,\"NVL\"(xci.CTR_STRUCTURE,'-') ctrStructure,\"NVL\"(xci.CTR_FLOOR,-1) ctrFloor," +
-            "\"NVL\"(xci.CTR_LIFT,'-') ctrLift,\"NVL\"(xci.CTR_PRJ_TYPE,'-') ctrPrjType,\"NVL\"(xci.CTR_QT_RANGE,'-') ctrQtRange," +
-            "\"NVL\"(xci.CTR_QT_TYPE,'-') ctrQtType,\"NVL\"(xci.RG_VER_CODE,'-') rgVerCode," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}), '-') ctrWaiter," +
-            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrOrg," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_SJS=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ctrSjs," +
-            "\"NVL\"(xci.CTR_GCJL,'-') CtrGctl," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CtrCldd," +
-            "\"NVL\"(xci.CTR_ROWID,'-') ctrRowid,\"NVL\"(xci.CTR_AREA_MA,'-') ctrAreaMa," +
-            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_PRO_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrProOrg," +
-            "xci.CTR_KG_DATE ctrKgDate," +
-            "\"NVL\"(xci.CTR_STATU,'-') ctrStatu,\"NVL\"(xci.CTR_DRAW,'-') ctrDraw,\"NVL\"(xci.DRAW_STATU,'-') drawStatu," +
-            "\"NVL\"(xci.CTR_X,'-') ctrX," +
-            "\"NVL\"(xci.CTR_Y,'-') ctrY,\"NVL\"(xci.CTR_MAP_VERSION,'-') ctrMapVersion" +
-            " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}")
-//    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode}")
-    public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode")String ctrCode);
-
-    /**
      * 用户角色为E类型是查询所拥有的客户
      * @Description:
      * @author: zheng shuai
@@ -215,4 +186,32 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "WHERE\n" +
             "\tRN BETWEEN #{startNum} AND #{endNum}")
     public List<Map<String,Object>> getCustomerInfoByRoleTypeR(@Param("userId") String userId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
+
+     /**
+     * @Description: 根据客户号获取客户信息
+     * @author: GeWeiliang
+     * @date: 2018\8\23 0023 11:13
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("SELECT " +
+            "xci.CTR_CODE ctrCode,xci.CTR_CRT_DATE ctrCrtDate,\"NVL\"(xci.CTR_NAME,'-') ctrName," +
+            "xci.CTR_TEL ctrTel,\"NVL\"(xci.CTR_CARDID,'-') ctr_cardid,\"NVL\"(xci.CTR_ADDR,'-') ctrAddr," +
+            "\"NVL\"(xci.CTR_AREA,-1) ctrArea,\"NVL\"(xci.CTR_STRUCTURE,'-') ctrStructure,\"NVL\"(xci.CTR_FLOOR,-1) ctrFloor," +
+            "\"NVL\"(xci.CTR_LIFT,'-') ctrLift,\"NVL\"(xci.CTR_PRJ_TYPE,'-') ctrPrjType,\"NVL\"(xci.CTR_QT_RANGE,'-') ctrQtRange," +
+            "\"NVL\"(xci.CTR_QT_TYPE,'-') ctrQtType,\"NVL\"(xci.RG_VER_CODE,'-') rgVerCode," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}), '-') ctrWaiter," +
+            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrOrg," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_SJS=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ctrSjs," +
+            "\"NVL\"(xci.CTR_GCJL,'-') CtrGctl," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CtrCldd," +
+            "\"NVL\"(xci.CTR_ROWID,'-') ctrRowid,\"NVL\"(xci.CTR_AREA_MA,'-') ctrAreaMa," +
+            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_PRO_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrProOrg," +
+            "xci.CTR_KG_DATE ctrKgDate," +
+            "\"NVL\"(xci.CTR_STATU,'-') ctrStatu,\"NVL\"(xci.CTR_DRAW,'-') ctrDraw,\"NVL\"(xci.DRAW_STATU,'-') drawStatu," +
+            "\"NVL\"(xci.CTR_X,'-') ctrX," +
+            "\"NVL\"(xci.CTR_Y,'-') ctrY,\"NVL\"(xci.CTR_MAP_VERSION,'-') ctrMapVersion" +
+            " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}")
+//    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode}")
+    public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode") String ctrCode);
 }

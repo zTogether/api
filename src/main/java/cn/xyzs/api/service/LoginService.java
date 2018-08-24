@@ -7,8 +7,6 @@ import cn.xyzs.api.pojo.TUser;
 import cn.xyzs.api.pojo.XyGcbGrxx;
 import cn.xyzs.api.util.MD5Util;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
