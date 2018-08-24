@@ -8,6 +8,7 @@ import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.pojo.XyClbZcDb;
 import cn.xyzs.api.pojo.XyVal;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -195,7 +196,7 @@ public class GoodService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String,Object> addShoppingCart(String ctrCode,String opUserid,String zcCode,Double zcQty,String zcArea,String zcMark){
+    public Map<String,Object> addShoppingCart(String ctrCode,String opUserid,String zcCode,String zcQty,String zcArea,String zcMark){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
@@ -205,10 +206,10 @@ public class GoodService {
             for (Map<String, Object> map : zcList) {
                 xyClbZcDb.setZcType((String) map.get("ZC_TYPE"));
                 xyClbZcDb.setZcName((String) map.get("ZC_NAME"));
-                xyClbZcDb.setZcPriceIn((Double) map.get("ZC_PRICE_IN"));
-                xyClbZcDb.setZcPirceLook((Double) map.get("ZC_PRICE_LOOK"));
-                xyClbZcDb.setZcPriceOut((Double) map.get("ZC_PRICE_OUT"));
-                xyClbZcDb.setZcPriceHd((Double) map.get("ZC_PRICE_HD"));
+                xyClbZcDb.setZcPriceIn((String) map.get("ZC_PRICE_IN"));
+                xyClbZcDb.setZcPirceLook((String) map.get("ZC_PRICE_LOOK"));
+                xyClbZcDb.setZcPriceOut((String) map.get("ZC_PRICE_OUT"));
+                xyClbZcDb.setZcPriceHd((String) map.get("ZC_PRICE_HD"));
                 xyClbZcDb.setZcBrand((String)map.get("ZC_BRAND"));
                 xyClbZcDb.setZcSup((String)map.get("ZC_SUP"));
                 xyClbZcDb.setZcSpec((String) map.get("ZC_SPEC"));
@@ -217,7 +218,7 @@ public class GoodService {
                 xyClbZcDb.setZcStyle((String)map.get("ZC_STYLE"));
                 xyClbZcDb.setZcArea(zcArea);
                 xyClbZcDb.setZcUnit((String) map.get("ZC_UNIT"));
-                xyClbZcDb.setZcCyc((Integer) map.get("ZC_CYC"));
+                xyClbZcDb.setZcCyc((String) map.get("ZC_CYC"));
             }
             xyClbZcShoppingMapper.addShoppingCart(ctrCode,opUserid,zcCode,xyClbZcDb.getZcName(),xyClbZcDb.getZcType(),
                     zcQty,xyClbZcDb.getZcPriceIn(),xyClbZcDb.getZcPriceOut(),xyClbZcDb.getZcBrand(),xyClbZcDb.getZcSup(),
@@ -270,7 +271,7 @@ public class GoodService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String,Object> updateGoods(String rowId,Integer zcQty,String zcArea,String zcMark){
+    public Map<String,Object> updateGoods(String rowId,String zcQty,String zcArea,String zcMark){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";

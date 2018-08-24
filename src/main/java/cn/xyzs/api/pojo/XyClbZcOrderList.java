@@ -31,15 +31,15 @@ public class XyClbZcOrderList {
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_IN")
-    private Integer zcPriceIn;
+    private String zcPriceIn;
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_OUT")
-    private Integer zcPriceOut;
+    private String zcPriceOut;
     @Setter
     @Getter
     @Column(name = "ZC_QTY")
-    private Integer zcQty;
+    private String zcQty;
     @Setter
     @Getter
     @Column(name = "ZC_BRAND")

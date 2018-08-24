@@ -40,9 +40,9 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "ZC_SUP,ZC_SPEC,ZC_MATERIAL,ZC_COLOR,ZC_UNIT,ZC_MARK,ZC_CYC,ZC_AREA)\n" +
             "VALUES(ctrCode,opUserid,zcCode,zcName,zcType,zcQty,zcPriceIn,zcPriceOut,zcBrand,zcSup,zcSpec," +
             "zcMaterial,zcColor,zcUnit,zcMark,zcCyc,zcArea)")
-    int addShoppingCart(String ctrCode,String opUserid,String zcCode,String zcName,String zcType,Double zcQty,
-                        Double zcPriceIn,Double zcPriceOut,String zcBrand,String zcSup,String zcSpec,String zcMaterial,
-                        String zcColor,String zcUnit,String zcMark,Integer zcCyc,String zcArea)throws SQLException;
+    int addShoppingCart(String ctrCode,String opUserid,String zcCode,String zcName,String zcType,String zcQty,
+                        String zcPriceIn,String zcPriceOut,String zcBrand,String zcSup,String zcSpec,String zcMaterial,
+                        String zcColor,String zcUnit,String zcMark,String zcCyc,String zcArea)throws SQLException;
 
     /**
      *
@@ -75,10 +75,10 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @return: int
      */
     @UpdateProvider(type = updateGoods.class,method = "updateGoods")
-    int updateGoods(@Param("rowId") String rowId,@Param("zcQty") Integer zcQty,
+    int updateGoods(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
                     @Param("zcArea") String zcArea,@Param("zcMark") String zcMark) throws SQLException;
     class updateGoods{
-        public String updateGoods(@Param("rowId") String rowId,@Param("zcQty")Integer zcQty,
+        public String updateGoods(@Param("rowId") String rowId,@Param("zcQty")String zcQty,
                                   @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_SHOPPING");
