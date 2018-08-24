@@ -1,9 +1,8 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.XyCustomerInfoMapper;
+import cn.xyzs.api.pojo.XyCustomerInfo;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -34,5 +33,21 @@ public class XyCustomerInfoService {
         resultMap.put("msg",msg);
         resultMap.put("resultData",obj);
         return resultMap;
+    }
+
+
+    /**
+     *
+     * @Description: 根据客户档案号获取客户信息
+     * @author: GeWeiliang
+     * @date: 2018\8\23 0023 11:12
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> getCustInfoByCtrCode(String ctrCode){
+        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> custInfo = xyCustomerInfoMapper.getCustInfoByCtrCode(ctrCode);
+        map.put("customerInfo",custInfo);
+        return map;
     }
 }

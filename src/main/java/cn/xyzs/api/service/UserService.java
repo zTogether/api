@@ -1,7 +1,6 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.UserMapper;
-import cn.xyzs.api.pojo.XyUser;
 import cn.xyzs.api.util.MD5Util;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

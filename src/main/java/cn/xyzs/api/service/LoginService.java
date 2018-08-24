@@ -147,24 +147,5 @@ public class LoginService {
         resultMap.put("resultData", obj);
         return resultMap;
     }
-    /***
-     *
-     * @Description:修改密码
-     * @author: GeWeiliang
-     * @date: 2018\8\16 0016 14:37
-     * @param:
-     * @return:
-     */
-    public Map<String,Object> resetPassword(String userTel,String password){
-        int result = userMapper.changePassword(userTel, MD5Util.md5Password(password));
-        Map<String,Object> map = new HashMap<String,Object>();
-        if(result==1){
-            map.put("code","200");
-            map.put("msg","密码修改成功");
-        }else{
-            map.put("code","400");
-            map.put("msg","修改失败");
-        }
-        return map;
-    }
+
 }

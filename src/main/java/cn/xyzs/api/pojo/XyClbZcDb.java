@@ -24,19 +24,19 @@ public class XyClbZcDb {
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_IN")
-    private String zcPriceIn;
+    private Double zcPriceIn;
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_LOOK")
-    private String zcPirceLook;
+    private Double zcPirceLook;
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_OUT")
-    private String zcPriceOut;
+    private Double zcPriceOut;
     @Setter
     @Getter
     @Column(name = "ZC_PRICE_HD")
-    private String zcPriceHd;
+    private Double zcPriceHd;
     @Setter
     @Getter
     @Column(name = "ZC_BRAND")

@@ -71,7 +71,7 @@ public interface UserMapper extends Mapper<TUser> {
 
     /**
      *
-     * @Description:修改个人资料
+     * @Description: 修改个人资料
      * @author: GeWeiliang
      * @date: 2018\8\22 0022 9:46
      * @param: [userTel, userSex, userBthd, idCard, bankIdBc, bankIdIcbc, bankIdCmbc]
@@ -87,4 +87,6 @@ public interface UserMapper extends Mapper<TUser> {
 
     @Select("SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}")
     public Map<String,Object> getUserInfo(@Param("userTel") String userTel);
+
+
 }
