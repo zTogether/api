@@ -1,6 +1,5 @@
 package cn.xyzs.api.service;
 
-
 import cn.xyzs.api.mapper.XyClbZcDbMapper;
 import cn.xyzs.api.mapper.XyClbZcFlMapper;
 import cn.xyzs.api.mapper.XyCustomerInfoMapper;
@@ -132,7 +131,6 @@ public class GoodService {
         return list;
     }
 
-
     public Map<String,Object> getCustomerInfoByUserId(String userId,String startNum,String endNum,String roleType){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
@@ -150,17 +148,17 @@ public class GoodService {
             msg = "成功";
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-        resultMap.put("code",code);
-        resultMap.put("msg",msg);
-        resultMap.put("resultData",obj);
-    }
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
         return resultMap;
-}
+    }
 
     /**
-     *根据客户号查询购物车
-     * @Description:
+     *
+     * @Description: 根据客户号查询购物车
      * @author: GeWeiliang
      * @date: 2018\8\23 0023 15:05
      * @param: [ctrCOde]
@@ -188,6 +186,55 @@ public class GoodService {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
             resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     *
+     * @Description: 添加购物车
+     * @author: GeWeiliang
+     * @date: 2018\8\24 0024 9:30
+     * @param: [ctrCode, opUserid, zcCode, zcQty, zcArea, zcMark]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> addShoppingCart(String ctrCode,String opUserid,String zcCode,String zcQty,String zcArea,String zcMark){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> zcList = xyClbZcShoppingMapper.queryZcDb(zcCode);
+            XyClbZcDb xyClbZcDb = new XyClbZcDb();
+            for (Map<String, Object> map : zcList) {
+                xyClbZcDb.setZcType((String) map.get("ZC_TYPE"));
+                xyClbZcDb.setZcName((String) map.get("ZC_NAME"));
+                xyClbZcDb.setZcPriceIn((String) map.get("ZC_PRICE_IN"));
+                xyClbZcDb.setZcPirceLook((String) map.get("ZC_PRICE_LOOK"));
+                xyClbZcDb.setZcPriceOut((String) map.get("ZC_PRICE_OUT"));
+                xyClbZcDb.setZcPriceHd((String) map.get("ZC_PRICE_HD"));
+                xyClbZcDb.setZcBrand((String)map.get("ZC_BRAND"));
+                xyClbZcDb.setZcSup((String)map.get("ZC_SUP"));
+                xyClbZcDb.setZcSpec((String) map.get("ZC_SPEC"));
+                xyClbZcDb.setZcMaterial((String)map.get("ZC_MATERIAL"));
+                xyClbZcDb.setZcColor((String)map.get("ZC_COLOR"));
+                xyClbZcDb.setZcStyle((String)map.get("ZC_STYLE"));
+                xyClbZcDb.setZcArea(zcArea);
+                xyClbZcDb.setZcUnit((String) map.get("ZC_UNIT"));
+                xyClbZcDb.setZcCyc((String) map.get("ZC_CYC"));
+            }
+            xyClbZcShoppingMapper.addShoppingCart(ctrCode,opUserid,zcCode,xyClbZcDb.getZcName(),xyClbZcDb.getZcType(),
+                    zcQty,xyClbZcDb.getZcPriceIn(),xyClbZcDb.getZcPriceOut(),xyClbZcDb.getZcBrand(),xyClbZcDb.getZcSup(),
+                    xyClbZcDb.getZcSpec(),xyClbZcDb.getZcMaterial(),xyClbZcDb.getZcColor(),xyClbZcDb.getZcUnit(),zcMark,
+                    xyClbZcDb.getZcCyc(),zcArea);
+
+            code = "200";
+            msg = "已加入购物车";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
         }
         return resultMap;
     }
@@ -227,7 +274,7 @@ public class GoodService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String,Object> updateGoods(String rowId,Integer zcQty,String zcArea,String zcMark){
+    public Map<String,Object> updateGoods(String rowId,String zcQty,String zcArea,String zcMark){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
@@ -235,54 +282,6 @@ public class GoodService {
             xyClbZcShoppingMapper.updateGoods(rowId,zcQty,zcArea,zcMark);
             code = "200";
             msg = "更改成功";
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            resultMap.put("code",code);
-            resultMap.put("msg",msg);
-        }
-        return resultMap;
-    }
-    /**
-     *
-     * @Description: 添加购物车
-     * @author: GeWeiliang
-     * @date: 2018\8\24 0024 9:30
-     * @param: [ctrCode, opUserid, zcCode, zcQty, zcArea, zcMark]
-     * @return: java.util.Map<java.lang.String,java.lang.Object>
-     */
-    @Transactional
-    public Map<String,Object> addShoppingCart(String ctrCode,String opUserid,String zcCode,Double zcQty,String zcArea,String zcMark){
-        Map<String,Object> resultMap = new HashMap<>();
-        String code = "500";
-        String msg = "系统异常";
-        try{
-            List<Map<String,Object>> zcList = xyClbZcShoppingMapper.queryZcDb(zcCode);
-            XyClbZcDb xyClbZcDb = new XyClbZcDb();
-            for (Map<String, Object> map : zcList) {
-                xyClbZcDb.setZcType((String) map.get("ZC_TYPE"));
-                xyClbZcDb.setZcName((String) map.get("ZC_NAME"));
-                xyClbZcDb.setZcPriceIn((Double) map.get("ZC_PRICE_IN"));
-                xyClbZcDb.setZcPirceLook((Double) map.get("ZC_PRICE_LOOK"));
-                xyClbZcDb.setZcPriceOut((Double) map.get("ZC_PRICE_OUT"));
-                xyClbZcDb.setZcPriceHd((Double) map.get("ZC_PRICE_HD"));
-                xyClbZcDb.setZcBrand((String)map.get("ZC_BRAND"));
-                xyClbZcDb.setZcSup((String)map.get("ZC_SUP"));
-                xyClbZcDb.setZcSpec((String) map.get("ZC_SPEC"));
-                xyClbZcDb.setZcMaterial((String)map.get("ZC_MATERIAL"));
-                xyClbZcDb.setZcColor((String)map.get("ZC_COLOR"));
-                xyClbZcDb.setZcStyle((String)map.get("ZC_STYLE"));
-                xyClbZcDb.setZcArea(zcArea);
-                xyClbZcDb.setZcUnit((String) map.get("ZC_UNIT"));
-                xyClbZcDb.setZcCyc((Integer) map.get("ZC_CYC"));
-            }
-            xyClbZcShoppingMapper.addShoppingCart(ctrCode,opUserid,zcCode,xyClbZcDb.getZcName(),xyClbZcDb.getZcType(),
-                    zcQty,xyClbZcDb.getZcPriceIn(),xyClbZcDb.getZcPriceOut(),xyClbZcDb.getZcBrand(),xyClbZcDb.getZcSup(),
-                    xyClbZcDb.getZcSpec(),xyClbZcDb.getZcMaterial(),xyClbZcDb.getZcColor(),xyClbZcDb.getZcUnit(),zcMark,
-                    xyClbZcDb.getZcCyc(),zcArea);
-
-            code = "200";
-            msg = "已加入购物车";
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
