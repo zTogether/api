@@ -36,6 +36,7 @@ public class GoodController {
     @ResponseBody
     @RequestMapping("/sortFilter")
     public Map<String, Object> test(String zcflCode,String startNum,String endNum){
+
         return goodService.sortFilter(zcflCode,startNum,endNum);
     }
 
@@ -93,5 +94,11 @@ public class GoodController {
     @ResponseBody
     public Map<String,Object> updateGoods(String rowId,Integer zcQty,String zcArea,String zcMark){
         return goodService.updateGoods(rowId,zcQty,zcArea,zcMark);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getCustomerInfoByUserId")
+    public Map<String,Object> getCustomerInfoByUserId(String userId,String startNum,String endNum,String roleType){
+        return goodService.getCustomerInfoByUserId(userId,startNum,endNum,roleType);
     }
 }

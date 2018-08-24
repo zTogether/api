@@ -1,11 +1,13 @@
 package cn.xyzs.api.service;
 
+import cn.xyzs.api.mapper.XyClbZcDbMapper;
+import cn.xyzs.api.mapper.XyClbZcFlMapper;
+import cn.xyzs.api.mapper.XyCustomerInfoMapper;
+import cn.xyzs.api.mapper.XyValMapper;
 import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.pojo.XyClbZcDb;
-import cn.xyzs.api.pojo.XyClbZcShopping;
 import cn.xyzs.api.pojo.XyVal;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -25,6 +27,9 @@ public class GoodService {
 
     @Resource
     private XyValMapper xyValMapper;
+
+    @Resource
+    private XyCustomerInfoMapper xyCustomerInfoMapper;
 
     @Resource
     private XyClbZcShoppingMapper xyClbZcShoppingMapper;
@@ -105,6 +110,7 @@ public class GoodService {
                 } else {
                     test(YSubdirectory,zcflCodeList);
                 }
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,6 +125,31 @@ public class GoodService {
             list.add(b[i]);
         }
         return list;
+    }
+
+    public Map<String,Object> getCustomerInfoByUserId(String userId,String startNum,String endNum,String roleType){
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String,Object>> CustomerInfoList = null;
+            if ("E".equals(roleType)){
+                CustomerInfoList = xyCustomerInfoMapper.getCustomerInfoByRoleTypeE(userId,startNum,endNum);
+            } else if("R".equals(roleType)){
+                CustomerInfoList = xyCustomerInfoMapper.getCustomerInfoByRoleTypeR(userId,startNum,endNum);
+            }
+            obj.put("CustomerInfoList",CustomerInfoList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
     }
 
     /**

@@ -85,4 +85,134 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}")
 //    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode}")
     public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode")String ctrCode);
+
+    /**
+     * 用户角色为E类型是查询所拥有的客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/24 16:06
+     * @param: [userId, startNum, endNum]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tA.*,\n" +
+            "\t\tROWNUM RN \n" +
+            "\tFROM\n" +
+            "\t\t(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tT.CTR_CODE,\n" +
+            "\t\t\tT.CTR_NAME,\n" +
+            "\t\t\tT.CTR_TEL,\n" +
+            "\t\t\tT.CTR_ADDR,\n" +
+            "\t\t\tT.CTR_CRT_DATE,\n" +
+            "\t\t\tT.CTR_CARDID,\n" +
+            "\t\t\tT.CTR_AREA,\n" +
+            "\t\t\tU1.USER_NAME JDRY_NAME,\n" +
+            "\t\t\tU2.USER_NAME SJS_NAME,\n" +
+            "\t\t\tU3.USER_NAME GCJL_NAME,\n" +
+            "\t\t\tU4.USER_NAME CLDD_NAME,\n" +
+            "\t\t\to1.org_name FWJG,\n" +
+            "\t\t\to2.org_name SGJG \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CUSTOMER_INFO T\n" +
+            "\t\t\tLEFT JOIN XY_USER U1 ON T.CTR_WAITER = U1.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U2 ON T.Ctr_Sjs = U2.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U3 ON T.Ctr_Gcjl = U3.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U4 ON T.Ctr_Cldd = U4.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
+            "\t\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tT.CTR_WAITER = #{userId}\n" +
+            "\t\t\tOR T.CTR_SJS = #{userId}\n" +
+            "\t\t\tOR T.CTR_GCJL = #{userId}\n" +
+            "\t\t\tOR T.CTR_CLDD = #{userId}\n" +
+            "\t\t) A \n" +
+            "\t) \n" +
+            "WHERE RN BETWEEN #{startNum} AND #{endNum}")
+    public List<Map<String,Object>> getCustomerInfoByRoleTypeE(@Param("userId") String userId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
+
+    @Select("SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tA.*,\n" +
+            "\t\tROWNUM RN \n" +
+            "\tFROM\n" +
+            "\t\t(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tT.CTR_CODE,\n" +
+            "\t\t\tT.CTR_NAME,\n" +
+            "\t\t\tT.CTR_TEL,\n" +
+            "\t\t\tT.CTR_ADDR,\n" +
+            "\t\t\tT.CTR_CRT_DATE,\n" +
+            "\t\t\tT.CTR_CARDID,\n" +
+            "\t\t\tT.CTR_AREA,\n" +
+            "\t\t\tU1.USER_NAME JDRY_NAME,\n" +
+            "\t\t\tU2.USER_NAME SJS_NAME,\n" +
+            "\t\t\tU3.USER_NAME GCJL_NAME,\n" +
+            "\t\t\tU4.USER_NAME CLDD_NAME,\n" +
+            "\t\t\to1.org_name FWJG,\n" +
+            "\t\t\to2.org_name SGJG \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CUSTOMER_INFO T\n" +
+            "\t\t\tLEFT JOIN XY_USER U1 ON T.CTR_WAITER = U1.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U2 ON T.Ctr_Sjs = U2.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U3 ON T.Ctr_Gcjl = U3.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U4 ON T.Ctr_Cldd = U4.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
+            "\t\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
+            "\t\tWHERE\n" +
+            "\t\t\t(\n" +
+            "\t\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId} ) \n" +
+            "\t\t\t\tAND (\n" +
+            "\t\t\t\t\tEXISTS (\n" +
+            "\t\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t\t1 \n" +
+            "\t\t\t\t\tFROM\n" +
+            "\t\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\t\tWHERE\n" +
+            "\t\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
+            "\t\t\t\t\t\tAND B.ROLE_ID = #{userId} \n" +
+            "\t\t\t\t\t\tAND T.CTR_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t\t) \n" +
+            "\t\t\t\t\tOR EXISTS (\n" +
+            "\t\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t\t1 \n" +
+            "\t\t\t\t\tFROM\n" +
+            "\t\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\t\tWHERE\n" +
+            "\t\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
+            "\t\t\t\t\t\tAND B.ROLE_ID = #{userId} \n" +
+            "\t\t\t\t\t\tAND T.CTR_PRO_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t\t) \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t) \n" +
+            "\t\t\tOR EXISTS (\n" +
+            "\t\t\tSELECT\n" +
+            "\t\t\t\t1 \n" +
+            "\t\t\tFROM\n" +
+            "\t\t\t\tXY_USER_RELATION D \n" +
+            "\t\t\tWHERE\n" +
+            "\t\t\t\tD.LEADER_ID = #{userId} \n" +
+            "\t\t\t\tAND (\n" +
+            "\t\t\t\t\tD.FOLLOWER_ID = T.CTR_WAITER \n" +
+            "\t\t\t\t\tOR D.FOLLOWER_ID = T.CTR_SJS \n" +
+            "\t\t\t\t\tOR D.FOLLOWER_ID = T.CTR_GCJL \n" +
+            "\t\t\t\t\tOR D.FOLLOWER_ID = T.CTR_CLDD \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t) \n" +
+            "\t\t) A \n" +
+            "\t) \n" +
+            "WHERE\n" +
+            "\tRN BETWEEN #{startNum} AND #{endNum}")
+    public List<Map<String,Object>> getCustomerInfoByRoleTypeR(@Param("userId") String userId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 }
