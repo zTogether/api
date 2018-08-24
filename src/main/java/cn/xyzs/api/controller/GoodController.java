@@ -64,7 +64,7 @@ public class GoodController {
      */
     @RequestMapping("/addShoppingCart")
     @ResponseBody
-    public Map<String,Object> addShoppingCart(String ctrCode,String opUserid,String zcCode,Double zcQty,String zcArea,String zcMark){
+    public Map<String,Object> addShoppingCart(String ctrCode,String opUserid,String zcCode,String zcQty,String zcArea,String zcMark){
         return goodService.addShoppingCart(ctrCode,opUserid,zcCode,zcQty,zcArea,zcMark);
     }
 
@@ -92,7 +92,7 @@ public class GoodController {
      */
     @RequestMapping("/updateGoods")
     @ResponseBody
-    public Map<String,Object> updateGoods(String rowId,Integer zcQty,String zcArea,String zcMark){
+    public Map<String,Object> updateGoods(String rowId,String zcQty,String zcArea,String zcMark){
         return goodService.updateGoods(rowId,zcQty,zcArea,zcMark);
     }
 
