@@ -169,7 +169,6 @@ public class GoodService {
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
-        double sum;
         try{
             List<Map<String,Object>> shoppingList = xyClbZcShoppingMapper.showZcShopping(ctrCode);
             for (Map<String, Object> map : shoppingList) {

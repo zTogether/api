@@ -16,8 +16,6 @@ public class GoodController {
     @Resource
     private GoodService goodService;
 
-    @Resource
-    private XyCustomerInfoService xyCustomerInfoService;
 
     /**
      * 获取下级目录
