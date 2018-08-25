@@ -169,9 +169,9 @@ public class GoodService {
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
+        double sum;
         try{
             List<Map<String,Object>> shoppingList = xyClbZcShoppingMapper.showZcShopping(ctrCode);
-            System.err.print(shoppingList);
             for (Map<String, Object> map : shoppingList) {
                 String area = xyClbZcShoppingMapper.getArea((String)map.get("ZC_TYPE"),(String)map.get("ZC_CODE"));
                 List<XyVal> list = xyValMapper.getZcAreaList(conversionList(area));
