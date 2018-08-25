@@ -36,13 +36,14 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @return: int
      */
     @Insert("INSERT INTO \n" +
-            "XY_CLB_ZC_SHOPPING(CTR_CODE,OP_USERID,ZC_CODE,ZC_NAME,ZC_TYPE,ZC_QTY,ZC_PRICE_IN,ZC_PRICE_OUT,ZC_BRAND," +
+            "XY_CLB_ZC_SHOPPING(ROW_ID,CTR_CODE,OP_USERID,ZC_CODE,ZC_NAME,ZC_TYPE,ZC_QTY,ZC_PRICE_IN,ZC_PRICE_OUT,ZC_BRAND," +
             "ZC_SUP,ZC_SPEC,ZC_MATERIAL,ZC_COLOR,ZC_UNIT,ZC_MARK,ZC_CYC,ZC_AREA)\n" +
-            "VALUES(ctrCode,opUserid,zcCode,zcName,zcType,zcQty,zcPriceIn,zcPriceOut,zcBrand,zcSup,zcSpec," +
-            "zcMaterial,zcColor,zcUnit,zcMark,zcCyc,zcArea)")
-    int addShoppingCart(String ctrCode,String opUserid,String zcCode,String zcName,String zcType,String zcQty,
-                        String zcPriceIn,String zcPriceOut,String zcBrand,String zcSup,String zcSpec,String zcMaterial,
-                        String zcColor,String zcUnit,String zcMark,String zcCyc,String zcArea)throws SQLException;
+            "VALUES(sys_guid(),#{ctrCode,jdbcType=VARCHAR},#{opUserid,jdbcType=VARCHAR},#{zcCode,jdbcType=VARCHAR},#{zcName,jdbcType=VARCHAR}," +
+            "#{zcType,jdbcType=VARCHAR},#{zcQty,jdbcType=VARCHAR},#{zcPriceIn,jdbcType=VARCHAR},#{zcPriceOut,jdbcType=VARCHAR},#{zcBrand,jdbcType=VARCHAR},#{zcSup,jdbcType=VARCHAR},#{zcSpec,jdbcType=VARCHAR}," +
+            "#{zcMaterial,jdbcType=VARCHAR},#{zcColor,jdbcType=VARCHAR},#{zcUnit,jdbcType=VARCHAR},#{zcMark,jdbcType=VARCHAR},#{zcCyc,jdbcType=VARCHAR},#{zcArea,jdbcType=VARCHAR})")
+    int addShoppingCart(@Param("ctrCode") String ctrCode,@Param("opUserid") String opUserid,@Param("zcCode") String zcCode,@Param("zcName") String zcName,@Param("zcType") String zcType,@Param("zcQty") String zcQty,
+                        @Param("zcPriceIn") String zcPriceIn,@Param("zcPriceOut") String zcPriceOut,@Param("zcBrand") String zcBrand, @Param("zcSup")String zcSup,@Param("zcSpec") String zcSpec,@Param("zcMaterial") String zcMaterial,
+                        @Param("zcColor") String zcColor,@Param("zcUnit") String zcUnit,@Param("zcMark")String zcMark,@Param("zcCyc") String zcCyc,@Param("zcArea") String zcArea)throws SQLException;
 
     /**
      *

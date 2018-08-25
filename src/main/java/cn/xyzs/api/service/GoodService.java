@@ -209,10 +209,10 @@ public class GoodService {
             for (Map<String, Object> map : zcList) {
                 xyClbZcDb.setZcType((String) map.get("ZC_TYPE"));
                 xyClbZcDb.setZcName((String) map.get("ZC_NAME"));
-                xyClbZcDb.setZcPriceIn((String) map.get("ZC_PRICE_IN"));
-                xyClbZcDb.setZcPirceLook((String) map.get("ZC_PRICE_LOOK"));
-                xyClbZcDb.setZcPriceOut((String) map.get("ZC_PRICE_OUT"));
-                xyClbZcDb.setZcPriceHd((String) map.get("ZC_PRICE_HD"));
+                xyClbZcDb.setZcPriceIn(String.valueOf(map.get("ZC_PRICE_IN")));
+                xyClbZcDb.setZcPirceLook(String.valueOf(map.get("ZC_PRICE_LOOK")));
+                xyClbZcDb.setZcPriceOut(String.valueOf(map.get("ZC_PRICE_OUT")));
+                xyClbZcDb.setZcPriceHd(String.valueOf(map.get("ZC_PRICE_HD")));
                 xyClbZcDb.setZcBrand((String)map.get("ZC_BRAND"));
                 xyClbZcDb.setZcSup((String)map.get("ZC_SUP"));
                 xyClbZcDb.setZcSpec((String) map.get("ZC_SPEC"));
