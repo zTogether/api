@@ -84,13 +84,13 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
                                   @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_SHOPPING");
-                if (zcQty!=null){
+                if (zcQty!=null && zcQty!=""){
                     SET("ZC_QTY = #{zcQty}");
                 }
-                if (zcArea!=null){
+                if (zcArea!=null && zcQty!=""){
                     SET("ZC_AREA = #{zcArea}");
                 }
-                if (zcMark!=null){
+                if (zcMark!=null && zcQty!=""){
                     SET("ZC_MARK = #{zcMark}");
                 }
                 WHERE("ROW_ID = #{rowId}");
