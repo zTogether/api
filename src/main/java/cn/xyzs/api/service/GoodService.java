@@ -131,6 +131,14 @@ public class GoodService {
         return list;
     }
 
+    /**
+     * 查询用户所拥有的客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/25 16:52
+     * @param: [userId, startNum, endNum, roleType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public Map<String,Object> getCustomerInfoByUserId(String userId,String startNum,String endNum,String roleType){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
@@ -175,6 +183,11 @@ public class GoodService {
                 String area = xyClbZcShoppingMapper.getArea((String)map.get("ZC_TYPE"),(String)map.get("ZC_CODE"));
                 List<XyVal> list = xyValMapper.getZcAreaList(conversionList(area));
                 map.put("areaList",list);
+            }
+            if (shoppingList.size()<1){
+                obj.put("ZJ",0);
+            } else {
+                obj.put("ZJ", shoppingList.get(shoppingList.size()-1).get("ZJ"));
             }
             code = "200";
             msg = "成功";
@@ -286,6 +299,29 @@ public class GoodService {
         }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    public Map<String,Object> getCuntomerInfoByCondition(String userId, String condition ,String roleType){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String,Object>> CustomerInfoList = null;
+            if ("E".equals(roleType)){
+                CustomerInfoList = xyCustomerInfoMapper.getECuntomerInfoByCondition(userId,condition);
+            }
+            code = "200";
+            msg = "成功";
+            obj.put("CustomerInfoList",CustomerInfoList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
         }
         return resultMap;
     }

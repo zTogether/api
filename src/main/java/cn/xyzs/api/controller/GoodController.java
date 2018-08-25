@@ -99,4 +99,10 @@ public class GoodController {
     public Map<String,Object> getCustomerInfoByUserId(String userId,String startNum,String endNum,String roleType){
         return goodService.getCustomerInfoByUserId(userId,startNum,endNum,roleType);
     }
+
+    @ResponseBody
+    @RequestMapping("/getCuntomerInfoByCondition")
+    public Map<String ,Object> getCuntomerInfoByCondition(String userId, String condition ,String roleType){
+        return goodService.getCuntomerInfoByCondition(userId,condition,roleType);
+    }
 }
