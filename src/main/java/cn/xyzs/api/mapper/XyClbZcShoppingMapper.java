@@ -66,7 +66,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @return: int
      */
     @Delete("DELETE FROM XY_CLB_ZC_SHOPPING WHERE ROW_ID=#{rowId}")
-    int removeGoods(@Param("rowId") String rowId) throws SQLException;
+    void removeGoods(@Param("rowId") String rowId) throws SQLException;
 
     /**
      *
