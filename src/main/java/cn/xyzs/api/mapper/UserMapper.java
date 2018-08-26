@@ -75,13 +75,43 @@ public interface UserMapper extends Mapper<TUser> {
      * @param: [userTel, userSex, userBthd, idCard, bankIdBc, bankIdIcbc, bankIdCmbc]
      * @return: int
      */
-    @Select("UPDATE XY_USER SET USER_TEL=#{userTel} AND  USER_SEX=#{userSex} AND \n"+
-            "\tUSER_BTHD=#{userBthd} AND ID_CARD=#{idCard} AND BANK_ID_BC=#{bankIdBc} \n"+
-            "\tBANK_ID_ICBC=#{bankIdIcbc} AND BANK_ID_CMBC=#{bankIdCmbc} WHERE USER_CODE=#{userCode}")
+    @SelectProvider(type = updatePersonalInfo.class,method = "updatePersonalInfo")
     public int changePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
                                   @Param("userBthd") String userBthd,@Param("idCard") String idCard,
                                   @Param("bankIdBc") String bankIdBc,@Param("bankIdIcbc") String bankIdIcbc,
                                   @Param("bankIdCmbc") String bankIdCmbc);
+    class updatePersonalInfo{
+        public String updatePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
+                                         @Param("userBthd") String userBthd,@Param("idCard") String idCard,
+                                         @Param("bankIdBc") String bankIdBc,@Param("bankIdIcbc") String bankIdIcbc,
+                                         @Param("bankIdCmbc") String bankIdCmbc){
+            return new SQL(){{
+                UPDATE("XY_USER");
+                if(userTel!=null){
+                    SET("USER_TEL=#{userTel}");
+                }
+                if (userSex!=null){
+                    SET("USER_SEX=#{userSex}");
+                }
+                if (userBthd!=null){
+                    SET("USER_BTHD=#{userBthd}");
+                }
+                if (idCard!=null){
+                    SET("ID_CARD=#{idCard}");
+                }
+                if (bankIdBc!=null){
+                    SET("BANK_ID_BC=#{bankIdBc}");
+                }
+                if (bankIdIcbc!=null){
+                    SET("BANK_ID_ICBC=#{bankIdIcbc}");
+                }
+                if (bankIdCmbc!=null){
+                    SET("BANK_ID_CMBC=#{bankIdCmbc}");
+                }
+                WHERE("USER_CODE=#{userCode}");
+            }}.toString();
+        }
+    }
 
     @Select("SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}")
     public Map<String,Object> getUserInfo(@Param("userTel") String userTel);
