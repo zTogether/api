@@ -7,9 +7,7 @@ import cn.xyzs.api.mapper.XyValMapper;
 
 import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.mapper.*;
-import cn.xyzs.api.pojo.XyClbZcDb;
-import cn.xyzs.api.pojo.XyClbZcShopping;
-import cn.xyzs.api.pojo.XyVal;
+import cn.xyzs.api.pojo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +36,11 @@ public class GoodService {
     @Resource
     private XyClbZcShoppingMapper xyClbZcShoppingMapper;
 
+    @Resource
+    private XyClbZcOrderMapper xyClbZcOrderMapper;
+
+    @Resource
+    private XyClbZcOrderListMapper xyClbZcOrderListMapper;
 
     /**
      * 获取下级目录
@@ -323,6 +326,69 @@ public class GoodService {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
             resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    @Transactional
+    public Map<String,Object> addOeder(String[] rowIds,String ctrCode,String opUserid){
+        List<String> rowIdList = new ArrayList<>();
+        for (int i = 0; i <rowIds.length ; i++) {
+            rowIdList.add(rowIds[i]);
+        }
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> zcSupList = xyClbZcShoppingMapper.getZcSupToShoppingCar(rowIdList);
+            for (Map<String, Object> map : zcSupList) {
+                String singleZcsupZotal = String.valueOf(xyClbZcShoppingMapper.getSingleZCSUPTotal(rowIdList,(String)map.get("ZC_SUP")).get(0).get("SINGLEZCSUPTOTAL"));
+                XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
+                xyClbZcOrder.setCtrCode(ctrCode);
+                xyClbZcOrder.setOpUserid(opUserid);
+                xyClbZcOrder.setOrderJe(singleZcsupZotal);
+                xyClbZcOrder.setOrderMark("");
+                xyClbZcOrder.setOrderStatus("1");
+                xyClbZcOrder.setOrderType("0");
+                xyClbZcOrder.setOrderSup((String)map.get("ZC_SUP"));
+                xyClbZcOrder.setEditType("1");
+                xyClbZcOrder.setOrderDis("0");
+                xyClbZcOrder.setOrderDisMark("");
+                xyClbZcOrder.setOrderIsreturn("0");
+                xyClbZcOrderMapper.addZcOrder(xyClbZcOrder);
+                List<Map<String ,Object>> goodList = xyClbZcShoppingMapper.getGoodByRowIdAndZcSup(rowIdList,(String)map.get("ZC_SUP"));
+                for (Map<String, Object> goodMap : goodList) {
+                    XyClbZcOrderList xyClbZcOrderList = new XyClbZcOrderList();
+                    xyClbZcOrderList.setOrderId(xyClbZcOrder.getOrderId());
+                    xyClbZcOrderList.setZcCode(String.valueOf(goodMap.get("ZC_CODE")));
+                    xyClbZcOrderList.setZcName(String.valueOf(goodMap.get("ZC_NAME")));
+                    xyClbZcOrderList.setZcType(String.valueOf(goodMap.get("ZC_TYPE")));
+                    xyClbZcOrderList.setZcPriceIn(String.valueOf(goodMap.get("ZC_PRICE_IN")));
+                    xyClbZcOrderList.setZcPriceOut(String.valueOf(goodMap.get("ZC_PRICE_OUT")));
+                    xyClbZcOrderList.setZcQty(String.valueOf(goodMap.get("ZC_QTY")));
+                    xyClbZcOrderList.setZcBrand(String.valueOf(goodMap.get("ZC_BRAND")));
+                    xyClbZcOrderList.setZcSup(String.valueOf(goodMap.get("ZC_SUP")));
+                    xyClbZcOrderList.setZcSpec(String.valueOf(goodMap.get("ZC_SPEC")));
+                    xyClbZcOrderList.setZcMaterial(String.valueOf(goodMap.get("ZC_MATERIAL")));
+                    xyClbZcOrderList.setZcColor(String.valueOf(goodMap.get("ZC_COLOR")));
+                    xyClbZcOrderList.setZcUnit(String.valueOf(goodMap.get("ZC_UNIT")));
+                    xyClbZcOrderList.setZcMark(String.valueOf(goodMap.get("ZC_MARK")));
+                    xyClbZcOrderList.setZcCyc((goodMap.get("ZC_CYC")==null)?"":String.valueOf(goodMap.get("ZC_CYC")));
+                    xyClbZcOrderList.setZcArea(String.valueOf(goodMap.get("ZC_AREA")));
+                    String zcVersion = xyClbZcDbMapper.getZcVersion(String.valueOf(goodMap.get("ZC_CODE")));
+                    xyClbZcOrderList.setZcVersion(zcVersion);
+                    xyClbZcOrderList.setZcShopStatus("0");
+                    xyClbZcOrderListMapper.addOrderList(xyClbZcOrderList);
+                }
+            }
+            xyClbZcShoppingMapper.deleteGood(rowIdList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
         }
         return resultMap;
     }

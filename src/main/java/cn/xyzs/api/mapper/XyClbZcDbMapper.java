@@ -41,4 +41,12 @@ public interface XyClbZcDbMapper{
             @Result(column = "ZC_AREA",property = "zcArea", javaType = String.class),
     })
     public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list,@Param("startNum")String startNum,@Param("endNum" )String endNum) throws SQLException;
+
+    @Select("SELECT\n" +
+            "\txczd.ZC_VERSION \n" +
+            "FROM\n" +
+            "\tXY_CLB_ZC_DB xczd \n" +
+            "WHERE\n" +
+            "\txczd.ZC_CODE = #{zcCode}")
+    public String getZcVersion (@Param("zcCode") String zcCode) throws SQLException;
 }
