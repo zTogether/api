@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     /**
      *
-     * @Description: 添加订单主表并返回orderId
+     * @Description: 添加订单主表
      * @author: GeWeiliang
      * @date: 2018\8\24 0024 18:39
      * @param: [orderDate, ctrCode, opUserid, orderJe, orderMark]

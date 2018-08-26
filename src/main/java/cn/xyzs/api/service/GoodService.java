@@ -7,6 +7,8 @@ import cn.xyzs.api.mapper.XyValMapper;
 
 import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.mapper.*;
+import cn.xyzs.api.pojo.XyClbZcDb;
+import cn.xyzs.api.pojo.XyVal;
 import cn.xyzs.api.pojo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
