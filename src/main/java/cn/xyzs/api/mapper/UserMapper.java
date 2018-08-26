@@ -40,7 +40,7 @@ public interface UserMapper extends Mapper<TUser> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("SELECT * FROM XY_USER_ROLE xyro,XY_ROLE xr WHERE xyro.ROLE_ID = xr.ROLE_ID AND xyro.USER_ID = #{userId}")
-    public List<Map<String,Object>> getUserRole(String userId) throws SQLException;
+     List<Map<String,Object>> getUserRole(String userId) throws SQLException;
 
     /**
      * 根据角色id查询对应的菜单信息
@@ -61,11 +61,11 @@ public interface UserMapper extends Mapper<TUser> {
             "\txrf.ROLE_ID = xy.ROLE_ID\n" +
             "AND\n" +
             "\txrf.COMPO_ID = XY_COMPO.COMPO_ID")
-    public List<Map<String, Object>> getMenuByRole(String roleId) throws SQLException;
+    List<Map<String, Object>> getMenuByRole(String roleId) throws SQLException;
 
     //修改密码
     @Select("UPDATE XY_USER SET PASSWORD=#{password} WHERE USER_TEL=#{userTel}")
-    public int changePassword(@Param("userTel") String userTel,@Param("password") String password);
+    void changePassword(@Param("userTel") String userTel,@Param("password") String password) throws SQLException;
 
     /**
      *
@@ -76,10 +76,10 @@ public interface UserMapper extends Mapper<TUser> {
      * @return: int
      */
     @SelectProvider(type = updatePersonalInfo.class,method = "updatePersonalInfo")
-    public int changePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
+     void changePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
                                   @Param("userBthd") String userBthd,@Param("idCard") String idCard,
                                   @Param("bankIdBc") String bankIdBc,@Param("bankIdIcbc") String bankIdIcbc,
-                                  @Param("bankIdCmbc") String bankIdCmbc);
+                                  @Param("bankIdCmbc") String bankIdCmbc)throws SQLException;
     class updatePersonalInfo{
         public String updatePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
                                          @Param("userBthd") String userBthd,@Param("idCard") String idCard,
@@ -114,7 +114,7 @@ public interface UserMapper extends Mapper<TUser> {
     }
 
     @Select("SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}")
-    public Map<String,Object> getUserInfo(@Param("userTel") String userTel);
+    Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 
 
 }

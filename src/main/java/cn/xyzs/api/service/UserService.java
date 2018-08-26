@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,16 +32,20 @@ public class UserService {
      * @return:
      */
     public Map<String,Object> resetPassword(String userTel,String password){
-        int result = userMapper.changePassword(userTel, MD5Util.md5Password(password));
-        Map<String,Object> map = new HashMap<String,Object>();
-        if(result==1){
-            map.put("code","1");
-            map.put("msg","密码修改成功");
-        }else{
-            map.put("code","-1");
-            map.put("msg","修改失败");
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            userMapper.changePassword(userTel, MD5Util.md5Password(password));
+            code = "200";
+            msg = "修改成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
         }
-        return map;
+        return resultMap;
     }
 
     /**
@@ -53,16 +58,21 @@ public class UserService {
      */
     public Map<String,Object> changePersonalInfo(String userCode,String userTel,String userSex, String userBthd,String idCard,
                                                  String bankIdBc, String bankIdIcbc, String bankIdCmbc){
-    int result =  userMapper.changePersonalInfo(userCode,userTel,userSex,userBthd,idCard,bankIdBc,bankIdIcbc,bankIdCmbc);
-    Map<String,Object> map = new HashMap<String,Object>();
-    if (result>0){
-        map.put("code","1");
-        map.put("msg","修改成功");
-    }else{
-        map.put("code","-1");
-        map.put("msg","修改失败");
-    }
-    return map;
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        String code = "500";
+        String msg = "修改失败";
+        try{
+            userMapper.changePersonalInfo(userCode,userTel,userSex,userBthd,idCard,bankIdBc,bankIdIcbc,bankIdCmbc);
+            code = "200";
+            msg = "修改成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+
+        return resultMap;
     }
 
     public Map<String,Object> getUserInfo(String userTel){

@@ -29,6 +29,7 @@ public class TUser {
     //用户电话
     @Getter
     @Setter
+    @Column(name = "USER_TEL")
     private String userTel;
     //用户密码
     @Getter
