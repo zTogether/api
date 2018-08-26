@@ -51,9 +51,9 @@ public class UserService {
      * @param: [userTel, userSex, userBthd, idCard, bankIdBc, bankIdIcbc, bankIdCmbc]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> changePersonalInfo(String userTel,String userSex, String userBthd,String idCard,
+    public Map<String,Object> changePersonalInfo(String userCode,String userTel,String userSex, String userBthd,String idCard,
                                                  String bankIdBc, String bankIdIcbc, String bankIdCmbc){
-    int result =  userMapper.changePersonalInfo(userTel,userSex,userBthd,idCard,bankIdBc,bankIdIcbc,bankIdCmbc);
+    int result =  userMapper.changePersonalInfo(userCode,userTel,userSex,userBthd,idCard,bankIdBc,bankIdIcbc,bankIdCmbc);
     Map<String,Object> map = new HashMap<String,Object>();
     if (result>0){
         map.put("code","1");

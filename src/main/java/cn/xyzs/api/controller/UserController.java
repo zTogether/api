@@ -37,9 +37,9 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/changePersonalInfo")
-    public Map<String,Object> changePersonalInfo(String userTel,String userSex, String userBthd,String idCard,
+    public Map<String,Object> changePersonalInfo(String userCode,String userTel,String userSex, String userBthd,String idCard,
                                                  String bankIdBc, String bankIdIcbc, String bankIdCmbc){
-        return  userService.changePersonalInfo(userTel,userSex,userBthd,idCard,bankIdBc,bankIdIcbc,bankIdCmbc);
+        return  userService.changePersonalInfo(userCode,userTel,userSex,userBthd,idCard,bankIdBc,bankIdIcbc,bankIdCmbc);
     }
 
     @ResponseBody

@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.sql.SQLException;
+
 public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     /**
      *
@@ -15,11 +17,10 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @return: int
      */
     @Insert("INSERT INTO XY_CLB_ZC_ORDER(ORDER_DATE,CTR_CODE,OP_USERID,ORDER_MARK,ORDER_STATUS) \n" +
-            "VALUES(#{orderDate},#{ctrCode},#{opUserid},#{orderJe},#{orderMark},1)")
-    int addZcOrder(@Param("orderDate") String orderDate, @Param("ctrCode") String ctrCode,
+            "VALUES(TO_DATE(SYSDATE(),'YY/MM/DD HH24:MI:SS),#{opUserid},#{orderJe},#{orderMark},1)")
+    int addZcOrder( @Param("ctrCode") String ctrCode,
                    @Param("opUserid") String opUserid, @Param("orderJe") String orderJe,
-                   @Param("orderMark") String orderMark);
-
+                   @Param("orderMark") String orderMark) throws SQLException;
 
 
 }

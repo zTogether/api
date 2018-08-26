@@ -77,8 +77,8 @@ public interface UserMapper extends Mapper<TUser> {
      */
     @Select("UPDATE XY_USER SET USER_TEL=#{userTel} AND  USER_SEX=#{userSex} AND \n"+
             "\tUSER_BTHD=#{userBthd} AND ID_CARD=#{idCard} AND BANK_ID_BC=#{bankIdBc} \n"+
-            "\tBANK_ID_ICBC=#{bankIdIcbc} AND BANK_ID_CMBC=#{bankIdCmbc}")
-    public int changePersonalInfo(@Param("userTel") String userTel,@Param("userSex") String userSex,
+            "\tBANK_ID_ICBC=#{bankIdIcbc} AND BANK_ID_CMBC=#{bankIdCmbc} WHERE USER_CODE=#{userCode}")
+    public int changePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
                                   @Param("userBthd") String userBthd,@Param("idCard") String idCard,
                                   @Param("bankIdBc") String bankIdBc,@Param("bankIdIcbc") String bankIdIcbc,
                                   @Param("bankIdCmbc") String bankIdCmbc);

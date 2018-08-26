@@ -6,9 +6,7 @@ import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyValMapper;
 
 import cn.xyzs.api.mapper.*;
-import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.pojo.XyClbZcDb;
-import cn.xyzs.api.pojo.XyClbZcShopping;
 import cn.xyzs.api.pojo.XyVal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +35,9 @@ public class GoodService {
 
     @Resource
     private XyClbZcShoppingMapper xyClbZcShoppingMapper;
+
+    @Resource
+    private XyClbZcOrderMapper xyClbZcOrderMapper;
 
 
     /**
@@ -73,7 +74,6 @@ public class GoodService {
         List<String> zcflCodeList = new ArrayList<>();
         String code = "500";
         String msg = "系统异常";
-        int a = 0;
         try {
             if (startNum == null || startNum == ""){
                 startNum = "1";
@@ -325,5 +325,13 @@ public class GoodService {
         }
         return resultMap;
     }
+
+//    public Map<String,Object> produceOrder(String ctrCode,){
+//        try{
+//            xyClbZcOrderMapper.addZcOrder();
+//        }catch (SQLException e){
+//            e.printStackTrace();
+//        }
+//    }
 
 }
