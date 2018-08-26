@@ -97,4 +97,107 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             }}.toString();
         }
     }
+
+    /**
+     * 根据流水号查询购物车里的供应商
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/26 11:02
+     * @param: [list]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+                "SELECT\n" +
+                    "\tDISTINCT xczs.ZC_SUP\n" +
+                "FROM\n" +
+                    "\tXY_CLB_ZC_SHOPPING xczs \n" +
+                "WHERE\n" +
+                    "\txczs.ROW_ID IN " +
+                        "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
+                            "#{item} "+
+                        "</foreach>"+
+            "</script>")
+    public List<Map<String, Object>> getZcSupToShoppingCar(@Param("list") List<String> list) throws SQLException;
+
+    /**
+     * 查询单个供应商的商品总额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/26 11:07
+     * @param: [list, zcSup]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT SUM(C.ItemsTotal) SINGLEZCSUPTOTAL from(\n" +
+            "\tSELECT \n" +
+            "\t\tA.ZC_QTY*B.ZC_PRICE_OUT ItemsTotal\n" +
+            "\tFROM (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\txczs.ZC_QTY,xczs.ROW_ID\n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CLB_ZC_SHOPPING xczs \n" +
+            "\t\tWHERE\n" +
+            "\t\t\txczs.ROW_ID IN \n" +
+            "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
+                "#{item} "+
+            "</foreach>"+
+            "\t\t\tAND xczs.ZC_SUP = #{zcSup}\n" +
+            "\t) A,\n" +
+            "\t(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\txczs.ZC_PRICE_OUT,xczs.ROW_ID\n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CLB_ZC_SHOPPING xczs \n" +
+            "\t\tWHERE\n" +
+            "\t\t\txczs.ROW_ID IN \n" +
+            "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
+                "#{item} "+
+            "</foreach>"+
+            "\t\t\tAND xczs.ZC_SUP = #{zcSup}\n" +
+            "\t) B\n" +
+            "\tWHERE A.ROW_ID = B.ROW_ID\n" +
+            ") C" +
+            "</script>")
+    public List<Map<String, Object>> getSingleZCSUPTotal(@Param("list") List<String> list,@Param("zcSup") String zcSup) throws SQLException;
+
+    /**
+     * 根据流水号与供应商查询购物车内的商品
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/26 11:14
+     * @param: [list, zcSup]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\t\t*\n" +
+            "FROM\n" +
+            "\t\tXY_CLB_ZC_SHOPPING xczs \n" +
+            "WHERE\n" +
+            "\t\txczs.ROW_ID IN \n" +
+            "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
+                "#{item} "+
+            "</foreach>"+
+            "AND xczs.ZC_SUP = #{zcSup}" +
+            "</script>")
+    public List<Map<String, Object>> getGoodByRowIdAndZcSup(@Param("list") List<String> list,@Param("zcSup") String zcSup) throws SQLException;
+
+    /**
+     * 根据流水号批量清空购物车
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/26 14:34
+     * @param: [list]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM \n" +
+            "\tXY_CLB_ZC_SHOPPING xczs \n" +
+            "WHERE \n" +
+            "\txczs.ROW_ID IN \n" +
+            "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
+                "#{item} "+
+            "</foreach>"+
+            "</script>")
+    public void deleteGood(@Param("list") List<String> list) throws SQLException;
 }

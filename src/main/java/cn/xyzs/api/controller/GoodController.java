@@ -105,4 +105,10 @@ public class GoodController {
     public Map<String ,Object> getCuntomerInfoByCondition(String userId, String condition ,String roleType){
         return goodService.getCuntomerInfoByCondition(userId,condition,roleType);
     }
+
+    @ResponseBody
+    @RequestMapping("/addOeder")
+    public Map<String ,Object> addOrder(String[] rowIds,String ctrCode,String opUserid){
+        return goodService.addOeder(rowIds,ctrCode,opUserid);
+    }
 }
