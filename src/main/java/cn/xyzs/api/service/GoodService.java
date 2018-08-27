@@ -195,6 +195,10 @@ public class GoodService {
         Map<String, Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
+        if (startNum == null || startNum == ""){
+            startNum = "1";
+            endNum = "10";
+        }
         try{
             List<Map<String,Object>> goodsList = xyClbZcShoppingMapper.queryGoods(condition,startNum,endNum);
             code = "200";
@@ -219,10 +223,28 @@ public class GoodService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     public  Map<String,Object> queryGoodsByZcCode(String zcCode){
-        Map<String,Object> map = new HashMap<>();
-        List<Map<String,Object>> goods = xyClbZcShoppingMapper.queryZcDb(zcCode);
-        map.put("goodsInfo",goods);
-        return map;
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        List<XyClbZcDb> goods = null;
+        try {
+            List<XyClbZcDb> goodList = xyClbZcDbMapper.queryZcDb(zcCode);
+            for (XyClbZcDb xyClbZcDb : goodList) {
+                List<XyVal> xyZcAcerList = xyValMapper.getZcAreaList(conversionList(xyClbZcDb.getZcArea()));
+                xyClbZcDb.setXyZcAreas(xyZcAcerList);
+            }
+            obj.put("goodList",goodList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
     }
 
     /**
