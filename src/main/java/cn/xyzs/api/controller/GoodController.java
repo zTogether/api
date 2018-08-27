@@ -62,8 +62,8 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/queryGoods")
-    public Map<String,Object> queryGoods(String zcBrand,String zcVersion,String startNum,String endNum){
-        return goodService.queryGoods(zcBrand,zcVersion,startNum,endNum);
+    public Map<String,Object> queryGoods(String condition,String startNum,String endNum){
+        return goodService.queryGoods(condition,startNum,endNum);
     }
     /**
      *

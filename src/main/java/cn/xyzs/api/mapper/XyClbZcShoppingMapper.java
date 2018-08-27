@@ -72,11 +72,11 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "\t\tFROM\n" +
             "\t\t\tXY_CLB_ZC_DB xczd \n" +
             "\t\tWHERE\n" +
-            "\t\t\txczd.ZC_BRAND LIKE '%'||#{zcBrand}||'%' \n" +
-            "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{zcVersion}||'%'\n" +
+            "\t\t\txczd.ZC_BRAND LIKE '%'||#{condition}||'%' \n" +
+            "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{condition}||'%'\n" +
             "\t) A\n" +
             ") WHERE RN BETWEEN #{startNum} AND #{endNum}\n")
-    List<Map<String,Object>> queryGoods(@Param("zcBrand") String zcBrand,@Param("zcVersion") String zcVersion,
+    List<Map<String,Object>> queryGoods(@Param("condition") String condition,
                                         @Param("startNum") String startNum,@Param("endNum") String endNum)throws SQLException;
 
     /**

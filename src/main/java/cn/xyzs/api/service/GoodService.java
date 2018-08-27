@@ -177,13 +177,13 @@ public class GoodService {
      * @param: [zcBrand, zcVersion, startNum, endNum]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> queryGoods(String zcBrand,String zcVersion,String startNum,String endNum){
+    public Map<String,Object> queryGoods(String condition,String startNum,String endNum){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try{
-            List<Map<String,Object>> goodsList = xyClbZcShoppingMapper.queryGoods(zcBrand,zcVersion,startNum,endNum);
+            List<Map<String,Object>> goodsList = xyClbZcShoppingMapper.queryGoods(condition,startNum,endNum);
             code = "200";
             msg = "成功";
             obj.put("goodsList",goodsList);
