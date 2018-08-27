@@ -38,6 +38,20 @@ public class GoodController {
         return goodService.sortFilter(zcflCode,startNum,endNum);
     }
 
+    /***
+     *
+     * @Description: 查询商品信息
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 11:06
+     * @param: [zcCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/showGoodsInfo")
+    public Map<String,Object> showGoodsInfo(String zcCode){
+        return goodService.queryGoodsByZcCode(zcCode);
+    }
+
     /**
      *
      * @Description: 根据客户号查询购物车

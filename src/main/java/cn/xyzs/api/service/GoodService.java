@@ -169,6 +169,21 @@ public class GoodService {
         return resultMap;
     }
 
+    /***
+     *
+     * @Description: 根据zcCode查询商品信息
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 11:04
+     * @param: [zcCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public  Map<String,Object> queryGoodsByZcCode(String zcCode){
+        Map<String,Object> map = new HashMap<>();
+        List<Map<String,Object>> goods = xyClbZcShoppingMapper.queryZcDb(zcCode);
+        map.put("goodsInfo",goods);
+        return map;
+    }
+
     /**
      *
      * @Description: 根据客户号查询购物车
@@ -275,7 +290,7 @@ public class GoodService {
             code = "200";
             msg = "移除成功";
         }catch (SQLException e){
-            e.printStackTrace();;
+            e.printStackTrace();
         }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
