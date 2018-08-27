@@ -139,7 +139,6 @@ public class LoginService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         resultMap.put("code", code);
         resultMap.put("msg", msg);
         resultMap.put("resultData", obj);

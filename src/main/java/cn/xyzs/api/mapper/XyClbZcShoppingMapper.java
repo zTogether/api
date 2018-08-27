@@ -57,6 +57,28 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
     @Select("SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode}")
     List<Map<String,Object>> queryZcDb(@Param("zcCode") String zcCode);
 
+    /***
+     *
+     * @Description: 根据zcBrand和zcVersion查询商品并分页
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 11:32
+     * @param: [zcBrand, zcVersion]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("SELECT * FROM(\n" +
+            "\tSELECT A.*, ROWNUM RN FROM(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\t* \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CLB_ZC_DB xczd \n" +
+            "\t\tWHERE\n" +
+            "\t\t\txczd.ZC_BRAND LIKE '%'||#{condition}||'%' \n" +
+            "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{condition}||'%'\n" +
+            "\t) A\n" +
+            ") WHERE RN BETWEEN #{startNum} AND #{endNum}\n")
+    List<Map<String,Object>> queryGoods(@Param("condition") String condition,
+                                        @Param("startNum") String startNum,@Param("endNum") String endNum)throws SQLException;
+
     /**
      *
      * @Description: 根据流水号将商品移出购物车
@@ -66,7 +88,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @return: int
      */
     @Delete("DELETE FROM XY_CLB_ZC_SHOPPING WHERE ROW_ID=#{rowId}")
-    int removeGoods(@Param("rowId") String rowId) throws SQLException;
+    void removeGoods(@Param("rowId") String rowId) throws SQLException;
 
     /**
      *

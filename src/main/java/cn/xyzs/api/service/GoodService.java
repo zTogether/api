@@ -182,6 +182,49 @@ public class GoodService {
         return resultMap;
     }
 
+    /***
+     *
+     * @Description: 根据zcBrand和zcVersion 查询商品并分页
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 13:40
+     * @param: [zcBrand, zcVersion, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> queryGoods(String condition,String startNum,String endNum){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> goodsList = xyClbZcShoppingMapper.queryGoods(condition,startNum,endNum);
+            code = "200";
+            msg = "成功";
+            obj.put("goodsList",goodsList);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 根据zcCode查询商品信息
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 11:04
+     * @param: [zcCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public  Map<String,Object> queryGoodsByZcCode(String zcCode){
+        Map<String,Object> map = new HashMap<>();
+        List<Map<String,Object>> goods = xyClbZcShoppingMapper.queryZcDb(zcCode);
+        map.put("goodsInfo",goods);
+        return map;
+    }
+
     /**
      *
      * @Description: 根据客户号查询购物车
@@ -288,7 +331,7 @@ public class GoodService {
             code = "200";
             msg = "移除成功";
         }catch (SQLException e){
-            e.printStackTrace();;
+            e.printStackTrace();
         }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
