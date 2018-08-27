@@ -42,6 +42,14 @@ public class UserController {
         return  userService.changePersonalInfo(userCode,userTel,userSex,userBthd,idCard,bankIdBc,bankIdIcbc,bankIdCmbc);
     }
 
+    /***
+     *
+     * @Description: 根据手机号获取用户信息
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 16:03
+     * @param: [userTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/getUserInfo")
     public Map<String,Object> getUserInfo(String userTel){
