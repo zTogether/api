@@ -2,11 +2,9 @@ package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZcDb;
 import org.apache.ibatis.annotations.*;
-import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public interface XyClbZcDbMapper{
 
