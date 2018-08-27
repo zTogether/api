@@ -52,6 +52,19 @@ public class GoodController {
         return goodService.queryGoodsByZcCode(zcCode);
     }
 
+    /***
+     *
+     * @Description: 根据品牌和zcVersion查询并分页展示
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 13:43
+     * @param: [zcBrand, zcVersion, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/queryGoods")
+    public Map<String,Object> queryGoods(String zcBrand,String zcVersion,String startNum,String endNum){
+        return goodService.queryGoods(zcBrand,zcVersion,startNum,endNum);
+    }
     /**
      *
      * @Description: 根据客户号查询购物车

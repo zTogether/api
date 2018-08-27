@@ -57,6 +57,23 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
     @Select("SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode}")
     List<Map<String,Object>> queryZcDb(@Param("zcCode") String zcCode);
 
+    /***
+     *
+     * @Description: 根据zcBrand和zcVersion查询商品并分页
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 11:32
+     * @param: [zcBrand, zcVersion]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("SELECT * FROM(\n" +
+            "\tSELECT A.*, ROWNUM RN FROM(\n" +
+            "\t\tSELECT * FROM XY_CLB_ZC_DB xczd \n" +
+            "\t\tWHERE xczd.ZC_BRAND LIKE '%#{zcBrand}%' \n" +
+            "\t\tOR xczd.ZC_VERSION LIKE '%#{zcVersion}%') A) \n" +
+            "WHERE RN BETWEEN #{startNum} AND #{endNum}")
+    List<Map<String,Object>> queryGoods(@Param("zcBrand") String zcBrand,@Param("zcVersion") String zcVersion,
+                                        @Param("startNum") String startNum,@Param("endNum") String endNum)throws SQLException;
+
     /**
      *
      * @Description: 根据流水号将商品移出购物车

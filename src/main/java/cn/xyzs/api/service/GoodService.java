@@ -171,6 +171,34 @@ public class GoodService {
 
     /***
      *
+     * @Description: 根据zcBrand和zcVersion 查询商品并分页
+     * @author: GeWeiliang
+     * @date: 2018\8\27 0027 13:40
+     * @param: [zcBrand, zcVersion, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> queryGoods(String zcBrand,String zcVersion,String startNum,String endNum){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> goodsList = xyClbZcShoppingMapper.queryGoods(zcBrand,zcVersion,startNum,endNum);
+            code = "200";
+            msg = "成功";
+            obj.put("goodsList",goodsList);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
      * @Description: 根据zcCode查询商品信息
      * @author: GeWeiliang
      * @date: 2018\8\27 0027 11:04
