@@ -11,10 +11,23 @@ import java.util.Map;
 public interface XyClbZcDbMapper{
 
     @Select("<script>" +
-            "SELECT * FROM(SELECT XY_CLB_ZC_DB.*,rownum rn FROM XY_CLB_ZC_DB WHERE ZC_TYPE IN " +
+            "SELECT * FROM(\n" +
+            "\tSELECT A.*, ROWNUM RN FROM(\n" +
+            "\t\tSELECT \n" +
+            "\t\t\t* \n" +
+            "\t\tFROM \n" +
+            "\t\t\tXY_CLB_ZC_DB xczd \n" +
+            "\t\tWHERE \n" +
+            "\t\t\txczd.ZC_TYPE IN " +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-                "#{item} "+
-            "</foreach> <![CDATA[AND ROWNUM <=#{endNum}) table_alias WHERE rn >= #{startNum}]]> " +
+            "#{item} "+
+            "</foreach>"+
+            "\t\tAND\n" +
+            "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT >= #{minimum}]]>\n" +
+            "\t\tAND\n" +
+            "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT <= #{maximum}]]>\n" +
+            "\t) A\n" +
+            ") WHERE RN BETWEEN #{startNum} AND #{endNum}" +
             "</script>")
     @Results(id="getGoodByZcType",value={
             @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
@@ -40,7 +53,8 @@ public interface XyClbZcDbMapper{
             @Result(column = "ZC_VERSION", property = "zcVersion", javaType = String.class),
             @Result(column = "ZC_AREA",property = "zcArea", javaType = String.class),
     })
-    public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list,@Param("startNum")String startNum,@Param("endNum" )String endNum) throws SQLException;
+    public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list,@Param("startNum")String startNum,@Param("endNum" )String endNum,
+                                           @Param("minimum") String minimum,@Param("maximum") String maximum) throws SQLException;
 
     @Select("SELECT\n" +
             "\txczd.ZC_VERSION \n" +

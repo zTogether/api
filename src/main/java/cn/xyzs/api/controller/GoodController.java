@@ -33,9 +33,9 @@ public class GoodController {
 
     @ResponseBody
     @RequestMapping("/sortFilter")
-    public Map<String, Object> test(String zcflCode,String startNum,String endNum){
+    public Map<String, Object> test(String zcflCode,String startNum,String endNum,String minimum,String maximum){
 
-        return goodService.sortFilter(zcflCode,startNum,endNum);
+        return goodService.sortFilter(zcflCode,startNum,endNum,minimum,maximum);
     }
 
     /**

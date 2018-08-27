@@ -72,14 +72,27 @@ public class GoodService {
         return resultMap;
     }
 
-    public  Map<String, Object> sortFilter(String zcflCode,String startNum,String endNum){
+    public  Map<String, Object> sortFilter(String zcflCode,String startNum,String endNum,String minimum,String maximum){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
         List<String> zcflCodeList = new ArrayList<>();
         String code = "500";
         String msg = "系统异常";
-        int a = 0;
         try {
+            if(minimum == null || minimum == ""){
+                minimum = "0";
+                //判断最低价是否为空的同时判断最高价是否为空
+                if(maximum == null || maximum == ""){
+                    //若最低价与最高价同时为空的话，则最高价为最大值，最低价为最小值0
+                    maximum = "999999999";
+                }
+            } else {
+                //若最低价不为空最高价为空的话则最高价为最大值
+                if(maximum == null || maximum == ""){
+                    maximum = "999999999";
+                }
+            }
+
             if (startNum == null || startNum == ""){
                 startNum = "1";
                 endNum = "10";
@@ -91,7 +104,7 @@ public class GoodService {
             } else {
                 test(YSubdirectory,zcflCodeList);
             }
-            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(zcflCodeList,startNum,endNum);
+            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(zcflCodeList,startNum,endNum,minimum,maximum);
             for (XyClbZcDb xyClbZcDb : goodList) {
                 List<XyVal> xyZcAcerList = xyValMapper.getZcAreaList(conversionList(xyClbZcDb.getZcArea()));
                 xyClbZcDb.setXyZcAreas(xyZcAcerList);
