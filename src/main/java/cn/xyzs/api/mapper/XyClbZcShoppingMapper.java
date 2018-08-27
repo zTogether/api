@@ -67,10 +67,15 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      */
     @Select("SELECT * FROM(\n" +
             "\tSELECT A.*, ROWNUM RN FROM(\n" +
-            "\t\tSELECT * FROM XY_CLB_ZC_DB xczd \n" +
-            "\t\tWHERE xczd.ZC_BRAND LIKE '%#{zcBrand}%' \n" +
-            "\t\tOR xczd.ZC_VERSION LIKE '%#{zcVersion}%') A) \n" +
-            "WHERE RN BETWEEN #{startNum} AND #{endNum}")
+            "\t\tSELECT\n" +
+            "\t\t\t* \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CLB_ZC_DB xczd \n" +
+            "\t\tWHERE\n" +
+            "\t\t\txczd.ZC_BRAND LIKE '%'||#{zcBrand}||'%' \n" +
+            "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{zcVersion}||'%'\n" +
+            "\t) A\n" +
+            ") WHERE RN BETWEEN #{startNum} AND #{endNum}\n")
     List<Map<String,Object>> queryGoods(@Param("zcBrand") String zcBrand,@Param("zcVersion") String zcVersion,
                                         @Param("startNum") String startNum,@Param("endNum") String endNum)throws SQLException;
 
