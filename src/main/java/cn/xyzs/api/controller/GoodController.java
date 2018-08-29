@@ -123,14 +123,14 @@ public class GoodController {
 
     @ResponseBody
     @RequestMapping("/getCustomerInfoByUserId")
-    public Map<String,Object> getCustomerInfoByUserId(String userId,String startNum,String endNum,String roleType){
-        return goodService.getCustomerInfoByUserId(userId,startNum,endNum,roleType);
+    public Map<String,Object> getCustomerInfoByUserId(String userId,String roleId,String startNum,String endNum,String roleType){
+        return goodService.getCustomerInfoByUserId(userId,roleId,startNum,endNum,roleType);
     }
 
     @ResponseBody
     @RequestMapping("/getCuntomerInfoByCondition")
-    public Map<String ,Object> getCuntomerInfoByCondition(String userId, String condition ,String roleType){
-        return goodService.getCuntomerInfoByCondition(userId,condition,roleType);
+    public Map<String ,Object> getCuntomerInfoByCondition(String userId,String condition ,String roleType,String roleId){
+        return goodService.getCuntomerInfoByCondition(userId,condition,roleType,roleId);
     }
 
     @ResponseBody

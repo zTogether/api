@@ -158,7 +158,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\t\t\tWHERE\n" +
             "\t\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
             "\t\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
-            "\t\t\t\t\t\tAND B.ROLE_ID = #{userId} \n" +
+            "\t\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
             "\t\t\t\t\t\tAND T.CTR_ORG LIKE A.ORG_CODE || '%' \n" +
             "\t\t\t\t\t) \n" +
             "\t\t\t\t\tOR EXISTS (\n" +
@@ -170,7 +170,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\t\t\tWHERE\n" +
             "\t\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
             "\t\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
-            "\t\t\t\t\t\tAND B.ROLE_ID = #{userId} \n" +
+            "\t\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
             "\t\t\t\t\t\tAND T.CTR_PRO_ORG LIKE A.ORG_CODE || '%' \n" +
             "\t\t\t\t\t) \n" +
             "\t\t\t\t) \n" +
@@ -193,7 +193,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t) \n" +
             "WHERE\n" +
             "\tRN BETWEEN #{startNum} AND #{endNum}")
-    public List<Map<String,Object>> getCustomerInfoByRoleTypeR(@Param("userId") String userId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
+    public List<Map<String,Object>> getCustomerInfoByRoleTypeR(@Param("userId") String userId, @Param("roleId") String roleId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
      /**
      * @Description: 根据客户号获取客户信息
@@ -224,7 +224,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
     public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode") String ctrCode);
 
     /**
-     * 根据客户档案号/手机号/姓名查询E类型员工所拥有得到客户
+     * E根据客户档案号/手机号/姓名查询E类型员工所拥有得到客户
      * @Description:
      * @author: zheng shuai
      * @date: 2018/8/25 16:46
@@ -264,4 +264,80 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "OR A.CTR_NAME = #{condition}\n" +
             "OR A.CTR_TEL = #{condition}")
     public List<Map<String,Object>> getECuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition) throws SQLException;
+
+    @Select("SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tT.CTR_CODE,\n" +
+            "\t\tT.CTR_NAME,\n" +
+            "\t\tT.CTR_TEL,\n" +
+            "\t\tT.CTR_ADDR,\n" +
+            "\t\tT.CTR_CRT_DATE,\n" +
+            "\t\tT.CTR_CARDID,\n" +
+            "\t\tT.CTR_AREA,\n" +
+            "\t\tU1.USER_NAME JDRY_NAME,\n" +
+            "\t\tU2.USER_NAME SJS_NAME,\n" +
+            "\t\tU3.USER_NAME GCJL_NAME,\n" +
+            "\t\tU4.USER_NAME CLDD_NAME,\n" +
+            "\t\to1.org_name FWJG,\n" +
+            "\t\to2.org_name SGJG \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO T\n" +
+            "\t\tLEFT JOIN XY_USER U1 ON T.CTR_WAITER = U1.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U2 ON T.Ctr_Sjs = U2.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U3 ON T.Ctr_Gcjl = U3.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U4 ON T.Ctr_Cldd = U4.USER_ID\n" +
+            "\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
+            "\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
+            "\tWHERE\n" +
+            "\t\t(\n" +
+            "\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId} ) \n" +
+            "\t\t\tAND (\n" +
+            "\t\t\t\tEXISTS (\n" +
+            "\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t1 \n" +
+            "\t\t\t\tFROM\n" +
+            "\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\tWHERE\n" +
+            "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
+            "\t\t\t\t\tAND T.CTR_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t\tOR EXISTS (\n" +
+            "\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t1 \n" +
+            "\t\t\t\tFROM\n" +
+            "\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\tWHERE\n" +
+            "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
+            "\t\t\t\t\tAND T.CTR_PRO_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t) \n" +
+            "\t\t) \n" +
+            "\t\tOR EXISTS (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\t1 \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_USER_RELATION D \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tD.LEADER_ID = #{userId} \n" +
+            "\t\t\tAND (\n" +
+            "\t\t\t\tD.FOLLOWER_ID = T.CTR_WAITER \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_SJS \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_GCJL \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_CLDD \n" +
+            "\t\t\t)) \n" +
+            "\t) temptable \n" +
+            "WHERE\n" +
+            "\ttemptable.CTR_CODE = #{condition} \n" +
+            "\tOR temptable.CTR_NAME = #{condition} \n" +
+            "\tOR temptable.CTR_TEL = #{condition}")
+    public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition,@Param("roleId") String roleId) throws SQLException;
 }

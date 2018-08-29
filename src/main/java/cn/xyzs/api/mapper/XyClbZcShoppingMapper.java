@@ -1,5 +1,6 @@
 package cn.xyzs.api.mapper;
 
+import cn.xyzs.api.pojo.XyClbZcDb;
 import cn.xyzs.api.pojo.XyClbZcShopping;
 
 import org.apache.ibatis.annotations.*;
@@ -76,8 +77,32 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{condition}||'%'\n" +
             "\t) A\n" +
             ") WHERE RN BETWEEN #{startNum} AND #{endNum}\n")
-    List<Map<String,Object>> queryGoods(@Param("condition") String condition,
-                                        @Param("startNum") String startNum,@Param("endNum") String endNum)throws SQLException;
+    @Results(id="getGoodByZcType",value={
+            @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
+            @Result(column = "ZC_NAME", property = "zcName", javaType = String.class),
+            @Result(column = "ZC_TYPE", property = "zcType", javaType = String.class),
+            @Result(column = "ZC_PRICE_IN", property = "zcPriceIn", javaType = String.class),
+            @Result(column = "ZC_PRICE_LOOK", property = "zcPirceLook", javaType = String.class),
+            @Result(column = "ZC_PRICE_OUT", property = "zcPriceOut", javaType = String.class),
+            @Result(column = "ZC_PRICE_HD", property = "zcPriceHd", javaType = String.class),
+            @Result(column = "ZC_BRAND", property = "zcBrand", javaType = String.class),
+            @Result(column = "ZC_SUP", property = "zcSup", javaType = String.class),
+            @Result(column = "ZC_SPEC", property = "zcSpec", javaType = String.class),
+            @Result(column = "ZC_MATERIAL", property = "zcMaterial", javaType = String.class),
+            @Result(column = "ZC_COLOR", property = "zcColor", javaType = String.class),
+            @Result(column = "ZC_STYLE", property = "zcStyle", javaType = String.class),
+            @Result(column = "ZC_IS_NEW", property = "zcIsNew", javaType = String.class),
+            @Result(column = "ZC_IS_HOT", property = "zcIshot", javaType = String.class),
+            @Result(column = "ZC_UNIT", property = "zcUnit", javaType = String.class),
+            @Result(column = "ZC_DES", property = "zcDes", javaType = String.class),
+            @Result(column = "ZC_CYC", property = "zcCyc", javaType = String.class),
+            @Result(column = "ZC_IS_USED", property = "zcIsUsed", javaType = String.class),
+            @Result(column = "ZC_PRO_AREA", property = "zcProArea", javaType = String.class),
+            @Result(column = "ZC_VERSION", property = "zcVersion", javaType = String.class),
+            @Result(column = "ZC_AREA",property = "zcArea", javaType = String.class),
+    })
+    List<XyClbZcDb> queryGoods(@Param("condition") String condition,
+                               @Param("startNum") String startNum, @Param("endNum") String endNum)throws SQLException;
 
     /**
      *

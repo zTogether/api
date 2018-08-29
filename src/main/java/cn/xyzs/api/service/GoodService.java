@@ -156,7 +156,7 @@ public class GoodService {
      * @param: [userId, startNum, endNum, roleType]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> getCustomerInfoByUserId(String userId,String startNum,String endNum,String roleType){
+    public Map<String,Object> getCustomerInfoByUserId(String userId,String roleId,String startNum,String endNum,String roleType){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
         String code = "500";
@@ -166,7 +166,7 @@ public class GoodService {
             if ("E".equals(roleType)){
                 CustomerInfoList = xyCustomerInfoMapper.getCustomerInfoByRoleTypeE(userId,startNum,endNum);
             } else if("R".equals(roleType)){
-                CustomerInfoList = xyCustomerInfoMapper.getCustomerInfoByRoleTypeR(userId,startNum,endNum);
+                CustomerInfoList = xyCustomerInfoMapper.getCustomerInfoByRoleTypeR(userId,roleId,startNum,endNum);
             }
             obj.put("CustomerInfoList",CustomerInfoList);
             code = "200";
@@ -199,7 +199,11 @@ public class GoodService {
             endNum = "10";
         }
         try{
-            List<Map<String,Object>> goodsList = xyClbZcShoppingMapper.queryGoods(condition,startNum,endNum);
+            List<XyClbZcDb> goodsList = xyClbZcShoppingMapper.queryGoods(condition,startNum,endNum);
+            for (XyClbZcDb xyClbZcDb : goodsList) {
+                List<XyVal> xyZcAcerList = xyValMapper.getZcAreaList(conversionList(xyClbZcDb.getZcArea()));
+                xyClbZcDb.setXyZcAreas(xyZcAcerList);
+            }
             code = "200";
             msg = "成功";
             obj.put("goodsList",goodsList);
@@ -386,7 +390,7 @@ public class GoodService {
         return resultMap;
     }
 
-    public Map<String,Object> getCuntomerInfoByCondition(String userId, String condition ,String roleType){
+    public Map<String,Object> getCuntomerInfoByCondition(String userId, String condition ,String roleType ,String roleId){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
@@ -395,6 +399,8 @@ public class GoodService {
             List<Map<String,Object>> CustomerInfoList = null;
             if ("E".equals(roleType)){
                 CustomerInfoList = xyCustomerInfoMapper.getECuntomerInfoByCondition(userId,condition);
+            } else {
+                CustomerInfoList = xyCustomerInfoMapper.getRCuntomerInfoByCondition(userId,condition,roleId);
             }
             code = "200";
             msg = "成功";
