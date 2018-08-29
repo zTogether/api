@@ -480,4 +480,36 @@ public class GoodService {
         return resultMap;
     }
 
+    /***
+     *
+     * @Description: 查询订单明细
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 15:41
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> showOrderList(String orderId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> orderList = xyClbZcOrderListMapper.showOrderList(orderId);
+            for (Map<String, Object> map : orderList) {
+                String area = xyClbZcShoppingMapper.getArea((String)map.get("ZC_TYPE"),(String)map.get("ZC_CODE"));
+                List<XyVal> list = xyValMapper.getZcAreaList(conversionList(area));
+                map.put("areaList",list);
+            }
+            obj.put("orderList",orderList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }
