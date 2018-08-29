@@ -1,12 +1,12 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZcOrder;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     /**
@@ -52,6 +52,35 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     @Options(useGeneratedKeys=true, keyProperty="orderId", keyColumn="ORDER_ID")
     public void addZcOrder(XyClbZcOrder xyClbZcOrder) throws SQLException;
 
+    /***
+     *
+     * @Description: 根据ctrCode查询订单
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 9:40
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("SELECT * FROM(\n" +
+            "\tSELECT A.*,ROWNUM RN FROM(\n" +
+            "\t\tSELECT zo.*,u.USER_NAME,sup.SUP_NAME \n" +
+            "\t\tFROM XY_CLB_ZC_ORDER zo,XY_USER u,XY_SUPPLIER sup\n" +
+            "\t\tWHERE zo.CTR_CODE=2018000468 AND zo.OP_USERID=u.USER_ID AND sup.SUP_CODE=zo.ORDER_SUP\n" +
+            "\t\tORDER BY zo.ORDER_DATE DESC" +
+            "\t) A\n" +
+            ") WHERE RN BETWEEN 1 AND 10")
+    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
+    /***
+     *
+     * @Description: 删除订单
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 9:48
+     * @param: [orderId]
+     * @return: void
+     */
+    @Delete("DELETE FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}")
+    public void deleteFromOrder(@Param("orderId") String orderId) throws SQLException;
+    @Delete("DELETE FROM XY_CLB_ZC_ORDER_LIST WHERE ORDER_ID=#{orderId}")
+    public void deleteFromOrderList(@Param("orderId") String orderId) throws SQLException;
 
 }

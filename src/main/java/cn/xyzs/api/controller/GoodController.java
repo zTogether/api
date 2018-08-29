@@ -138,4 +138,32 @@ public class GoodController {
     public Map<String ,Object> addOrder(String[] rowIds,String ctrCode,String opUserid){
         return goodService.addOeder(rowIds,ctrCode,opUserid);
     }
+
+    /***
+     *
+     * @Description: 查看订单
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 15:41
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/showOrder")
+    public Map<String,Object> showOrderByCtrCode(String ctrCode){
+        return goodService.showOrder(ctrCode);
+    }
+
+    /***
+     *
+     * @Description: 订单详情
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 15:45
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @RequestMapping("/showOrderList")
+    @ResponseBody
+    public Map<String,Object> showOrderList(String orderId){
+        return goodService.showOrderList(orderId);
+    }
 }

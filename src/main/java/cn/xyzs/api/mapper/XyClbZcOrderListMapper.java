@@ -2,9 +2,12 @@ package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZcOrderList;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
 
@@ -51,4 +54,18 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
             "\t#{zcShopStatus}\n" +
             ")")
     public void addOrderList(XyClbZcOrderList xyClbZcOrderList) throws SQLException;
+
+    /***
+     *
+     * @Description: 查询订单明细
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 15:21
+     * @param: [orderId]
+     * @return: void
+     */
+    @Select("SELECT zol.*,sup.SUP_NAME,zf.ZCFL_NAME \n" +
+            "FROM XY_CLB_ZC_ORDER_LIST zol,XY_SUPPLIER sup,XY_CLB_ZC_FL zf \n" +
+            "WHERE ORDER_ID=#{orderId} \n" +
+            "AND zol.ZC_SUP=sup.SUP_CODE AND zf.ZCFL_CODE=zol.ZC_TYPE")
+    public List<Map<String,Object>> showOrderList(String orderId)throws SQLException;
 }
