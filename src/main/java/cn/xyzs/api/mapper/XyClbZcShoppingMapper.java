@@ -59,7 +59,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
 
     /***
      *
-     * @Description: 根据zcBrand和zcVersion查询商品并分页
+     * @Description: 根据zcBrand或zcVersion查询商品并分页
      * @author: GeWeiliang
      * @date: 2018\8\27 0027 11:32
      * @param: [zcBrand, zcVersion]
