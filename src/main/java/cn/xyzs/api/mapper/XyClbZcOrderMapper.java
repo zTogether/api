@@ -68,7 +68,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "\t\tORDER BY zo.ORDER_DATE DESC" +
             "\t) A\n" +
             ") WHERE RN BETWEEN 1 AND 10")
-    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode);
+    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
     /***
      *
@@ -79,8 +79,8 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @return: void
      */
     @Delete("DELETE FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}")
-    public void deleteFromOrder(@Param("orderId") String orderId);
+    public void deleteFromOrder(@Param("orderId") String orderId) throws SQLException;
     @Delete("DELETE FROM XY_CLB_ZC_ORDER_LIST WHERE ORDER_ID=#{orderId}")
-    public void deleteFromOrderList(@Param("orderId") String orderId);
+    public void deleteFromOrderList(@Param("orderId") String orderId) throws SQLException;
 
 }

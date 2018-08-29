@@ -138,4 +138,10 @@ public class GoodController {
     public Map<String ,Object> addOrder(String[] rowIds,String ctrCode,String opUserid){
         return goodService.addOeder(rowIds,ctrCode,opUserid);
     }
+
+    @ResponseBody
+    @RequestMapping("/showOrder")
+    public Map<String,Object> showOrderByCtrCode(String ctrCode){
+        return goodService.showOrder(ctrCode);
+    }
 }
