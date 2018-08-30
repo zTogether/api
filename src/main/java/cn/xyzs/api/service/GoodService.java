@@ -486,13 +486,13 @@ public class GoodService {
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> showOrder(String ctrCode){
+    public Map<String,Object> showOrder(String ctrCode,String startNum,String endNum){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try{
-            List<Map<String,Object>> list = xyClbZcOrderMapper.queryOrderByctrCode(ctrCode);
+            List<Map<String,Object>> list = xyClbZcOrderMapper.queryOrderByctrCode(ctrCode,startNum,endNum);
             Map<String,Object> custInfo = xyCustomerInfoMapper.getCustInfoByCtrCode(ctrCode);
             code = "200";
             msg = "成功";

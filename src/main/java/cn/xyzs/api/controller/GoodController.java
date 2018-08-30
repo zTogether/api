@@ -149,8 +149,8 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/showOrder")
-    public Map<String,Object> showOrderByCtrCode(String ctrCode){
-        return goodService.showOrder(ctrCode);
+    public Map<String,Object> showOrderByCtrCode(String ctrCode,String startNum,String endNum){
+        return goodService.showOrder(ctrCode,startNum,endNum);
     }
 
     /***
