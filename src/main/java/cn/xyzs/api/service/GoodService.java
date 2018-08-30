@@ -566,4 +566,33 @@ public class GoodService {
         }
         return resultMap;
     }
+
+    /***
+     *
+     * @Description: 修改订单明细以及订单主表
+     * @author: GeWeiliang
+     * @date: 2018\8\30 0030 15:35
+     * @param: [rowId, zcQty, zcArea, zcMark, orderId, orderJe, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> updateOrderList(String rowId,String zcQty,String zcArea, String zcMark,
+                                              String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
+                                              String editType, String orderDis, String orderDisMark, String orderIsreturn){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            xyClbZcOrderListMapper.updateOrderList(rowId,zcQty,zcArea,zcMark);
+            xyClbZcOrderMapper.updateOrder(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
 }

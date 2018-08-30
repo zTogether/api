@@ -178,8 +178,24 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/deleteOrder")
-    @Transactional
     public Map<String,Object> deleteOrder(String orderId){
         return goodService.deleteOrder(orderId);
+    }
+
+    /***
+     *
+     * @Description: 修改订单
+     * @author: GeWeiliang
+     * @date: 2018\8\30 0030 15:39
+     * @param: [rowId, zcQty, zcArea, zcMark, orderId, orderJe, orderMark, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/updateOrderList")
+    public Map<String,Object> updateOrder(String rowId,String zcQty,String zcArea, String zcMark,
+                                          String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
+                                          String editType, String orderDis, String orderDisMark, String orderIsreturn){
+        return goodService.updateOrderList(rowId,zcQty,zcArea,zcMark,orderId,orderJe,orderMark,orderStatus,orderType,editType,
+                orderDis,orderDisMark,orderIsreturn);
     }
 }
