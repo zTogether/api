@@ -578,7 +578,7 @@ public class GoodService {
     @Transactional
     public Map<String,Object> updateOrderList(String rowId,String zcQty,String zcArea, String zcMark,
                                               String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
-                                              String editType, String orderDis, String orderDisMark, String orderIsreturn){
+                                              String editType,String orderDis, String orderDisMark, String orderIsreturn){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
