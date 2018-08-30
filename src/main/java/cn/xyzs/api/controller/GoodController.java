@@ -3,6 +3,7 @@ package cn.xyzs.api.controller;
 import cn.xyzs.api.service.GoodService;
 import cn.xyzs.api.service.XyCustomerInfoService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -165,5 +166,20 @@ public class GoodController {
     @ResponseBody
     public Map<String,Object> showOrderList(String orderId){
         return goodService.showOrderList(orderId);
+    }
+
+    /***
+     *
+     * @Description: 删除订单
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 16:16
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/deleteOrder")
+    @Transactional
+    public Map<String,Object> deleteOrder(String orderId){
+        return goodService.deleteOrder(orderId);
     }
 }
