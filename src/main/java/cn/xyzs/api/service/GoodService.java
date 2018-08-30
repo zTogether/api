@@ -540,4 +540,30 @@ public class GoodService {
         }
         return resultMap;
     }
+
+    /***
+     *
+     * @Description: 删除订单
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 16:15
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> deleteOrder(String orderId){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            xyClbZcOrderMapper.deleteFromOrder(orderId);
+            xyClbZcOrderMapper.deleteFromOrderList(orderId);
+            code = "200";
+            msg = "删除成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
 }

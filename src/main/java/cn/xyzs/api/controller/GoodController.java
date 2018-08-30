@@ -166,4 +166,18 @@ public class GoodController {
     public Map<String,Object> showOrderList(String orderId){
         return goodService.showOrderList(orderId);
     }
+
+    /***
+     *
+     * @Description: 删除订单
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 16:16
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/deleteOrder")
+    public Map<String,Object> deleteOrder(String orderId){
+        return goodService.deleteOrder(orderId);
+    }
 }
