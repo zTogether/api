@@ -3,6 +3,7 @@ package cn.xyzs.api.controller;
 import cn.xyzs.api.service.GoodService;
 import cn.xyzs.api.service.XyCustomerInfoService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -177,6 +178,7 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/deleteOrder")
+    @Transactional
     public Map<String,Object> deleteOrder(String orderId){
         return goodService.deleteOrder(orderId);
     }
