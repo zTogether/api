@@ -46,7 +46,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
 
     /***
      *
-     * @Description: 根据orderId修改orderListFree
+     * @Description: 根据rowId修改orderListFree
      * @author: GeWeiliang
      * @date: 2018\8\31 0031 18:23
      * @param: [orderId, zcQty, zcMark, zcArea]

@@ -220,6 +220,14 @@ public class GoodController {
         return goodService.getOrderInfo(orderId);
     }
 
+    /***
+     *
+     * @Description: 根据rowId修改OrderListFree
+     * @author: GeWeiliang
+     * @date: 2018\8\31 0031 18:32
+     * @param: [rowId, zcQty, zcMark, zcArea]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @RequestMapping("/updateOrderListFree")
     @ResponseBody
     public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea){
