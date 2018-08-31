@@ -61,7 +61,8 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @param: [ctrCode]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT\n" +
+    @Select("<script>" +
+            "SELECT\n" +
             "\tB.*,TO_CHAR(B.ORDER_DATE,'yyyy-MM-dd HH24:mm:ss') ORDERDATE\n" +
             "FROM\n" +
             "\t(\n" +
@@ -84,7 +85,8 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "\t\t\tAND sup.SUP_CODE = zo.ORDER_SUP\n" +
             "\t\t\tORDER BY zo.ORDER_DATE DESC\n" +
             "\t\t) A\n" +
-            "\t) B WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}")
+            "\t) B WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
+            "</script>")
     public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode,@Param("startNum")String startNum,@Param("endNum" )String endNum) throws SQLException;
 
     /***
@@ -159,7 +161,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @param: [orderId]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    @Select("SELECT * FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}</script>")
     public Map<String,Object> getOrderInfo(@Param("orderId") String orderId)throws SQLException;
 
 }

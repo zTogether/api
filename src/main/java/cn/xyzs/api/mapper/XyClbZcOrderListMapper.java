@@ -66,10 +66,12 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
      * @param: [orderId]
      * @return: void
      */
-    @Select("SELECT zol.*,sup.SUP_NAME,zf.ZCFL_NAME \n" +
+    @Select("<script>" +
+            "SELECT zol.*,sup.SUP_NAME,zf.ZCFL_NAME \n" +
             "FROM XY_CLB_ZC_ORDER_LIST zol,XY_SUPPLIER sup,XY_CLB_ZC_FL zf \n" +
             "WHERE ORDER_ID=#{orderId} \n" +
-            "AND zol.ZC_SUP=sup.SUP_CODE AND zf.ZCFL_CODE=zol.ZC_TYPE")
+            "AND zol.ZC_SUP=sup.SUP_CODE AND zf.ZCFL_CODE=zol.ZC_TYPE" +
+            "</script>")
     public List<Map<String,Object>> showOrderList(String orderId)throws SQLException;
 
     /***

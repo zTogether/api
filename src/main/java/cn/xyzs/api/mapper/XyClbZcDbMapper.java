@@ -54,7 +54,7 @@ public interface XyClbZcDbMapper{
     public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list,@Param("startNum")String startNum,@Param("endNum" )String endNum,
                                            @Param("minimum") String minimum,@Param("maximum") String maximum) throws SQLException;
 
-    @Select("SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode,jdbcType=VARCHAR}")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode,jdbcType=VARCHAR}</script>")
     @Results(id="queryZcDb",value={
             @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
             @Result(column = "ZC_NAME", property = "zcName", javaType = String.class),
@@ -81,11 +81,13 @@ public interface XyClbZcDbMapper{
     })
     public List<XyClbZcDb> queryZcDb(@Param("zcCode") String zcCode) throws SQLException;
 
-    @Select("SELECT\n" +
+    @Select("<script>" +
+            "SELECT\n" +
             "\txczd.ZC_VERSION \n" +
             "FROM\n" +
             "\tXY_CLB_ZC_DB xczd \n" +
             "WHERE\n" +
-            "\txczd.ZC_CODE = #{zcCode}")
+            "\txczd.ZC_CODE = #{zcCode}" +
+            "</script>")
     public String getZcVersion (@Param("zcCode") String zcCode) throws SQLException;
 }

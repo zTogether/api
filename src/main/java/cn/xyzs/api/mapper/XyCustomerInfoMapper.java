@@ -19,7 +19,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @param: [ctrTel]
      * @return: java.lang.Integer
      */
-    @Select("SELECT COUNT(1) FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_TEL = #{ctrTel}")
+    @Select("<script>SELECT COUNT(1) FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_TEL = #{ctrTel}</script>")
     public Integer isCustomer(String ctrTel) throws SQLException;
 
     /**
@@ -30,7 +30,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @param: []
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select(" SELECT " +
+    @Select("<script> " +
+            "SELECT " +
                 "xci.CTR_CODE ctrCode," +
                 "xci.CTR_CRT_DATE ctrCrtDate," +
                 "xci.CTR_KG_DATE ctrKgDate," +
@@ -54,7 +55,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             " WHERE " +
                 "xci.CTR_ORG = xo.ORG_CODE" +
             " AND " +
-                "xci.CTR_TEL = #{ctrTel}")
+                "xci.CTR_TEL = #{ctrTel}" +
+            "</script>")
     public List<Map<String, Object>> getCustomerEngineeringInfo(String ctrTel) throws SQLException;
 
     /**
@@ -65,7 +67,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @param: [userId, startNum, endNum]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT\n" +
+    @Select("<script>" +
+            "SELECT\n" +
             "\t* \n" +
             "FROM\n" +
             "\t(\n" +
@@ -103,7 +106,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\tOR T.CTR_CLDD = #{userId}\n" +
             "\t\t) A \n" +
             "\t) \n" +
-            "WHERE RN BETWEEN #{startNum} AND #{endNum}")
+            "WHERE RN BETWEEN #{startNum} AND #{endNum}" +
+            "</script>")
     public List<Map<String,Object>> getCustomerInfoByRoleTypeE(@Param("userId") String userId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
     /**
@@ -114,7 +118,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @param: [userId, startNum, endNum]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT\n" +
+    @Select("<script>" +
+            "SELECT\n" +
             "\t* \n" +
             "FROM\n" +
             "\t(\n" +
@@ -192,7 +197,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t) A \n" +
             "\t) \n" +
             "WHERE\n" +
-            "\tRN BETWEEN #{startNum} AND #{endNum}")
+            "\tRN BETWEEN #{startNum} AND #{endNum}" +
+            "</script>")
     public List<Map<String,Object>> getCustomerInfoByRoleTypeR(@Param("userId") String userId, @Param("roleId") String roleId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
      /**
@@ -202,7 +208,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    @Select("SELECT " +
+    @Select("<script>" +
+            "SELECT " +
             "xci.CTR_CODE ctrCode,xci.CTR_CRT_DATE ctrCrtDate,\"NVL\"(xci.CTR_NAME,'-') ctrName," +
             "xci.CTR_TEL ctrTel,\"NVL\"(xci.CTR_CARDID,'-') ctr_cardid,\"NVL\"(xci.CTR_ADDR,'-') ctrAddr," +
             "\"NVL\"(xci.CTR_AREA,-1) ctrArea,\"NVL\"(xci.CTR_STRUCTURE,'-') ctrStructure,\"NVL\"(xci.CTR_FLOOR,-1) ctrFloor," +
@@ -223,7 +230,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\"NVL\"(xci.CTR_STATU,'-') ctrStatu,\"NVL\"(xci.CTR_DRAW,'-') ctrDraw,\"NVL\"(xci.DRAW_STATU,'-') drawStatu," +
             "\"NVL\"(xci.CTR_X,'-') ctrX," +
             "\"NVL\"(xci.CTR_Y,'-') ctrY,\"NVL\"(xci.CTR_MAP_VERSION,'-') ctrMapVersion" +
-            " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}")
+            " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}" +
+            "</script>")
 //    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode}")
     public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
@@ -235,7 +243,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @param: [userId, condition]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT * FROM (\n" +
+    @Select("<script>" +
+            "SELECT * FROM (\n" +
             "\tSELECT\n" +
             "\t\tT.CTR_CODE,\n" +
             "\t\tT.CTR_NAME,\n" +
@@ -266,10 +275,12 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             ") A\n" +
             "WHERE A.CTR_CODE = #{condition}\n" +
             "OR A.CTR_NAME = #{condition}\n" +
-            "OR A.CTR_TEL = #{condition}")
+            "OR A.CTR_TEL = #{condition}" +
+            "</script>")
     public List<Map<String,Object>> getECuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition) throws SQLException;
 
-    @Select("SELECT\n" +
+    @Select("<script>" +
+            "SELECT\n" +
             "\t* \n" +
             "FROM\n" +
             "\t(\n" +
@@ -342,6 +353,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "WHERE\n" +
             "\ttemptable.CTR_CODE = #{condition} \n" +
             "\tOR temptable.CTR_NAME = #{condition} \n" +
-            "\tOR temptable.CTR_TEL = #{condition}")
+            "\tOR temptable.CTR_TEL = #{condition}" +
+            "</script>")
     public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition,@Param("roleId") String roleId) throws SQLException;
 }

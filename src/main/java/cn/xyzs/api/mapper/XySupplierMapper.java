@@ -17,6 +17,6 @@ import java.util.Map;
  * @return:
  */
 public interface XySupplierMapper extends Mapper<XySupplier> {
-    @Select("SELECT * FROM XY_SUPPLIER WHERE SUP_CODE = #{supCode}")
+    @Select("<script>SELECT * FROM XY_SUPPLIER WHERE SUP_CODE = #{supCode}</script>")
     public List<Map<String,Object>> getSupInfo(@Param("supCode") String supCode);
 }

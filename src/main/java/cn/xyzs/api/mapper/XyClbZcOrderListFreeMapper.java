@@ -19,7 +19,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
      * @param: [orderId]
      * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcOrderListFree>
      */
-    @Select("SELECT * FROM XY_CLB_ZC_ORDER_LIST_FREE xczolf WHERE xczolf.ORDER_ID = #{orderId}")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER_LIST_FREE xczolf WHERE xczolf.ORDER_ID = #{orderId}</script>")
     @Results(id="getNonStandard",value={
             @Result(column = "ORDER_ID", property = "orderId", javaType = String.class),
             @Result(column = "ROW_ID", property = "rowId", javaType = String.class),
