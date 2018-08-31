@@ -43,6 +43,9 @@ public class GoodService {
     @Resource
     private XyClbZcOrderListMapper xyClbZcOrderListMapper;
 
+    @Resource
+    private XySupplierMapper xySupplierMapper;
+
     /**
      * 获取下级目录
      * @Description:
@@ -263,7 +266,6 @@ public class GoodService {
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
-        double sum;
         try{
             List<Map<String,Object>> shoppingList = xyClbZcShoppingMapper.showZcShopping(ctrCode);
             for (Map<String, Object> map : shoppingList) {
@@ -523,11 +525,15 @@ public class GoodService {
         String msg = "系统异常";
         try{
             List<Map<String,Object>> orderList = xyClbZcOrderListMapper.showOrderList(orderId);
+            String supCode = "";
             for (Map<String, Object> map : orderList) {
                 String area = xyClbZcShoppingMapper.getArea((String)map.get("ZC_TYPE"),(String)map.get("ZC_CODE"));
                 List<XyVal> list = xyValMapper.getZcAreaList(conversionList(area));
+                supCode = (String)map.get("ZC_SUP");
                 map.put("areaList",list);
             }
+            List<Map<String,Object>> supInfo = xySupplierMapper.getSupInfo(supCode);
+            obj.put("supInfo",supInfo);
             obj.put("orderList",orderList);
             code = "200";
             msg = "成功";

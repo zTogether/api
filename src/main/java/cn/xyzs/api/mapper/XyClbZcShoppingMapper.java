@@ -23,7 +23,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      */
     @Select("SELECT s.*,u.USER_NAME,ZC_QTY*ZC_PRICE_OUT AS TOTAL,SUM(ZC_QTY*ZC_PRICE_OUT) OVER(ORDER BY s.ROW_ID) AS ZJ" +
             " FROM XY_CLB_ZC_SHOPPING s,XY_USER u WHERE CTR_CODE=#{ctrCode} AND s.OP_USERID=u.USER_ID")
-    List<Map<String,Object>> showZcShopping(String ctrCode) throws SQLException;
+    List<Map<String,Object>> showZcShopping(String ctrCode);
 
     @Select("SELECT ZC_AREA FROM XY_CLB_ZC_DB WHERE ZC_TYPE=#{zcType} AND ZC_CODE=#{zcCode}")
     String getArea(@Param("zcType") String zcType, @Param("zcCode") String zcCode)throws SQLException;
