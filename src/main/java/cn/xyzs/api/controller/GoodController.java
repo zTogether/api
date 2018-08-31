@@ -178,8 +178,22 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/deleteOrder")
-    @Transactional
     public Map<String,Object> deleteOrder(String orderId){
         return goodService.deleteOrder(orderId);
     }
+
+    /**
+     * 根据orderId查询非标商品
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/8/31 10:59
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getNonStandard")
+    public Map<String ,Object> getNonStandard(String orderId){
+        return goodService.getNonStandard(orderId);
+    }
+
 }

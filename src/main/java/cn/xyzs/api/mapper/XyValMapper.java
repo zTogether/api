@@ -25,4 +25,12 @@ public interface XyValMapper extends Mapper<XyVal>{
             @Result(column = "VAL_NAME", property = "valName", javaType = String.class),
     })
     public List<XyVal> getZcAreaList(@Param("list") List<String> list) throws SQLException;
+
+    @Select("SELECT * FROM XY_VAL WHERE VAL_ID = #{valId} AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C' ")
+    @Results(id="getZcArea",value={
+            @Result(column = "XY_VAL", property = "valsetId", javaType = String.class),
+            @Result(column = "VAL_ID", property = "valId", javaType = String.class),
+            @Result(column = "VAL_NAME", property = "valName", javaType = String.class),
+    })
+    public XyVal getZcArea(@Param("valId") String valId) throws SQLException;
 }
