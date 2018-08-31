@@ -220,4 +220,12 @@ public class GoodController {
         return goodService.getOrderInfo(orderId);
     }
 
+    @ResponseBody
+    @RequestMapping("/updateOrderInfo")
+    public Map<String,Object> updateOrderInfo(String orderId, String orderJe,  String orderMark, String orderStatus,
+                                              String orderType,  String editType, String orderDis, String orderDisMark,
+                                              String orderIsreturn){
+        return goodService.updateOrderInfo(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+    }
+
 }

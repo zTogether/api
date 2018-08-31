@@ -650,17 +650,40 @@ public class GoodService {
      */
     public Map<String,Object> getOrderInfo(String orderId){
         Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
         Map<String,Object> map = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
             map = xyClbZcOrderMapper.getOrderInfo(orderId);
+            obj.put("orderInfo",map);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
-            resultMap.put("resultData",map);
+            resultMap.put("resultData",obj);
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    @Transactional
+    public Map<String,Object> updateOrderInfo( String orderId, String orderJe,  String orderMark, String orderStatus,
+                                               String orderType,  String editType, String orderDis, String orderDisMark,
+                                               String orderIsreturn){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            xyClbZcOrderMapper.updateOrder(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+            code = "200";
+            msg = "修改成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
         }
