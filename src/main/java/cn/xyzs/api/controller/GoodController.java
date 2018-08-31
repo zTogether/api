@@ -220,4 +220,10 @@ public class GoodController {
         return goodService.getOrderInfo(orderId);
     }
 
+    @RequestMapping("/updateOrderListFree")
+    @ResponseBody
+    public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea){
+        return goodService.updateOrderListFree(rowId,zcQty,zcMark,zcArea);
+    }
+
 }

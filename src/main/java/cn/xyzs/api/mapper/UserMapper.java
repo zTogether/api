@@ -118,5 +118,4 @@ public interface UserMapper extends Mapper<TUser> {
     @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}</script>")
     Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 
-
 }

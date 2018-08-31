@@ -1,8 +1,8 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZcOrderListFree;
-import cn.xyzs.api.pojo.XyVal;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.FetchType;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -43,4 +43,34 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
             @Result(column="ZC_AREA",property="xyVal",one=@One(select="cn.xyzs.api.mapper.XyValMapper.getZcArea",fetchType= FetchType.EAGER))
     })
     public List<XyClbZcOrderListFree> getNonStandard(@Param("orderId") String orderId) throws SQLException;
+
+    /***
+     *
+     * @Description: 根据orderId修改orderListFree
+     * @author: GeWeiliang
+     * @date: 2018\8\31 0031 18:23
+     * @param: [orderId, zcQty, zcMark, zcArea]
+     * @return: void
+     */
+    @UpdateProvider(type = updateOrderListFree.class,method = "updateOrderListFree")
+    public void updateOrderListFree(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
+                                    @Param("zcMark") String zcMark,@Param("zcArea") String zcArea)throws SQLException;
+    class updateOrderListFree{
+        public String updateOrderListFree(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
+                                          @Param("zcMark") String zcMark,@Param("zcArea") String zcArea){
+            return new SQL(){{
+                UPDATE("XY_CLB_ZC_ORDER_LIST_FREE");
+                if (zcQty!=null && zcQty!=""){
+                    SET("ZC_QTY=#{zcQty}");
+                }
+                if (zcMark!=null && zcMark!=""){
+                    SET("ZC_MARK=#{zcMark}");
+                }
+                if (zcArea!=null && zcArea!=""){
+                    SET("ZC_AREA=#{zcArea}");
+                }
+                WHERE("ROW_ID=#{rowId}");
+            }}.toString();
+        }
+    }
 }
