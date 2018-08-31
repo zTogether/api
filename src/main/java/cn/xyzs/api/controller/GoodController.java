@@ -214,4 +214,10 @@ public class GoodController {
         return goodService.getNonStandard(orderId);
     }
 
+    @ResponseBody
+    @RequestMapping("/getOrderInfo")
+    public Map<String,Object> getOrderInfo(String orderId){
+        return goodService.getOrderInfo(orderId);
+    }
+
 }

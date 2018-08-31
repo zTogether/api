@@ -151,4 +151,15 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
         }
     }
 
+    /***
+     *
+     * @Description: 根据orderId获取订单信息
+     * @author: GeWeiliang
+     * @date: 2018\8\31 0031 16:37
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("SELECT * FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}")
+    public Map<String,Object> getOrderInfo(@Param("orderId") String orderId)throws SQLException;
+
 }
