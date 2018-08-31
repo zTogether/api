@@ -1,8 +1,6 @@
 package cn.xyzs.api.service;
 
-import cn.xyzs.api.mapper.XyClbZcShoppingMapper;
 import cn.xyzs.api.mapper.XyCustomerInfoMapper;
-import cn.xyzs.api.mapper.XySupplierMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,10 +14,6 @@ public class XyCustomerInfoService {
 
     @Resource
     private XyCustomerInfoMapper xyCustomerInfoMapper;
-    @Resource
-    private XySupplierMapper xySupplierMapper;
-    @Resource
-    private XyClbZcShoppingMapper xyClbZcShoppingMapper;
 
     public Map<String, Object> getCustomerEngineeringInfo(String ctrTel){
         Map<String, Object> resultMap = new HashMap<>();

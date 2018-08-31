@@ -17,8 +17,6 @@ public class GoodController {
 
     @Resource
     private GoodService goodService;
-    @Resource
-    private XyCustomerInfoService xyCustomerInfoService;
 
 
     /**
