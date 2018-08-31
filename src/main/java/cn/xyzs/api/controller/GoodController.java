@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -16,6 +17,8 @@ public class GoodController {
 
     @Resource
     private GoodService goodService;
+    @Resource
+    private XyCustomerInfoService xyCustomerInfoService;
 
 
     /**
@@ -180,6 +183,23 @@ public class GoodController {
     @RequestMapping("/deleteOrder")
     public Map<String,Object> deleteOrder(String orderId){
         return goodService.deleteOrder(orderId);
+    }
+
+    /***
+     *
+     * @Description: 修改订单
+     * @author: GeWeiliang
+     * @date: 2018\8\30 0030 15:39
+     * @param: [rowId, zcQty, zcArea, zcMark, orderId, orderJe, orderMark, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/updateOrderList")
+    public Map<String,Object> updateOrder(String rowId,String zcQty,String zcArea, String zcMark,
+                                          String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
+                                          String editType, String orderDis, String orderDisMark, String orderIsreturn){
+        return goodService.updateOrderList(rowId,zcQty,zcArea,zcMark,orderId,orderJe,orderMark,orderStatus,orderType,editType,
+                orderDis,orderDisMark,orderIsreturn);
     }
 
     /**

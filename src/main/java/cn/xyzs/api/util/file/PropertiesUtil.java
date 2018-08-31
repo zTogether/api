@@ -30,15 +30,7 @@ public class PropertiesUtil {
 	 */
 	public static String getSourcingValueBykey(String key){
 		String value="";
-		try{
-			value = ps.getProperty(key);
-			if(value == null || value.equals("")){
-				System.out.println("The value for key: " +  key + " doesn't exist.");
-				System.out.println("Please check the content of the properties file.");
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		value = cn.xyzs.api.util.PropertiesUtil.getString(key, value, ps);
 		return value;
 	}
 }

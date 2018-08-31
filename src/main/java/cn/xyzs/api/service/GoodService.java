@@ -45,6 +45,9 @@ public class GoodService {
     private XyClbZcOrderListMapper xyClbZcOrderListMapper;
 
     @Resource
+    private XySupplierMapper xySupplierMapper;
+
+    @Resource
     private XyClbZcOrderListFreeMapper xyClbZcOrderListFreeMapper;
 
     /**
@@ -527,11 +530,15 @@ public class GoodService {
         String msg = "系统异常";
         try{
             List<Map<String,Object>> orderList = xyClbZcOrderListMapper.showOrderList(orderId);
+            String supCode = "";
             for (Map<String, Object> map : orderList) {
                 String area = xyClbZcShoppingMapper.getArea((String)map.get("ZC_TYPE"),(String)map.get("ZC_CODE"));
                 List<XyVal> list = xyValMapper.getZcAreaList(conversionList(area));
+                supCode = (String)map.get("ZC_SUP");
                 map.put("areaList",list);
             }
+            List<Map<String,Object>> supInfo = xySupplierMapper.getSupInfo(supCode);
+            obj.put("supInfo",supInfo);
             obj.put("orderList",orderList);
             code = "200";
             msg = "成功";
@@ -563,6 +570,35 @@ public class GoodService {
             xyClbZcOrderMapper.deleteFromOrderList(orderId);
             code = "200";
             msg = "删除成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 修改订单明细以及订单主表
+     * @author: GeWeiliang
+     * @date: 2018\8\30 0030 15:35
+     * @param: [rowId, zcQty, zcArea, zcMark, orderId, orderJe, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> updateOrderList(String rowId,String zcQty,String zcArea, String zcMark,
+                                              String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
+                                              String editType,String orderDis, String orderDisMark, String orderIsreturn){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            xyClbZcOrderListMapper.updateOrderList(rowId,zcQty,zcArea,zcMark);
+            xyClbZcOrderMapper.updateOrder(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+            code = "200";
+            msg = "成功";
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
