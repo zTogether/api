@@ -2,7 +2,10 @@ package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZcOrderList;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -68,4 +71,34 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
             "WHERE ORDER_ID=#{orderId} \n" +
             "AND zol.ZC_SUP=sup.SUP_CODE AND zf.ZCFL_CODE=zol.ZC_TYPE")
     public List<Map<String,Object>> showOrderList(String orderId)throws SQLException;
+
+    /***
+     *
+     * @Description: 根据rowId修改orderList
+     * @author: GeWeiliang
+     * @date: 2018\8\30 0030 15:08
+     * @param: [rowId, zcQty, zcArea, zcMark]
+     * @return: void
+     */
+    @UpdateProvider(type = updateOrderList.class,method = "updateOrderList")
+    public void updateOrderList(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
+                                @Param("zcArea") String zcArea,@Param("zcMark") String zcMark)throws SQLException;
+    class updateOrderList{
+        public String updateOrderList(@Param("rowId") String rowId, @Param("zcQty") String zcQty,
+                                      @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
+          return new SQL(){{
+              UPDATE("XY_CLB_ZC_ORDER_LIST");
+              if (zcQty!=null && zcQty!=""){
+                  SET("ZC_QTY=#{zcQty}");
+              }
+              if (zcArea!=null && zcArea!=""){
+                  SET("ZC_AREA=#{zcArea}");
+              }
+              if (zcMark!=null && zcMark!=""){
+                  SET("ZC_MARK=#{zcMark}");
+              }
+              WHERE("ROW_ID=#{rowId}");
+          }}.toString();
+        }
+    }
 }

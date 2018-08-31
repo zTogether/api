@@ -2,6 +2,7 @@ package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZcOrder;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -60,15 +61,31 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @param: [ctrCode]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT * FROM(\n" +
-            "\tSELECT A.*,ROWNUM RN FROM(\n" +
-            "\t\tSELECT zo.*,u.USER_NAME,sup.SUP_NAME \n" +
-            "\t\tFROM XY_CLB_ZC_ORDER zo,XY_USER u,XY_SUPPLIER sup\n" +
-            "\t\tWHERE zo.CTR_CODE=2018000468 AND zo.OP_USERID=u.USER_ID AND sup.SUP_CODE=zo.ORDER_SUP\n" +
-            "\t\tORDER BY zo.ORDER_DATE DESC" +
-            "\t) A\n" +
-            ") WHERE RN BETWEEN 1 AND 10")
-    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode) throws SQLException;
+    @Select("SELECT\n" +
+            "\tB.*,TO_CHAR(B.ORDER_DATE,'yyyy-MM-dd HH24:mm:ss') ORDERDATE\n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tA.*,\n" +
+            "\t\tROWNUM RN \n" +
+            "\tFROM\n" +
+            "\t\t(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tzo.*,\n" +
+            "\t\t\tu.USER_NAME,\n" +
+            "\t\t\tsup.SUP_NAME \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CLB_ZC_ORDER zo,\n" +
+            "\t\t\tXY_USER u,\n" +
+            "\t\t\tXY_SUPPLIER sup \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tzo.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} \n" +
+            "\t\t\tAND zo.OP_USERID = u.USER_ID \n" +
+            "\t\t\tAND sup.SUP_CODE = zo.ORDER_SUP\n" +
+            "\t\t\tORDER BY zo.ORDER_DATE DESC\n" +
+            "\t\t) A\n" +
+            "\t) B WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}")
+    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode,@Param("startNum")String startNum,@Param("endNum" )String endNum) throws SQLException;
 
     /***
      *
@@ -82,5 +99,56 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     public void deleteFromOrder(@Param("orderId") String orderId) throws SQLException;
     @Delete("DELETE FROM XY_CLB_ZC_ORDER_LIST WHERE ORDER_ID=#{orderId}")
     public void deleteFromOrderList(@Param("orderId") String orderId) throws SQLException;
+
+    /***
+     *
+     * @Description: 根据orderId修改订单表
+     * @author: GeWeiliang
+     * @date: 2018\8\30 0030 15:26
+     * @param: [orderId, orderJe, orderMark, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: void
+     */
+    @UpdateProvider(type = updateOrder.class,method = "updateOrder")
+    public void updateOrder(@Param("orderId") String orderId,@Param("orderJe") String orderJe,
+                            @Param("orderMark") String orderMark,@Param("orderStatus") String orderStatus,
+                            @Param("orderType") String orderType, @Param("editType") String editType,
+                            @Param("orderDis") String orderDis,@Param("orderDisMark") String orderDisMark,
+                            @Param("orderIsreturn") String orderIsreturn)throws SQLException;
+    class updateOrder{
+        public String updateOrder(@Param("orderId") String orderId,@Param("orderJe") String orderJe,
+                                  @Param("orderMark") String orderMark,@Param("orderStatus") String orderStatus,
+                                  @Param("orderType") String orderType,@Param("editType") String editType,
+                                  @Param("orderDis") String orderDis,@Param("orderDisMark") String orderDisMark,
+                                  @Param("orderIsreturn") String orderIsreturn){
+            return new SQL(){{
+                UPDATE("XY_CLB_ZC_ORDER");
+                if (orderJe!=null && orderJe!=""){
+                    SET("ORDER_JE=#{orderJe}");
+                }
+                if (orderMark!=null && orderMark!=""){
+                    SET("ORDER_MARK=#{orderMark}");
+                }
+                if (orderStatus!=null && orderStatus!=""){
+                    SET("ORDER_STATUS=#{orderStatus}");
+                }
+                if (orderType!=null && orderType!=""){
+                    SET("ORDER_TYPE=#{orderType}");
+                }
+                if (editType!=null && editType!=""){
+                    SET("EDIT_TYPE=#{editType}");
+                }
+                if (orderDis!=null && orderDis!=""){
+                    SET("ORDER_DIS=#{orderDis}");
+                }
+                if (orderDisMark!=null && orderDisMark!=""){
+                    SET("ORDER_DIS_MARK=#{orderDisMark}");
+                }
+                if (orderIsreturn!=null && orderIsreturn!=""){
+                    SET("ORDER_ISRETURN=#{orderIsreturn}");
+                }
+                WHERE("ORDER_ID=#{orderId}");
+            }}.toString();
+        }
+    }
 
 }

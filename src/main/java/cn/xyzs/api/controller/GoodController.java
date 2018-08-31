@@ -3,6 +3,7 @@ package cn.xyzs.api.controller;
 import cn.xyzs.api.service.GoodService;
 import cn.xyzs.api.service.XyCustomerInfoService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -149,8 +150,8 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/showOrder")
-    public Map<String,Object> showOrderByCtrCode(String ctrCode){
-        return goodService.showOrder(ctrCode);
+    public Map<String,Object> showOrderByCtrCode(String ctrCode,String startNum,String endNum){
+        return goodService.showOrder(ctrCode,startNum,endNum);
     }
 
     /***
@@ -165,5 +166,36 @@ public class GoodController {
     @ResponseBody
     public Map<String,Object> showOrderList(String orderId){
         return goodService.showOrderList(orderId);
+    }
+
+    /***
+     *
+     * @Description: 删除订单
+     * @author: GeWeiliang
+     * @date: 2018\8\29 0029 16:16
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/deleteOrder")
+    public Map<String,Object> deleteOrder(String orderId){
+        return goodService.deleteOrder(orderId);
+    }
+
+    /***
+     *
+     * @Description: 修改订单
+     * @author: GeWeiliang
+     * @date: 2018\8\30 0030 15:39
+     * @param: [rowId, zcQty, zcArea, zcMark, orderId, orderJe, orderMark, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/updateOrderList")
+    public Map<String,Object> updateOrder(String rowId,String zcQty,String zcArea, String zcMark,
+                                          String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
+                                          String editType, String orderDis, String orderDisMark, String orderIsreturn){
+        return goodService.updateOrderList(rowId,zcQty,zcArea,zcMark,orderId,orderJe,orderMark,orderStatus,orderType,editType,
+                orderDis,orderDisMark,orderIsreturn);
     }
 }
