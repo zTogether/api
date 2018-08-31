@@ -89,15 +89,15 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
           return new SQL(){{
               UPDATE("XY_CLB_ZC_ORDER_LIST");
               if (zcQty!=null && zcQty!=""){
-                  SET("ZC_QTY=#{zcQty}");
+                  SET("ZC_QTY=#{zcQty,jdbcType=VARCHAR}");
               }
               if (zcArea!=null && zcArea!=""){
-                  SET("ZC_AREA=#{zcArea}");
+                  SET("ZC_AREA=#{zcArea,jdbcType=VARCHAR}");
               }
               if (zcMark!=null && zcMark!=""){
-                  SET("ZC_MARK=#{zcMark}");
+                  SET("ZC_MARK=#{zcMark,jdbcType=VARCHAR}");
               }
-              WHERE("ROW_ID=#{rowId}");
+              WHERE("ROW_ID=#{rowId,jdbcType=VARCHAR}");
           }}.toString();
         }
     }

@@ -596,7 +596,9 @@ public class GoodService {
         String msg = "系统异常";
         try{
             xyClbZcOrderListMapper.updateOrderList(rowId,zcQty,zcArea,zcMark);
-            xyClbZcOrderMapper.updateOrder(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+            if (orderId != null && orderId != ""){
+                xyClbZcOrderMapper.updateOrder(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+            }
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -623,7 +625,9 @@ public class GoodService {
         String msg = "系统异常";
         try {
             List<XyClbZcOrderListFree> nonStandardList = xyClbZcOrderListFreeMapper.getNonStandard(orderId);
+            List<XyVal> areaList = xyValMapper.getZcAreaListByValsetId("A3B32F221FF17256988E7C0A218EBF5C");
             obj.put("nonStandardList",nonStandardList);
+            obj.put("areaList",areaList);
             code = "200";
             msg = "成功";
         } catch (SQLException e) {

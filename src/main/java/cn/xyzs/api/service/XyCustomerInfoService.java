@@ -50,10 +50,23 @@ public class XyCustomerInfoService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     public Map<String,Object> getCustInfoByCtrCode(String ctrCode){
-        Map<String,Object> map = new HashMap<>();
-        Map<String,Object> custInfo = xyCustomerInfoMapper.getCustInfoByCtrCode(ctrCode);
-        map.put("customerInfo",custInfo);
-        return map;
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            Map<String,Object> custInfo = xyCustomerInfoMapper.getCustInfoByCtrCode(ctrCode);
+            code = "200";
+            msg = "成功";
+            obj.put("custInfo",custInfo);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
     }
 
 }
