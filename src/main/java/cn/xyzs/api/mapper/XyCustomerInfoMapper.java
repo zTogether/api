@@ -225,7 +225,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\"NVL\"(xci.CTR_Y,'-') ctrY,\"NVL\"(xci.CTR_MAP_VERSION,'-') ctrMapVersion" +
             " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}")
 //    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode}")
-    public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode") String ctrCode);
+    public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
     /**
      * E根据客户档案号/手机号/姓名查询E类型员工所拥有得到客户

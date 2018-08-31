@@ -123,30 +123,30 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_ORDER");
                 if (orderJe!=null && orderJe!=""){
-                    SET("ORDER_JE=#{orderJe}");
+                    SET("ORDER_JE=#{orderJe,jdbcType=VARCHAR}");
                 }
                 if (orderMark!=null && orderMark!=""){
-                    SET("ORDER_MARK=#{orderMark}");
+                    SET("ORDER_MARK=#{orderMark,jdbcType=VARCHAR}");
                 }
                 if (orderStatus!=null && orderStatus!=""){
-                    SET("ORDER_STATUS=#{orderStatus}");
+                    SET("ORDER_STATUS=#{orderStatus,jdbcType=VARCHAR}");
                 }
                 if (orderType!=null && orderType!=""){
-                    SET("ORDER_TYPE=#{orderType}");
+                    SET("ORDER_TYPE=#{orderType,jdbcType=VARCHAR}");
                 }
                 if (editType!=null && editType!=""){
-                    SET("EDIT_TYPE=#{editType}");
+                    SET("EDIT_TYPE=#{editType,jdbcType=VARCHAR}");
                 }
                 if (orderDis!=null && orderDis!=""){
-                    SET("ORDER_DIS=#{orderDis}");
+                    SET("ORDER_DIS=#{orderDis,jdbcType=VARCHAR}");
                 }
                 if (orderDisMark!=null && orderDisMark!=""){
-                    SET("ORDER_DIS_MARK=#{orderDisMark}");
+                    SET("ORDER_DIS_MARK=#{orderDisMark,jdbcType=VARCHAR}");
                 }
                 if (orderIsreturn!=null && orderIsreturn!=""){
-                    SET("ORDER_ISRETURN=#{orderIsreturn}");
+                    SET("ORDER_ISRETURN=#{orderIsreturn,jdbcType=VARCHAR}");
                 }
-                WHERE("ORDER_ID=#{orderId}");
+                WHERE("ORDER_ID=#{orderId,jdbcType=VARCHAR}");
             }}.toString();
         }
     }
