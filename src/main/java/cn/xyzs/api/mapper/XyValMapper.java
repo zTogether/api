@@ -26,7 +26,7 @@ public interface XyValMapper extends Mapper<XyVal>{
     })
     public List<XyVal> getZcAreaList(@Param("list") List<String> list) throws SQLException;
 
-    @Select("SELECT * FROM XY_VAL WHERE VAL_ID = #{valId} AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C' ")
+    @Select("<script>SELECT * FROM XY_VAL WHERE VAL_ID = #{valId} AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C' </script>")
     @Results(id="getZcArea",value={
             @Result(column = "VALSET_ID", property = "valsetId", javaType = String.class),
             @Result(column = "VAL_ID", property = "valId", javaType = String.class),
@@ -34,7 +34,7 @@ public interface XyValMapper extends Mapper<XyVal>{
     })
     public XyVal getZcArea(@Param("valId") String valId) throws SQLException;
 
-    @Select("SELECT * FROM XY_VAL xv WHERE xv.VALSET_ID = #{valsetId}")
+    @Select("<script>SELECT * FROM XY_VAL xv WHERE xv.VALSET_ID = #{valsetId}</script>")
     @Results(id="getZcAreaListByValsetId",value={
             @Result(column = "VALSET_ID", property = "valsetId", javaType = String.class),
             @Result(column = "VAL_ID", property = "valId", javaType = String.class),

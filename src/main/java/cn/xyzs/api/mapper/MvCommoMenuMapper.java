@@ -48,7 +48,8 @@ public interface MvCommoMenuMapper extends Mapper<MvCommoMenu>{
      * @param: [mvCommoMenu]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT\n" +
+    @Select("<script>" +
+            "SELECT\n" +
             "\t* \n" +
             "FROM\n" +
             "\tXY_COMPO xc \n" +
@@ -61,6 +62,6 @@ public interface MvCommoMenuMapper extends Mapper<MvCommoMenu>{
             "\tWHERE\n" +
             "\t\tMV_COMMO_MENU.USER_ID = #{userId} \n" +
             "\tAND MV_COMMO_MENU.ROLE_ID = #{roleId} \n" +
-            ")")
+            ")</script>")
     public List<Map<String ,Object>> getCommoMenu(MvCommoMenu mvCommoMenu) throws SQLException;
 }

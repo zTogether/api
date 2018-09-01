@@ -19,6 +19,6 @@ public interface XyClbZcFlMapper extends Mapper<XyClbZcFl>{
      * @param: [zcflCode]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT xczf.* FROM XY_CLB_ZC_FL xczf WHERE xczf.P_CODE = #{zcflCode}")
+    @Select("<script>SELECT xczf.* FROM XY_CLB_ZC_FL xczf WHERE xczf.P_CODE = #{zcflCode}</script>")
     public List<Map<String, Object>> getSubdirectory(String zcflCode) throws SQLException;
 }

@@ -39,7 +39,7 @@ public interface UserMapper extends Mapper<TUser> {
      * @param: [userId]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT * FROM XY_USER_ROLE xyro,XY_ROLE xr WHERE xyro.ROLE_ID = xr.ROLE_ID AND xyro.USER_ID = #{userId}")
+    @Select("<script>SELECT * FROM XY_USER_ROLE xyro,XY_ROLE xr WHERE xyro.ROLE_ID = xr.ROLE_ID AND xyro.USER_ID = #{userId}</script>")
      List<Map<String,Object>> getUserRole(String userId) throws SQLException;
 
     /**
@@ -50,7 +50,8 @@ public interface UserMapper extends Mapper<TUser> {
      * @param: [roleId]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT \n" +
+    @Select("<script>" +
+            "SELECT \n" +
             "\txrf.* ,\n" +
             "\tXY_COMPO.*\n" +
             "FROM \n" +
@@ -60,11 +61,12 @@ public interface UserMapper extends Mapper<TUser> {
             "WHERE \n" +
             "\txrf.ROLE_ID = xy.ROLE_ID\n" +
             "AND\n" +
-            "\txrf.COMPO_ID = XY_COMPO.COMPO_ID")
+            "\txrf.COMPO_ID = XY_COMPO.COMPO_ID" +
+            "</script>")
     List<Map<String, Object>> getMenuByRole(String roleId) throws SQLException;
 
     //修改密码
-    @Select("UPDATE XY_USER SET PASSWORD=#{password} WHERE USER_TEL=#{userTel}")
+    @Select("<script>UPDATE XY_USER SET PASSWORD=#{password} WHERE USER_TEL=#{userTel}</script>")
     void changePassword(@Param("userTel") String userTel,@Param("password") String password) throws SQLException;
 
     /**
@@ -113,8 +115,7 @@ public interface UserMapper extends Mapper<TUser> {
         }
     }
 
-    @Select("SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}")
+    @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}</script>")
     Map<String,Object> getUserInfo(@Param("userTel") String userTel);
-
 
 }

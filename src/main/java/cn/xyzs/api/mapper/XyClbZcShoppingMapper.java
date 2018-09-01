@@ -21,11 +21,13 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @param: [ctrCode]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT s.*,u.USER_NAME,ZC_QTY*ZC_PRICE_OUT AS TOTAL,SUM(ZC_QTY*ZC_PRICE_OUT) OVER(ORDER BY s.ROW_ID) AS ZJ" +
-            " FROM XY_CLB_ZC_SHOPPING s,XY_USER u WHERE CTR_CODE=#{ctrCode} AND s.OP_USERID=u.USER_ID")
+    @Select("<script>" +
+            "SELECT s.*,u.USER_NAME,ZC_QTY*ZC_PRICE_OUT AS TOTAL,SUM(ZC_QTY*ZC_PRICE_OUT) OVER(ORDER BY s.ROW_ID) AS ZJ" +
+            " FROM XY_CLB_ZC_SHOPPING s,XY_USER u WHERE CTR_CODE=#{ctrCode} AND s.OP_USERID=u.USER_ID" +
+            "</script>")
     List<Map<String,Object>> showZcShopping(String ctrCode);
 
-    @Select("SELECT ZC_AREA FROM XY_CLB_ZC_DB WHERE ZC_TYPE=#{zcType} AND ZC_CODE=#{zcCode}")
+    @Select("<script>SELECT ZC_AREA FROM XY_CLB_ZC_DB WHERE ZC_TYPE=#{zcType} AND ZC_CODE=#{zcCode}</script>")
     String getArea(@Param("zcType") String zcType, @Param("zcCode") String zcCode)throws SQLException;
 
 
@@ -55,7 +57,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @param: [zcCode]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode}")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode}</script>")
     List<Map<String,Object>> queryZcDb(@Param("zcCode") String zcCode);
 
     /***
@@ -66,7 +68,8 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @param: [zcBrand, zcVersion]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT * FROM(\n" +
+    @Select("<script>" +
+            "SELECT * FROM(\n" +
             "\tSELECT A.*, ROWNUM RN FROM(\n" +
             "\t\tSELECT\n" +
             "\t\t\t* \n" +
@@ -76,7 +79,8 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "\t\t\txczd.ZC_BRAND LIKE '%'||#{condition,}||'%' \n" +
             "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{condition}||'%'\n" +
             "\t) A\n" +
-            ") WHERE RN BETWEEN #{startNum} AND #{endNum}\n")
+            ") WHERE RN BETWEEN #{startNum} AND #{endNum}\n" +
+            "</script>")
     @Results(id="getGoodByZcType",value={
             @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
             @Result(column = "ZC_NAME", property = "zcName", javaType = String.class),

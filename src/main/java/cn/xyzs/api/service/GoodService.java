@@ -11,7 +11,6 @@ import cn.xyzs.api.pojo.XyVal;
 import cn.xyzs.api.pojo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -49,6 +48,7 @@ public class GoodService {
 
     @Resource
     private XyClbZcOrderListFreeMapper xyClbZcOrderListFreeMapper;
+
 
     /**
      * 获取下级目录
@@ -684,6 +684,32 @@ public class GoodService {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 根据rowId修改orderListFree
+     * @author: GeWeiliang
+     * @date: 2018\8\31 0031 18:22
+     * @param: [orderId, zcQty, zcMark, zcArea]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            xyClbZcOrderListFreeMapper.updateOrderListFree(rowId,zcQty,zcMark,zcArea);
+            code = "200";
+            msg = "更改成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
         }
