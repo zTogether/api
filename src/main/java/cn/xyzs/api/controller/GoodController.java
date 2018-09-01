@@ -1,14 +1,11 @@
 package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.GoodService;
-import cn.xyzs.api.service.XyCustomerInfoService;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -292,4 +289,17 @@ public class GoodController {
                 orderDisMark,editType,orderIsreturn);
     }
 
+    /**
+     *
+     * @Description: 根据rowId删除非标化商品
+     * @author: GeWeiliang
+     * @date: 2018\9\1 0001 10:42
+     * @param: [rowId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/deleteOrderListFree")
+    public Map<String,Object> deleteOrderListFree(String rowId){
+        return goodService.deleteOrderListFree(rowId);
+    }
 }

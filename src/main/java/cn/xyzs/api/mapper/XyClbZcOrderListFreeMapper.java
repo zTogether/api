@@ -73,4 +73,28 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
             }}.toString();
         }
     }
+
+    /***
+     *
+     * @Description: 删除非标化商品
+     * @author: GeWeiliang
+     * @date: 2018\9\1 0001 10:11
+     * @param: [orderId, rowId]
+     * @return: void
+     */
+    @DeleteProvider(type = deleteOrderListFree.class,method = "deleteOrderListFree")
+    public void deleteOrderListFree(@Param("orderId") String orderId,@Param("rowId") String rowId)throws SQLException;
+    class deleteOrderListFree{
+        public String deleteOrderListFree(@Param("orderId") String orderId,@Param("rowId") String rowId){
+            return new SQL(){{
+                DELETE_FROM("XY_CLB_ZC_ORDER_LIST_FREE");
+                if (orderId!=null && orderId!=""){
+                    WHERE("ORDER_ID=#{orderID}");
+                }
+                if(rowId!=null && rowId!=""){
+                    WHERE("ROW_ID=#{rowId}");
+                }
+            }}.toString();
+        }
+    }
 }
