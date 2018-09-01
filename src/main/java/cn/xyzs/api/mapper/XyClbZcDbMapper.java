@@ -8,6 +8,14 @@ import java.util.List;
 
 public interface XyClbZcDbMapper{
 
+    /**
+     *
+     * @Description:根据ZC_TYPE获取商品
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:10
+     * @param: [list, startNum, endNum, minimum, maximum]
+     * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcDb>
+     */
     @Select("<script>" +
             "SELECT * FROM(\n" +
             "\tSELECT A.*, ROWNUM RN FROM(\n" +
@@ -54,6 +62,14 @@ public interface XyClbZcDbMapper{
     public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list,@Param("startNum")String startNum,@Param("endNum" )String endNum,
                                            @Param("minimum") String minimum,@Param("maximum") String maximum) throws SQLException;
 
+    /**
+     *
+     * @Description:根据zcCode获取商品信息
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:10
+     * @param: [zcCode]
+     * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcDb>
+     */
     @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode,jdbcType=VARCHAR}</script>")
     @Results(id="queryZcDb",value={
             @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
@@ -81,6 +97,14 @@ public interface XyClbZcDbMapper{
     })
     public List<XyClbZcDb> queryZcDb(@Param("zcCode") String zcCode) throws SQLException;
 
+    /**
+     * 根据zcCode获取商品型号
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:11
+     * @param: [zcCode]
+     * @return: java.lang.String
+     */
     @Select("<script>" +
             "SELECT\n" +
             "\txczd.ZC_VERSION \n" +

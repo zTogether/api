@@ -14,6 +14,14 @@ import java.util.Map;
 
 public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
 
+    /**
+     * 添加订单详情
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:12
+     * @param: [xyClbZcOrderList]
+     * @return: void
+     */
     @Insert("INSERT INTO \n" +
             "\tXY_CLB_ZC_ORDER_LIST ( \n" +
             "\t\tORDER_ID,\n" +

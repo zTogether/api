@@ -279,6 +279,14 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "</script>")
     public List<Map<String,Object>> getECuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition) throws SQLException;
 
+    /**
+     * 根据条件获取R类型下拥有的客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:13
+     * @param: [userId, condition, roleId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
             "SELECT\n" +
             "\t* \n" +

@@ -33,10 +33,17 @@ public class GoodController {
         return goodService.getSubdirectory(zcflCode);
     }
 
+    /**
+     * 分类筛选获取商品信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:20
+     * @param: [zcflCode, startNum, endNum, minimum, maximum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/sortFilter")
-    public Map<String, Object> test(String zcflCode,String startNum,String endNum,String minimum,String maximum){
-
+    public Map<String, Object> sortFilter(String zcflCode,String startNum,String endNum,String minimum,String maximum){
         return goodService.sortFilter(zcflCode,startNum,endNum,minimum,maximum);
     }
 
@@ -123,18 +130,42 @@ public class GoodController {
         return goodService.updateGoods(rowId,zcQty,zcArea,zcMark);
     }
 
+    /**
+     * 获取用户所拥有的客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:20
+     * @param: [userId, roleId, startNum, endNum, roleType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/getCustomerInfoByUserId")
     public Map<String,Object> getCustomerInfoByUserId(String userId,String roleId,String startNum,String endNum,String roleType){
         return goodService.getCustomerInfoByUserId(userId,roleId,startNum,endNum,roleType);
     }
 
+    /**
+     * 根据条件获取用户所拥有的客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:20
+     * @param: [userId, condition, roleType, roleId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/getCuntomerInfoByCondition")
     public Map<String ,Object> getCuntomerInfoByCondition(String userId,String condition ,String roleType,String roleId){
         return goodService.getCuntomerInfoByCondition(userId,condition,roleType,roleId);
     }
 
+    /**
+     * 添加订单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:21
+     * @param: [rowIds, ctrCode, opUserid]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/addOeder")
     public Map<String ,Object> addOrder(String[] rowIds,String ctrCode,String opUserid){
@@ -214,12 +245,28 @@ public class GoodController {
         return goodService.getNonStandard(orderId);
     }
 
+    /**
+     * 获取订单信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:21
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/getOrderInfo")
     public Map<String,Object> getOrderInfo(String orderId){
         return goodService.getOrderInfo(orderId);
     }
 
+    /**
+     * 修改订单信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:21
+     * @param: [orderId, orderJe, orderMark, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/updateOrderInfo")
     public Map<String,Object> updateOrderInfo(String orderId, String orderJe,  String orderMark, String orderStatus,

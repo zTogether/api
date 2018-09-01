@@ -12,6 +12,14 @@ import java.util.List;
 
 public interface XyValMapper extends Mapper<XyVal>{
 
+    /**
+     * 获取区域List
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:14
+     * @param: [list]
+     * @return: java.util.List<cn.xyzs.api.pojo.XyVal>
+     */
     @Select("<script>" +
             "SELECT * FROM XY_VAL WHERE VAL_ID IN " +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
@@ -26,6 +34,14 @@ public interface XyValMapper extends Mapper<XyVal>{
     })
     public List<XyVal> getZcAreaList(@Param("list") List<String> list) throws SQLException;
 
+    /**
+     * 获取区域信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:14
+     * @param: [valId]
+     * @return: cn.xyzs.api.pojo.XyVal
+     */
     @Select("<script>SELECT * FROM XY_VAL WHERE VAL_ID = #{valId} AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C' </script>")
     @Results(id="getZcArea",value={
             @Result(column = "VALSET_ID", property = "valsetId", javaType = String.class),
@@ -34,6 +50,14 @@ public interface XyValMapper extends Mapper<XyVal>{
     })
     public XyVal getZcArea(@Param("valId") String valId) throws SQLException;
 
+    /**
+     * 根据
+     * @Description:VALSET_ID获取区域list
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:15
+     * @param: [valsetId]
+     * @return: java.util.List<cn.xyzs.api.pojo.XyVal>
+     */
     @Select("<script>SELECT * FROM XY_VAL xv WHERE xv.VALSET_ID = #{valsetId}</script>")
     @Results(id="getZcAreaListByValsetId",value={
             @Result(column = "VALSET_ID", property = "valsetId", javaType = String.class),

@@ -78,6 +78,14 @@ public class GoodService {
         return resultMap;
     }
 
+    /**
+     * 分类筛选主材分类
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:16
+     * @param: [zcflCode, startNum, endNum, minimum, maximum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public  Map<String, Object> sortFilter(String zcflCode,String startNum,String endNum,String minimum,String maximum){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
@@ -397,6 +405,14 @@ public class GoodService {
         return resultMap;
     }
 
+    /**
+     * 根据条件获取用户所拥有的客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:16
+     * @param: [userId, condition, roleType, roleId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public Map<String,Object> getCuntomerInfoByCondition(String userId, String condition ,String roleType ,String roleId){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
@@ -422,6 +438,14 @@ public class GoodService {
         return resultMap;
     }
 
+    /**
+     * 添加订单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:17
+     * @param: [rowIds, ctrCode, opUserid]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @Transactional
     public Map<String,Object> addOeder(String[] rowIds,String ctrCode,String opUserid){
         List<String> rowIdList = new ArrayList<>();
@@ -669,6 +693,14 @@ public class GoodService {
         return resultMap;
     }
 
+    /**
+     * 修改订单信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:21
+     * @param: [orderId, orderJe, orderMark, orderStatus, orderType, editType, orderDis, orderDisMark, orderIsreturn]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @Transactional
     public Map<String,Object> updateOrderInfo( String orderId, String orderJe,  String orderMark, String orderStatus,
                                                String orderType,  String editType, String orderDis, String orderDisMark,

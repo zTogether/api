@@ -15,6 +15,14 @@ public class XyCustomerInfoService {
     @Resource
     private XyCustomerInfoMapper xyCustomerInfoMapper;
 
+    /**
+     * 根据客户电话查询客户工程信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:19
+     * @param: [ctrTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public Map<String, Object> getCustomerEngineeringInfo(String ctrTel){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
