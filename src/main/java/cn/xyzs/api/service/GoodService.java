@@ -679,6 +679,9 @@ public class GoodService {
         String msg = "系统异常";
         try {
             xyClbZcOrderMapper.updateOrder(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+           if ("1".equals(editType)){
+               xyClbZcOrderListFreeMapper.deleteOrderListFree(orderId,null);
+           }
             code = "200";
             msg = "修改成功";
         } catch (SQLException e) {
@@ -712,6 +715,32 @@ public class GoodService {
             }
             code = "200";
             msg = "更改成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 删除非标化商品
+     * @author: GeWeiliang
+     * @date: 2018\9\1 0001 10:39
+     * @param: [rowId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> deleteOrderListFree(String rowId){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            xyClbZcOrderListFreeMapper.deleteOrderListFree(null,rowId);
+            code = "200";
+            msg = "成功";
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
