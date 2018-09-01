@@ -238,8 +238,11 @@ public class GoodController {
      */
     @RequestMapping("/updateOrderListFree")
     @ResponseBody
-    public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea){
-        return goodService.updateOrderListFree(rowId,zcQty,zcMark,zcArea);
+    public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea,String orderId,
+                                                  String orderJe,String orderMark,String orderStatus,String orderType,
+                                                  String orderDis,String orderDisMark,String editType,String orderIsreturn){
+        return goodService.updateOrderListFree(rowId,zcQty,zcMark,zcArea,orderId,orderJe,orderMark,orderStatus,orderType,orderDis,
+                orderDisMark,editType,orderIsreturn);
     }
 
 }

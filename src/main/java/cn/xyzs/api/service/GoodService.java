@@ -651,7 +651,7 @@ public class GoodService {
     public Map<String,Object> getOrderInfo(String orderId){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map;
         String code = "500";
         String msg = "系统异常";
         try {
@@ -699,12 +699,17 @@ public class GoodService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea){
+    public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea,String orderId,
+                                                  String orderJe,String orderMark,String orderStatus,String orderType,
+                                                  String orderDis,String orderDisMark,String editType,String orderIsreturn){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try{
             xyClbZcOrderListFreeMapper.updateOrderListFree(rowId,zcQty,zcMark,zcArea);
+            if (orderId != null && orderId != ""){
+                xyClbZcOrderMapper.updateOrder(orderId,orderJe,orderMark,orderStatus,orderType,editType,orderDis,orderDisMark,orderIsreturn);
+            }
             code = "200";
             msg = "更改成功";
         }catch (SQLException e){
