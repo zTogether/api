@@ -98,9 +98,11 @@ public class MenuService {
             MvCommoMenu mvCommoMenu = new MvCommoMenu();
             mvCommoMenu.setUserId(userId);
             mvCommoMenu.setRoleId(roleId);
-            for (int i = 0; i <compoIds.length ; i++) {
-                mvCommoMenu.setCompoId(compoIds[i]);
-                mvCommoMenuMapper.addCommoMenu(mvCommoMenu);
+            if (compoIds != null){
+                for (int i = 0; i <compoIds.length ; i++) {
+                    mvCommoMenu.setCompoId(compoIds[i]);
+                    mvCommoMenuMapper.addCommoMenu(mvCommoMenu);
+                }
             }
             code = "200";
             msg = "添加成功";

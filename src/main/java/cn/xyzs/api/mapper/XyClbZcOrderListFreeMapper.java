@@ -89,7 +89,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
             return new SQL(){{
                 DELETE_FROM("XY_CLB_ZC_ORDER_LIST_FREE");
                 if (orderId!=null && orderId!=""){
-                    WHERE("ORDER_ID=#{orderID}");
+                    WHERE("ORDER_ID=#{orderId}");
                 }
                 if(rowId!=null && rowId!=""){
                     WHERE("ROW_ID=#{rowId}");
