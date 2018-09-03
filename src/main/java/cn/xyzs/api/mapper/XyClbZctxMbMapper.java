@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public interface XyClbZctxMb extends Mapper<XyClbZctxMbVr> {
+public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
     /***
      *
      * @Description: 根据vrStyle查询套系VR

@@ -1,6 +1,6 @@
 package cn.xyzs.api.service;
 
-import cn.xyzs.api.mapper.XyClbZctxMb;
+import cn.xyzs.api.mapper.XyClbZctxMbMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class WholeDecoratesService {
     @Resource
-    private XyClbZctxMb xyClbZctxMb;
+    private XyClbZctxMbMapper xyClbZctxMbMapper;
 
     /***
      *
@@ -28,7 +28,7 @@ public class WholeDecoratesService {
         String code = "500";
         String msg = "系统异常";
         try{
-            List<Map<String,Object>> vrList = xyClbZctxMb.showZctxVr(vrStyle);
+            List<Map<String,Object>> vrList = xyClbZctxMbMapper.showZctxVr(vrStyle);
             obj.put("zctxVr",vrList);
             code = "200";
             msg = "成功";
