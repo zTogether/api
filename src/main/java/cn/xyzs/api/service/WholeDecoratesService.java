@@ -41,4 +41,55 @@ public class WholeDecoratesService {
         }
         return resultMap;
     }
+
+    public Map<String,Object> txDetail(String vrId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            obj = xyClbZctxMbMapper.vrDetail(vrId);
+            String pic = (String)obj.get("VR_PIC");
+            GoodService goodService = new GoodService();
+            List<String> picList = goodService.conversionList(pic);
+            obj.put("picList",picList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+            return  resultMap;
+    }
+
+    /***
+     *
+     * @Description: 套系材料列表
+     * @author: GeWeiliang
+     * @date: 2018\9\3 0003 16:47
+     * @param: [vrId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> txClList(String vrId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> clList = xyClbZctxMbMapper.txClList(vrId);
+            obj.put("clList",clList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }
