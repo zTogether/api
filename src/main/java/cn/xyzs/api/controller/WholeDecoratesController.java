@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/zctx")
+    @RequestMapping("/zctx")
 public class WholeDecoratesController {
     @Resource
     private WholeDecoratesService wholeDecoratesService;
