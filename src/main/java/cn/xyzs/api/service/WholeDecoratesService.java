@@ -24,11 +24,12 @@ public class WholeDecoratesService {
      */
     public Map<String,Object> showZctxVr(String vrStyle){
         Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try{
             List<Map<String,Object>> vrList = xyClbZctxMb.showZctxVr(vrStyle);
-            resultMap.put("zctxVr",vrList);
+            obj.put("zctxVr",vrList);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -36,6 +37,7 @@ public class WholeDecoratesService {
         }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
         }
         return resultMap;
     }
