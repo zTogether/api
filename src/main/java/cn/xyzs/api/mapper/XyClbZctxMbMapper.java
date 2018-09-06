@@ -40,11 +40,8 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
         public String clList(@Param("vrId") String vrId,@Param("flBh") String flBh){
             return new SQL(){{
                 SELECT("zm.*,zf.ZCFL_NAME,zd.ZC_NAME,zd.ZC_PRICE_OUT,zd.ZC_BRAND,zd.ZC_SPEC," +
-                        "sup.SUP_NAME,zd.ZC_MATERIAL," +
-                        "\"NVL\"(zd.ZC_COLOR,'-') ZC_COLOR," +
-                        "zd.ZC_UNIT," +
-                        "\"NVL\"(zd.ZC_DES,'-') ZC_DES," +
-                        "\"NVL\"(zd.ZC_CYC,0) ZC_CYC");
+                        "sup.SUP_NAME,zd.ZC_MATERIAL,\"NVL\"(zd.ZC_COLOR,'-') ZC_COLOR," +
+                        "zd.ZC_UNIT,\"NVL\"(zd.ZC_DES,'-') ZC_DES,\"NVL\"(zd.ZC_CYC,0) ZC_CYC");
                 FROM("XY_CLB_ZCTX_MB zm,XY_CLB_ZC_DB zd,XY_SUPPLIER sup,XY_CLB_ZC_FL zf\n");
                 WHERE("zm.VR_ID=#{vrId} AND zm.ZC_CODE=zd.ZC_CODE AND zd.ZC_SUP=sup.SUP_CODE " +
                         "AND zm.ML_ZCFL=zf.ZCFL_CODE\n");
