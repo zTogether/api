@@ -1,7 +1,6 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZctxMbVr;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
