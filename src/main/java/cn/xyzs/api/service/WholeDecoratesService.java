@@ -73,13 +73,13 @@ public class WholeDecoratesService {
      * @param: [vrId]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> txClList(String vrId){
+    public Map<String,Object> txClList(String vrId,String flBh){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try{
-            List<Map<String,Object>> clList = xyClbZctxMbMapper.txClList(vrId);
+            List<Map<String,Object>> clList = xyClbZctxMbMapper.txClList(vrId,flBh);
             obj.put("clList",clList);
             code = "200";
             msg = "成功";

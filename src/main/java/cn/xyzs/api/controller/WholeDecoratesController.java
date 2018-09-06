@@ -52,7 +52,7 @@ public class WholeDecoratesController {
      */
     @ResponseBody
     @RequestMapping("/clList")
-    public Map<String,Object> txClList(String vrId){
-        return  wholeDecoratesService.txClList(vrId);
+    public Map<String,Object> txClList(String vrId,String flBh){
+        return  wholeDecoratesService.txClList(vrId,flBh);
     }
 }
