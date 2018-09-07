@@ -35,18 +35,21 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @SelectProvider(type = clList.class,method = "clList")
-    public List<Map<String,Object>> txClList(@Param("vrId") String vrId,@Param("flBh") String flBh) throws SQLException;
+    public List<Map<String,Object>> txClList(@Param("vrId") String vrId,@Param("mlId") String mlId) throws SQLException;
     class clList{
-        public String clList(@Param("vrId") String vrId,@Param("flBh") String flBh){
+        public String clList(@Param("vrId") String vrId,@Param("mlId") String mlId){
             return new SQL(){{
-                SELECT("zm.*,zf.ZCFL_NAME,zd.ZC_NAME,zd.ZC_PRICE_OUT,zd.ZC_BRAND,zd.ZC_SPEC," +
-                        "sup.SUP_NAME,zd.ZC_MATERIAL,\"NVL\"(zd.ZC_COLOR,'-') ZC_COLOR," +
-                        "zd.ZC_UNIT,\"NVL\"(zd.ZC_DES,'-') ZC_DES,\"NVL\"(zd.ZC_CYC,0) ZC_CYC");
-                FROM("XY_CLB_ZCTX_MB zm,XY_CLB_ZC_DB zd,XY_SUPPLIER sup,XY_CLB_ZC_FL zf\n");
-                WHERE("zm.VR_ID=#{vrId} AND zm.ZC_CODE=zd.ZC_CODE AND zd.ZC_SUP=sup.SUP_CODE " +
-                        "AND zm.ML_ZCFL=zf.ZCFL_CODE\n");
-                if(flBh!=null && flBh!=""){
-                    WHERE("FL_BH=#{flBh}");
+                SELECT("zm.*,zm.ML_ZCFL,NVL(zd.ZC_NAME, '-') ZC_NAME,zd.ZC_PRICE_OUT," +
+                        "NVL(zd.ZC_BRAND, '-') ZC_BRAND,NVL(sup.SUP_NAME, '-') SUP_NAME, NVL(zd.ZC_SPEC, '-') ZC_SPEC," +
+                        "NVL(zd.ZC_MATERIAL, '-') ZC_MATERIAL,NVL(zd.ZC_COLOR, '-') ZC_COLOR,NVL(zf.ZCFL_NAME,'-') ZCFL," +
+                        "NVL(zd.ZC_UNIT,'-') ZC_UNIT,NVL(zd.ZC_DES,'-') ZC_DES,zd.ZC_CYC");
+                FROM("XY_CLB_ZCTX_MB zm");
+                LEFT_OUTER_JOIN("XY_CLB_ZC_DB zd ON zm.ZC_CODE=zd.ZC_CODE");
+                LEFT_OUTER_JOIN("XY_SUPPLIER sup ON zd.ZC_SUP=sup.SUP_CODE");
+                LEFT_OUTER_JOIN("XY_CLB_ZC_FL zf ON zd.ZC_TYPE=zf.ZCFL_CODE");
+                WHERE("zm.VR_ID=#{vrId}");
+                if(mlId!=null && mlId!=""){
+                    WHERE("zm.ML_ID=#{mlId}");
                 }
                 ORDER_BY("zm.FL_BH");
             }}.toString();
