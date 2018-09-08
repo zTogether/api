@@ -20,10 +20,10 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
      * @param: []
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_STYLE=#{vrStyle}")
+    @Select("<script>SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_STYLE=#{vrStyle}</script>")
     public List<Map<String,Object>> showZctxVr(@Param("vrStyle") String vrStyle)throws SQLException;
 
-    @Select("SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_ID=#{vrId}")
+    @Select("<script>SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_ID=#{vrId}</script>")
     public Map<String,Object> vrDetail(@Param("vrId") String vrId) throws SQLException;
 
     /***
