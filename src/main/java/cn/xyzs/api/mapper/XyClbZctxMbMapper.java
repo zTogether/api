@@ -39,7 +39,7 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
     class clList{
         public String clList(@Param("vrId") String vrId,@Param("mlId") String mlId){
             return new SQL(){{
-                SELECT("zm.*,zm.ML_ZCFL,NVL(zd.ZC_NAME, '-') ZC_NAME,zd.ZC_PRICE_OUT," +
+                SELECT("zm.*,NVL(zd.ZC_NAME, '-') ZC_NAME,zd.ZC_PRICE_OUT," +
                         "NVL(zd.ZC_BRAND, '-') ZC_BRAND,NVL(sup.SUP_NAME, '-') SUP_NAME, NVL(zd.ZC_SPEC, '-') ZC_SPEC," +
                         "NVL(zd.ZC_MATERIAL, '-') ZC_MATERIAL,NVL(zd.ZC_COLOR, '-') ZC_COLOR,NVL(zf.ZCFL_NAME,'-') ZCFL," +
                         "NVL(zd.ZC_UNIT,'-') ZC_UNIT,NVL(zd.ZC_DES,'-') ZC_DES,zd.ZC_CYC");
