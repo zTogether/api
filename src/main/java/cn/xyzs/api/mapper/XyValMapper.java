@@ -65,4 +65,6 @@ public interface XyValMapper extends Mapper<XyVal>{
             @Result(column = "VAL_NAME", property = "valName", javaType = String.class),
     })
     public List<XyVal> getZcAreaListByValsetId(@Param("valsetId") String valsetId) throws SQLException;
+
+
 }

@@ -1,6 +1,8 @@
 package cn.xyzs.api.service;
 
+import cn.xyzs.api.mapper.XyClbZcFlMapper;
 import cn.xyzs.api.mapper.XyClbZctxMbMapper;
+import cn.xyzs.api.pojo.XyClbZcFl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -13,6 +15,8 @@ import java.util.Map;
 public class WholeDecoratesService {
     @Resource
     private XyClbZctxMbMapper xyClbZctxMbMapper;
+    @Resource
+    private XyClbZcFlMapper xyClbZcFlMapper;
 
     /***
      *
@@ -73,13 +77,29 @@ public class WholeDecoratesService {
      * @param: [vrId]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> txClList(String vrId,String flBh){
+    public Map<String,Object> txClList(String vrId,String mlId){
+        GoodService goodService = new GoodService();
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try{
-            List<Map<String,Object>> clList = xyClbZctxMbMapper.txClList(vrId,flBh);
+            List<Map<String,Object>> clList = xyClbZctxMbMapper.txClList(vrId,mlId);
+            for (Map<String, Object> map : clList) {
+                String mlZcfl = (String)map.get("ML_ZCFL");
+                if (mlZcfl!=null && mlZcfl!=""){
+                    List<String> flList = xyClbZcFlMapper.getZcFl(goodService.conversionList(mlZcfl));
+                    map.put("FL",flList);
+                }else{
+                    map.put("FL","-");
+                }
+                if (map.get("ZC_PRICE_OUT")==null||map.get("ZC_PRICE_OUT")==""){
+                    map.put("ZC_PRICE_OUT","-");
+                }
+                if(map.get("ZC_CYC")==null||map.get("ZC_CYC")==""){
+                    map.put("ZC_CYC","-");
+                }
+            }
             obj.put("clList",clList);
             code = "200";
             msg = "成功";
