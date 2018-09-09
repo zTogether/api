@@ -63,7 +63,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
                 if (zcQty!=null && zcQty!=""){
                     SET("ZC_QTY=#{zcQty}");
                 }
-                if (zcMark!=null && zcMark!=""){
+                if (zcMark!=null){
                     SET("ZC_MARK=#{zcMark}");
                 }
                 if (zcArea!=null && zcArea!=""){

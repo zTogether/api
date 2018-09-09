@@ -104,7 +104,7 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
               if (zcArea!=null && zcArea!=""){
                   SET("ZC_AREA=#{zcArea,jdbcType=VARCHAR}");
               }
-              if (zcMark!=null && zcMark!=""){
+              if (zcMark!=null){
                   SET("ZC_MARK=#{zcMark,jdbcType=VARCHAR}");
               }
               WHERE("ROW_ID=#{rowId,jdbcType=VARCHAR}");

@@ -138,10 +138,10 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
                 if (zcQty!=null && zcQty!=""){
                     SET("ZC_QTY = #{zcQty}");
                 }
-                if (zcArea!=null && zcQty!=""){
+                if (zcArea!=null && zcArea!=""){
                     SET("ZC_AREA = #{zcArea}");
                 }
-                if (zcMark!=null && zcQty!=""){
+                if (zcMark!=null){
                     SET("ZC_MARK = #{zcMark}");
                 }
                 WHERE("ROW_ID = #{rowId}");
