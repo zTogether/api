@@ -20,4 +20,16 @@ public class OpenTenderController {
     public Map<String ,Object> getOpenTenderInfo(String grId){
         return openTenderService.getOpenTenderInfo(grId);
     }
+
+    @ResponseBody
+    @RequestMapping("/signUp")
+    public Map<String ,Object> signUp( String grId, String pgId, String endDate){
+        return openTenderService.signUp(grId,pgId,endDate);
+    }
+
+    @ResponseBody
+    @RequestMapping("/grabSingle")
+    public Map<String ,Object> grabSingle(String pgId,String grId){
+        return openTenderService.grabSingle(pgId,grId);
+    }
 }
