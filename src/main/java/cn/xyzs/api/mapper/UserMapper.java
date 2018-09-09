@@ -89,25 +89,25 @@ public interface UserMapper extends Mapper<TUser> {
                                          @Param("bankIdCmbc") String bankIdCmbc){
             return new SQL(){{
                 UPDATE("XY_USER");
-                if(userTel!=null){
+                if(userTel!=null&&userTel!=""){
                     SET("USER_TEL=#{userTel}");
                 }
-                if (userSex!=null){
+                if (userSex!=null&&userSex!=""){
                     SET("USER_SEX=#{userSex}");
                 }
-                if (userBthd!=null){
+                if (userBthd!=null&&userBthd!=""){
                     SET("USER_BTHD=#{userBthd}");
                 }
-                if (idCard!=null){
+                if (idCard!=null&&idCard!=""){
                     SET("ID_CARD=#{idCard}");
                 }
-                if (bankIdBc!=null){
+                if (bankIdBc!=null&&bankIdBc!=""){
                     SET("BANK_ID_BC=#{bankIdBc}");
                 }
-                if (bankIdIcbc!=null){
+                if (bankIdIcbc!=null&&bankIdIcbc!=""){
                     SET("BANK_ID_ICBC=#{bankIdIcbc}");
                 }
-                if (bankIdCmbc!=null){
+                if (bankIdCmbc!=null&&bankIdCmbc!=""){
                     SET("BANK_ID_CMBC=#{bankIdCmbc}");
                 }
                 WHERE("USER_CODE=#{userCode}");

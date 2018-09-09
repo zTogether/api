@@ -56,4 +56,31 @@ public class MenuController {
     public Map<String, Object> addCommoMenu(String userId,String roleId,String[] compoIds){
         return menuService.addCommoMenu(userId,roleId,compoIds);
     }
+
+    /***
+     *
+     * @Description: 获取工人信息
+     * @author: GeWeiliang
+     * @date: 2018\9\8 0008 14:58
+     * @param: [grTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getGrInfo")
+    public Map<String,Object> getGrInfo(String grTel){
+        return menuService.getGrInfo(grTel);
+    }
+
+    @ResponseBody
+    @RequestMapping("/changeGrPassword")
+    public  Map<String,Object> changeGrPassword(String grTel,String password){
+        return menuService.changeGrPassword(grTel,password);
+    }
+
+    @ResponseBody
+    @RequestMapping("/changeGrInfo")
+    public Map<String,Object> updateGrInfo(String name,String idCard, String grTel, String grBankId,
+                                           String grAdd,String grId){
+        return menuService.updateGrInfo(name,idCard,grTel,grBankId,grAdd,grId);
+    }
 }
