@@ -124,10 +124,11 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
                                   @Param("orderIsreturn") String orderIsreturn){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_ORDER");
+                SET("ORDER_ID=#{orderId}");
                 if (orderJe!=null && orderJe!=""){
                     SET("ORDER_JE=#{orderJe,jdbcType=VARCHAR}");
                 }
-                if (orderMark!=null && orderMark!=""){
+                if (orderMark!=null){
                     SET("ORDER_MARK=#{orderMark,jdbcType=VARCHAR}");
                 }
                 if (orderStatus!=null && orderStatus!=""){
@@ -142,7 +143,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
                 if (orderDis!=null && orderDis!=""){
                     SET("ORDER_DIS=#{orderDis,jdbcType=VARCHAR}");
                 }
-                if (orderDisMark!=null && orderDisMark!=""){
+                if (orderDisMark!=null){
                     SET("ORDER_DIS_MARK=#{orderDisMark,jdbcType=VARCHAR}");
                 }
                 if (orderIsreturn!=null && orderIsreturn!=""){
