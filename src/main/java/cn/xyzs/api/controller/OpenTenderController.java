@@ -23,13 +23,13 @@ public class OpenTenderController {
 
     @ResponseBody
     @RequestMapping("/signUp")
-    public Map<String ,Object> signUp( String grId, String pgId, String endDate){
-        return openTenderService.signUp(grId,pgId,endDate);
+    public Map<String ,Object> signUp( String grId, String pgId, String endDate ,String ctrCode){
+        return openTenderService.signUp(grId,pgId,endDate,ctrCode);
     }
 
     @ResponseBody
     @RequestMapping("/grabSingle")
-    public Map<String ,Object> grabSingle(String pgId,String grId){
-        return openTenderService.grabSingle(pgId,grId);
+    public Map<String ,Object> grabSingle(String pgId,String grId,String endDate,String ctrCode){
+        return openTenderService.grabSingle(pgId,grId,endDate,ctrCode);
     }
 }

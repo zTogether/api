@@ -349,17 +349,18 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
 
     @Insert("<script>" +
             "INSERT INTO XY_PG_WAITER(\n" +
-            "\tGR_ID,PG_ID,ZT,OP_DATE,END_DATE\n" +
+            "\tGR_ID,PG_ID,ZT,OP_DATE,END_DATE,CTR_CODE\n" +
             ") \n" +
             "VALUES(\n" +
-            "\t#{grId}',\n" +
+            "\t#{grId},\n" +
             "\t#{pgId},\n" +
-            "\t'已报名',\n" +
+            "\t#{zt},\n" +
             "\tSYSDATE,\n" +
-            "\tTO_DATE(#{endDate}, 'yyyy-MM-dd hh24:mi:ss')\n" +
+            "\tTO_DATE(#{endDate}, 'yyyy-MM-dd hh24:mi:ss'),\n" +
+            "\t#{ctrCode}\n" +
             ")" +
             "</script>")
-    public void addXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId, @Param("endDate") String endDate) throws SQLException;
+    public void addXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId, @Param("endDate") String endDate ,@Param("ctrCode") String ctrCode ,@Param("zt") String zt) throws SQLException;
 
     @Update("<script>" +
             "UPDATE XY_PG_WAITER\n" +

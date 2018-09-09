@@ -62,4 +62,13 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
             }}.toString();
         }
     }
+
+    @Update("<script>" +
+            "UPDATE XY_GCB_GRXX\n" +
+            "SET\n" +
+            "\tGR_LEVEL = 0\n" +
+            "WHERE\n" +
+            "\tGR_ID = #{grId}\t" +
+            "</script>")
+    public void updateGrabSingleLevel(String grId) throws SQLException;
 }

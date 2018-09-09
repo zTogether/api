@@ -1,6 +1,7 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.VwXyPgWaiterMapper;
+import cn.xyzs.api.mapper.XyGcbGrxxMapper;
 import cn.xyzs.api.mapper.XyPgMapper;
 import cn.xyzs.api.mapper.XyPgWaiterMapper;
 import cn.xyzs.api.pojo.VwXyPgWaiter;
@@ -24,6 +25,9 @@ public class OpenTenderService {
 
     @Resource
     private XyPgMapper xyPgMapper;
+
+    @Resource
+    private XyGcbGrxxMapper xyGcbGrxxMapper;
 
     /**
      * 获取派工开单信息
@@ -64,22 +68,25 @@ public class OpenTenderService {
     }
 
     @Transactional
-    public Map<String ,Object> signUp( String grId, String pgId, String endDate){
+    public Map<String ,Object> signUp( String grId, String pgId, String endDate,String ctrCode){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
-            xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate);
+            xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"已报名");
             code = "200";
             msg = "报名成功";
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
         }
         return resultMap;
     }
 
     @Transactional
-    public Map<String ,Object> grabSingle(String pgId,String grId){
+    public Map<String ,Object> grabSingle(String pgId,String grId, String endDate,String ctrCode){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
@@ -87,9 +94,10 @@ public class OpenTenderService {
             Map<String ,Object> xyPgInfo =  xyPgMapper.getXyPgInfoByPgId(pgId);
             if (xyPgInfo != null){
                 String PG_GR = String.valueOf(xyPgInfo.get("PG_GR"));
-                if (PG_GR == null || "".equals(PG_GR)){
+                if (PG_GR == null || "".equals(PG_GR) || "null".equals(PG_GR)){
                     xyPgMapper.updatePgGr(pgId,grId);
-                    xyPgWaiterMapper.updateXyPgWaiterInfo(grId,pgId);
+                    xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"抢单成功");
+                    xyGcbGrxxMapper.updateGrabSingleLevel(grId);
                     code = "200";
                     msg = "抢单成功";
                 } else {
@@ -99,6 +107,9 @@ public class OpenTenderService {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
         }
         return resultMap;
     }
