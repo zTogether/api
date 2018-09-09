@@ -47,9 +47,9 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
                 LEFT_OUTER_JOIN("XY_CLB_ZC_DB zd ON zm.ZC_CODE=zd.ZC_CODE");
                 LEFT_OUTER_JOIN("XY_SUPPLIER sup ON zd.ZC_SUP=sup.SUP_CODE");
                 LEFT_OUTER_JOIN("XY_CLB_ZC_FL zf ON zd.ZC_TYPE=zf.ZCFL_CODE");
-                WHERE("zm.VR_ID=#{vrId}");
+                WHERE("zm.VR_ID=#{vrId,jdbcType=VARCHAR}");
                 if(mlId!=null && mlId!=""){
-                    WHERE("zm.ML_ID=#{mlId}");
+                    WHERE("zm.ML_ID=#{mlId,jdbcType=VARCHAR}");
                 }
                 ORDER_BY("zm.FL_BH");
             }}.toString();
