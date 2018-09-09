@@ -98,6 +98,7 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
                                       @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
           return new SQL(){{
               UPDATE("XY_CLB_ZC_ORDER_LIST");
+              SET("ROW_ID=#{rowId}");
               if (zcQty!=null && zcQty!=""){
                   SET("ZC_QTY=#{zcQty,jdbcType=VARCHAR}");
               }

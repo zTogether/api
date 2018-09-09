@@ -60,6 +60,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
                                           @Param("zcMark") String zcMark,@Param("zcArea") String zcArea){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_ORDER_LIST_FREE");
+                SET("ROW_ID=#{rowId}");
                 if (zcQty!=null && zcQty!=""){
                     SET("ZC_QTY=#{zcQty}");
                 }

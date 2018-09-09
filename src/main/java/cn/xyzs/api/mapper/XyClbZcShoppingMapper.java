@@ -135,6 +135,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
                                   @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_SHOPPING");
+                SET("ROW_ID=#{rowId}");
                 if (zcQty!=null && zcQty!=""){
                     SET("ZC_QTY = #{zcQty}");
                 }
