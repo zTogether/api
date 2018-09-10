@@ -3,7 +3,6 @@ package cn.xyzs.api.service;
 import cn.xyzs.api.mapper.XyClbZcFlMapper;
 import cn.xyzs.api.mapper.XyClbZctxMbMapper;
 import cn.xyzs.api.pojo.XyClbZcFl;
-import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -106,6 +105,7 @@ public class WholeDecoratesService {
 
     public  List<List<Map<String ,Object>>> dataFormat( List<Map<String ,Object>> listMap){
         Set<String> yzFlSet = new HashSet<>();
+        GoodService goodService = new GoodService();
         for (Map<String, Object> map : listMap) {
             yzFlSet.add(String.valueOf(map.get("FL_BH")));
         }
@@ -116,7 +116,15 @@ public class WholeDecoratesService {
                 if (s.equals(String.valueOf(map.get("FL_BH")))){
                     tempList.add(map);
                 }
+
+                if(map.get("ZC_PRICE_OUT")==null||map.get("ZC_PRICE_OUT")==""){
+                    map.put("ZC_PRICE_OUT","-");
+                }
+                if (map.get("ZC_CYC")==null||map.get("ZC_CYC")==""){
+                    map.put("ZC_CYC","-");
+                }
             }
+
             yzZctxMbCommitlist.add(tempList);
         }
         return yzZctxMbCommitlist;

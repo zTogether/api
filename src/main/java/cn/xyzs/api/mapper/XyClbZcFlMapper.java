@@ -29,5 +29,5 @@ public interface XyClbZcFlMapper extends Mapper<XyClbZcFl>{
                 "#{item} "+
             "</foreach> " +
             "</script>")
-    public List<String> getZcFl(@Param("list") List zcflList) throws SQLException;
+    public List<String> getZcFl(@Param("list") List zcflList);
 }
