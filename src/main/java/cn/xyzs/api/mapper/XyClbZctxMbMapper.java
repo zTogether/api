@@ -38,7 +38,7 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
             "SELECT zm.*,NVL(zd.ZC_NAME, '-') ZC_NAME,zd.ZC_PRICE_OUT,NVL(zd.ZC_BRAND, '-') ZC_BRAND,\n" +
             "\t\t   NVL(sup.SUP_NAME, '-') SUP_NAME, NVL(zd.ZC_SPEC, '-') ZC_SPEC,\n" +
             "\t\t\t NVL(zd.ZC_MATERIAL, '-') ZC_MATERIAL,NVL(zd.ZC_COLOR, '-') ZC_COLOR,NVL(zf.ZCFL_NAME,'-') ZCFL,\n" +
-            "       NVL(zd.ZC_UNIT,'-') ZC_UNIT,NVL(zd.ZC_DES,'-') ZC_DES,zd.ZC_CYC\n" +
+            "       NVL(zd.ZC_UNIT,'-') ZC_UNIT,NVL(zd.ZC_DES,'-') ZC_DES,zd.ZC_CYC,NVL(zd.ZC_VERSION, '-') ZC_VERSION\n" +
             "FROM XY_CLB_ZCTX_MB zm\n" +
             "LEFT JOIN XY_CLB_ZC_DB zd ON zm.ZC_CODE=zd.ZC_CODE\n" +
             "LEFT JOIN XY_SUPPLIER sup ON zd.ZC_SUP=sup.SUP_CODE\n" +
