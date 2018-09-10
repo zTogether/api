@@ -1,10 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyPgWaiter;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -372,5 +369,27 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\tPG_ID = #{pgId}" +
             "</script>")
     public void updateXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId) throws SQLException;
+
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tCOUNT(1) \n" +
+            "FROM \n" +
+            "\tXY_PG_WAITER xpw\n" +
+            "WHERE\n" +
+            "\txpw.ZT = '抢单成功'\n" +
+            "AND xpw.GR_ID = #{grId}\n" +
+            "AND xpw.YS_DATE IS NULL" +
+            "</script>")
+    public Integer getConstructionSiteIngCount(String grId) throws SQLException;
+
+    @Delete("<script>" +
+            "DELETE \n" +
+            "FROM\n" +
+            "\tXY_PG_WAITER xpw \n" +
+            "WHERE\n" +
+            "\txpw.GR_ID = #{grId}\n" +
+            "\tAND xpw.ZT = '已报名'" +
+            "</script>")
+    public void deleteRegisteredTenders(String grId) throws SQLException;
 
 }

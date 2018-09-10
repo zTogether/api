@@ -86,7 +86,7 @@ public class OpenTenderService {
     }
 
     @Transactional
-    public Map<String ,Object> grabSingle(String pgId,String grId, String endDate,String ctrCode){
+    public Map<String ,Object> grabSingle(String pgId,String grId, String endDate,String ctrCode,String grGz){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
@@ -98,6 +98,16 @@ public class OpenTenderService {
                     xyPgMapper.updatePgGr(pgId,grId);
                     xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"抢单成功");
                     xyGcbGrxxMapper.updateGrabSingleLevel(grId);
+                    Integer constructionSiteIngCount = xyPgWaiterMapper.getConstructionSiteIngCount(grId);
+                    if ("10".equals(grGz) || "21".equals(grGz)){
+                        if (constructionSiteIngCount == 5){
+                            xyPgWaiterMapper.deleteRegisteredTenders(grId);
+                        }
+                    } else {
+                        if (constructionSiteIngCount == 1){
+                            xyPgWaiterMapper.deleteRegisteredTenders(grId);
+                        }
+                    }
                     code = "200";
                     msg = "抢单成功";
                 } else {

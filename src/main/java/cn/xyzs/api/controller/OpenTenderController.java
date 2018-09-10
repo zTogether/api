@@ -29,7 +29,7 @@ public class OpenTenderController {
 
     @ResponseBody
     @RequestMapping("/grabSingle")
-    public Map<String ,Object> grabSingle(String pgId,String grId,String endDate,String ctrCode){
-        return openTenderService.grabSingle(pgId,grId,endDate,ctrCode);
+    public Map<String ,Object> grabSingle(String pgId,String grId,String endDate,String ctrCode,String grGz){
+        return openTenderService.grabSingle(pgId,grId,endDate,ctrCode,grGz);
     }
 }
