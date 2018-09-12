@@ -12,6 +12,14 @@ import java.util.Map;
 
 public interface XyPgMapper extends Mapper<XyPg>{
 
+    /**
+     * 根据pgId获取此标的详情
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:24
+     * @param: [pgId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @Select("<script>" +
             "SELECT\n" +
             "\t*\n" +
@@ -22,6 +30,14 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "</script>")
     public Map<String ,Object> getXyPgInfoByPgId(String pgId) throws SQLException;
 
+    /**
+     * 修改派工主表的工人id
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:25
+     * @param: [pgId, grId]
+     * @return: void
+     */
     @Update("<script>" +
             "UPDATE XY_PG\n" +
             "SET\n" +

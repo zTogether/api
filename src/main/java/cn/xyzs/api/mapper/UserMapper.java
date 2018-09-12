@@ -115,6 +115,14 @@ public interface UserMapper extends Mapper<TUser> {
         }
     }
 
+    /**
+     * 根据手机号获取员工信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:22
+     * @param: [userTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}</script>")
     Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 

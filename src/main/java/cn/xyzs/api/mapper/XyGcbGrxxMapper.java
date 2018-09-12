@@ -63,6 +63,14 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
         }
     }
 
+    /**
+     * 根据grId修改工人等级
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:24
+     * @param: [grId]
+     * @return: void
+     */
     @Update("<script>" +
             "UPDATE XY_GCB_GRXX\n" +
             "SET\n" +

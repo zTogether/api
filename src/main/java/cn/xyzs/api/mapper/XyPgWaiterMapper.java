@@ -10,6 +10,14 @@ import java.util.Map;
 
 public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
 
+    /**
+     *
+     * @Description:根据grid与状态获投标的历史信息
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:26
+     * @param: [grId, zt]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
             "SELECT\n" +
             "\txpw.ZT,\n" +
@@ -120,6 +128,14 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "</script>")
     public List<Map<String, Object>> getTenderHistoryList(@Param("grId") String grId, @Param("zt") String zt) throws SQLException;
 
+    /**
+     *
+     * @Description:获取抢单成功已建的招标记录
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:27
+     * @param: [grId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
             "SELECT\n" +
             "\txpw.ZT,\n" +
@@ -232,6 +248,14 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "</script>")
     public List<Map<String ,Object>> getConstructionSiteList(@Param("grId") String grId) throws SQLException;
 
+    /**
+     * 获取抢单成功在建的招标记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:28
+     * @param: [grId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
             "SELECT\n" +
             "\txpw.ZT,\n" +
@@ -344,6 +368,14 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "</script>")
     public List<Map<String ,Object>> getConstructionSiteIngList(@Param("grId") String grId) throws SQLException;
 
+    /**
+     * 添加记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:28
+     * @param: [grId, pgId, endDate, ctrCode, zt]
+     * @return: void
+     */
     @Insert("<script>" +
             "INSERT INTO XY_PG_WAITER(\n" +
             "\tGR_ID,PG_ID,ZT,OP_DATE,END_DATE,CTR_CODE\n" +
@@ -359,6 +391,14 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "</script>")
     public void addXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId, @Param("endDate") String endDate ,@Param("ctrCode") String ctrCode ,@Param("zt") String zt) throws SQLException;
 
+    /**
+     * 修改状态
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:28
+     * @param: [grId, pgId]
+     * @return: void
+     */
     @Update("<script>" +
             "UPDATE XY_PG_WAITER\n" +
             "SET\n" +
@@ -370,6 +410,14 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "</script>")
     public void updateXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId) throws SQLException;
 
+    /**
+     * 获取抢单成功在建的工地数量
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:29
+     * @param: [grId]
+     * @return: java.lang.Integer
+     */
     @Select("<script>" +
             "SELECT \n" +
             "\tCOUNT(1) \n" +
@@ -382,6 +430,14 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "</script>")
     public Integer getConstructionSiteIngCount(String grId) throws SQLException;
 
+    /**
+     * 删除记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:30
+     * @param: [grId]
+     * @return: void
+     */
     @Delete("<script>" +
             "DELETE \n" +
             "FROM\n" +

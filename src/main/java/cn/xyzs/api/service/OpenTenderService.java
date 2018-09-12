@@ -67,6 +67,14 @@ public class OpenTenderService {
         return resultMap;
     }
 
+    /**
+     * 报名
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:31
+     * @param: [grId, pgId, endDate, ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @Transactional
     public Map<String ,Object> signUp( String grId, String pgId, String endDate,String ctrCode){
         Map<String,Object> resultMap = new HashMap<>();
@@ -85,6 +93,14 @@ public class OpenTenderService {
         return resultMap;
     }
 
+    /**
+     * 抢单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:32
+     * @param: [pgId, grId, endDate, ctrCode, grGz]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @Transactional
     public Map<String ,Object> grabSingle(String pgId,String grId, String endDate,String ctrCode,String grGz){
         Map<String,Object> resultMap = new HashMap<>();

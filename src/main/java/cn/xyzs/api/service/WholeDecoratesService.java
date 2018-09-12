@@ -44,6 +44,14 @@ public class WholeDecoratesService {
         return resultMap;
     }
 
+    /**
+     * 获取套系的详细信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:33
+     * @param: [vrId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public Map<String,Object> txDetail(String vrId){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
@@ -103,6 +111,14 @@ public class WholeDecoratesService {
         return resultMap;
     }
 
+    /**
+     * 数据分离
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:33
+     * @param: [listMap]
+     * @return: java.util.List<java.util.List<java.util.Map<java.lang.String,java.lang.Object>>>
+     */
     public  List<List<Map<String ,Object>>> dataFormat( List<Map<String ,Object>> listMap){
         Set<String> yzFlSet = new HashSet<>();
         GoodService goodService = new GoodService();
