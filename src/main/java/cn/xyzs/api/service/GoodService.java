@@ -89,7 +89,6 @@ public class GoodService {
     public  Map<String, Object> sortFilter(String zcflCode,String startNum,String endNum,String minimum,String maximum){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
-        List<String> zcflCodeList = new ArrayList<>();
         String code = "500";
         String msg = "系统异常";
         try {
@@ -111,14 +110,8 @@ public class GoodService {
                 startNum = "1";
                 endNum = "10";
             }
-            List<Map<String, Object>> YSubdirectory = xyClbZcFlMapper.getSubdirectory(zcflCode);
-            if (YSubdirectory.size() < 1){
-                System.out.println(1);
-                zcflCodeList.add(zcflCode);
-            } else {
-                test(YSubdirectory,zcflCodeList);
-            }
-            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(zcflCodeList,startNum,endNum,minimum,maximum);
+
+            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(xyClbZcFlMapper.getTest(zcflCode),startNum,endNum,minimum,maximum);
             for (XyClbZcDb xyClbZcDb : goodList) {
                 List<XyVal> xyZcAcerList = xyValMapper.getZcAreaList(conversionList(xyClbZcDb.getZcArea()));
                 xyClbZcDb.setXyZcAreas(xyZcAcerList);

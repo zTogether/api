@@ -63,7 +63,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      */
     @Select("<script>" +
             "SELECT\n" +
-            "\tB.*,TO_CHAR(B.ORDER_DATE,'yyyy-MM-dd HH24:mm:ss') ORDERDATE\n" +
+            "\tB.*,TO_CHAR(B.ORDER_DATE,'yyyy-MM-dd hh24:mi:ss') ORDERDATE\n" +
             "FROM\n" +
             "\t(\n" +
             "\tSELECT\n" +

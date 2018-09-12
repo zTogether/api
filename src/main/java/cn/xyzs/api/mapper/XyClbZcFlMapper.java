@@ -30,4 +30,12 @@ public interface XyClbZcFlMapper extends Mapper<XyClbZcFl>{
             "</foreach> " +
             "</script>")
     public List<String> getZcFl(@Param("list") List zcflList);
+
+    @Select("<script>" +
+            "SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\tXY_CLB_ZC_FL xczf START WITH xczf.ZCFL_CODE = #{zcflCode} CONNECT BY xczf.P_CODE = PRIOR xczf.ZCFL_CODE" +
+            "</script>")
+    public List<String> getTest(String zcflCode) throws SQLException;
 }
