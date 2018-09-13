@@ -91,7 +91,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
 
     /***
      *
-     * @Description: 删除订单
+     * @Description: 删除订单主表
      * @author: GeWeiliang
      * @date: 2018\8\29 0029 9:48
      * @param: [orderId]
@@ -99,8 +99,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      */
     @Delete("DELETE FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}")
     public void deleteFromOrder(@Param("orderId") String orderId) throws SQLException;
-    @Delete("DELETE FROM XY_CLB_ZC_ORDER_LIST WHERE ORDER_ID=#{orderId}")
-    public void deleteFromOrderList(@Param("orderId") String orderId) throws SQLException;
+
 
     /***
      *

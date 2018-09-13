@@ -1,10 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbZcOrderList;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -112,4 +109,29 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
           }}.toString();
         }
     }
+
+    /***
+     *
+     * @Description: 删除标准化商品
+     * @author: GeWeiliang
+     * @date: 2018\9\13 0013 14:36
+     * @param: [orderId, rowId]
+     * @return: void
+     */
+    @DeleteProvider(type = deleteFromOrderList.class,method = "deleteFromOrderGoods")
+    public void deleteFromOrderList(@Param("orderId") String orderId,@Param("rowId") String rowId) throws SQLException;
+    class deleteFromOrderList{
+        public String deleteFromOrderGoods(@Param("orderId") String orderId,@Param("rowId") String rowId){
+            return new SQL(){{
+                DELETE_FROM("XY_CLB_ORDER_LIST");
+                if (orderId!=null && orderId!=""){
+                    WHERE("ORDER_ID=#{orderId}");
+                }
+                if (rowId!=null && rowId!=""){
+                    WHERE("ROW_ID=#{rowId}");
+                }
+            }}.toString();
+        }
+    }
+
 }

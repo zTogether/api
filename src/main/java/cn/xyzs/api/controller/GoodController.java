@@ -207,8 +207,22 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/deleteOrder")
-    public Map<String,Object> deleteOrder(String orderId){
-        return goodService.deleteOrder(orderId);
+    public Map<String,Object> deleteOrder(String orderId,String rowId){
+        return goodService.deleteOrder(orderId,rowId);
+    }
+
+    /***
+     *
+     * @Description: 删除订单中商品
+     * @author: GeWeiliang
+     * @date: 2018\9\13 0013 15:23
+     * @param: [orderId, rowId, flag]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/deleteOrderGoods")
+    public Map<String,Object> deleteOrderGoods(String orderId,String rowId,String flag){
+        return goodService.deleteOrderGoods(orderId,rowId,flag);
     }
 
     /***
