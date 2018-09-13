@@ -615,13 +615,13 @@ public class GoodService {
             if ("1".equals(flag)){
                 xyClbZcOrderListMapper.deleteFromOrderList(orderId,rowId);
                 code = "200";
-                msg = "成功";
+                msg = "标化商品删除成功";
             }
             //删除非标化商品
             if ("0".equals(flag)){
                 xyClbZcOrderListFreeMapper.deleteOrderListFree(orderId,rowId);
                 code = "200";
-                msg = "成功";
+                msg = "非标化商品删除成功";
             }
             List list = xyClbZcOrderListMapper.showOrderList(orderId);
             List list2 = xyClbZcOrderListFreeMapper.getNonStandard(orderId);
