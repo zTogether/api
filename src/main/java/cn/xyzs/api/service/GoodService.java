@@ -111,7 +111,7 @@ public class GoodService {
                 endNum = "10";
             }
 
-            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(xyClbZcFlMapper.getTest(zcflCode),startNum,endNum,minimum,maximum);
+            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(xyClbZcFlMapper.getLowerDirectory(zcflCode),startNum,endNum,minimum,maximum);
             for (XyClbZcDb xyClbZcDb : goodList) {
                 List<XyVal> xyZcAcerList = xyValMapper.getZcAreaList(conversionList(xyClbZcDb.getZcArea()));
                 xyClbZcDb.setXyZcAreas(xyZcAcerList);

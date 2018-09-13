@@ -31,11 +31,19 @@ public interface XyClbZcFlMapper extends Mapper<XyClbZcFl>{
             "</script>")
     public List<String> getZcFl(@Param("list") List zcflList);
 
+    /**
+     * 获取所有下级目录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 18:22
+     * @param: [zcflCode]
+     * @return: \
+     */
     @Select("<script>" +
             "SELECT\n" +
             "\t* \n" +
             "FROM\n" +
             "\tXY_CLB_ZC_FL xczf START WITH xczf.ZCFL_CODE = #{zcflCode} CONNECT BY xczf.P_CODE = PRIOR xczf.ZCFL_CODE" +
             "</script>")
-    public List<String> getTest(String zcflCode) throws SQLException;
+    public List<String> getLowerDirectory(String zcflCode) throws SQLException;
 }
