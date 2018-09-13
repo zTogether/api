@@ -123,7 +123,7 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
     class deleteFromOrderList{
         public String deleteFromOrderGoods(@Param("orderId") String orderId,@Param("rowId") String rowId){
             return new SQL(){{
-                DELETE_FROM("XY_CLB_ORDER_LIST");
+                DELETE_FROM("XY_CLB_ZC_ORDER_LIST");
                 if (orderId!=null && orderId!=""){
                     WHERE("ORDER_ID=#{orderId}");
                 }
