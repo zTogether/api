@@ -7,6 +7,7 @@ import javax.persistence.Column;
 
 public class MvCommoMenu {
 
+    //
     @Column(name = "USER_ID")
     @Getter
     @Setter
