@@ -31,6 +31,9 @@ public class LoginService {
     @Resource
     private XyRoleMapper xyRoleMapper;
 
+    @Resource
+    private MvSysSmsService mvSysSmsService;
+
     /**
      * 登陆
      * @Description:
@@ -55,12 +58,17 @@ public class LoginService {
             //判断客户是否存在
             if (isCustomer > 0){
                 //判断验证码输入是否正确
-                if ("1234".equals(verificationCode)){
+                Map<String ,Object> checkMap = mvSysSmsService.checkVerificationCode(verificationCode,ctrTel);
+                String checkCode = String.valueOf(checkMap.get("code"));
+                if ("200".equals(checkCode)){
                     code = "200";
                     msg = "登陆成功";
-                } else {
+                } else if ("400".equals(checkCode)){
                     code = "401";
                     msg = "验证码输入错误";
+                } else if ("300".equals(checkCode)){
+                    code = "402";
+                    msg = "验证码超时";
                 }
             } else {
                 code = "400";
