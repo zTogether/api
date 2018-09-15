@@ -14,4 +14,7 @@ public class MvSysConfig {
 
     @Column(name = "PARAMETER_VALUE")
     private String parameterValue;
+
+    @Column(name = "PARAMETER_MARK")
+    private String parameterMark;
 }
