@@ -112,6 +112,8 @@ public class SendMsgUtil {
             System.out.println("发送失败");
         }*/
 
-        System.out.println(getVerificationCode());
+       /* System.out.println(getVerificationCode());*/
+
+        System.out.println(MD5Util.md5Password("123123"));
     }
 }
