@@ -13,7 +13,7 @@ import javax.persistence.Column;
  */
 @Data
 public class VwXyPgWaiter {
-    //
+    //操作日期
     @Column(name="PG_OP_DATE")
     private String pgOpDate;
     //派工号
@@ -46,10 +46,10 @@ public class VwXyPgWaiter {
     //工程地址
     @Column(name="CTR_ADDR")
     private String ctrAddr;
-    //
+    //机构工程名
     @Column(name="ORG_PRJ_NAME")
     private String orgPrj_name;
-
+    //状态
     @Column(name="STATE")
     private String state;
 

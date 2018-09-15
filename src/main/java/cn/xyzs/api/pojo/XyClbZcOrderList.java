@@ -71,7 +71,7 @@ public class XyClbZcOrderList {
     //版本
     @Column(name = "ZC_VERSION")
     private String zcVersion;
-
+    //状态
     @Column(name = "ZC_SHOP_STATUS")
     private String zcShopStatus;
 }

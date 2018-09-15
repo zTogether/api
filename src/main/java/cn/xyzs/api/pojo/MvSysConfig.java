@@ -1,8 +1,11 @@
 package cn.xyzs.api.pojo;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Table;
 
+@Data
 @Table(name = "MV_SYS_CONFIG")
 public class MvSysConfig {
 

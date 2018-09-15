@@ -20,11 +20,12 @@ public class XyRoleFuc {
     @Getter
     @Column(name = "ROLE_ID")
     private String roleId;
-    //
+    //菜单ID
     @Setter
     @Getter
     @Column(name = "COMPO_ID")
     private String compoId;
+    //操作ID
     @Setter
     @Getter
     @Column(name = "OP_ID")

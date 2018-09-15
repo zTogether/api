@@ -15,7 +15,7 @@ import javax.persistence.Table;
  */
 @Table(name = "XY_USER_ROLE")
 public class XyUserRole {
-    //
+    //用户角色ID
     @Getter
     @Setter
     @Column(name = "UR_ID")

@@ -116,10 +116,12 @@ public class XyClbZcDb {
     @Getter
     @Column(name = "ZC_IS_USED")
     private String zcIsUsed;
+    //
     @Setter
     @Getter
     @Column(name = "ZC_PRO_AREA")
     private String zcProArea;
+    //版本
     @Setter
     @Getter
     @Column(name = "ZC_VERSION")

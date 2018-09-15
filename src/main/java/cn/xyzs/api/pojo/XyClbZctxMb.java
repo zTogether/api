@@ -33,7 +33,7 @@ public class XyClbZctxMb {
     //目录名称
     @Column(name = "ML_MC")
     private String mlMc;
-    //
+    //目录是否必须
     @Column(name = "ML_ISMUST")
     private String mlIsmust;
     //商品分类
