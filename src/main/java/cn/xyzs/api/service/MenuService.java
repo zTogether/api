@@ -20,6 +20,8 @@ public class MenuService {
     private MvCommoMenuMapper mvCommoMenuMapper;
     @Resource
     private XyGcbGrxxMapper xyGcbGrxxMapper;
+    @Resource
+    private MvSysSmsService mvSysSmsService;
 
     /**
      * 保存常用菜单
@@ -156,14 +158,25 @@ public class MenuService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String,Object> changeGrPassword(String grTel,String password){
+    public Map<String,Object> changeGrPassword(String grTel,String password,String verificationCode){
         String code = "500";
         String msg = "系统异常";
         Map<String ,Object> resultMap = new HashMap<>();
         try{
-            xyGcbGrxxMapper.changeGrPassword(grTel,MD5Util.md5Password(password));
-            code = "200";
-            msg = "成功";
+            //判断验证码输入是否正确
+            Map<String ,Object> checkMap = mvSysSmsService.checkVerificationCode(verificationCode,grTel);
+            String checkCode = String.valueOf(checkMap.get("code"));
+            if ("200".equals(checkCode)){
+                xyGcbGrxxMapper.changeGrPassword(grTel,MD5Util.md5Password(password));
+                code = "200";
+                msg = "修改成功";
+            } else if ("400".equals(checkCode)){
+                code = "401";
+                msg = "验证码输入错误";
+            } else if ("300".equals(checkCode)){
+                code = "402";
+                msg = "验证码超时";
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }finally {

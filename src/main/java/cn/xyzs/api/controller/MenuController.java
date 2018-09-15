@@ -71,12 +71,28 @@ public class MenuController {
         return menuService.getGrInfo(grTel);
     }
 
+    /***
+     *
+     * @Description: 修改工人密码
+     * @author: GeWeiliang
+     * @date: 2018\9\14 0014 17:37
+     * @param: [grTel, password]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/changeGrPassword")
-    public  Map<String,Object> changeGrPassword(String grTel,String password){
-        return menuService.changeGrPassword(grTel,password);
+    public  Map<String,Object> changeGrPassword(String grTel,String password,String verificationCode){
+        return menuService.changeGrPassword(grTel,password,verificationCode);
     }
 
+    /**
+     *
+     * @Description: 修改工人信息
+     * @author: GeWeiliang
+     * @date: 2018\9\14 0014 17:38
+     * @param: [name, idCard, grTel, grBankId, grAdd, grId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/changeGrInfo")
     public Map<String,Object> updateGrInfo(String name,String idCard, String grTel, String grBankId,

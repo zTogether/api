@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 @Table(name = "XY_VAL")
 public class XyVal {
+    //
     @Setter
     @Getter
     @Column(name = "VALSET_ID")
