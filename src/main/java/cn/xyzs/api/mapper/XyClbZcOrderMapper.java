@@ -63,7 +63,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      */
     @Select("<script>" +
             "SELECT\n" +
-            "\tB.*,TO_CHAR(B.ORDER_DATE,'yyyy-MM-dd HH24:mm:ss') ORDERDATE\n" +
+            "\tB.*,TO_CHAR(B.ORDER_DATE,'yyyy-MM-dd hh24:mi:ss') ORDERDATE\n" +
             "FROM\n" +
             "\t(\n" +
             "\tSELECT\n" +
@@ -91,7 +91,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
 
     /***
      *
-     * @Description: 删除订单
+     * @Description: 删除订单主表
      * @author: GeWeiliang
      * @date: 2018\8\29 0029 9:48
      * @param: [orderId]
@@ -99,8 +99,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      */
     @Delete("DELETE FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}")
     public void deleteFromOrder(@Param("orderId") String orderId) throws SQLException;
-    @Delete("DELETE FROM XY_CLB_ZC_ORDER_LIST WHERE ORDER_ID=#{orderId}")
-    public void deleteFromOrderList(@Param("orderId") String orderId) throws SQLException;
+
 
     /***
      *
@@ -124,10 +123,11 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
                                   @Param("orderIsreturn") String orderIsreturn){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_ORDER");
+                SET("ORDER_ID=#{orderId}");
                 if (orderJe!=null && orderJe!=""){
                     SET("ORDER_JE=#{orderJe,jdbcType=VARCHAR}");
                 }
-                if (orderMark!=null && orderMark!=""){
+                if (orderMark!=null){
                     SET("ORDER_MARK=#{orderMark,jdbcType=VARCHAR}");
                 }
                 if (orderStatus!=null && orderStatus!=""){
@@ -142,7 +142,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
                 if (orderDis!=null && orderDis!=""){
                     SET("ORDER_DIS=#{orderDis,jdbcType=VARCHAR}");
                 }
-                if (orderDisMark!=null && orderDisMark!=""){
+                if (orderDisMark!=null){
                     SET("ORDER_DIS_MARK=#{orderDisMark,jdbcType=VARCHAR}");
                 }
                 if (orderIsreturn!=null && orderIsreturn!=""){

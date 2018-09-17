@@ -1,7 +1,9 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.MvCommoMenuMapper;
+import cn.xyzs.api.mapper.XyGcbGrxxMapper;
 import cn.xyzs.api.pojo.MvCommoMenu;
+import cn.xyzs.api.util.MD5Util;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,10 @@ public class MenuService {
 
     @Resource
     private MvCommoMenuMapper mvCommoMenuMapper;
+    @Resource
+    private XyGcbGrxxMapper xyGcbGrxxMapper;
+    @Resource
+    private MvSysSmsService mvSysSmsService;
 
     /**
      * 保存常用菜单
@@ -109,6 +115,98 @@ public class MenuService {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 查询工人信息
+     * @author: GeWeiliang
+     * @date: 2018\9\8 0008 14:56
+     * @param: [grTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> getGrInfo(String grTel){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String ,Object> resultMap = new HashMap<>();
+        Map<String ,Object> obj = new HashMap<>();
+        try{
+            Map<String,Object> grInfo = xyGcbGrxxMapper.getGrInfo(grTel);
+            obj.put("grInfo",grInfo);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 修改工人密码
+     * @author: GeWeiliang
+     * @date: 2018\9\8 0008 14:31
+     * @param: [grTel, password]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> changeGrPassword(String grTel,String password,String verificationCode){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String ,Object> resultMap = new HashMap<>();
+        try{
+            //判断验证码输入是否正确
+            Map<String ,Object> checkMap = mvSysSmsService.checkVerificationCode(verificationCode,grTel);
+            String checkCode = String.valueOf(checkMap.get("code"));
+            if ("200".equals(checkCode)){
+                xyGcbGrxxMapper.changeGrPassword(grTel,MD5Util.md5Password(password));
+                code = "200";
+                msg = "修改成功";
+            } else if ("400".equals(checkCode)){
+                code = "401";
+                msg = "验证码输入错误";
+            } else if ("300".equals(checkCode)){
+                code = "402";
+                msg = "验证码超时";
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 修改工人信息
+     * @author: GeWeiliang
+     * @date: 2018\9\8 0008 15:49
+     * @param: [name, idCard, grTel, grBankId, grAdd, grId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> updateGrInfo(String name,String idCard, String grTel, String grBankId,
+                                           String grAdd,String grId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String ,Object> resultMap = new HashMap<>();
+        try{
+            xyGcbGrxxMapper.changeGrInfo(name,idCard,grTel,grBankId,grAdd,grId);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
         }

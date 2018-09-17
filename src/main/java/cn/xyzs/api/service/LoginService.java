@@ -3,8 +3,10 @@ package cn.xyzs.api.service;
 import cn.xyzs.api.mapper.UserMapper;
 import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyGcbGrxxMapper;
+import cn.xyzs.api.mapper.XyRoleMapper;
 import cn.xyzs.api.pojo.TUser;
 import cn.xyzs.api.pojo.XyGcbGrxx;
+import cn.xyzs.api.pojo.XyRole;
 import cn.xyzs.api.util.MD5Util;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,12 @@ public class LoginService {
 
     @Resource
     private XyGcbGrxxMapper xyGcbGrxxMapper;
+
+    @Resource
+    private XyRoleMapper xyRoleMapper;
+
+    @Resource
+    private MvSysSmsService mvSysSmsService;
 
     /**
      * 登陆
@@ -50,12 +58,17 @@ public class LoginService {
             //判断客户是否存在
             if (isCustomer > 0){
                 //判断验证码输入是否正确
-                if ("1234".equals(verificationCode)){
+                Map<String ,Object> checkMap = mvSysSmsService.checkVerificationCode(verificationCode,ctrTel);
+                String checkCode = String.valueOf(checkMap.get("code"));
+                if ("200".equals(checkCode)){
                     code = "200";
                     msg = "登陆成功";
-                } else {
+                } else if ("400".equals(checkCode)){
                     code = "401";
                     msg = "验证码输入错误";
+                } else if ("300".equals(checkCode)){
+                    code = "402";
+                    msg = "验证码超时";
                 }
             } else {
                 code = "400";
@@ -100,7 +113,11 @@ public class LoginService {
             } else {
                 //判断密码是否正确
                 if (MD5Util.md5Password(password).equals(xyGcbGrxx.getPassword())){
+                    XyRole xyRole = new XyRole();
+                    xyRole.setRoleId("-1");
+                    xyRole = xyRoleMapper.selectOne(xyRole);
                     obj.put("xyGcbGrxx",xyGcbGrxx);
+                    obj.put("xyRole",xyRole);
                     code = "200";
                     msg = "登陆成功";
                 } else {

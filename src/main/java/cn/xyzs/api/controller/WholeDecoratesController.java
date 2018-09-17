@@ -44,15 +44,16 @@ public class WholeDecoratesController {
 
     /***
      *
-     * @Description: 套系材料列表
+     * @Description: 获取材料列表
      * @author: GeWeiliang
-     * @date: 2018\9\3 0003 17:30
+     * @date: 2018\9\10 0010 17:19
      * @param: [vrId]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @ResponseBody
-    @RequestMapping("/clList")
-    public Map<String,Object> txClList(String vrId){
-        return  wholeDecoratesService.txClList(vrId);
+    @RequestMapping("/getZctxMbInfo")
+    public Map<String ,Object> getZctxMbInfo(String vrId){
+        return wholeDecoratesService.getZctxMbInfo(vrId);
     }
+
 }

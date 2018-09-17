@@ -15,6 +15,14 @@ public class XyCustomerInfoController {
     @Resource
     private XyCustomerInfoService xyCustomerInfoService;
 
+    /**
+     * 根据客户电话查询客户工程信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/12 14:20
+     * @param: [ctrTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/getCustomerEngineeringInfo")
     public Map<String,Object> getCustomerEngineeringInfo(String ctrTel){

@@ -89,7 +89,6 @@ public class GoodService {
     public  Map<String, Object> sortFilter(String zcflCode,String startNum,String endNum,String minimum,String maximum){
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
-        List<String> zcflCodeList = new ArrayList<>();
         String code = "500";
         String msg = "系统异常";
         try {
@@ -111,14 +110,8 @@ public class GoodService {
                 startNum = "1";
                 endNum = "10";
             }
-            List<Map<String, Object>> YSubdirectory = xyClbZcFlMapper.getSubdirectory(zcflCode);
-            if (YSubdirectory.size() < 1){
-                System.out.println(1);
-                zcflCodeList.add(zcflCode);
-            } else {
-                test(YSubdirectory,zcflCodeList);
-            }
-            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(zcflCodeList,startNum,endNum,minimum,maximum);
+
+            List<XyClbZcDb> goodList = xyClbZcDbMapper.getGoodByZcType(xyClbZcFlMapper.getLowerDirectory(zcflCode),startNum,endNum,minimum,maximum);
             for (XyClbZcDb xyClbZcDb : goodList) {
                 List<XyVal> xyZcAcerList = xyValMapper.getZcAreaList(conversionList(xyClbZcDb.getZcArea()));
                 xyClbZcDb.setXyZcAreas(xyZcAcerList);
@@ -585,15 +578,58 @@ public class GoodService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String,Object> deleteOrder(String orderId){
+    public Map<String,Object> deleteOrder(String orderId,String rowId){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try{
             xyClbZcOrderMapper.deleteFromOrder(orderId);
-            xyClbZcOrderMapper.deleteFromOrderList(orderId);
+            xyClbZcOrderListMapper.deleteFromOrderList(orderId,rowId);
+            xyClbZcOrderListFreeMapper.deleteOrderListFree(orderId,rowId);
             code = "200";
             msg = "删除成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /***
+     *
+     * @Description: 删除订单中商品
+     * @author: GeWeiliang
+     * @date: 2018\9\13 0013 15:09
+     * @param: [orderId, rowId, flag]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String,Object> deleteOrderGoods(String orderId,String rowId,String flag){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            //删除标准化商品
+            if ("1".equals(flag)){
+                xyClbZcOrderListMapper.deleteFromOrderList(orderId,rowId);
+                code = "200";
+                msg = "标化商品删除成功";
+            }
+            //删除非标化商品
+            if ("0".equals(flag)){
+                xyClbZcOrderListFreeMapper.deleteOrderListFree(orderId,rowId);
+                code = "200";
+                msg = "非标化商品删除成功";
+            }
+            List list = xyClbZcOrderListMapper.showOrderList(orderId);
+            List list2 = xyClbZcOrderListFreeMapper.getNonStandard(orderId);
+
+            if (list.size()==0 && list2.size()==0){
+                xyClbZcOrderMapper.deleteFromOrder(orderId);
+            }
+
         }catch (SQLException e){
             e.printStackTrace();
         }finally {

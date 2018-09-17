@@ -1,6 +1,7 @@
 package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.LoginService;
+import cn.xyzs.api.service.MvSysSmsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,9 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
+    @Resource
+    private MvSysSmsService mvSysSmsService;
+
     /**
      * 登陆
      * @Description:
@@ -28,7 +32,11 @@ public class LoginController {
     public Map<String,Object> login(String userTel, String password, String verificationCode, String roleFlag){
         return loginService.login(userTel,password,verificationCode,roleFlag);
     }
-
+    @ResponseBody
+    @RequestMapping("/sendVerificationCode")
+    public  Map<String,Object> sendVerificationCode(String userTel){
+        return mvSysSmsService.sendVerificationCode(userTel);
+    }
 
     /**
      * 根据用户角色id获取用户菜单信息
@@ -43,5 +51,6 @@ public class LoginController {
     public Map<String ,Object> getMenuByRole(String roleId) {
         return loginService.getMenuByRole(roleId);
     }
+
 
 }
