@@ -8,18 +8,19 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public interface MvSysConfigMapper extends Mapper<MvSysConfig> {
-    @Select("SELECT * FROM MV_SYS_CONFIG WHERE PARAMETER_KEY=#{key}")
-    public Object getObj(@Param("key") String parameterKey);
 
-    @Select("SELECT * FROM MV_SYS_CONFIG WHERE PARAMETER_KEY=#{key}")
-    public int queryConfig(@Param("key") String parameterKey);
+    @Select("SELECT * FROM MV_SYS_CONFIG WHERE PARAMETER_KEY=#{parameterKey}")
+    public Map<String ,Object> getMvSysConfig(MvSysConfig mvSysConfig) throws SQLException;
 
-    @Insert("INSERT INTO MV_SYS_CONFIG VALUES(#{key},#{value})")
-    public void addConfig(@Param("key") String parameterKey,@Param("value") String value)throws SQLException;
+    @Select("SELECT COUNT(1) FROM MV_SYS_CONFIG WHERE PARAMETER_KEY=#{parameterKey}")
+    public Integer getCount(MvSysConfig mvSysConfig) throws SQLException;
 
-    @Update("UPDATE MV_SYS_CONFIG SET PARAMETER_VALUE=#{value} WHERE PARAMETER_KEY=#{key}")
-    public void updateConfig(@Param("key") String parameterKey,@Param("value") String value)throws SQLException;
+    @Insert("INSERT INTO MV_SYS_CONFIG VALUES(#{parameterKey},#{parameterValue},#{parameterMark})")
+    public void addMvSysConfig(MvSysConfig mvSysConfig) throws SQLException;
 
-    @Delete("DELETE FROM MV_SYS_CONFIG WHERE PARAMETER_KEY=#{key}")
-    public void deleteConfig(@Param("key") String parameterKey);
+    @Update("UPDATE MV_SYS_CONFIG SET PARAMETER_VALUE=#{parameterValue} WHERE PARAMETER_KEY=#{parameterKey}")
+    public void updateMvSysConfig(MvSysConfig mvSysConfig) throws SQLException;
+
+    @Delete("DELETE FROM MV_SYS_CONFIG WHERE PARAMETER_KEY=#{parameterKey}")
+    public void deleteMvSysConfig(MvSysConfig mvSysConfig) throws SQLException;
 }
