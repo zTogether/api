@@ -120,7 +120,7 @@ public class WholeDecoratesService {
      * @return: java.util.List<java.util.List<java.util.Map<java.lang.String,java.lang.Object>>>
      */
     public  List<List<Map<String ,Object>>> dataFormat( List<Map<String ,Object>> listMap){
-        Set<String> yzFlSet = new HashSet<>();
+        Set<String> yzFlSet = new TreeSet<>();
         GoodService goodService = new GoodService();
         for (Map<String, Object> map : listMap) {
             yzFlSet.add(String.valueOf(map.get("FL_BH")));

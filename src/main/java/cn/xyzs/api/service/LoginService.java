@@ -99,7 +99,7 @@ public class LoginService {
                     obj.put("roleList",roleList);
                 } else {
                     code = "401";
-                    msg = "登陆失败";
+                    msg = "用户名或密码错误";
                 }
             }
         } else if ("2".equals(roleFlag)){
