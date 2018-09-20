@@ -230,6 +230,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\"NVL\"(xci.CTR_STATU,'-') ctrStatu,\"NVL\"(xci.CTR_DRAW,'-') ctrDraw,\"NVL\"(xci.DRAW_STATU,'-') drawStatu," +
             "\"NVL\"(xci.CTR_X,'-') ctrX," +
             "\"NVL\"(xci.CTR_Y,'-') ctrY,\"NVL\"(xci.CTR_MAP_VERSION,'-') ctrMapVersion" +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_OWENER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ctrOwener" +
             " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}" +
             "</script>")
 //    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode}")
