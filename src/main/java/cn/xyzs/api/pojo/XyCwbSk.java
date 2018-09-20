@@ -26,7 +26,7 @@ public class XyCwbSk {
     //收款金额
     @Column(name = "CWB_SK_MONEY")
     private String cwbSkMoney;
-    //
+    //金额确认
     @Column(name = "CWB_SK_CMONEY")
     private String cwbSkCmoney;
     //收款类型(1:收款,2:退款)

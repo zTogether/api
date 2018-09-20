@@ -1,5 +1,6 @@
 package cn.xyzs.api.pojo;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import javax.persistence.Table;
  * @param:
  * @return:
  */
+@Data
 @Table(name = "XY_CUSTOMER_INFO")
 public class XyCustomerInfo {
     //客户号
@@ -162,4 +164,8 @@ public class XyCustomerInfo {
     @Getter
     @Column(name="CTR_MAP_VERSION")
     private String ctrMapVersion;
+
+    //合约成效人
+    @Column(name = "CTR_OWENER")
+    private String ctrOwener;
 }

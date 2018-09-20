@@ -91,4 +91,31 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "WHERE CTR_CODE=#{ctrCode}" +
             "</script>")
     public List<Map<String,Object>> fcList(String ctrCcode) throws SQLException;
+
+    /**
+     *
+     * @Description: 报价清单
+     * @author: GeWeiliang
+     * @date: 2018\9\20 0020 9:32
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT * FROM XY_BJD_MAIN WHERE CTR_CODE=#{ctrCode}" +
+            "</script>")
+    public List<Map<String,Object>> bjdList(String ctrCode) throws SQLException;
+
+    /**
+     *
+     * @Description: 收款情况
+     * @author: GeWeiliang
+     * @date: 2018\9\20 0020 10:56
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("SELECT SUM(CASE WHEN CWB_SK_IO='2' THEN -(CWB_SK_MONEY)\n" +
+            "\t\tWHEN CWB_SK_IO='1' THEN CWB_SK_MONEY END) AS MONEY,\n" +
+            "\t\tCWB_SK_CONTENT AS B\n" +
+            "\t\tFROM XY_CWB_SK WHERE CTR_CODE=#{ctrCode} GROUP BY CWB_SK_CONTENT")
+    public List<Map<String,Object>> skCondition(String ctrCode);
 }
