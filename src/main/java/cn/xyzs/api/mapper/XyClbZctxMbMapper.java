@@ -42,7 +42,7 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
             "LEFT JOIN XY_SUPPLIER sup ON zd.ZC_SUP=sup.SUP_CODE\n" +
             "LEFT JOIN XY_CLB_ZC_FL zf ON zd.ZC_TYPE=zf.ZCFL_CODE\n" +
             "WHERE zm.VR_ID = #{vrId} AND zm.FL_BH LIKE #{flBh}||'%'\n" +
-            "ORDER BY zm.FL_BH" +
+            "ORDER BY zm.ZC_CODE" +
             "</script>")
     public List<Map<String ,Object>> getZctxMbList(@Param("vrId") String vrId,@Param("flBh") String flBh) throws SQLException;
 
