@@ -1,0 +1,5 @@
+{
+  "update":"yes",//是否自动更新
+  "version":"1.0",//最新的版本号
+  "url":"http://192.168.10.242:8088/files/filetest/fb/0ad64183-0781-483f-99e6-13d7649d65fd.wgt"//最新安装包的URL路径
+}
