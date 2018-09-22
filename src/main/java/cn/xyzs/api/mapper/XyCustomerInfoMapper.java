@@ -214,7 +214,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "xci.CTR_TEL ctrTel,\"NVL\"(xci.CTR_CARDID,'-') ctr_cardid,\"NVL\"(xci.CTR_ADDR,'-') ctrAddr," +
             "\"NVL\"(xci.CTR_AREA,-1) ctrArea,\"NVL\"(xci.CTR_STRUCTURE,'-') ctrStructure,\"NVL\"(xci.CTR_FLOOR,-1) ctrFloor," +
             "\"NVL\"(xci.CTR_LIFT,'-') ctrLift,\"NVL\"(xci.CTR_PRJ_TYPE,'-') ctrPrjType,\"NVL\"(xci.CTR_QT_RANGE,'-') ctrQtRange," +
-            "\"NVL\"(xci.CTR_QT_TYPE,'-') ctrQtType,\"NVL\"(xci.RG_VER_CODE,'-') rgVerCode," +
+            "\"NVL\"(xci.CTR_QT_TYPE,'-') ctrQtType," +
+            "\"NVL\"((SELECT xgrv.RG_VER_NAME FROM XY_GCB_RG_VER xgrv WHERE xgrv.RG_VER_CODE = xci.RG_VER_CODE),'-') rgVerCode," +
             "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}), '-') ctrWaiter," +
             "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}), '-') WaiterTel," +
             "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrOrg," +
@@ -224,13 +225,15 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_GCJL=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') GcjlTel," +
             "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CtrCldd," +
             "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ClddTel," +
-            "\"NVL\"(xci.CTR_ROWID,'-') ctrRowid,\"NVL\"(xci.CTR_AREA_MA,'-') ctrAreaMa," +
+            "\"NVL\"(xci.CTR_ROWID,'-') ctrRowid," +
             "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_PRO_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrProOrg," +
             "xci.CTR_KG_DATE ctrKgDate," +
             "\"NVL\"(xci.CTR_STATU,'-') ctrStatu,\"NVL\"(xci.CTR_DRAW,'-') ctrDraw,\"NVL\"(xci.DRAW_STATU,'-') drawStatu," +
             "\"NVL\"(xci.CTR_X,'-') ctrX," +
             "\"NVL\"(xci.CTR_Y,'-') ctrY," +
             "\"NVL\"(xci.CTR_MAP_VERSION,'-') ctrMapVersion," +
+            "\"NVL\"((SELECT xu.USER_TEL FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_AREA_MA=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CTRAREAMATEL," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_AREA_MA=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CTRAREAMA," +
             "\"NVL\"((SELECT xu.USER_NAME FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_OWENER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ctrOwener" +
             " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}" +
             "</script>")
