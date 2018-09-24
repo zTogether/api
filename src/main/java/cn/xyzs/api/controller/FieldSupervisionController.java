@@ -113,4 +113,11 @@ public class FieldSupervisionController {
         return fieldSupervisionService.getFcCkList(ckdCode);
     }
 
+
+    @ResponseBody
+    @RequestMapping("/rgList")
+    public Map<String,Object> getRgList(String ctrCode,String bjdCode){
+        return fieldSupervisionService.getRgList(ctrCode,bjdCode);
+    }
+
 }
