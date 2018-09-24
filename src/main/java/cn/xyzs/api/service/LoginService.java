@@ -5,6 +5,7 @@ import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyGcbGrxxMapper;
 import cn.xyzs.api.mapper.XyRoleMapper;
 import cn.xyzs.api.pojo.TUser;
+import cn.xyzs.api.pojo.XyCustomerInfo;
 import cn.xyzs.api.pojo.XyGcbGrxx;
 import cn.xyzs.api.pojo.XyRole;
 import cn.xyzs.api.util.MD5Util;
@@ -77,6 +78,7 @@ public class LoginService {
         } else if("1".equals(roleFlag)) {
             TUser tUser = new TUser();
             tUser.setUserTel(ctrTel);
+            tUser.setIsUsed("1");
             tUser = userMapper.selectOne(tUser);
             //判断用户手否存在
             if (tUser == null){
@@ -105,6 +107,7 @@ public class LoginService {
         } else if ("2".equals(roleFlag)){
             XyGcbGrxx xyGcbGrxx = new XyGcbGrxx();
             xyGcbGrxx.setGrTel(ctrTel);
+            xyGcbGrxx.setGrStatu("1");
             xyGcbGrxx = xyGcbGrxxMapper.selectOne(xyGcbGrxx);
             //判断用户手否存在
             if (xyGcbGrxx == null){
@@ -159,6 +162,30 @@ public class LoginService {
         resultMap.put("code", code);
         resultMap.put("msg", msg);
         resultMap.put("resultData", obj);
+        return resultMap;
+    }
+
+    /**
+     * 发送短信验证码
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/23 13:56
+     * @param: [phone]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public  Map<String ,Object> sendVerificationCode(String phone){
+        Map<String, Object> resultMap = new HashMap<>();
+        XyCustomerInfo xyCustomerInfo = new XyCustomerInfo();
+        xyCustomerInfo.setCtrTel(phone);
+        xyCustomerInfo = customerInfoMapper.selectOne(xyCustomerInfo);
+        if (xyCustomerInfo != null){
+            resultMap = mvSysSmsService.sendVerificationCode(phone);
+        } else {
+            String code = "400";
+            String msg = "用户不存在";
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
         return resultMap;
     }
 

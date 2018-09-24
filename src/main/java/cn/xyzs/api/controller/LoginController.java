@@ -16,9 +16,6 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
-    @Resource
-    private MvSysSmsService mvSysSmsService;
-
     /**
      * 登陆
      * @Description:
@@ -32,10 +29,19 @@ public class LoginController {
     public Map<String,Object> login(String userTel, String password, String verificationCode, String roleFlag){
         return loginService.login(userTel,password,verificationCode,roleFlag);
     }
+
+    /**
+     * 发送验证码
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/23 13:54
+     * @param: [userTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/sendVerificationCode")
     public  Map<String,Object> sendVerificationCode(String userTel){
-        return mvSysSmsService.sendVerificationCode(userTel);
+        return loginService.sendVerificationCode(userTel);
     }
 
     /**

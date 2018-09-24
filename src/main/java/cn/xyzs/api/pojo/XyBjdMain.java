@@ -20,11 +20,11 @@ public class XyBjdMain {
     @Column(name = "CTR_CODE")
     private String ctrCode;
 
-    //发起对象
+    //发起对象（0：执行总监发起   1：设计师发起）
     @Column(name = "BJD_AUTHER")
     private String bjdAuther;
 
-    //单据状态
+    //单据状态（1：草稿   2：已审   3：待审）
     @Column(name = "BJD_STAGE")
     private String bjdStage;
 
@@ -40,11 +40,13 @@ public class XyBjdMain {
     @Column(name = "BJD_FWF_ZJ")
     private String bjdFwfZj;
 
-    //报价类型
     @Column(name = "BJD_DRAWING")
     private String bjdDrawing;
 
     //柜子面积
     @Column(name = "BJD_CA_AREA")
     private String bjdCabArea;
+
+    //报价类型
+    //单据号尾号为   01：原始     其他为：增减项
 }
