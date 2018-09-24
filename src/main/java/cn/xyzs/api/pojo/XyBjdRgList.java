@@ -47,7 +47,7 @@ public class XyBjdRgList {
     //
     @Column(name = "RG_YN")
     private String rgYn;
-    //是否认同
+    //是否认同(1:业主认同 其余皆为不认同)
     @Column(name = "RG_YZRK")
     private String rgYzrk;
 }
