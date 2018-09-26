@@ -12,7 +12,8 @@ import java.util.Map;
 public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
 
     @Select("<script>SELECT BRL.BJD_CODE,BRL.BJD_RG_ROWID,BRL.BJD_RG_STAGE,BRL.BJD_RG_NO,\n" +
-            "\t\tBRL.RG_NAME,BRL.RG_UNIT,BRL.RG_QTY,BRL.RG_PRICE,BRL.RG_XJ,\n" +
+            "\t\tBRL.RG_NAME,BRL.RG_UNIT," +
+            "NVL(BRL.RG_QTY,'0') RG_QTY,BRL.RG_PRICE,BRL.RG_XJ,\n" +
             "\t\tNVL(BRL.RG_MARK, '-') RG_MARK,\n" +
             "\t\tNVL(BRL.RG_DES, '-') RG_DES,\n" +
             "\t\tNVL(BRL.RG_YN, '-') RG_YN,\n" +
