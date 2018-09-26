@@ -26,7 +26,7 @@ public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
                                                  @Param("bjdCode") String bjdCode)throws SQLException;
 
     @Select("<script>" +
-            "SELECT SUM(BRL.RG_XJ) PRJ_ZJ\t\n" +
+            "SELECT NVL(SUM(BRL.RG_XJ),0) PRJ_ZJ\t\n" +
             "FROM XY_BJD_RG_LIST BRL \n" +
             "LEFT JOIN XY_BJD_MAIN BM ON BRL.BJD_CODE=BM.BJD_CODE\n" +
             "WHERE BM.CTR_CODE=#{ctrCode} AND BRL.BJD_CODE=#{bjdCode} AND BRL.BJD_RG_STAGE=#{rgStage}\n" +
