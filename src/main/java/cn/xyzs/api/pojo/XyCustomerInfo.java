@@ -69,7 +69,7 @@ public class XyCustomerInfo {
     @Getter
     @Column(name="CTR_LIFT")
     private String ctrLift;
-    //工程类型
+    //工程类型(0：新装 1：再装)
     @Setter
     @Getter
     @Column(name="CTR_PRJ_TYPE")
@@ -79,7 +79,7 @@ public class XyCustomerInfo {
     @Getter
     @Column(name="CTR_QT_RANGE")
     private String ctrQtRang;
-    //报价类型
+    //报价类型(0：标准 1：售前 2：保惠)
     @Setter
     @Getter
     @Column(name="CTR_QT_TYPE")

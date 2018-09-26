@@ -45,11 +45,11 @@ public class XyPg {
     @Column(name = "PG_OP_USER")
     private String pgOpUser;
 
-    //工资状态
+    //工资状态(0：未申请   1：已申请   2：已发放)
     @Column(name = "PG_MONEY_YN")
     private String pgMoneyYn;
 
-    //打印状态
+    //打印状态（0：未打印   1：已打印    如果grId == null的话：等待工人报名中）
     @Column(name = "PG_PRINT_YN")
     private String pgPrintYn;
     
