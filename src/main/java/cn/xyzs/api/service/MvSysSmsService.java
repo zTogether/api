@@ -26,14 +26,14 @@ public class MvSysSmsService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String ,Object> sendVerificationCode(String phone){
+    public Map<String ,Object> sendVerificationCode(String sendType ,String phone){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
             //发送短信（sendResultCode = 200 为发送成功）
             String verificationCode = SendMsgUtil.getVerificationCode();
-            String sendResultCode = SendMsgUtil.sendMsg(verificationCode ,phone);
+            String sendResultCode = SendMsgUtil.sendMsg(sendType,verificationCode ,phone);
             //如果发送成功
             if ("200".equals(sendResultCode)){
                 MvSysSms mvSysSms = new MvSysSms();

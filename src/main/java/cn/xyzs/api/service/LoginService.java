@@ -179,7 +179,7 @@ public class LoginService {
         xyCustomerInfo.setCtrTel(phone);
         xyCustomerInfo = customerInfoMapper.selectOne(xyCustomerInfo);
         if (xyCustomerInfo != null){
-            resultMap = mvSysSmsService.sendVerificationCode(phone);
+            resultMap = mvSysSmsService.sendVerificationCode("0" ,phone);
         } else {
             String code = "400";
             String msg = "用户不存在";
