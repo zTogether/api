@@ -18,7 +18,8 @@ public class SendMsgUtil {
     // 短信应用SDK AppKey
     private static final String appkey = "823a0c51470a517207285607784680db";
     // 短信模板ID，需要在短信应用中申请
-    private static final int templateId = 193979; // NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
+    //private static final int templateId = 193979; // NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
+    private static final int templateId = 201035;
     // 签名
     private static final String smsSign = "江苏轩辕装饰工程有限公司"; // NOTE: 这里的签名"腾讯云"只是一个示例，真实的签名需要在短信控制台中申请，另外签名参数使用的是`签名内容`，而不是`签名ID`
     // 需要发送短信的手机号码
@@ -105,15 +106,14 @@ public class SendMsgUtil {
 
 
     public static void main(String args[]) {
-        /*String code = sendMsg("1234","15250992995");
+        String code = sendMsg("1234","15895838592");
         if ("200".equals(code)){
             System.out.println("发送成功");
         } else {
             System.out.println("发送失败");
-        }*/
+        }
 
        /* System.out.println(getVerificationCode());*/
 
-        System.out.println(MD5Util.md5Password("123123"));
     }
 }
