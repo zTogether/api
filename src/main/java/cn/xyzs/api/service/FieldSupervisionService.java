@@ -34,6 +34,9 @@ public class FieldSupervisionService {
     @Resource
     private XyBjdRgListMapper xyBjdRgListMapper;
 
+    @Resource
+    private XyBjdFcListMapper xyBjdFcListMapper;
+
     /**
      * 获取收款情况
      * @Description:
@@ -479,6 +482,62 @@ public class FieldSupervisionService {
             code = "200";
             msg = "成功";
         }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据项目code获取辅材详情
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/27 11:07
+     * @param: [bjdCode, fcStage, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getBjdFcList(String bjdCode, String fcStage, String startNum, String endNum){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> bjdFcList = xyBjdFcListMapper.bjdFcList(bjdCode,fcStage,startNum,endNum);
+            obj.put("bjdFcList",bjdFcList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取总计
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/27 12:12
+     * @param: [bjdCode, fcStage]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getZj(String bjdCode){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            String zj = xyBjdFcListMapper.getZj(bjdCode);
+            obj.put("zj",zj);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
             e.printStackTrace();
         }finally {
             resultMap.put("code",code);

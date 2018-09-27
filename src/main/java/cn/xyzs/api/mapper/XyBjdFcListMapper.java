@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -24,10 +25,10 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             "WHERE RN BETWEEN #{startNum} AND #{endNum}" +
             "</script>")
     public List<Map<String,Object>> bjdFcList(@Param("bjdCode") String bjdCode, @Param("fcStage") String fcStage,
-                                              @Param("startNum") String startNum,@Param("endNum") String endNum);
+                                              @Param("startNum") String startNum,@Param("endNum") String endNum) throws SQLException;
 
     @Select("<script>" +
-            "SELECT SUM(FC_XJ) ZJ FROM XY_BJD_FC_LIST WHERE BJD_CODE = #{bjdCode} AND BJD_FC_STAGE = #{fcStage}" +
+            "SELECT SUM(FC_XJ) ZJ FROM XY_BJD_FC_LIST WHERE BJD_CODE = #{bjdCode}" +
             "</script>")
-    public String getZj(@Param("bjdCode") String bjdCode, @Param("fcStage") String fcStage);
+    public String getZj(@Param("bjdCode") String bjdCode) throws SQLException;
 }
