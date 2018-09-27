@@ -19,7 +19,7 @@ public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
             "\t\tNVL(BRL.RG_YZRK, '-') RG_YZRK\t" +
             "FROM XY_BJD_RG_LIST BRL \n" +
             "LEFT JOIN XY_BJD_MAIN BM ON BRL.BJD_CODE=BM.BJD_CODE\n" +
-            "WHERE BM.CTR_CODE=#{ctrCode} AND BRL.BJD_CODE=#{bjdCode}\n" +
+            "WHERE BM.CTR_CODE=#{ctrCode ,jdbcType=VARCHAR} AND BRL.BJD_CODE=#{bjdCode ,jdbcType=VARCHAR}\n" +
             "ORDER BY TO_NUMBER(BRL.BJD_RG_NO) </script>")
     public List<Map<String,Object>> getBjdRgList(@Param("ctrCode") String ctrCode,
                                                  @Param("bjdCode") String bjdCode)throws SQLException;
