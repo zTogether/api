@@ -12,7 +12,8 @@ import java.util.Map;
 public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
 
     @Select("<script>SELECT BRL.BJD_CODE,BRL.BJD_RG_ROWID,BRL.BJD_RG_STAGE,BRL.BJD_RG_NO,\n" +
-            "\t\tBRL.RG_NAME,BRL.RG_UNIT,BRL.RG_QTY,BRL.RG_PRICE,BRL.RG_XJ,\n" +
+            "\t\tBRL.RG_NAME,BRL.RG_UNIT," +
+            "NVL(BRL.RG_QTY,'0') RG_QTY,BRL.RG_PRICE,BRL.RG_XJ,\n" +
             "\t\tNVL(BRL.RG_MARK, '-') RG_MARK,\n" +
             "\t\tNVL(BRL.RG_DES, '-') RG_DES,\n" +
             "\t\tNVL(BRL.RG_YN, '-') RG_YN,\n" +
@@ -25,7 +26,7 @@ public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
                                                  @Param("bjdCode") String bjdCode)throws SQLException;
 
     @Select("<script>" +
-            "SELECT SUM(BRL.RG_XJ) PRJ_ZJ\t\n" +
+            "SELECT NVL(SUM(BRL.RG_XJ),0) PRJ_ZJ\t\n" +
             "FROM XY_BJD_RG_LIST BRL \n" +
             "LEFT JOIN XY_BJD_MAIN BM ON BRL.BJD_CODE=BM.BJD_CODE\n" +
             "WHERE BM.CTR_CODE=#{ctrCode} AND BRL.BJD_CODE=#{bjdCode} AND BRL.BJD_RG_STAGE=#{rgStage}\n" +
