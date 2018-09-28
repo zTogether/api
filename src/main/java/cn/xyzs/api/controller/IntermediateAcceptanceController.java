@@ -28,4 +28,32 @@ public class IntermediateAcceptanceController {
     public Map<String ,Object> getPgYsList(String ctrCode){
         return intermediateAcceptanceSrevice.getPgYsList(ctrCode);
     }
+
+    /**
+     * 验收提交申请
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/28 14:36
+     * @param: [ctrCode, ysGz, opUserId, zxyMark, custMark]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/inspectionSubmitApply")
+    public Map<String ,Object> inspectionSubmitApply(String ctrCode, String ysGz ,String opUserId, String zxyMark){
+        return intermediateAcceptanceSrevice.inspectionSubmitApply(ctrCode,ysGz,opUserId,zxyMark);
+    }
+
+    /**
+     * 获取允许验收的工种
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/28 16:17
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @ResponseBody
+    @RequestMapping("/getSllowYsGz")
+    public Map<String ,Object> getSllowYsGz(String ctrCode){
+        return intermediateAcceptanceSrevice.getSllowYsGz(ctrCode);
+    }
 }

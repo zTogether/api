@@ -13,6 +13,8 @@ public interface DateMapper {
      * @param: []
      * @return: java.lang.String
      */
-    @Select("select TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss')sysdate  from dual")
+    @Select("<script>" +
+            "SELECT TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss') FROM dual" +
+            "</script>")
     public String getSysDate() throws SQLException;
 }

@@ -9,6 +9,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface XyValMapper extends Mapper<XyVal>{
 
@@ -66,5 +67,33 @@ public interface XyValMapper extends Mapper<XyVal>{
     })
     public List<XyVal> getZcAreaListByValsetId(@Param("valsetId") String valsetId) throws SQLException;
 
-
+    /**
+     * 获取允许验收的工种
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/28 16:17
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tval.VAL_ID,\n" +
+            "\tval.VAL_NAME\n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\t\tSELECT \n" +
+            "\t\t\txv.VAL_ID,\n" +
+            "\t\t\txv.VAL_NAME\n" +
+            "\t\tFROM \n" +
+            "\t\t\tXY_VAL xv \n" +
+            "\t\tWHERE \n" +
+            "\t\t\txv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C'\n" +
+            "\t\tAND\n" +
+            "\t\t\txv.VAL_ID IN(10,21,22,30,40,50)\n" +
+            "\t) val\n" +
+            "WHERE val.VAL_ID NOT IN(\n" +
+            "\tSELECT xpy.YS_GZ FROM XY_PG_YS xpy WHERE xpy.CTR_CODE = #{ctrCode}\n" +
+            ")" +
+            "</script>")
+    public List<Map<String ,Object>> getSllowYsGz(String ctrCode) throws SQLException;
 }

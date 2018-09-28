@@ -26,7 +26,7 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "\txpy.YS_ID, \n" +
             "\txpy.CTR_CODE, \n" +
             "\txpy.YS_GZ, \n" +
-            "\tTO_CHAR(xpy.OP_DATE,'yyyy-MM-dd HH24:mi:ss') OP_DATE, \n" +
+            "\tTO_CHAR(xpy.OP_DATE,'yyyy-MM-dd') OP_DATE, \n" +
             "\txpy.OP_USERID, \n" +
             "\txpy.YS_STATU, \n" +
             "\txpy.ZXY_MARK, \n" +
@@ -37,26 +37,76 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "FROM\n" +
             "\tXY_PG_YS xpy\n" +
             "WHERE\n" +
-            "\txpy.CTR_CODE = #{ctrCode}" +
+            "\txpy.CTR_CODE = #{ctrCode} " +
+            "ORDER BY xpy.YS_STATU" +
             "</script>")
     public List<Map<String ,Object>> getXyPgYsListByCtrCode(String ctrCode) throws SQLException;
 
     /**
      *
-     * @Description: 添加验收
+     * @Description: 添加验收(带验收时间)
      * @author: GeWeiliang
      * @date: 2018\9\28 0028 9:39
      * @param: [ctrCode, ysGz, opDate, opUserid, ysStatu, zxyMark, custMark, ysDate]
      * @return: void
      */
     @Insert("<script>" +
-            "INSERT INTO XY_PG_YS(YS_ID,CTR_CODE,YS_GZ,OP_DATE,OP_USERID,YS_STATU,ZXY_MARK,CUST_MARK,YS_DATE) " +
-            "VALUES(SYS_GUID(),#{ctrCode},#{ysGz},TO_DATE(#{opDate}, 'yyyy-MM-dd HH24:mi:ss'),#{opUserid},#{ysStatu}," +
-            "    #{zxyMark},#{custMark},TO_DATE(#{ysDate}), 'yyyy-MM-dd HH24:mi:ss')" +
+            "INSERT INTO XY_PG_YS(" +
+                "YS_ID," +
+                "CTR_CODE," +
+                "YS_GZ," +
+                "OP_DATE," +
+                "OP_USERID," +
+                "YS_STATU," +
+                "ZXY_MARK," +
+                "CUST_MARK," +
+                "YS_DATE) " +
+            "VALUES(" +
+                "SYS_GUID()," +
+                "#{ctrCode,jdbcType=VARCHAR}," +
+                "#{ysGz,jdbcType=VARCHAR}," +
+                "SYSDATE," +
+                "#{opUserid,jdbcType=VARCHAR}," +
+                "#{ysStatu,jdbcType=VARCHAR}," +
+                "#{zxyMark,jdbcType=VARCHAR}," +
+                "#{custMark,jdbcType=VARCHAR}," +
+                "TO_DATE(#{ysDate}, 'yyyy-MM-dd HH24:mi:ss'))" +
             "</script>")
-    public void addYanshou(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,@Param("opDate")String opDate,
+    public void addYanshou(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,
                            @Param("opUserid")String opUserid,@Param("ysStatu")String ysStatu,@Param("zxyMark")String zxyMark,
                            @Param("custMark")String custMark, @Param("ysdate")String ysDate) throws SQLException;
+
+    /**
+     *
+     * @Description: 添加验收(不带验收时间)
+     * @author: GeWeiliang
+     * @date: 2018\9\28 0028 9:39
+     * @param: [ctrCode, ysGz, opDate, opUserid, ysStatu, zxyMark, custMark, ysDate]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_PG_YS(" +
+                "YS_ID," +
+                "CTR_CODE," +
+                "YS_GZ," +
+                "OP_DATE," +
+                "OP_USERID," +
+                "YS_STATU," +
+                "ZXY_MARK," +
+                "CUST_MARK) " +
+            "VALUES(" +
+                "SYS_GUID()," +
+                "#{ctrCode,jdbcType=VARCHAR}," +
+                "#{ysGz,jdbcType=VARCHAR}," +
+                "SYSDATE," +
+                "#{opUserid,jdbcType=VARCHAR}," +
+                "#{ysStatu,jdbcType=VARCHAR}," +
+                "#{zxyMark,jdbcType=VARCHAR}," +
+                "#{custMark,jdbcType=VARCHAR})" +
+            "</script>")
+    public void addYanshouB(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,
+                           @Param("opUserid")String opUserid,@Param("ysStatu")String ysStatu,@Param("zxyMark")String zxyMark,
+                           @Param("custMark")String custMark) throws SQLException;
 
     /**
      *
@@ -72,4 +122,24 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "</script>")
     public void updateYanshou(@Param("ysId") String ysId,@Param("custMark") String custMark,
                               @Param("ysDate") String ysDate) throws SQLException;
+
+    /**
+     * 根据ctrCode，ysId获取是否已提交验收
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/28 14:16
+     * @param: [ctrCode, ysId]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tCOUNT(1) \n" +
+            "FROM \n" +
+            "\tXY_PG_YS xpy \n" +
+            "WHERE \n" +
+            "\txpy.CTR_CODE = #{ctrCode}\n" +
+            "AND\n" +
+            "\txpy.YS_GZ = #{ysGz}" +
+            "</script>")
+    public Integer getCountByCtrCodeAndYszt(@Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz) throws SQLException;
 }

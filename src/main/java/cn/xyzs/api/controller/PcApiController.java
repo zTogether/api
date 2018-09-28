@@ -17,8 +17,8 @@ public class PcApiController {
 
     @ResponseBody
     @RequestMapping("/sendGiftCode")
-    public Map<String ,Object> sendGiftCode(String phone){
-        return pcApiService.sendGiftCode(phone);
+    public Map<String ,Object> sendGiftCode(String phone,String giftCode){
+        return pcApiService.sendGiftCode(phone,giftCode);
     }
 
 }
