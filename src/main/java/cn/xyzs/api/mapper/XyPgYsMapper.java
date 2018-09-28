@@ -1,7 +1,10 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyPgYs;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -37,4 +40,36 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "\txpy.CTR_CODE = #{ctrCode}" +
             "</script>")
     public List<Map<String ,Object>> getXyPgYsListByCtrCode(String ctrCode) throws SQLException;
+
+    /**
+     *
+     * @Description: 添加验收
+     * @author: GeWeiliang
+     * @date: 2018\9\28 0028 9:39
+     * @param: [ctrCode, ysGz, opDate, opUserid, ysStatu, zxyMark, custMark, ysDate]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_PG_YS(YS_ID,CTR_CODE,YS_GZ,OP_DATE,OP_USERID,YS_STATU,ZXY_MARK,CUST_MARK,YS_DATE) " +
+            "VALUES(SYS_GUID(),#{ctrCode},#{ysGz},TO_DATE(#{opDate}, 'yyyy-MM-dd HH24:mi:ss'),#{opUserid},#{ysStatu}," +
+            "    #{zxyMark},#{custMark},TO_DATE(#{ysDate}), 'yyyy-MM-dd HH24:mi:ss')" +
+            "</script>")
+    public void addYanshou(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,@Param("opDate")String opDate,
+                           @Param("opUserid")String opUserid,@Param("ysStatu")String ysStatu,@Param("zxyMark")String zxyMark,
+                           @Param("custMark")String custMark, @Param("ysdate")String ysDate) throws SQLException;
+
+    /**
+     *
+     * @Description: 根据YS_ID修改验收
+     * @author: GeWeiliang
+     * @date: 2018\9\28 0028 9:39
+     * @param: [ysId, custMark, ysDate]
+     * @return: void
+     */
+    @Update("<script>" +
+            "UPDATE XY_PG_YS SET CUST_MARK=#{custMark},YS_DATE=TO_DATE(#{ysDate}, 'yyyy-MM-dd HH24:mi:ss')" +
+            "WHERE YS_ID=#{ysId}" +
+            "</script>")
+    public void updateYanshou(@Param("ysId") String ysId,@Param("custMark") String custMark,
+                              @Param("ysDate") String ysDate) throws SQLException;
 }
