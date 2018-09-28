@@ -448,4 +448,22 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "</script>")
     public void deleteRegisteredTenders(String grId) throws SQLException;
 
+    /**
+     *
+     * @Description: 修改派工验收时间
+     * @author: GeWeiliang
+     * @date: 2018\9\28 0028 10:21
+     * @param: [ctrCode, ysDate, pgStage]
+     * @return: void
+     */
+    @Update("UPDATE XY_PG_WAITER xpw \n" +
+            "SET xpw.YS_DATE = TO_DATE(#{ysDate}, 'yyyy-MM-dd HH24:mi:ss')\n" +
+            "WHERE\n" +
+            "\txpw.PG_ID = (SELECT xp.PG_ID FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode} AND xp.PG_STAGE = #{pgStage} )\n" +
+            "AND\n" +
+            "\txpw.ZT = '抢单成功'\n" +
+            "AND\n" +
+            "\txpw.CTR_CODE = #{ctrCode}\n")
+    public void updateYsDate(@Param("ctrCode") String ctrCode,@Param("ysDate") String ysDate,@Param("pgStage") String pgStage);
+
 }
