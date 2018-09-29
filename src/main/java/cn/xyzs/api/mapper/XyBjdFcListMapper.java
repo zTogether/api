@@ -28,7 +28,12 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
                                               @Param("startNum") String startNum,@Param("endNum") String endNum) throws SQLException;
 
     @Select("<script>" +
-            "SELECT SUM(FC_XJ) ZJ FROM XY_BJD_FC_LIST WHERE BJD_CODE = #{bjdCode}" +
+            "SELECT\n" +
+            "\txbm.BJD_FC_ZJ\n" +
+            "FROM\n" +
+            "\tXY_BJD_MAIN xbm\n" +
+            "WHERE\n" +
+            "\txbm.BJD_CODE = #{bjdCode}" +
             "</script>")
-    public String getZj(@Param("bjdCode") String bjdCode) throws SQLException;
+    public String getZj(@Param("bjdCode") String ctrCode) throws SQLException;
 }

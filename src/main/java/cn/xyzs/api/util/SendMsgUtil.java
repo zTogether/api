@@ -19,7 +19,7 @@ public class SendMsgUtil {
     private static final String appkey = "823a0c51470a517207285607784680db";
     // 短信模板ID，需要在短信应用中申请
     private static final int templateId1 = 193979; //验证码短信模板ID
-    private static final int templateId2 = 201035;//礼品码短信模板ID
+    private static final int templateId2 = 203858;//礼品码短信模板ID
     // 签名
     private static final String smsSign = "江苏轩辕装饰工程有限公司"; // NOTE: 这里的签名"腾讯云"只是一个示例，真实的签名需要在短信控制台中申请，另外签名参数使用的是`签名内容`，而不是`签名ID`
     // 需要发送短信的手机号码
