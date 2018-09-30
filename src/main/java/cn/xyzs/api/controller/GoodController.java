@@ -151,7 +151,7 @@ public class GoodController {
      */
     @ResponseBody
     @RequestMapping("/getCuntomerInfoByCondition")
-    public Map<String ,Object> getCuntomerInfoByCondition(String userId,String condition ,String roleType,String roleId){
+        public Map<String ,Object> getCuntomerInfoByCondition(String userId,String condition ,String roleType,String roleId){
         return goodService.getCuntomerInfoByCondition(userId,condition,roleType,roleId);
     }
 
