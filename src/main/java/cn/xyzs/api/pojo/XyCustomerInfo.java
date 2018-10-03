@@ -92,7 +92,7 @@ public class XyCustomerInfo {
     //接待人员
     @Setter
     @Getter
-    @Column(name="CTR_WAITER")
+    @Column(name=" ")
     private String ctrWaiter;
     //服务机构
     @Setter

@@ -369,4 +369,27 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\tOR temptable.CTR_TEL = #{condition}" +
             "</script>")
     public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition,@Param("roleId") String roleId) throws SQLException;
+
+    /**
+     * 根据ctrCode获取所有服务人员
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/3 9:22
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\txui.CTR_WAITER,\n" +
+            "\txui.CTR_SJS,\n" +
+            "\txui.CTR_GCJL,\n" +
+            "\txui.CTR_CLDD,\n" +
+            "\txui.CTR_AREA_MA,\n" +
+            "\txui.CTR_OWENER\n" +
+            "FROM\n" +
+            "\tXY_CUSTOMER_INFO xui \n" +
+            "WHERE\n" +
+            "\txui.CTR_CODE = #{ctrCode}" +
+            "</script>")
+    public Map<String ,String> getServicePersonalByCtrCode(String ctrCode) throws SQLException;
 }

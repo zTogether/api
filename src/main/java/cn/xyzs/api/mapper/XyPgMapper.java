@@ -139,4 +139,17 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "</script>")
     public List<Map<String ,Object>> getGrConstructionSiteByCondition(@Param("grId") String grId ,@Param("condition") String condition) throws SQLException;
 
+    /**
+     * 根据ctrCode获取所有为其服务的工人
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/3 9:24
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT xp.PG_GR FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode}" +
+            "</script>")
+    public List<Map<String ,String>> getGrIdS(String ctrCode) throws SQLException;
+
 }
