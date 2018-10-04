@@ -1,0 +1,31 @@
+package cn.xyzs.api.controller;
+
+import cn.xyzs.api.service.ChatRoomService;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/chatRoom")
+public class ChatRoomController {
+
+    @Resource
+    private ChatRoomService chatRoomService;
+
+    /**
+     *
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 9:21
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getServicePersonalInfoByCtrCode")
+    public Map<String ,Object> getServicePersonalInfoByCtrCode(String ctrCode){
+        return chatRoomService.getServicePersonalInfoByCtrCode(ctrCode);
+    }
+}

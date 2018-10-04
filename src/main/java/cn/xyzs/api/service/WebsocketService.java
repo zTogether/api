@@ -2,7 +2,6 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyPgMapper;
-import cn.xyzs.api.util.SpringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +19,14 @@ public class WebsocketService {
     @Resource
     private XyCustomerInfoMapper xyCustomerInfoMapper;
 
+    /**
+     * 获取用户所包含的服务人员（接待人员，设计师，执行总监，材料导购，区域老总，合约成效人，以及所有的施工工人）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 8:56
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.String>>
+     */
     public List<Map<String ,String >> getUserLsit(String ctrCode){
         List<Map<String ,String>> userIdList = new ArrayList<>();
         try {

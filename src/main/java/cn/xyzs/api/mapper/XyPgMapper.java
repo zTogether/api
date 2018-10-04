@@ -152,4 +152,24 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "</script>")
     public List<Map<String ,String>> getGrIdS(String ctrCode) throws SQLException;
 
+    /**
+     * 根据ctrCode获取所有为其服务的工人姓名与Id
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 8:54
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\txp.PG_GR,\n" +
+            "\tcgg.GR_NAME\n" +
+            "FROM\n" +
+            "\tXY_PG xp \n" +
+            "LEFT JOIN XY_GCB_GRXX cgg ON xp.PG_GR = cgg.GR_ID\n" +
+            "WHERE\n" +
+            "\txp.CTR_CODE = #{ctrCode}" +
+            "</script>")
+    public List<Map<String ,Object>> getGrInfoListByCtrCode(String ctrCode) throws SQLException;
+
 }
