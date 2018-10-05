@@ -28,4 +28,32 @@ public class ChatRoomController {
     public Map<String ,Object> getServicePersonalInfoByCtrCode(String ctrCode){
         return chatRoomService.getServicePersonalInfoByCtrCode(ctrCode);
     }
+
+    /**
+     * 添加聊天记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 16:49
+     * @param: [ctrCode, userId, chatingContent, contentType]
+     * @return: void
+     */
+    @ResponseBody
+    @RequestMapping("/addChattingRecords")
+    public Map<String ,Object> addChattingRecords (String ctrCode , String userId , String chatingContent , String contentType){
+        return chatRoomService.addChattingRecords(ctrCode,userId,chatingContent,contentType);
+    }
+
+    /**
+     * 获取离线消息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 17:07
+     * @param: [lastSendDate, ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getOfflineMessage")
+    public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode){
+        return chatRoomService.getOfflineMessage(userId,ctrCode);
+    }
 }

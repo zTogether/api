@@ -1,8 +1,10 @@
 package cn.xyzs.api.service;
 
+import cn.xyzs.api.mapper.MvChattingRecordsMapper;
 import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyPgMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -18,6 +20,8 @@ public class ChatRoomService {
     private XyCustomerInfoMapper xyCustomerInfoMapper;
     @Resource
     private XyPgMapper xyPgMapper;
+    @Resource
+    private MvChattingRecordsMapper mvChattingRecordsMapper;
 
     /**
      *
@@ -84,6 +88,61 @@ public class ChatRoomService {
             msg = "成功";
             obj.put("servicePersonalInfoList",servicePersonalInfoList);
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 添加聊天记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 16:49
+     * @param: [ctrCode, userId, chatingContent, contentType]
+     * @return: void
+     */
+    @Transactional
+    public Map<String ,Object> addChattingRecords (String ctrCode , String userId , String chatingContent , String contentType){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            mvChattingRecordsMapper.addChattingRecords(ctrCode,userId,chatingContent,contentType);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取离线消息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 17:07
+     * @param: [lastSendDate, ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            //离线消息
+            List<Map<String ,Object>> offlineMessageList = mvChattingRecordsMapper.getOfflineMessage(userId,ctrCode);
+            obj.put("offlineMessageList",offlineMessageList);
+            code = "200";
+            msg = "成功";
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
