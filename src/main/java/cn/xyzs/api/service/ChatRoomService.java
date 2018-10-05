@@ -107,12 +107,12 @@ public class ChatRoomService {
      * @return: void
      */
     @Transactional
-    public Map<String ,Object> addChattingRecords (String ctrCode , String userId , String chatingContent , String contentType){
+    public Map<String ,Object> addChattingRecords (String ctrCode , String userId ,String sendDate , String chatingContent , String contentType){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
-            mvChattingRecordsMapper.addChattingRecords(ctrCode,userId,chatingContent,contentType);
+            mvChattingRecordsMapper.addChattingRecords(ctrCode,userId,sendDate,chatingContent,contentType);
             code = "200";
             msg = "成功";
         } catch (SQLException e) {

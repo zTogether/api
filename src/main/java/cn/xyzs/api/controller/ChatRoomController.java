@@ -40,8 +40,8 @@ public class ChatRoomController {
      */
     @ResponseBody
     @RequestMapping("/addChattingRecords")
-    public Map<String ,Object> addChattingRecords (String ctrCode , String userId , String chatingContent , String contentType){
-        return chatRoomService.addChattingRecords(ctrCode,userId,chatingContent,contentType);
+    public Map<String ,Object> addChattingRecords (String ctrCode , String userId ,String sendDate ,String chatingContent , String contentType){
+        return chatRoomService.addChattingRecords(ctrCode,userId,sendDate,chatingContent,contentType);
     }
 
     /**

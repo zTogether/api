@@ -25,12 +25,12 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
             "VALUES (\n" +
             "\t\t#{ctrCode},\n" +
             "\t\t#{userId},\n" +
-            "\t\tSYSDATE,\n" +
+            "\t\tTO_DATE(#{sendDate}, 'yyyy-MM-dd HH24:mi:ss') ,\n" +
             "\t\t#{chatingContent},\n" +
             "\t\t#{contentType}\n" +
             ")" +
             "</script>")
-    public void addChattingRecords (@Param("ctrCode") String ctrCode , @Param("userId") String userId , @Param("chatingContent") String chatingContent , @Param("contentType") String contentType) throws SQLException;
+    public void addChattingRecords (@Param("ctrCode") String ctrCode , @Param("userId") String userId , @Param("sendDate") String sendDate , @Param("chatingContent") String chatingContent , @Param("contentType") String contentType) throws SQLException;
 
     /**
      * 获取离线消息

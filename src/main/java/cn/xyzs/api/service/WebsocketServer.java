@@ -1,5 +1,6 @@
 package cn.xyzs.api.service;
 
+import cn.xyzs.api.util.DateUtil;
 import cn.xyzs.api.util.SpringUtil;
 import org.springframework.stereotype.Component;
 
@@ -119,9 +120,10 @@ public class WebsocketServer {
      * @return: void
      */
     public void sendMessage(String message,String userId) throws IOException {
+        DateUtil dateUtil = SpringUtil.getBean(DateUtil.class);
         //将聊天内容推送至页面
-        System.out.println(message);
-        this.session.getBasicRemote().sendText(message + ","+userId);
+        //System.out.println(message);
+        this.session.getBasicRemote().sendText(message + ","+userId + "," + dateUtil.getSysDate());
         //this.session.getAsyncRemote().sendText(message);
     }
 
