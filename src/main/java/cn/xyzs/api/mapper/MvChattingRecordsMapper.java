@@ -68,8 +68,14 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
             "\t)\n" +
             "AND\n" +
             "\tmcr.CTR_CODE = #{ctrCode ,jdbcType=VARCHAR} " +
-            "ORDER BY mcr.SEND_DATE" +
+            "AND " +
+            "mcr.SEND_DATE NOT IN " +
+            "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> " +
+            "TO_DATE(#{item}, 'yyyy-MM-dd HH24:mi:ss') " +
+            "</foreach>" +
+            "ORDER BY mcr.SEND_DATE " +
+
             "</script>")
-    public List<Map<String ,Object>> getOfflineMessage (@Param("userId") String userId ,@Param("ctrCode") String ctrCode) throws SQLException;
+    public List<Map<String ,Object>> getOfflineMessage (@Param("userId") String userId ,@Param("ctrCode") String ctrCode, @Param("list") List<String> sendDateList) throws SQLException;
 
 }

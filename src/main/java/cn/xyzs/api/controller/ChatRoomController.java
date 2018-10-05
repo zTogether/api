@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -53,7 +54,7 @@ public class ChatRoomController {
      */
     @ResponseBody
     @RequestMapping("/getOfflineMessage")
-    public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode){
-        return chatRoomService.getOfflineMessage(userId,ctrCode);
+    public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode , String [] sendDates){
+        return chatRoomService.getOfflineMessage(userId,ctrCode,sendDates);
     }
 }

@@ -132,14 +132,22 @@ public class ChatRoomService {
      * @param: [lastSendDate, ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode){
+    public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode , String [] sendDates){
+        List<String> sendDateList = new ArrayList<>();
+        if (sendDates == null){
+            sendDateList.add ("9999-12-12 12:12:12");
+        } else {
+            for (int i = 0; i <sendDates.length ; i++) {
+                sendDateList.add(sendDates[i]);
+            }
+        }
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
             //离线消息
-            List<Map<String ,Object>> offlineMessageList = mvChattingRecordsMapper.getOfflineMessage(userId,ctrCode);
+            List<Map<String ,Object>> offlineMessageList = mvChattingRecordsMapper.getOfflineMessage(userId,ctrCode,sendDateList);
             obj.put("offlineMessageList",offlineMessageList);
             code = "200";
             msg = "成功";
