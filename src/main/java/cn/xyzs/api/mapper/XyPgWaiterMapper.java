@@ -109,12 +109,10 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\t\txp.PG_ID = xpw.PG_ID \n" +
             "\t), 'yyyy-MM-dd hh24:mi:ss') open_tender,\n" +
             "\t(\n" +
-            "\t\tSELECT vwpw.ORG_PRJ_NAME FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
-            "\t) ORG_PRJ_NAME,\n" +
-            "\t(\n" +
             "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ADD_MONEY,\n" +
-            "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance\n" +
+            "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance, \n" +
+            "( SELECT xo.ORG_NAME FROM XY_ORG xo WHERE xo.ORG_CODE = xcii.CTR_PRO_ORG ) ORG_PRJ_NAME " +
             "FROM\n" +
             "\tXY_PG_WAITER xpw,\n" +
             "\tXY_CUSTOMER_INFO xcii,\n" +
@@ -346,9 +344,6 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\tWHERE\n" +
             "\t\txp.PG_ID = xpw.PG_ID \n" +
             "\t), 'yyyy-MM-dd hh24:mi:ss') open_tender,\n" +
-            "\t(\n" +
-            "\t\tSELECT vwpw.ORG_PRJ_NAME FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
-            "\t) ORG_PRJ_NAME,\n" +
             "\t(\n" +
             "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ADD_MONEY,\n" +
