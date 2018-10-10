@@ -57,4 +57,18 @@ public class ChatRoomController {
     public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode , String [] sendDates){
         return chatRoomService.getOfflineMessage(userId,ctrCode,sendDates);
     }
+
+    /**
+     * 获取离线消息(2)
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 17:07
+     * @param: [lastSendDate, ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getOfflineMessageByDateNode")
+    public Map<String ,Object> getOfflineMessageByDateNode (String ctrCode ,String dateNode ,String selectFlag){
+        return chatRoomService.getOfflineMessageByDateNode(ctrCode,dateNode,selectFlag);
+    }
 }

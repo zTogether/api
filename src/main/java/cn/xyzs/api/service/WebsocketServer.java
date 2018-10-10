@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-@Component
-@ServerEndpoint("/websocket/{userId}/{ctrCode}")
+/*@Component
+@ServerEndpoint("/websocket/{userId}/{ctrCode}")*/
 public class WebsocketServer {
-
+/*
     //在线人数
     private  static  int COUNT = 0;
     //创建链接池
@@ -25,14 +25,14 @@ public class WebsocketServer {
     //创建session会话
     private Session session;
 
-    /**
+    *//**
      * 接入链接
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:29
      * @param: [session]
      * @return: void
-     */
+     *//*
     @OnOpen
     public  void onOpen(Session session ){
         //设置接入会话
@@ -49,14 +49,14 @@ public class WebsocketServer {
         System.out.println("当前在线人数："+COUNT);
     }
 
-    /**
+    *//**
      * 断开链接
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:28
      * @param: []
      * @return: void
-     */
+     *//*
     @OnClose
     public void onclose(){
         //将谅解用户删除连接池
@@ -68,14 +68,14 @@ public class WebsocketServer {
     }
 
 
-    /**
+    *//**
      * 接收到客户端的信息
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:28
      * @param: [message, session]
      * @return: void
-     */
+     *//*
     @OnMessage
     public  void shoudaoMessage(String message, Session session ){
         //获取链接地址占位符的ctrCode
@@ -98,27 +98,27 @@ public class WebsocketServer {
         }
     }
 
-    /**
+    *//**
      * 发生错误时调用
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:29
      * @param: [session, error]
      * @return: void
-     */
+     *//*
     @OnError
     public void onError(Session session, Throwable error) {
         error.printStackTrace();
     }
 
-    /**
+    *//**
      * 将消息推送至客户端
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:30
      * @param: [message, userId]
      * @return: void
-     */
+     *//*
     public void sendMessage(String message,String userId) throws IOException {
         DateUtil dateUtil = SpringUtil.getBean(DateUtil.class);
         //将聊天内容推送至页面
@@ -127,50 +127,50 @@ public class WebsocketServer {
         //this.session.getAsyncRemote().sendText(message);
     }
 
-    /**
+    *//**
      * 获取在线人数
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:30
      * @param: []
      * @return: int
-     */
+     *//*
     public static synchronized int getOnlineCount() {
         return COUNT;
     }
 
-    /**
+    *//**
      * 添加在线人数
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:31
      * @param: []
      * @return: void
-     */
+     *//*
     public static synchronized void addOnlineCount() {
         WebsocketServer.COUNT++;
     }
 
-    /**
+    *//**
      * 减少在线人数
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:31
      * @param: []
      * @return: void
-     */
+     *//*
     public static synchronized void subOnlineCount() {
         WebsocketServer.COUNT--;
     }
 
-    /**
+    *//**
      * 获取链接IDSet
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/3 14:31
      * @param: [ctrCode]
      * @return: java.util.Set<java.lang.String>
-     */
+     *//*
     public Set<String> getIdSet(String ctrCode){
         //创建链接idSet集合
         Set<String> idSet = new HashSet<>();
@@ -187,5 +187,5 @@ public class WebsocketServer {
             }
         }
         return idSet;
-    }
+    }*/
 }

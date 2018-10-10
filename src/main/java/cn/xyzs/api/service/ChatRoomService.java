@@ -160,4 +160,37 @@ public class ChatRoomService {
         }
         return resultMap;
     }
+
+    /**
+     *  获取离线消息(2)
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/5 17:49
+     * @param: [ctrCode, dateNde, selectFlag]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getOfflineMessageByDateNode (String ctrCode ,String dateNode ,String selectFlag){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> offlineMessageList = new ArrayList<>();
+            if ("0".equals(selectFlag)){
+                offlineMessageList = mvChattingRecordsMapper.getOfflineMessageByDateNode(ctrCode,dateNode);
+            } else if ("1".equals(selectFlag)){
+                offlineMessageList = mvChattingRecordsMapper.getOfflineMessageNotByDateNode(ctrCode);
+            }
+            obj.put("offlineMessageList",offlineMessageList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }

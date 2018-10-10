@@ -174,18 +174,22 @@ public class LoginService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     public  Map<String ,Object> sendVerificationCode(String phone){
+        String code = "500";
+        String msg = "系统异常";
         Map<String, Object> resultMap = new HashMap<>();
         XyCustomerInfo xyCustomerInfo = new XyCustomerInfo();
         xyCustomerInfo.setCtrTel(phone);
-        xyCustomerInfo = customerInfoMapper.selectOne(xyCustomerInfo);
-        if (xyCustomerInfo != null){
+        List<XyCustomerInfo> xyCustomerInfoLsit = customerInfoMapper.select(xyCustomerInfo);
+        if (xyCustomerInfoLsit != null && xyCustomerInfoLsit.size() > 0){
             resultMap = mvSysSmsService.sendVerificationCode("0" ,phone);
+            code = "200";
+            msg = "登陆成功";
         } else {
-            String code = "400";
-            String msg = "用户不存在";
-            resultMap.put("code",code);
-            resultMap.put("msg",msg);
+            code = "400";
+            msg = "用户不存在";
         }
+        resultMap.put("code",code);
+        resultMap.put("msg",msg);
         return resultMap;
     }
 
