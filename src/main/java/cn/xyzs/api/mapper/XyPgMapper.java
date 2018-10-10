@@ -84,4 +84,92 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "</script>")
     public List<Map<String,Object>> getPrjList(String ctrCode) throws SQLException;
 
+    /**
+     * 工人聊天群，获取工人工地(分页)
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/30 11:15
+     * @param: [grId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT *  FROM ( \n" +
+            "\tSELECT A.*, ROWNUM RN \n" +
+            "\t\tFROM ( \n" +
+            "\t\t\tSELECT\n" +
+            "\t\t\t\txci.CTR_CODE,\n" +
+            "\t\t\t\txci.CTR_NAME,\n" +
+            "\t\t\t\txci.CTR_TEL,\n" +
+            "\t\t\t\txci.CTR_ADDR\n" +
+            "\t\t\tFROM\n" +
+            "\t\t\t\tXY_PG xp \n" +
+            "\t\t\tLEFT JOIN XY_CUSTOMER_INFO xci ON xp.CTR_CODE = xci.CTR_CODE\n" +
+            "\t\t\tWHERE\n" +
+            "\t\t\t\txp.PG_GR = #{grId}\n" +
+            "\t\t) A\n" +
+            "\t)\n" +
+            "WHERE RN BETWEEN #{startNum} AND #{endNum}" +
+            "</script>")
+    public List<Map<String ,Object>> getGrConstructionSite(@Param("grId") String grId ,@Param("startNum") String startNum ,@Param("endNum") String endNum) throws SQLException;
+
+    /**
+     * 工人聊天群，根据条件获取工人工地
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/30 13:46
+     * @param: [grId, ctrTel, ctrName, ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT * FROM(\n" +
+            "\tSELECT\n" +
+            "\t\txci.CTR_CODE,\n" +
+            "\t\txci.CTR_NAME,\n" +
+            "\t\txci.CTR_TEL,\n" +
+            "\t\txci.CTR_ADDR\n" +
+            "\tFROM\n" +
+            "\t\tXY_PG xp \n" +
+            "\tLEFT JOIN XY_CUSTOMER_INFO xci ON xp.CTR_CODE = xci.CTR_CODE\n" +
+            "\tWHERE\n" +
+            "\t\txp.PG_GR = #{grId}\n" +
+            ") A\n" +
+            "WHERE A.CTR_TEL = #{condition}\n" +
+            "OR A.CTR_NAME = #{condition}\n" +
+            "OR A.CTR_CODE = #{condition}" +
+            "</script>")
+    public List<Map<String ,Object>> getGrConstructionSiteByCondition(@Param("grId") String grId ,@Param("condition") String condition) throws SQLException;
+
+    /**
+     * 根据ctrCode获取所有为其服务的工人
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/3 9:24
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT xp.PG_GR FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode}" +
+            "</script>")
+    public List<Map<String ,String>> getGrIdS(String ctrCode) throws SQLException;
+
+    /**
+     * 根据ctrCode获取所有为其服务的工人姓名与Id
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 8:54
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\txp.PG_GR,\n" +
+            "\tcgg.GR_NAME\n" +
+            "FROM\n" +
+            "\tXY_PG xp \n" +
+            "LEFT JOIN XY_GCB_GRXX cgg ON xp.PG_GR = cgg.GR_ID\n" +
+            "WHERE\n" +
+            "\txp.CTR_CODE = #{ctrCode}" +
+            "</script>")
+    public List<Map<String ,Object>> getGrInfoListByCtrCode(String ctrCode) throws SQLException;
+
 }

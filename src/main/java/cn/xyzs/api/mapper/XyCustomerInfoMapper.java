@@ -369,4 +369,73 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\tOR temptable.CTR_TEL = #{condition}" +
             "</script>")
     public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition,@Param("roleId") String roleId) throws SQLException;
+
+    /**
+     * 根据ctrCode获取所有服务人员
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/3 9:22
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\txui.CTR_WAITER,\n" +
+            "\txui.CTR_SJS,\n" +
+            "\txui.CTR_GCJL,\n" +
+            "\txui.CTR_CLDD,\n" +
+            "\txui.CTR_AREA_MA,\n" +
+            "\txui.CTR_OWENER\n" +
+            "FROM\n" +
+            "\tXY_CUSTOMER_INFO xui \n" +
+            "WHERE\n" +
+            "\txui.CTR_CODE = #{ctrCode}" +
+            "</script>")
+    public Map<String ,String> getServicePersonalByCtrCode(String ctrCode) throws SQLException;
+
+    /**
+     * 根据ctrCode获取所有服务人员姓名及ID
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/4 8:21
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\txui.CTR_WAITER,\n" +
+            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_WAITER) CTR_WAITER_NAME,\n" +
+            "\txui.CTR_SJS,\n" +
+            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_SJS) CTR_SJS_NAME,\n" +
+            "\txui.CTR_GCJL,\n" +
+            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_GCJL) CTR_GCJL_NAME,\n" +
+            "\txui.CTR_CLDD,\n" +
+            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_CLDD) CTR_CLDD_NAME,\n" +
+            "\txui.CTR_AREA_MA,\n" +
+            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_AREA_MA) CTR_AREA_MA_NAME,\n" +
+            "\txui.CTR_OWENER,\n" +
+            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_OWENER) CTR_OWENER_NAME\n" +
+            "FROM\n" +
+            "\tXY_CUSTOMER_INFO xui \n" +
+            "WHERE\n" +
+            "\txui.CTR_CODE = #{ctrCode}" +
+            "</script>")
+    public Map<String ,Object> getServicePersonalInfoByCtrCode(String ctrCode) throws SQLException;
+
+    /**
+     *
+     * @Description: 根据档案号查询RG_VER
+     * @author: GeWeiliang
+     * @date: 2018\10\6 0006 17:14
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT RV.RG_VER_CODE,rv.RG_VER_NAME,rv.RG_VER_MARK,rv.RG_VER_ISUSED,\n" +
+            "\t\t\trv.RG_VER_BJ_RGML,rv.RG_VER_BJ_FCML,rv.RG_VER_BJ_SGML,\n" +
+            "\t\t\tNVL(rv.RG_VER_C1,'-') RG_VER_C1,NVL(rv.RG_VER_C2,'-') RG_VER_C2,NVL(rv.RG_VER_C3,'-') RG_VER_C3\n" +
+            "FROM XY_GCB_RG_VER rv,XY_CUSTOMER_INFO xc\n" +
+            "WHERE rv.RG_VER_CODE=xc.RG_VER_CODE AND xc.CTR_CODE=#{ctrCode}" +
+            "</script>")
+    public Map<String,Object> getRgVer(@Param("ctrCode") String ctrCode) throws SQLException;
 }

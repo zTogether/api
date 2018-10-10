@@ -120,4 +120,32 @@ public class FieldSupervisionController {
         return fieldSupervisionService.getRgList(ctrCode,bjdCode);
     }
 
+    /**
+     * 根据项目code获取辅材详情
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/27 11:09
+     * @param: [bjdCode, fcStage, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getBjdFcList")
+    public Map<String ,Object> getBjdFcList(String bjdCode, String fcStage, String startNum, String endNum){
+        return fieldSupervisionService.getBjdFcList(bjdCode,fcStage,startNum,endNum);
+    }
+
+    /**
+     * 获取总计
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/27 12:12
+     * @param: [bjdCode, fcStage]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getZj")
+    public Map<String ,Object> getZj(String bjdCode){
+        return fieldSupervisionService.getZj(bjdCode);
+    }
+
 }

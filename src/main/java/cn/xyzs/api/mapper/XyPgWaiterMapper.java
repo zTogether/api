@@ -109,12 +109,10 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\t\txp.PG_ID = xpw.PG_ID \n" +
             "\t), 'yyyy-MM-dd hh24:mi:ss') open_tender,\n" +
             "\t(\n" +
-            "\t\tSELECT vwpw.ORG_PRJ_NAME FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
-            "\t) ORG_PRJ_NAME,\n" +
-            "\t(\n" +
             "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ADD_MONEY,\n" +
-            "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance\n" +
+            "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance, \n" +
+            "( SELECT xo.ORG_NAME FROM XY_ORG xo WHERE xo.ORG_CODE = xcii.CTR_PRO_ORG ) ORG_PRJ_NAME " +
             "FROM\n" +
             "\tXY_PG_WAITER xpw,\n" +
             "\tXY_CUSTOMER_INFO xcii,\n" +
@@ -347,9 +345,6 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\t\txp.PG_ID = xpw.PG_ID \n" +
             "\t), 'yyyy-MM-dd hh24:mi:ss') open_tender,\n" +
             "\t(\n" +
-            "\t\tSELECT vwpw.ORG_PRJ_NAME FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
-            "\t) ORG_PRJ_NAME,\n" +
-            "\t(\n" +
             "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ADD_MONEY,\n" +
             "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance\n" +
@@ -447,5 +442,23 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\tAND xpw.ZT = '已报名'" +
             "</script>")
     public void deleteRegisteredTenders(String grId) throws SQLException;
+
+    /**
+     *
+     * @Description: 修改派工验收时间
+     * @author: GeWeiliang
+     * @date: 2018\9\28 0028 10:21
+     * @param: [ctrCode, ysDate, pgStage]
+     * @return: void
+     */
+    @Update("UPDATE XY_PG_WAITER xpw \n" +
+            "SET xpw.YS_DATE = TO_DATE(#{ysDate}, 'yyyy-MM-dd HH24:mi:ss')\n" +
+            "WHERE\n" +
+            "\txpw.PG_ID = (SELECT xp.PG_ID FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode} AND xp.PG_STAGE = #{pgStage} )\n" +
+            "AND\n" +
+            "\txpw.ZT = '抢单成功'\n" +
+            "AND\n" +
+            "\txpw.CTR_CODE = #{ctrCode}\n")
+    public void updateYsDate(@Param("ctrCode") String ctrCode,@Param("ysDate") String ysDate,@Param("pgStage") String pgStage);
 
 }

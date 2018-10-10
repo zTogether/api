@@ -1,0 +1,59 @@
+package cn.xyzs.api.controller;
+
+import cn.xyzs.api.service.IntermediateAcceptanceSrevice;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/IntermediateAcceptance")
+public class IntermediateAcceptanceController {
+
+    @Resource
+    private IntermediateAcceptanceSrevice intermediateAcceptanceSrevice;
+
+    /**
+     * 根据ctrCode获取派工验收表里的信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/24 15:32
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getPgYsList")
+    public Map<String ,Object> getPgYsList(String ctrCode){
+        return intermediateAcceptanceSrevice.getPgYsList(ctrCode);
+    }
+
+    /**
+     * 验收提交申请
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/28 14:36
+     * @param: [ctrCode, ysGz, opUserId, zxyMark, custMark]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/inspectionSubmitApply")
+    public Map<String ,Object> inspectionSubmitApply(String ctrCode, String ysGz ,String opUserId, String zxyMark){
+        return intermediateAcceptanceSrevice.inspectionSubmitApply(ctrCode,ysGz,opUserId,zxyMark);
+    }
+
+    /**
+     * 获取允许验收的工种
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/9/28 16:17
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @ResponseBody
+    @RequestMapping("/getSllowYsGz")
+    public Map<String ,Object> getSllowYsGz(String ctrCode){
+        return intermediateAcceptanceSrevice.getSllowYsGz(ctrCode);
+    }
+}
