@@ -421,4 +421,21 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\txui.CTR_CODE = #{ctrCode}" +
             "</script>")
     public Map<String ,Object> getServicePersonalInfoByCtrCode(String ctrCode) throws SQLException;
+
+    /**
+     *
+     * @Description: 根据档案号查询RG_VER
+     * @author: GeWeiliang
+     * @date: 2018\10\6 0006 17:14
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT RV.RG_VER_CODE,rv.RG_VER_NAME,rv.RG_VER_MARK,rv.RG_VER_ISUSED,\n" +
+            "\t\t\trv.RG_VER_BJ_RGML,rv.RG_VER_BJ_FCML,rv.RG_VER_BJ_SGML,\n" +
+            "\t\t\tNVL(rv.RG_VER_C1,'-') RG_VER_C1,NVL(rv.RG_VER_C2,'-') RG_VER_C2,NVL(rv.RG_VER_C3,'-') RG_VER_C3\n" +
+            "FROM XY_GCB_RG_VER rv,XY_CUSTOMER_INFO xc\n" +
+            "WHERE rv.RG_VER_CODE=xc.RG_VER_CODE AND xc.CTR_CODE=#{ctrCode}" +
+            "</script>")
+    public Map<String,Object> getRgVer(@Param("ctrCode") String ctrCode) throws SQLException;
 }
