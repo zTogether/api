@@ -267,6 +267,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\t\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID=pg.PG_OP_USER) OP_USER_NAME\n" +
             "FROM XY_PG pg\n" +
             "WHERE pg.PG_GR=#{pgGr,jdbcType=VARCHAR}" +
+            "ORDER BY pg.PG_BEGIN_DATE DESC" +
             "</script>")
     public List<Map<String,Object>> getMyPrjList(@Param("pgGr") String pgGr) throws SQLException;
 
