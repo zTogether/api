@@ -199,6 +199,20 @@ public interface XyPgMapper extends Mapper<XyPg>{
     @Options(useGeneratedKeys=true, keyProperty="pgId", keyColumn="PG_ID")
     public void addPg(XyPg xyPg) throws SQLException;
 
+    /**
+     * 根据pgId修改pgGr
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/11 10:16
+     * @param: []
+     * @return: void
+     */
+    @Update("<script>" +
+            "UPDATE XY_PG SET PG_GR=#{pgGr,jdbcType=VARCHAR} WHERE PG_ID=#{pgId}" +
+            "</script>")
+    public void updatePgGrByPgId(@Param("pgGr") String pgGr ,@Param("pgId") String pgId) throws SQLException;
+}
+
     @Select("<script>" +
             "SELECT gr_id, del_sq\n" +
             "  FROM (SELECT (SELECT distinct B.PG_GR\n" +
