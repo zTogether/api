@@ -198,4 +198,51 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "</script>")
     @Options(useGeneratedKeys=true, keyProperty="pgId", keyColumn="PG_ID")
     public void addPg(XyPg xyPg) throws SQLException;
+
+    @Select("<script>" +
+            "SELECT gr_id, del_sq\n" +
+            "  FROM (SELECT (SELECT distinct B.PG_GR\n" +
+            "                          FROM XY_PG B\n" +
+            "                         WHERE B.CTR_CODE = A.CTR_CODE\n" +
+            "                         AND A.PG_ID != B.PG_ID\n" +
+            "                           AND (CASE A.PG_STAGE\n" +
+            "                                 WHEN '60' THEN\n" +
+            "                                  '22'\n" +
+            "                                 WHEN '32' THEN\n" +
+            "                                  '31'\n" +
+            "                                 ELSE\n" +
+            "                                  A.PG_STAGE\n" +
+            "                               END) = (CASE B.PG_STAGE\n" +
+            "                                 WHEN '60' THEN\n" +
+            "                                  '22'\n" +
+            "                                 WHEN '32' THEN\n" +
+            "                                  '31'\n" +
+            "                                 ELSE\n" +
+            "                                  B.PG_STAGE\n" +
+            "                               END)) gr_id,\n" +
+            "                       999999 score,\n" +
+            "                       '0' del_sq\n" +
+            "                  FROM XY_PG A\n" +
+            "                 WHERE A.PG_ID = #{pgId}\n" +
+            "                   AND EXISTS (SELECT B.PG_GR\n" +
+            "                          FROM XY_PG B\n" +
+            "                         WHERE B.CTR_CODE = A.CTR_CODE\n" +
+            "                           AND A.PG_ID != B.PG_ID\n" +
+            "                           AND (CASE A.PG_STAGE\n" +
+            "                                 WHEN '60' THEN\n" +
+            "                                  '22'\n" +
+            "                                 WHEN '32' THEN\n" +
+            "                                  '31'\n" +
+            "                                 ELSE\n" +
+            "                                  A.PG_STAGE\n" +
+            "                               END) = (CASE B.PG_STAGE\n" +
+            "                                 WHEN '60' THEN\n" +
+            "                                  '22'\n" +
+            "                                 WHEN '32' THEN\n" +
+            "                                  '31'\n" +
+            "                                 ELSE\n" +
+            "                                  B.PG_STAGE\n" +
+            "                               END)))" +
+            "</script>")
+    public List<Map<String,Object>> getMaxGr(@Param("pgId") String pgId);
 }
