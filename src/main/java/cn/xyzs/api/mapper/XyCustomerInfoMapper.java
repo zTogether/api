@@ -431,11 +431,23 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Select("<script>" +
-            "SELECT RV.RG_VER_CODE,rv.RG_VER_NAME,rv.RG_VER_MARK,rv.RG_VER_ISUSED,\n" +
-            "\t\t\trv.RG_VER_BJ_RGML,rv.RG_VER_BJ_FCML,rv.RG_VER_BJ_SGML,\n" +
-            "\t\t\tNVL(rv.RG_VER_C1,'-') RG_VER_C1,NVL(rv.RG_VER_C2,'-') RG_VER_C2,NVL(rv.RG_VER_C3,'-') RG_VER_C3\n" +
-            "FROM XY_GCB_RG_VER rv,XY_CUSTOMER_INFO xc\n" +
-            "WHERE rv.RG_VER_CODE=xc.RG_VER_CODE AND xc.CTR_CODE=#{ctrCode}" +
+            "SELECT\n" +
+            "\tRV.RG_VER_CODE,\n" +
+            "\trv.RG_VER_NAME,\n" +
+            "\trv.RG_VER_MARK,\n" +
+            "\trv.RG_VER_ISUSED,\n" +
+            "\trv.RG_VER_BJ_RGML,\n" +
+            "\trv.RG_VER_BJ_FCML,\n" +
+            "\trv.RG_VER_BJ_SGML,\n" +
+            "\tNVL( rv.RG_VER_C1, '-' ) RG_VER_C1,\n" +
+            "\tNVL( rv.RG_VER_C2, '-' ) RG_VER_C2,\n" +
+            "\tNVL( rv.RG_VER_C3, '-' ) RG_VER_C3 \n" +
+            "FROM\n" +
+            "\tXY_GCB_RG_VER rv,\n" +
+            "\tXY_CUSTOMER_INFO xc \n" +
+            "WHERE\n" +
+            "\trv.RG_VER_CODE = xc.RG_VER_CODE \n" +
+            "\tAND xc.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String,Object> getRgVer(@Param("ctrCode") String ctrCode) throws SQLException;
 }

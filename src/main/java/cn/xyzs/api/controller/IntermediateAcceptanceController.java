@@ -56,4 +56,32 @@ public class IntermediateAcceptanceController {
     public Map<String ,Object> getSllowYsGz(String ctrCode){
         return intermediateAcceptanceSrevice.getSllowYsGz(ctrCode);
     }
+
+    /**
+     * 获取派工工种List
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/10 12:49
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getPgGzList")
+    public Map<String ,Object> getPgGzList(String ctrCode){
+        return intermediateAcceptanceSrevice.getPgGzList(ctrCode);
+    }
+
+    /**
+     * 执行派工
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/11 9:18
+     * @param: [ctrCode, pgStage, pgBeginDate, pgOpUser]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/pg")
+    public Map<String, Object> pg(String ctrCode ,String pgStage ,String pgBeginDate ,String pgOpUser){
+        return intermediateAcceptanceSrevice.pg(ctrCode,pgStage,pgBeginDate,pgOpUser);
+    }
 }

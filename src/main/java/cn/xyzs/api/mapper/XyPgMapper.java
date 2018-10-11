@@ -1,9 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyPg;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -172,4 +170,32 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "</script>")
     public List<Map<String ,Object>> getGrInfoListByCtrCode(String ctrCode) throws SQLException;
 
+    /**
+     * 判断是否存在重复派工
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/10 16:18
+     * @param: [ctrCode, pgStage]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT COUNT(1) FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND xp.PG_STAGE = #{pgStage,jdbcType=VARCHAR} AND xp.PG_GR IS NULL" +
+            "</script>")
+    public Integer isRepetitionPg(@Param("ctrCode") String ctrCode ,@Param("pgStage") String pgStage ) throws SQLException;
+
+    /**
+     * 添加派工主表信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/10 17:03
+     * @param: [ctrCode, pgStage, pgBeginDate, pgOpUser]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_PG ( PG_ID, CTR_CODE, PG_STAGE, PG_BEGIN_DATE, PG_OP_USER )\n" +
+            "VALUES\n" +
+            "\t( sys_guid (), #{ctrCode,jdbcType=VARCHAR}, #{pgStage,jdbcType=VARCHAR}, TO_DATE( #{pgBeginDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss' ), #{pgOpUser,jdbcType=VARCHAR} )" +
+            "</script>")
+    @Options(useGeneratedKeys=true, keyProperty="pgId", keyColumn="PG_ID")
+    public void addPg(XyPg xyPg) throws SQLException;
 }

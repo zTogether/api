@@ -98,15 +98,19 @@ public interface XyValMapper extends Mapper<XyVal>{
     public List<Map<String ,Object>> getSllowYsGz(String ctrCode) throws SQLException;
 
     /**
-     *
+     * 获取valList
      * @Description:
-     * @author: GeWeiliang
-     * @date: 2018\10\6 0006 17:20
-     * @param: [valId]
+     * @author: zheng shuai
+     * @date: 2018/9/1 13:14
+     * @param: [list]
      * @return: java.util.List<cn.xyzs.api.pojo.XyVal>
      */
     @Select("<script>" +
-            "SELECT VAL_NAME FROM XY_VAL WHERE VAL_ID=#{valId} AND VALSET_ID='B3B32F221FF14256988E7C0A218EBF5C'" +
+            "SELECT * FROM XY_VAL WHERE VAL_ID IN " +
+            "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
+            "#{item,jdbcType=VARCHAR} "+
+            "</foreach> " +
+            " AND VALSET_ID = #{valsetId,jdbcType=VARCHAR}" +
             "</script>")
-    public List<XyVal> getRgVer(@Param("valId") String valId) throws SQLException;
+    public List<Map<String ,Object>> getValist(@Param("list") List<String> list ,@Param("valsetId") String valsetId) throws SQLException;
 }

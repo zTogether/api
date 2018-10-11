@@ -24,7 +24,7 @@ public class XyBjdMain {
     @Column(name = "BJD_AUTHER")
     private String bjdAuther;
 
-    //单据状态（1：草稿   2：已审   3：待审）
+    //单据状态（1：草稿   2：待审   3：已审）
     @Column(name = "BJD_STAGE")
     private String bjdStage;
 
