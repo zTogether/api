@@ -211,7 +211,6 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "UPDATE XY_PG SET PG_GR=#{pgGr,jdbcType=VARCHAR} WHERE PG_ID=#{pgId}" +
             "</script>")
     public void updatePgGrByPgId(@Param("pgGr") String pgGr ,@Param("pgId") String pgId) throws SQLException;
-}
 
     @Select("<script>" +
             "SELECT gr_id, del_sq\n" +

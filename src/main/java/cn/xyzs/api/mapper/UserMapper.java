@@ -22,10 +22,10 @@ public interface UserMapper extends Mapper<TUser> {
                 SELECT("user_Id,user_code,user_Name,user_Tel,password,user_Bthd,user_Sex,is_Used");
                 FROM("XY_USER");
                 if (map.get("userName")!=null){
-                    WHERE("user_Name like '%'||#{userName}||'%'");
+                    WHERE("user_Name like '%'||#{userName,jdbcType=VARCHAR}||'%'");
                 }
                 if(map.get("userCode")!=null&&!"".equals(map.get("userCode"))){
-                    WHERE("user_code = #{userCode}");
+                    WHERE("user_code = #{userCode,jdbcType=VARCHAR}");
                 }
             }}.toString();
         }
@@ -39,7 +39,7 @@ public interface UserMapper extends Mapper<TUser> {
      * @param: [userId]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("<script>SELECT * FROM XY_USER_ROLE xyro,XY_ROLE xr WHERE xyro.ROLE_ID = xr.ROLE_ID AND xyro.USER_ID = #{userId}</script>")
+    @Select("<script>SELECT * FROM XY_USER_ROLE xyro,XY_ROLE xr WHERE xyro.ROLE_ID = xr.ROLE_ID AND xyro.USER_ID = #{userId,jdbcType=VARCHAR}</script>")
      List<Map<String,Object>> getUserRole(String userId) throws SQLException;
 
     /**
@@ -56,7 +56,7 @@ public interface UserMapper extends Mapper<TUser> {
             "\tXY_COMPO.*\n" +
             "FROM \n" +
             "\tXY_ROLE_FUC xrf,\n" +
-            "\t(SELECT XY_ROLE.ROLE_ID FROM XY_ROLE WHERE XY_ROLE.ROLE_ID = #{roleId} ) xy,\n" +
+            "\t(SELECT XY_ROLE.ROLE_ID FROM XY_ROLE WHERE XY_ROLE.ROLE_ID = #{roleId,jdbcType=VARCHAR} ) xy,\n" +
             "\tXY_COMPO\n" +
             "WHERE \n" +
             "\txrf.ROLE_ID = xy.ROLE_ID\n" +
@@ -66,7 +66,7 @@ public interface UserMapper extends Mapper<TUser> {
     List<Map<String, Object>> getMenuByRole(String roleId) throws SQLException;
 
     //修改密码
-    @Select("<script>UPDATE XY_USER SET PASSWORD=#{password} WHERE USER_TEL=#{userTel}</script>")
+    @Select("<script>UPDATE XY_USER SET PASSWORD=#{password,jdbcType=VARCHAR} WHERE USER_TEL=#{userTel,jdbcType=VARCHAR}</script>")
     void changePassword(@Param("userTel") String userTel,@Param("password") String password) throws SQLException;
 
     /**
@@ -90,27 +90,27 @@ public interface UserMapper extends Mapper<TUser> {
             return new SQL(){{
                 UPDATE("XY_USER");
                 if(userTel!=null&&userTel!=""){
-                    SET("USER_TEL=#{userTel}");
+                    SET("USER_TEL=#{userTel,jdbcType=VARCHAR}");
                 }
                 if (userSex!=null&&userSex!=""){
-                    SET("USER_SEX=#{userSex}");
+                    SET("USER_SEX=#{userSex,jdbcType=VARCHAR}");
                 }
                 if (userBthd!=null&&userBthd!=""){
-                    SET("USER_BTHD=#{userBthd}");
+                    SET("USER_BTHD=#{userBthd,jdbcType=VARCHAR}");
                 }
                 if (idCard!=null&&idCard!=""){
-                    SET("ID_CARD=#{idCard}");
+                    SET("ID_CARD=#{idCard,jdbcType=VARCHAR}");
                 }
                 if (bankIdBc!=null&&bankIdBc!=""){
-                    SET("BANK_ID_BC=#{bankIdBc}");
+                    SET("BANK_ID_BC=#{bankIdBc,jdbcType=VARCHAR}");
                 }
                 if (bankIdIcbc!=null&&bankIdIcbc!=""){
-                    SET("BANK_ID_ICBC=#{bankIdIcbc}");
+                    SET("BANK_ID_ICBC=#{bankIdIcbc,jdbcType=VARCHAR}");
                 }
                 if (bankIdCmbc!=null&&bankIdCmbc!=""){
-                    SET("BANK_ID_CMBC=#{bankIdCmbc}");
+                    SET("BANK_ID_CMBC=#{bankIdCmbc,jdbcType=VARCHAR}");
                 }
-                WHERE("USER_CODE=#{userCode}");
+                WHERE("USER_CODE=#{userCode,jdbcType=VARCHAR}");
             }}.toString();
         }
     }
@@ -123,7 +123,7 @@ public interface UserMapper extends Mapper<TUser> {
      * @param: [userTel]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel}</script>")
+    @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel,jdbcType=VARCHAR}</script>")
     Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 
 }

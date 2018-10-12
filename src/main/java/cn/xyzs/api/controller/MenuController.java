@@ -81,8 +81,8 @@ public class MenuController {
      */
     @ResponseBody
     @RequestMapping("/changeGrPassword")
-    public  Map<String,Object> changeGrPassword(String grTel,String password,String verificationCode){
-        return menuService.changeGrPassword(grTel,password,verificationCode);
+    public  Map<String,Object> changeGrPassword(String grTel,String password){
+        return menuService.changeGrPassword(grTel,password);
     }
 
     /**

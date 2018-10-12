@@ -53,9 +53,9 @@ public interface MvSysSmsMapper extends Mapper<MvSysSms> {
             "FROM\n" +
             "\tMV_SYS_SMS mss \n" +
             "WHERE\n" +
-            "\tmss.TEL = #{tel} \n" +
+            "\tmss.TEL = #{tel,jdbcType=VARCHAR} \n" +
             "AND \n" +
-            "\tmss.VERIFICATION_CODE = #{verificationCode} \n" +
+            "\tmss.VERIFICATION_CODE = #{verificationCode,jdbcType=VARCHAR} \n" +
             "AND\n" +
             "\tmss.SEND_STATUS = '200' \n" +
             "</script>")
@@ -75,9 +75,9 @@ public interface MvSysSmsMapper extends Mapper<MvSysSms> {
             "FROM\n" +
             "\tMV_SYS_SMS mss \n" +
             "WHERE\n" +
-            "\tmss.TEL = #{tel} \n" +
+            "\tmss.TEL = #{tel,jdbcType=VARCHAR} \n" +
             "AND \n" +
-            "\tmss.VERIFICATION_CODE = #{verificationCode} \n" +
+            "\tmss.VERIFICATION_CODE = #{verificationCode,jdbcType=VARCHAR} \n" +
             "AND\n" +
             "\tmss.SEND_STATUS = '200' \n" +
             "AND\n" +

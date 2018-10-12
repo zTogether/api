@@ -24,8 +24,8 @@ public interface MvCommoMenuMapper extends Mapper<MvCommoMenu>{
             "FROM\n" +
             "\tMV_COMMO_MENU mcm \n" +
             "WHERE\n" +
-            "\tmcm.USER_ID = #{userId}\n" +
-            "\tAND mcm.ROLE_ID = #{roleId}\n")
+            "\tmcm.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
+            "\tAND mcm.ROLE_ID = #{roleId,jdbcType=VARCHAR}\n")
     public void wipeCommoMenu(MvCommoMenu mvCommoMenu) throws SQLException;
 
     /**
@@ -37,7 +37,7 @@ public interface MvCommoMenuMapper extends Mapper<MvCommoMenu>{
      * @return: void
      */
     @Insert("INSERT INTO MV_COMMO_MENU ( USER_ID, ROLE_ID, COMPO_ID )\n" +
-            "VALUES (#{userId},#{roleId},#{compoId})")
+            "VALUES (#{userId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR},#{compoId,jdbcType=VARCHAR})")
     public void addCommoMenu(MvCommoMenu mvCommoMenu) throws SQLException;
 
     /**
@@ -60,8 +60,8 @@ public interface MvCommoMenuMapper extends Mapper<MvCommoMenu>{
             "\tFROM\n" +
             "\t\tMV_COMMO_MENU \n" +
             "\tWHERE\n" +
-            "\t\tMV_COMMO_MENU.USER_ID = #{userId} \n" +
-            "\tAND MV_COMMO_MENU.ROLE_ID = #{roleId} \n" +
+            "\t\tMV_COMMO_MENU.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\tAND MV_COMMO_MENU.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
             ")</script>")
     public List<Map<String ,Object>> getCommoMenu(MvCommoMenu mvCommoMenu) throws SQLException;
 }
