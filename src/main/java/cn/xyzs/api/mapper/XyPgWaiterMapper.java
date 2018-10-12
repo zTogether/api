@@ -109,20 +109,20 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\t\txp.PG_ID = xpw.PG_ID \n" +
             "\t), 'yyyy-MM-dd hh24:mi:ss') open_tender,\n" +
             "\t(\n" +
-            "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
+            "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId,jdbcType=VARCHAR} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ADD_MONEY,\n" +
             "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance, \n" +
             "( SELECT xo.ORG_NAME FROM XY_ORG xo WHERE xo.ORG_CODE = xcii.CTR_PRO_ORG ) ORG_PRJ_NAME " +
             "FROM\n" +
             "\tXY_PG_WAITER xpw,\n" +
             "\tXY_CUSTOMER_INFO xcii,\n" +
-            "\t(SELECT GR_GPS_X,GR_GPS_Y FROM XY_GCB_GRXX WHERE GR_ID = #{grId}) grxx\n" +
+            "\t(SELECT GR_GPS_X,GR_GPS_Y FROM XY_GCB_GRXX WHERE GR_ID = #{grId,jdbcType=VARCHAR}) grxx\n" +
             "WHERE\n" +
-            "\txpw.GR_ID = #{grId} \n" +
+            "\txpw.GR_ID = #{grId,jdbcType=VARCHAR} \n" +
             "AND \n" +
             "\txpw.CTR_CODE = xcii.CTR_CODE\n" +
             "AND \n" +
-            "\txpw.ZT = #{zt}" +
+            "\txpw.ZT = #{zt,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String, Object>> getTenderHistoryList(@Param("grId") String grId, @Param("zt") String zt) throws SQLException;
 
@@ -225,18 +225,18 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\t\txp.PG_ID = xpw.PG_ID \n" +
             "\t), 'yyyy-MM-dd hh24:mi:ss') open_tender,\n" +
             "\t(\n" +
-            "\t\tSELECT vwpw.ORG_PRJ_NAME FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
+            "\t\tSELECT vwpw.ORG_PRJ_NAME FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId,jdbcType=VARCHAR} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ORG_PRJ_NAME,\n" +
             "\t(\n" +
-            "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
+            "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId,jdbcType=VARCHAR} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ADD_MONEY,\n" +
             "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance\n" +
             "FROM\n" +
             "\tXY_PG_WAITER xpw,\n" +
             "\tXY_CUSTOMER_INFO xcii,\n" +
-            "\t(SELECT GR_GPS_X,GR_GPS_Y FROM XY_GCB_GRXX WHERE GR_ID = #{grId}) grxx\n" +
+            "\t(SELECT GR_GPS_X,GR_GPS_Y FROM XY_GCB_GRXX WHERE GR_ID = #{grId,jdbcType=VARCHAR}) grxx\n" +
             "WHERE\n" +
-            "\txpw.GR_ID = #{grId} \n" +
+            "\txpw.GR_ID = #{grId,jdbcType=VARCHAR} \n" +
             "AND \n" +
             "\txpw.CTR_CODE = xcii.CTR_CODE\n" +
             "AND \n" +
@@ -345,15 +345,15 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\t\txp.PG_ID = xpw.PG_ID \n" +
             "\t), 'yyyy-MM-dd hh24:mi:ss') open_tender,\n" +
             "\t(\n" +
-            "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId} AND vwpw.PG_ID = xpw.PG_ID\n" +
+            "\t\tSELECT vwpw.ADD_MONEY FROM VW_XY_PG_WAITER vwpw WHERE vwpw.GR_ID = #{grId,jdbcType=VARCHAR} AND vwpw.PG_ID = xpw.PG_ID\n" +
             "\t) ADD_MONEY,\n" +
             "\tGETDISTANCE(xcii.CTR_X,xcii.CTR_Y,grxx.GR_GPS_X,grxx.GR_GPS_Y) distance\n" +
             "FROM\n" +
             "\tXY_PG_WAITER xpw,\n" +
             "\tXY_CUSTOMER_INFO xcii,\n" +
-            "\t(SELECT GR_GPS_X,GR_GPS_Y FROM XY_GCB_GRXX WHERE GR_ID = #{grId}) grxx\n" +
+            "\t(SELECT GR_GPS_X,GR_GPS_Y FROM XY_GCB_GRXX WHERE GR_ID = #{grId,jdbcType=VARCHAR}) grxx\n" +
             "WHERE\n" +
-            "\txpw.GR_ID = #{grId} \n" +
+            "\txpw.GR_ID = #{grId,jdbcType=VARCHAR} \n" +
             "AND \n" +
             "\txpw.CTR_CODE = xcii.CTR_CODE\n" +
             "AND \n" +
@@ -376,12 +376,12 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\tGR_ID,PG_ID,ZT,OP_DATE,END_DATE,CTR_CODE\n" +
             ") \n" +
             "VALUES(\n" +
-            "\t#{grId},\n" +
-            "\t#{pgId},\n" +
-            "\t#{zt},\n" +
+            "\t#{grId,jdbcType=VARCHAR},\n" +
+            "\t#{pgId,jdbcType=VARCHAR},\n" +
+            "\t#{zt,jdbcType=VARCHAR},\n" +
             "\tSYSDATE,\n" +
-            "\tTO_DATE(#{endDate}, 'yyyy-MM-dd hh24:mi:ss'),\n" +
-            "\t#{ctrCode}\n" +
+            "\tTO_DATE(#{endDate,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'),\n" +
+            "\t#{ctrCode,jdbcType=VARCHAR}\n" +
             ")" +
             "</script>")
     public void addXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId, @Param("endDate") String endDate ,@Param("ctrCode") String ctrCode ,@Param("zt") String zt) throws SQLException;
@@ -399,9 +399,9 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "SET\n" +
             "\tZT = '抢单成功'\n" +
             "WHERE\n" +
-            "\tGR_ID = #{grId}\n" +
+            "\tGR_ID = #{grId,jdbcType=VARCHAR}\n" +
             "AND\n" +
-            "\tPG_ID = #{pgId}" +
+            "\tPG_ID = #{pgId,jdbcType=VARCHAR}" +
             "</script>")
     public void updateXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId) throws SQLException;
 
@@ -420,7 +420,7 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\tXY_PG_WAITER xpw\n" +
             "WHERE\n" +
             "\txpw.ZT = '抢单成功'\n" +
-            "AND xpw.GR_ID = #{grId}\n" +
+            "AND xpw.GR_ID = #{grId,jdbcType=VARCHAR}\n" +
             "AND xpw.YS_DATE IS NULL" +
             "</script>")
     public Integer getConstructionSiteIngCount(String grId) throws SQLException;
@@ -438,7 +438,7 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "FROM\n" +
             "\tXY_PG_WAITER xpw \n" +
             "WHERE\n" +
-            "\txpw.GR_ID = #{grId}\n" +
+            "\txpw.GR_ID = #{grId,jdbcType=VARCHAR}\n" +
             "\tAND xpw.ZT = '已报名'" +
             "</script>")
     public void deleteRegisteredTenders(String grId) throws SQLException;
@@ -452,13 +452,13 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
      * @return: void
      */
     @Update("UPDATE XY_PG_WAITER xpw \n" +
-            "SET xpw.YS_DATE = TO_DATE(#{ysDate}, 'yyyy-MM-dd HH24:mi:ss')\n" +
+            "SET xpw.YS_DATE = TO_DATE(#{ysDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss')\n" +
             "WHERE\n" +
-            "\txpw.PG_ID = (SELECT xp.PG_ID FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode} AND xp.PG_STAGE = #{pgStage} )\n" +
+            "\txpw.PG_ID = (SELECT xp.PG_ID FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND xp.PG_STAGE = #{pgStage,jdbcType=VARCHAR} )\n" +
             "AND\n" +
             "\txpw.ZT = '抢单成功'\n" +
             "AND\n" +
-            "\txpw.CTR_CODE = #{ctrCode}\n")
+            "\txpw.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n")
     public void updateYsDate(@Param("ctrCode") String ctrCode,@Param("ysDate") String ysDate,@Param("pgStage") String pgStage);
 
 }

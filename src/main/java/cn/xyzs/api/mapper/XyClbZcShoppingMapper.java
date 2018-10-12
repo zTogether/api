@@ -23,11 +23,11 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      */
     @Select("<script>" +
             "SELECT s.*,u.USER_NAME,ZC_QTY*ZC_PRICE_OUT AS TOTAL,SUM(ZC_QTY*ZC_PRICE_OUT) OVER(ORDER BY s.ROW_ID) AS ZJ" +
-            " FROM XY_CLB_ZC_SHOPPING s,XY_USER u WHERE CTR_CODE=#{ctrCode} AND s.OP_USERID=u.USER_ID" +
+            " FROM XY_CLB_ZC_SHOPPING s,XY_USER u WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND s.OP_USERID=u.USER_ID" +
             "</script>")
     List<Map<String,Object>> showZcShopping(String ctrCode);
 
-    @Select("<script>SELECT ZC_AREA FROM XY_CLB_ZC_DB WHERE ZC_TYPE=#{zcType} AND ZC_CODE=#{zcCode}</script>")
+    @Select("<script>SELECT ZC_AREA FROM XY_CLB_ZC_DB WHERE ZC_TYPE=#{zcType,jdbcType=VARCHAR} AND ZC_CODE=#{zcCode,jdbcType=VARCHAR}</script>")
     String getArea(@Param("zcType") String zcType, @Param("zcCode") String zcCode)throws SQLException;
 
 
@@ -57,7 +57,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @param: [zcCode]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode}</script>")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode,jdbcType=VARCHAR}</script>")
     List<Map<String,Object>> queryZcDb(@Param("zcCode") String zcCode);
 
     /***
@@ -76,10 +76,10 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "\t\tFROM\n" +
             "\t\t\tXY_CLB_ZC_DB xczd \n" +
             "\t\tWHERE\n" +
-            "\t\t\txczd.ZC_BRAND LIKE '%'||#{condition,}||'%' \n" +
-            "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{condition}||'%'\n" +
+            "\t\t\txczd.ZC_BRAND LIKE '%'||#{condition,jdbcType=VARCHAR}||'%' \n" +
+            "\t\t\tOR xczd.ZC_VERSION LIKE '%'||#{condition,jdbcType=VARCHAR}||'%'\n" +
             "\t) A\n" +
-            ") WHERE RN BETWEEN #{startNum} AND #{endNum}\n" +
+            ") WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}\n" +
             "</script>")
     @Results(id="getGoodByZcType",value={
             @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
@@ -116,7 +116,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
      * @param: [rowId]
      * @return: int
      */
-    @Delete("DELETE FROM XY_CLB_ZC_SHOPPING WHERE ROW_ID=#{rowId}")
+    @Delete("DELETE FROM XY_CLB_ZC_SHOPPING WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}")
     void removeGoods(@Param("rowId") String rowId) throws SQLException;
 
     /**
@@ -135,17 +135,17 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
                                   @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_SHOPPING");
-                SET("ROW_ID=#{rowId}");
+                SET("ROW_ID=#{rowId,jdbcType=VARCHAR}");
                 if (zcQty!=null && zcQty!=""){
-                    SET("ZC_QTY = #{zcQty}");
+                    SET("ZC_QTY = #{zcQty,jdbcType=VARCHAR}");
                 }
                 if (zcArea!=null && zcArea!=""){
-                    SET("ZC_AREA = #{zcArea}");
+                    SET("ZC_AREA = #{zcArea,jdbcType=VARCHAR}");
                 }
                 if (zcMark!=null){
-                    SET("ZC_MARK = #{zcMark}");
+                    SET("ZC_MARK = #{zcMark,jdbcType=VARCHAR}");
                 }
-                WHERE("ROW_ID = #{rowId}");
+                WHERE("ROW_ID = #{rowId,jdbcType=VARCHAR}");
             }}.toString();
         }
     }
@@ -166,7 +166,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
                 "WHERE\n" +
                     "\txczs.ROW_ID IN " +
                         "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-                            "#{item} "+
+                            "#{item,jdbcType=VARCHAR} "+
                         "</foreach>"+
             "</script>")
     public List<Map<String, Object>> getZcSupToShoppingCar(@Param("list") List<String> list) throws SQLException;
@@ -191,9 +191,9 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "\t\tWHERE\n" +
             "\t\t\txczs.ROW_ID IN \n" +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-                "#{item} "+
+                "#{item,jdbcType=VARCHAR} "+
             "</foreach>"+
-            "\t\t\tAND xczs.ZC_SUP = #{zcSup}\n" +
+            "\t\t\tAND xczs.ZC_SUP = #{zcSup,jdbcType=VARCHAR}\n" +
             "\t) A,\n" +
             "\t(\n" +
             "\t\tSELECT\n" +
@@ -203,9 +203,9 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "\t\tWHERE\n" +
             "\t\t\txczs.ROW_ID IN \n" +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-                "#{item} "+
+                "#{item,jdbcType=VARCHAR} "+
             "</foreach>"+
-            "\t\t\tAND xczs.ZC_SUP = #{zcSup}\n" +
+            "\t\t\tAND xczs.ZC_SUP = #{zcSup,jdbcType=VARCHAR}\n" +
             "\t) B\n" +
             "\tWHERE A.ROW_ID = B.ROW_ID\n" +
             ") C" +
@@ -228,9 +228,9 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "WHERE\n" +
             "\t\txczs.ROW_ID IN \n" +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-                "#{item} "+
+                "#{item,jdbcType=VARCHAR} "+
             "</foreach>"+
-            "AND xczs.ZC_SUP = #{zcSup}" +
+            "AND xczs.ZC_SUP = #{zcSup,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String, Object>> getGoodByRowIdAndZcSup(@Param("list") List<String> list,@Param("zcSup") String zcSup) throws SQLException;
 
@@ -248,7 +248,7 @@ public interface XyClbZcShoppingMapper extends Mapper<XyClbZcShopping> {
             "WHERE \n" +
             "\txczs.ROW_ID IN \n" +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-                "#{item} "+
+                "#{item,jdbcType=VARCHAR} "+
             "</foreach>"+
             "</script>")
     public void deleteGood(@Param("list") List<String> list) throws SQLException;

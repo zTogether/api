@@ -158,13 +158,13 @@ public class MenuService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String,Object> changeGrPassword(String grTel,String password,String verificationCode){
+    public Map<String,Object> changeGrPassword(String grTel,String password){
         String code = "500";
         String msg = "系统异常";
         Map<String ,Object> resultMap = new HashMap<>();
         try{
             //判断验证码输入是否正确
-            Map<String ,Object> checkMap = mvSysSmsService.checkVerificationCode(verificationCode,grTel);
+          /*  Map<String ,Object> checkMap = mvSysSmsService.checkVerificationCode(verificationCode,grTel);
             String checkCode = String.valueOf(checkMap.get("code"));
             if ("200".equals(checkCode)){
                 xyGcbGrxxMapper.changeGrPassword(grTel,MD5Util.md5Password(password));
@@ -176,7 +176,10 @@ public class MenuService {
             } else if ("300".equals(checkCode)){
                 code = "402";
                 msg = "验证码超时";
-            }
+            }*/
+            xyGcbGrxxMapper.changeGrPassword(grTel,MD5Util.md5Password(password));
+            code = "200";
+            msg = "修改成功";
         }catch (SQLException e){
             e.printStackTrace();
         }finally {

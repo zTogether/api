@@ -26,14 +26,14 @@ public interface XyClbZcDbMapper{
             "\t\tWHERE \n" +
             "\t\t\txczd.ZC_TYPE IN " +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-            "#{item} "+
+            "#{item,jdbcType=VARCHAR} "+
             "</foreach>"+
             "\t\tAND\n" +
-            "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT >= #{minimum}]]>\n" +
+            "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT >= #{minimum,jdbcType=VARCHAR}]]>\n" +
             "\t\tAND\n" +
-            "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT <= #{maximum}]]>\n" +
+            "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT <= #{maximum,jdbcType=VARCHAR}]]>\n" +
             "\t) A\n" +
-            ") WHERE RN BETWEEN #{startNum} AND #{endNum}" +
+            ") WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
     @Results(id="getGoodByZcType",value={
             @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
@@ -111,7 +111,7 @@ public interface XyClbZcDbMapper{
             "FROM\n" +
             "\tXY_CLB_ZC_DB xczd \n" +
             "WHERE\n" +
-            "\txczd.ZC_CODE = #{zcCode}" +
+            "\txczd.ZC_CODE = #{zcCode,jdbcType=VARCHAR}" +
             "</script>")
     public String getZcVersion (@Param("zcCode") String zcCode) throws SQLException;
 }

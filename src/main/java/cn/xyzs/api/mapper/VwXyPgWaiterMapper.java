@@ -30,7 +30,7 @@ public interface VwXyPgWaiterMapper extends Mapper<VwXyPgWaiter> {
             "\tVW_XY_PG_WAITER vxpw,\n" +
             "\tXY_PG xp \n" +
             "WHERE\n" +
-            "\tvxpw.GR_ID = #{grId}\n" +
+            "\tvxpw.GR_ID = #{grId,jdbcType=VARCHAR}\n" +
             "\tAND vxpw.PG_ID = xp.PG_ID \n" +
             "ORDER BY\n" +
             "\tvxpw.STATE DESC,\n" +

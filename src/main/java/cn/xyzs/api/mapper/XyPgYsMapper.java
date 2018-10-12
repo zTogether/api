@@ -37,7 +37,7 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "FROM\n" +
             "\tXY_PG_YS xpy\n" +
             "WHERE\n" +
-            "\txpy.CTR_CODE = #{ctrCode} " +
+            "\txpy.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} " +
             "ORDER BY xpy.YS_STATU" +
             "</script>")
     public List<Map<String ,Object>> getXyPgYsListByCtrCode(String ctrCode) throws SQLException;
@@ -70,7 +70,7 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
                 "#{ysStatu,jdbcType=VARCHAR}," +
                 "#{zxyMark,jdbcType=VARCHAR}," +
                 "#{custMark,jdbcType=VARCHAR}," +
-                "TO_DATE(#{ysDate}, 'yyyy-MM-dd HH24:mi:ss'))" +
+                "TO_DATE(#{ysDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss'))" +
             "</script>")
     public void addYanshou(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,
                            @Param("opUserid")String opUserid,@Param("ysStatu")String ysStatu,@Param("zxyMark")String zxyMark,
@@ -117,8 +117,8 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
      * @return: void
      */
     @Update("<script>" +
-            "UPDATE XY_PG_YS SET CUST_MARK=#{custMark},YS_DATE=TO_DATE(#{ysDate}, 'yyyy-MM-dd HH24:mi:ss')" +
-            "WHERE YS_ID=#{ysId}" +
+            "UPDATE XY_PG_YS SET CUST_MARK=#{custMark,jdbcType=VARCHAR},YS_DATE=TO_DATE(#{ysDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss')" +
+            "WHERE YS_ID=#{ysId,jdbcType=VARCHAR}" +
             "</script>")
     public void updateYanshou(@Param("ysId") String ysId,@Param("custMark") String custMark,
                               @Param("ysDate") String ysDate) throws SQLException;
@@ -137,9 +137,9 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "FROM \n" +
             "\tXY_PG_YS xpy \n" +
             "WHERE \n" +
-            "\txpy.CTR_CODE = #{ctrCode}\n" +
+            "\txpy.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
             "AND\n" +
-            "\txpy.YS_GZ = #{ysGz}" +
+            "\txpy.YS_GZ = #{ysGz,jdbcType=VARCHAR}" +
             "</script>")
     public Integer getCountByCtrCodeAndYszt(@Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz) throws SQLException;
 }

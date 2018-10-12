@@ -39,7 +39,7 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "FROM\n" +
             "\tXY_CLB_FC_CKD_LIST xcfcl\t\n" +
             "WHERE\n" +
-            "\txcfcl.CKD_CODE = #{ckdCode}" +
+            "\txcfcl.CKD_CODE = #{ckdCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getFcCkdList(String ckdCode) throws SQLException;
 

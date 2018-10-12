@@ -23,11 +23,11 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
     @Insert("<script>" +
             "INSERT INTO MV_CHATING_RECORDS ( CTR_CODE, USER_ID, SEND_DATE, CHATING_CONTENT, CONTENT_TYPE )\n" +
             "VALUES (\n" +
-            "\t\t#{ctrCode},\n" +
-            "\t\t#{userId},\n" +
-            "\t\tTO_DATE(#{sendDate}, 'yyyy-MM-dd HH24:mi:ss') ,\n" +
-            "\t\t#{chatingContent},\n" +
-            "\t\t#{contentType}\n" +
+            "\t\t#{ctrCode,jdbcType=VARCHAR},\n" +
+            "\t\t#{userId,jdbcType=VARCHAR},\n" +
+            "\t\tTO_DATE(#{sendDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss') ,\n" +
+            "\t\t#{chatingContent,jdbcType=VARCHAR\n},\n" +
+            "\t\t#{contentType,jdbcType=VARCHAR}\n" +
             ")" +
             "</script>")
     public void addChattingRecords (@Param("ctrCode") String ctrCode , @Param("userId") String userId , @Param("sendDate") String sendDate , @Param("chatingContent") String chatingContent , @Param("contentType") String contentType) throws SQLException;
@@ -71,7 +71,7 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
             "AND " +
             "mcr.SEND_DATE NOT IN " +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> " +
-            "TO_DATE(#{item}, 'yyyy-MM-dd HH24:mi:ss') " +
+            "TO_DATE(#{item,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss') " +
             "</foreach>" +
             "ORDER BY mcr.SEND_DATE " +
 

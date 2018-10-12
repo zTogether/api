@@ -39,7 +39,7 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "\tLEFT JOIN XY_VAL xv ON fcm.CKD_FC_TYPE = xv.VAL_ID \n" +
             "\tAND xv.VALSET_ID = '39AB9E59F1EF4CF6ACD71CF9D89F8129' \n" +
             "WHERE\n" +
-            "\tCTR_CODE = #{ctrCcode}" +
+            "\tCTR_CODE = #{ctrCcode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> fcList(String ctrCcode) throws SQLException;
 }

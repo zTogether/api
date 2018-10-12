@@ -21,7 +21,7 @@ public interface XyCwbSkMapper extends Mapper<XyCwbSk>{
     @Select("SELECT SUM(CASE WHEN CWB_SK_IO='2' THEN -(CWB_SK_MONEY)\n" +
             "\t\tWHEN CWB_SK_IO='1' THEN CWB_SK_MONEY END) AS MONEY,\n" +
             "\t\tCWB_SK_CONTENT AS B\n" +
-            "\t\tFROM XY_CWB_SK WHERE CTR_CODE=#{ctrCode} GROUP BY CWB_SK_CONTENT")
+            "\t\tFROM XY_CWB_SK WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} GROUP BY CWB_SK_CONTENT")
     public List<Map<String,Object>> skCondition(String ctrCode) throws SQLException;
 
     /**
@@ -47,7 +47,7 @@ public interface XyCwbSkMapper extends Mapper<XyCwbSk>{
             "FROM\n" +
             "\tXY_CWB_SK xcs\n" +
             "WHERE\n" +
-            "\tCTR_CODE = #{ctrCode}" +
+            "\tCTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> skList(String ctrCode) throws SQLException;
 }

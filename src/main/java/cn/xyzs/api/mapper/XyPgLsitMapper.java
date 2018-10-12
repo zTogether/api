@@ -33,7 +33,7 @@ public interface XyPgLsitMapper extends Mapper<XyPgLsit>{
             "FROM\n" +
             "\tXY_PG_LIST xpl \n" +
             "WHERE\n" +
-            "\txpl.PG_ID = #{pgId}" +
+            "\txpl.PG_ID = #{pgId,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getPgLsit(String pgId) throws SQLException;
 

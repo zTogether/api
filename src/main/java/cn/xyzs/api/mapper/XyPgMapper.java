@@ -24,7 +24,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "FROM\n" +
             "\tXY_PG xp\n" +
             "WHERE\n" +
-            "\txp.PG_ID = #{pgId}" +
+            "\txp.PG_ID = #{pgId,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String ,Object> getXyPgInfoByPgId(String pgId) throws SQLException;
 
@@ -39,9 +39,9 @@ public interface XyPgMapper extends Mapper<XyPg>{
     @Update("<script>" +
             "UPDATE XY_PG\n" +
             "SET\n" +
-            "\tPG_GR = #{grId}\n" +
+            "\tPG_GR = #{grId,jdbcType=VARCHAR}\n" +
             "WHERE\n" +
-            "\tPG_ID = #{pgId}\t" +
+            "\tPG_ID = #{pgId,jdbcType=VARCHAR}\t" +
             "</script>")
     public void updatePgGr(@Param("pgId") String pgId , @Param("grId") String grId) throws SQLException;
 
@@ -78,7 +78,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tLEFT JOIN XY_VAL xv ON pg.PG_STAGE = xv.VAL_ID \n" +
             "\tAND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' \n" +
             "WHERE\n" +
-            "\tpg.CTR_CODE = #{ctrCode}" +
+            "\tpg.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> getPrjList(String ctrCode) throws SQLException;
 
@@ -103,7 +103,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\t\t\t\tXY_PG xp \n" +
             "\t\t\tLEFT JOIN XY_CUSTOMER_INFO xci ON xp.CTR_CODE = xci.CTR_CODE\n" +
             "\t\t\tWHERE\n" +
-            "\t\t\t\txp.PG_GR = #{grId}\n" +
+            "\t\t\t\txp.PG_GR = #{grId,jdbcType=VARCHAR}\n" +
             "\t\t) A\n" +
             "\t)\n" +
             "WHERE RN BETWEEN #{startNum} AND #{endNum}" +
@@ -129,11 +129,11 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\t\tXY_PG xp \n" +
             "\tLEFT JOIN XY_CUSTOMER_INFO xci ON xp.CTR_CODE = xci.CTR_CODE\n" +
             "\tWHERE\n" +
-            "\t\txp.PG_GR = #{grId}\n" +
+            "\t\txp.PG_GR = #{grId,jdbcType=VARCHAR}\n" +
             ") A\n" +
-            "WHERE A.CTR_TEL = #{condition}\n" +
-            "OR A.CTR_NAME = #{condition}\n" +
-            "OR A.CTR_CODE = #{condition}" +
+            "WHERE A.CTR_TEL = #{condition,jdbcType=VARCHAR}\n" +
+            "OR A.CTR_NAME = #{condition,jdbcType=VARCHAR}\n" +
+            "OR A.CTR_CODE = #{condition,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getGrConstructionSiteByCondition(@Param("grId") String grId ,@Param("condition") String condition) throws SQLException;
 
@@ -146,7 +146,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT xp.PG_GR FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode}" +
+            "SELECT xp.PG_GR FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,String>> getGrIdS(String ctrCode) throws SQLException;
 
@@ -166,7 +166,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tXY_PG xp \n" +
             "LEFT JOIN XY_GCB_GRXX cgg ON xp.PG_GR = cgg.GR_ID\n" +
             "WHERE\n" +
-            "\txp.CTR_CODE = #{ctrCode}" +
+            "\txp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getGrInfoListByCtrCode(String ctrCode) throws SQLException;
 
@@ -208,10 +208,9 @@ public interface XyPgMapper extends Mapper<XyPg>{
      * @return: void
      */
     @Update("<script>" +
-            "UPDATE XY_PG SET PG_GR=#{pgGr,jdbcType=VARCHAR} WHERE PG_ID=#{pgId}" +
+            "UPDATE XY_PG SET PG_GR=#{pgGr,jdbcType=VARCHAR} WHERE PG_ID=#{pgId,jdbcType=VARCHAR}" +
             "</script>")
     public void updatePgGrByPgId(@Param("pgGr") String pgGr ,@Param("pgId") String pgId) throws SQLException;
-
 
     @Select("<script>" +
             "SELECT gr_id, del_sq\n" +
@@ -237,7 +236,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "                       999999 score,\n" +
             "                       '0' del_sq\n" +
             "                  FROM XY_PG A\n" +
-            "                 WHERE A.PG_ID = #{pgId}\n" +
+            "                 WHERE A.PG_ID = #{pgId,jdbcType=VARCHAR}\n" +
             "                   AND EXISTS (SELECT B.PG_GR\n" +
             "                          FROM XY_PG B\n" +
             "                         WHERE B.CTR_CODE = A.CTR_CODE\n" +

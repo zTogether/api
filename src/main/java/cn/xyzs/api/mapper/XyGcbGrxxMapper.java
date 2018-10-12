@@ -44,21 +44,21 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
             return new SQL(){{
                 UPDATE("XY_GCB_GRXX");
                 if(name!=null&&name!=""){
-                    SET("GR_NAME=#{name}");
+                    SET("GR_NAME=#{name,jdbcType=VARCHAR}");
                 }
                 if (idCard!=null&&idCard!=""){
-                    SET("GR_IDCARD=#{idCard}");
+                    SET("GR_IDCARD=#{idCard,jdbcType=VARCHAR}");
                 }
                 if (grTel!=null&&grTel!=""){
-                    SET("GR_TEL=#{grTel}");
+                    SET("GR_TEL=#{grTel,jdbcType=VARCHAR}");
                 }
                 if (grBankId!=null&&grBankId!=""){
-                    SET("GR_BANKID=#{grBankId}");
+                    SET("GR_BANKID=#{grBankId,jdbcType=VARCHAR}");
                 }
                 if(grAdd!=null&&grAdd!=""){
-                    SET("GR_ADDR=#{grAdd}");
+                    SET("GR_ADDR=#{grAdd,jdbcType=VARCHAR}");
                 }
-                WHERE("GR_ID=#{grId}");
+                WHERE("GR_ID=#{grId,jdbcType=VARCHAR}");
             }}.toString();
         }
     }
@@ -76,7 +76,7 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
             "SET\n" +
             "\tGR_LEVEL = 0\n" +
             "WHERE\n" +
-            "\tGR_ID = #{grId}\t" +
+            "\tGR_ID = #{grId,jdbcType=VARCHAR}\t" +
             "</script>")
     public void updateGrabSingleLevel(String grId) throws SQLException;
 }
