@@ -211,6 +211,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "UPDATE XY_PG SET PG_GR=#{pgGr,jdbcType=VARCHAR} WHERE PG_ID=#{pgId}" +
             "</script>")
     public void updatePgGrByPgId(@Param("pgGr") String pgGr ,@Param("pgId") String pgId) throws SQLException;
+}
 
     @Select("<script>" +
             "SELECT gr_id, del_sq\n" +
@@ -236,7 +237,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "                       999999 score,\n" +
             "                       '0' del_sq\n" +
             "                  FROM XY_PG A\n" +
-            "                 WHERE A.PG_ID = #{pgId,jdbcType=VARCHAR}\n" +
+            "                 WHERE A.PG_ID = #{pgId}\n" +
             "                   AND EXISTS (SELECT B.PG_GR\n" +
             "                          FROM XY_PG B\n" +
             "                         WHERE B.CTR_CODE = A.CTR_CODE\n" +
@@ -311,4 +312,17 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tPG_ID = #{pgId,jdbcType=VARCHAR}" +
             "")
     public void updateDays(@Param("pgId") String pgId) throws SQLException;
+
+    @Select("<script>" +
+            "SELECT pg.PG_ID,pg.CTR_CODE,TO_CHAR(pg.PG_OP_DATE,'yyyy-MM-dd HH24:mi:ss') PG_OP_DATE,\n" +
+            "\t\tpg.PG_STAGE,PG_GR,TO_CHAR(pg.PG_BEGIN_DATE,'yyyy-MM-dd') PG_BEGIN_DATE,\n" +
+            "\t\tpg.PG_DAYS,pg.PG_OP_USER,pg.PG_MONEY_YN,pg.PG_PRINT_YN,pg.PG_ADD_MONEY,\n" +
+            "\t\t(SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID=pg.PG_STAGE AND xv.VALSET_ID='B3B32F221FF14256988E7C0A218EBF5C') PG_STAGE_NAME,\n" +
+            "\t\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID=pg.PG_OP_USER) OP_USER_NAME\n" +
+            "FROM XY_PG pg\n" +
+            "WHERE pg.PG_GR=#{pgGr,jdbcType=VARCHAR}" +
+            "ORDER BY pg.PG_BEGIN_DATE DESC" +
+            "</script>")
+    public List<Map<String,Object>> getMyPrjList(@Param("pgGr") String pgGr) throws SQLException;
+
 }
