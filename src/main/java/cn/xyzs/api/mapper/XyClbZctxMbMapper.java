@@ -18,10 +18,10 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
      * @param: []
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("<script>SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_STYLE=#{vrStyle}</script>")
+    @Select("<script>SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_STYLE=#{vrStyle,jdbcType=VARCHAR}</script>")
     public List<Map<String,Object>> showZctxVr(@Param("vrStyle") String vrStyle)throws SQLException;
 
-    @Select("<script>SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_ID=#{vrId}</script>")
+    @Select("<script>SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_ID=#{vrId,jdbcType=VARCHAR}</script>")
     public Map<String,Object> vrDetail(@Param("vrId") String vrId) throws SQLException;
 
     /***
@@ -41,7 +41,7 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
             "LEFT JOIN XY_CLB_ZC_DB zd ON zm.ZC_CODE=zd.ZC_CODE\n" +
             "LEFT JOIN XY_SUPPLIER sup ON zd.ZC_SUP=sup.SUP_CODE\n" +
             "LEFT JOIN XY_CLB_ZC_FL zf ON zd.ZC_TYPE=zf.ZCFL_CODE\n" +
-            "WHERE zm.VR_ID = #{vrId} AND zm.FL_BH LIKE #{flBh}||'%'\n" +
+            "WHERE zm.VR_ID = #{vrId,jdbcType=VARCHAR} AND zm.FL_BH LIKE #{flBh,jdbcType=VARCHAR}||'%'\n" +
             "ORDER BY zm.ZC_CODE" +
             "</script>")
     public List<Map<String ,Object>> getZctxMbList(@Param("vrId") String vrId,@Param("flBh") String flBh) throws SQLException;

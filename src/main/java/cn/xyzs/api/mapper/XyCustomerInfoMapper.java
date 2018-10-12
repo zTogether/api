@@ -19,7 +19,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @param: [ctrTel]
      * @return: java.lang.Integer
      */
-    @Select("<script>SELECT COUNT(1) FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_TEL = #{ctrTel}</script>")
+    @Select("<script>SELECT COUNT(1) FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_TEL = #{ctrTel,jdbcType=VARCHAR}</script>")
     public Integer isCustomer(String ctrTel) throws SQLException;
 
     /**
@@ -55,7 +55,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             " WHERE " +
                 "xci.CTR_ORG = xo.ORG_CODE" +
             " AND " +
-                "xci.CTR_TEL = #{ctrTel}" +
+                "xci.CTR_TEL = #{ctrTel,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String, Object>> getCustomerEngineeringInfo(String ctrTel) throws SQLException;
 
@@ -100,13 +100,13 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
             "\t\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
             "\t\tWHERE\n" +
-            "\t\t\tT.CTR_WAITER = #{userId}\n" +
-            "\t\t\tOR T.CTR_SJS = #{userId}\n" +
-            "\t\t\tOR T.CTR_GCJL = #{userId}\n" +
-            "\t\t\tOR T.CTR_CLDD = #{userId}\n" +
+            "\t\t\tT.CTR_WAITER = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_SJS = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_GCJL = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_CLDD = #{userId,jdbcType=VARCHAR}\n" +
             "\t\t) A \n" +
             "\t) \n" +
-            "WHERE RN BETWEEN #{startNum} AND #{endNum}" +
+            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> getCustomerInfoByRoleTypeE(@Param("userId") String userId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
@@ -152,7 +152,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
             "\t\tWHERE\n" +
             "\t\t\t(\n" +
-            "\t\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId} ) \n" +
+            "\t\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId,jdbcType=VARCHAR} ) \n" +
             "\t\t\t\tAND (\n" +
             "\t\t\t\t\tEXISTS (\n" +
             "\t\t\t\t\tSELECT\n" +
@@ -162,8 +162,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\t\t\t\tXY_USER_ROLE B \n" +
             "\t\t\t\t\tWHERE\n" +
             "\t\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
-            "\t\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
-            "\t\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
+            "\t\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
             "\t\t\t\t\t\tAND T.CTR_ORG LIKE A.ORG_CODE || '%' \n" +
             "\t\t\t\t\t) \n" +
             "\t\t\t\t\tOR EXISTS (\n" +
@@ -174,8 +174,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\t\t\t\tXY_USER_ROLE B \n" +
             "\t\t\t\t\tWHERE\n" +
             "\t\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
-            "\t\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
-            "\t\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
+            "\t\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
             "\t\t\t\t\t\tAND T.CTR_PRO_ORG LIKE A.ORG_CODE || '%' \n" +
             "\t\t\t\t\t) \n" +
             "\t\t\t\t) \n" +
@@ -186,7 +186,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\tFROM\n" +
             "\t\t\t\tXY_USER_RELATION D \n" +
             "\t\t\tWHERE\n" +
-            "\t\t\t\tD.LEADER_ID = #{userId} \n" +
+            "\t\t\t\tD.LEADER_ID = #{userId,jdbcType=VARCHAR} \n" +
             "\t\t\t\tAND (\n" +
             "\t\t\t\t\tD.FOLLOWER_ID = T.CTR_WAITER \n" +
             "\t\t\t\t\tOR D.FOLLOWER_ID = T.CTR_SJS \n" +
@@ -197,7 +197,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t) A \n" +
             "\t) \n" +
             "WHERE\n" +
-            "\tRN BETWEEN #{startNum} AND #{endNum}" +
+            "\tRN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> getCustomerInfoByRoleTypeR(@Param("userId") String userId, @Param("roleId") String roleId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
@@ -216,28 +216,28 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\"NVL\"(xci.CTR_LIFT,'-') ctrLift,\"NVL\"(xci.CTR_PRJ_TYPE,'-') ctrPrjType,\"NVL\"(xci.CTR_QT_RANGE,'-') ctrQtRange," +
             "\"NVL\"(xci.CTR_QT_TYPE,'-') ctrQtType," +
             "\"NVL\"((SELECT xgrv.RG_VER_NAME FROM XY_GCB_RG_VER xgrv WHERE xgrv.RG_VER_CODE = xci.RG_VER_CODE),'-') rgVerCode," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}), '-') ctrWaiter," +
-            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}), '-') WaiterTel," +
-            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrOrg," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_SJS=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ctrSjs," +
-            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_SJS=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') SjsTel," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_GCJL=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CtrGcjl," +
-            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_GCJL=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') GcjlTel," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CtrCldd," +
-            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ClddTel," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}), '-') ctrWaiter," +
+            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_WAITER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}), '-') WaiterTel," +
+            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') ctrOrg," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_SJS=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') ctrSjs," +
+            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_SJS=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') SjsTel," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_GCJL=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') CtrGcjl," +
+            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_GCJL=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') GcjlTel," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') CtrCldd," +
+            "\"NVL\"((SELECT xu.USER_TEL FROM XY_CUSTOMER_INFO xci,XY_USER xu WHERE xci.CTR_CLDD=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') ClddTel," +
             "\"NVL\"(xci.CTR_ROWID,'-') ctrRowid," +
-            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_PRO_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode}),'-') ctrProOrg," +
+            "\"NVL\"((SELECT xo.ORG_NAME FROM XY_ORG xo,XY_CUSTOMER_INFO xci WHERE xci.CTR_PRO_ORG=xo.ORG_CODE AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') ctrProOrg," +
             "xci.CTR_KG_DATE ctrKgDate," +
             "\"NVL\"(xci.CTR_STATU,'-') ctrStatu,\"NVL\"(xci.CTR_DRAW,'-') ctrDraw,\"NVL\"(xci.DRAW_STATU,'-') drawStatu," +
             "\"NVL\"(xci.CTR_X,'-') ctrX," +
             "\"NVL\"(xci.CTR_Y,'-') ctrY," +
             "\"NVL\"(xci.CTR_MAP_VERSION,'-') ctrMapVersion," +
-            "\"NVL\"((SELECT xu.USER_TEL FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_AREA_MA=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CTRAREAMATEL," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_AREA_MA=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') CTRAREAMA," +
-            "\"NVL\"((SELECT xu.USER_NAME FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_OWENER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode}),'-') ctrOwener" +
-            " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode}" +
+            "\"NVL\"((SELECT xu.USER_TEL FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_AREA_MA=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') CTRAREAMATEL," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_AREA_MA=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') CTRAREAMA," +
+            "\"NVL\"((SELECT xu.USER_NAME FROM XY_USER xu,XY_CUSTOMER_INFO xci WHERE xci.CTR_OWENER=xu.USER_ID AND xci.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}),'-') ctrOwener" +
+            " FROM XY_CUSTOMER_INFO xci WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
-//    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode}")
+//    @Select("SELECT * FROM XY_CUSTOMER_INFO WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR}")
     public Map<String,Object> getCustInfoByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
     /**
@@ -273,14 +273,14 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
             "\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
             "\tWHERE\n" +
-            "\t\tT.CTR_WAITER = #{userId} \n" +
-            "\t\tOR T.CTR_SJS = #{userId} \n" +
-            "\t\tOR T.CTR_GCJL = #{userId} \n" +
-            "\t\tOR T.CTR_CLDD = #{userId} \n" +
+            "\t\tT.CTR_WAITER = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\tOR T.CTR_SJS = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\tOR T.CTR_GCJL = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\tOR T.CTR_CLDD = #{userId,jdbcType=VARCHAR} \n" +
             ") A\n" +
-            "WHERE A.CTR_CODE = #{condition}\n" +
-            "OR A.CTR_NAME = #{condition}\n" +
-            "OR A.CTR_TEL = #{condition}" +
+            "WHERE A.CTR_CODE = #{condition,jdbcType=VARCHAR}\n" +
+            "OR A.CTR_NAME = #{condition,jdbcType=VARCHAR}\n" +
+            "OR A.CTR_TEL = #{condition,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> getECuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition) throws SQLException;
 
@@ -321,7 +321,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
             "\tWHERE\n" +
             "\t\t(\n" +
-            "\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId} ) \n" +
+            "\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId,jdbcType=VARCHAR} ) \n" +
             "\t\t\tAND (\n" +
             "\t\t\t\tEXISTS (\n" +
             "\t\t\t\tSELECT\n" +
@@ -331,8 +331,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\t\t\tXY_USER_ROLE B \n" +
             "\t\t\t\tWHERE\n" +
             "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
-            "\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
-            "\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
             "\t\t\t\t\tAND T.CTR_ORG LIKE A.ORG_CODE || '%' \n" +
             "\t\t\t\t) \n" +
             "\t\t\t\tOR EXISTS (\n" +
@@ -343,8 +343,8 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\t\t\tXY_USER_ROLE B \n" +
             "\t\t\t\tWHERE\n" +
             "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
-            "\t\t\t\t\tAND B.USER_ID = #{userId} \n" +
-            "\t\t\t\t\tAND B.ROLE_ID = #{roleId} \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
             "\t\t\t\t\tAND T.CTR_PRO_ORG LIKE A.ORG_CODE || '%' \n" +
             "\t\t\t\t) \n" +
             "\t\t\t) \n" +
@@ -355,7 +355,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\tFROM\n" +
             "\t\t\tXY_USER_RELATION D \n" +
             "\t\tWHERE\n" +
-            "\t\t\tD.LEADER_ID = #{userId} \n" +
+            "\t\t\tD.LEADER_ID = #{userId,jdbcType=VARCHAR} \n" +
             "\t\t\tAND (\n" +
             "\t\t\t\tD.FOLLOWER_ID = T.CTR_WAITER \n" +
             "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_SJS \n" +
@@ -364,9 +364,9 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\t\t\t)) \n" +
             "\t) temptable \n" +
             "WHERE\n" +
-            "\ttemptable.CTR_CODE = #{condition} \n" +
-            "\tOR temptable.CTR_NAME = #{condition} \n" +
-            "\tOR temptable.CTR_TEL = #{condition}" +
+            "\ttemptable.CTR_CODE = #{condition,jdbcType=VARCHAR} \n" +
+            "\tOR temptable.CTR_NAME = #{condition,jdbcType=VARCHAR} \n" +
+            "\tOR temptable.CTR_TEL = #{condition,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition,@Param("roleId") String roleId) throws SQLException;
 
@@ -389,7 +389,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "FROM\n" +
             "\tXY_CUSTOMER_INFO xui \n" +
             "WHERE\n" +
-            "\txui.CTR_CODE = #{ctrCode}" +
+            "\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String ,String> getServicePersonalByCtrCode(String ctrCode) throws SQLException;
 
@@ -418,7 +418,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "FROM\n" +
             "\tXY_CUSTOMER_INFO xui \n" +
             "WHERE\n" +
-            "\txui.CTR_CODE = #{ctrCode}" +
+            "\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String ,Object> getServicePersonalInfoByCtrCode(String ctrCode) throws SQLException;
 
@@ -447,7 +447,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\tXY_CUSTOMER_INFO xc \n" +
             "WHERE\n" +
             "\trv.RG_VER_CODE = xc.RG_VER_CODE \n" +
-            "\tAND xc.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "\tAND xc.CTR_CODE = #{ctrCode,jdbcType=VARCHAR,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String,Object> getRgVer(@Param("ctrCode") String ctrCode) throws SQLException;
 }

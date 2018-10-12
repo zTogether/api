@@ -41,25 +41,25 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
             "\t\tZC_VERSION,\n" +
             "\t\tZC_SHOP_STATUS )\n" +
             "VALUES(\n" +
-            "\t#{orderId},\n" +
+            "\t#{orderId,jdbcType=VARCHAR},\n" +
             "\tsys_guid(),\n" +
-            "\t#{zcCode},\n" +
-            "\t#{zcName},\n" +
-            "\t#{zcType},\n" +
-            "\tto_number(#{zcPriceIn}),\n" +
-            "\tto_number(#{zcPriceOut}),\n" +
-            "\tto_number(#{zcQty}),\n" +
-            "\t#{zcBrand},\n" +
-            "\t#{zcSup},\n" +
-            "\t#{zcSpec},\n" +
-            "\t#{zcMaterial},\n" +
-            "\t#{zcColor},\n" +
-            "\t#{zcUnit},\n" +
-            "\t#{zcMark},\n" +
-            "\tto_number(#{zcCyc}),\n" +
-            "\t#{zcArea},\n" +
-            "\t#{zcVersion},\n" +
-            "\t#{zcShopStatus}\n" +
+            "\t#{zcCode,jdbcType=VARCHAR},\n" +
+            "\t#{zcName,jdbcType=VARCHAR},\n" +
+            "\t#{zcType,jdbcType=VARCHAR},\n" +
+            "\tto_number(#{zcPriceIn,jdbcType=VARCHAR}),\n" +
+            "\tto_number(#{zcPriceOut,jdbcType=VARCHAR}),\n" +
+            "\tto_number(#{zcQty,jdbcType=VARCHAR}),\n" +
+            "\t#{zcBrand,jdbcType=VARCHAR},\n" +
+            "\t#{zcSup,jdbcType=VARCHAR},\n" +
+            "\t#{zcSpec,jdbcType=VARCHAR},\n" +
+            "\t#{zcMaterial,jdbcType=VARCHAR},\n" +
+            "\t#{zcColor,jdbcType=VARCHAR},\n" +
+            "\t#{zcUnit,jdbcType=VARCHAR},\n" +
+            "\t#{zcMark,jdbcType=VARCHAR},\n" +
+            "\tto_number(#{zcCyc,jdbcType=VARCHAR}),\n" +
+            "\t#{zcArea,jdbcType=VARCHAR},\n" +
+            "\t#{zcVersion,jdbcType=VARCHAR},\n" +
+            "\t#{zcShopStatus,jdbcType=VARCHAR}\n" +
             ")")
     public void addOrderList(XyClbZcOrderList xyClbZcOrderList) throws SQLException;
 
@@ -74,7 +74,7 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
     @Select("<script>" +
             "SELECT zol.*,sup.SUP_NAME,zf.ZCFL_NAME \n" +
             "FROM XY_CLB_ZC_ORDER_LIST zol,XY_SUPPLIER sup,XY_CLB_ZC_FL zf \n" +
-            "WHERE ORDER_ID=#{orderId} \n" +
+            "WHERE ORDER_ID=#{orderId,jdbcType=VARCHAR} \n" +
             "AND zol.ZC_SUP=sup.SUP_CODE AND zf.ZCFL_CODE=zol.ZC_TYPE" +
             "</script>")
     public List<Map<String,Object>> showOrderList(String orderId)throws SQLException;
@@ -95,7 +95,7 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
                                       @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
           return new SQL(){{
               UPDATE("XY_CLB_ZC_ORDER_LIST");
-              SET("ROW_ID=#{rowId}");
+              SET("ROW_ID=#{rowId,jdbcType=VARCHAR}");
               if (zcQty!=null && zcQty!=""){
                   SET("ZC_QTY=#{zcQty,jdbcType=VARCHAR}");
               }
@@ -125,10 +125,10 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
             return new SQL(){{
                 DELETE_FROM("XY_CLB_ZC_ORDER_LIST");
                 if (orderId!=null && orderId!=""){
-                    WHERE("ORDER_ID=#{orderId}");
+                    WHERE("ORDER_ID=#{orderId,jdbcType=VARCHAR}");
                 }
                 if (rowId!=null && rowId!=""){
-                    WHERE("ROW_ID=#{rowId}");
+                    WHERE("ROW_ID=#{rowId,jdbcType=VARCHAR}");
                 }
             }}.toString();
         }

@@ -19,7 +19,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
      * @param: [orderId]
      * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcOrderListFree>
      */
-    @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER_LIST_FREE xczolf WHERE xczolf.ORDER_ID = #{orderId}</script>")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER_LIST_FREE xczolf WHERE xczolf.ORDER_ID = #{orderId,jdbcType=VARCHAR}</script>")
     @Results(id="getNonStandard",value={
             @Result(column = "ORDER_ID", property = "orderId", javaType = String.class),
             @Result(column = "ROW_ID", property = "rowId", javaType = String.class),
@@ -60,17 +60,17 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
                                           @Param("zcMark") String zcMark,@Param("zcArea") String zcArea){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_ORDER_LIST_FREE");
-                SET("ROW_ID=#{rowId}");
+                SET("ROW_ID=#{rowId,jdbcType=VARCHAR}");
                 if (zcQty!=null && zcQty!=""){
-                    SET("ZC_QTY=#{zcQty}");
+                    SET("ZC_QTY=#{zcQty,jdbcType=VARCHAR}");
                 }
                 if (zcMark!=null){
-                    SET("ZC_MARK=#{zcMark}");
+                    SET("ZC_MARK=#{zcMark,jdbcType=VARCHAR}");
                 }
                 if (zcArea!=null && zcArea!=""){
-                    SET("ZC_AREA=#{zcArea}");
+                    SET("ZC_AREA=#{zcArea,jdbcType=VARCHAR}");
                 }
-                WHERE("ROW_ID=#{rowId}");
+                WHERE("ROW_ID=#{rowId,jdbcType=VARCHAR}");
             }}.toString();
         }
     }
@@ -90,10 +90,10 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
             return new SQL(){{
                 DELETE_FROM("XY_CLB_ZC_ORDER_LIST_FREE");
                 if (orderId!=null && orderId!=""){
-                    WHERE("ORDER_ID=#{orderId}");
+                    WHERE("ORDER_ID=#{orderId,jdbcType=VARCHAR}");
                 }
                 if(rowId!=null && rowId!=""){
-                    WHERE("ROW_ID=#{rowId}");
+                    WHERE("ROW_ID=#{rowId,jdbcType=VARCHAR}");
                 }
             }}.toString();
         }

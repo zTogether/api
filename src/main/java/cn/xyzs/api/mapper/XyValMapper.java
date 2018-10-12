@@ -24,7 +24,7 @@ public interface XyValMapper extends Mapper<XyVal>{
     @Select("<script>" +
             "SELECT * FROM XY_VAL WHERE VAL_ID IN " +
             "<foreach item='item' index='index' collection='list' open='(' separator=',' close=')'> "+
-                "#{item} "+
+                "#{item,jdbcType=VARCHAR} "+
             "</foreach> " +
             " AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C'" +
             "</script>")
@@ -43,7 +43,7 @@ public interface XyValMapper extends Mapper<XyVal>{
      * @param: [valId]
      * @return: cn.xyzs.api.pojo.XyVal
      */
-    @Select("<script>SELECT * FROM XY_VAL WHERE VAL_ID = #{valId} AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C' </script>")
+    @Select("<script>SELECT * FROM XY_VAL WHERE VAL_ID = #{valId,jdbcType=VARCHAR} AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C' </script>")
     @Results(id="getZcArea",value={
             @Result(column = "VALSET_ID", property = "valsetId", javaType = String.class),
             @Result(column = "VAL_ID", property = "valId", javaType = String.class),
@@ -59,7 +59,7 @@ public interface XyValMapper extends Mapper<XyVal>{
      * @param: [valsetId]
      * @return: java.util.List<cn.xyzs.api.pojo.XyVal>
      */
-    @Select("<script>SELECT * FROM XY_VAL xv WHERE xv.VALSET_ID = #{valsetId}</script>")
+    @Select("<script>SELECT * FROM XY_VAL xv WHERE xv.VALSET_ID = #{valsetId,jdbcType=VARCHAR}</script>")
     @Results(id="getZcAreaListByValsetId",value={
             @Result(column = "VALSET_ID", property = "valsetId", javaType = String.class),
             @Result(column = "VAL_ID", property = "valId", javaType = String.class),
@@ -92,7 +92,7 @@ public interface XyValMapper extends Mapper<XyVal>{
             "\t\t\txv.VAL_ID IN(10,21,22,30,40,50)\n" +
             "\t) val\n" +
             "WHERE val.VAL_ID NOT IN(\n" +
-            "\tSELECT xpy.YS_GZ FROM XY_PG_YS xpy WHERE xpy.CTR_CODE = #{ctrCode}\n" +
+            "\tSELECT xpy.YS_GZ FROM XY_PG_YS xpy WHERE xpy.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
             ")" +
             "</script>")
     public List<Map<String ,Object>> getSllowYsGz(String ctrCode) throws SQLException;

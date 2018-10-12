@@ -38,17 +38,17 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "VALUES(\n" +
             "\tsys_guid(),\n" +
             "\tSYSDATE,\n" +
-            "\t#{ctrCode},\n" +
-            "\t#{opUserid},\n" +
-            "\t#{orderJe},\n" +
-            "\t#{orderMark},\n" +
-            "\t#{orderStatus},\n" +
-            "\t#{orderType},\n" +
-            "\t#{orderSup},\n" +
-            "\t#{editType},\n" +
-            "\t#{orderDis},\n" +
-            "\t#{orderDisMark},\n" +
-            "\t#{orderIsreturn}\n" +
+            "\t#{ctrCode,jdbcType=VARCHAR},\n" +
+            "\t#{opUserid,jdbcType=VARCHAR},\n" +
+            "\t#{orderJe,jdbcType=VARCHAR},\n" +
+            "\t#{orderMark,jdbcType=VARCHAR},\n" +
+            "\t#{orderStatus,jdbcType=VARCHAR},\n" +
+            "\t#{orderType,jdbcType=VARCHAR},\n" +
+            "\t#{orderSup,jdbcType=VARCHAR},\n" +
+            "\t#{editType,jdbcType=VARCHAR},\n" +
+            "\t#{orderDis,jdbcType=VARCHAR},\n" +
+            "\t#{orderDisMark,jdbcType=VARCHAR},\n" +
+            "\t#{orderIsreturn,jdbcType=VARCHAR}\n" +
             ")")
     @Options(useGeneratedKeys=true, keyProperty="orderId", keyColumn="ORDER_ID")
     public void addZcOrder(XyClbZcOrder xyClbZcOrder) throws SQLException;
@@ -97,7 +97,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @param: [orderId]
      * @return: void
      */
-    @Delete("DELETE FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}")
+    @Delete("DELETE FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId,jdbcType=VARCHAR}")
     public void deleteFromOrder(@Param("orderId") String orderId) throws SQLException;
 
 
@@ -123,7 +123,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
                                   @Param("orderIsreturn") String orderIsreturn){
             return new SQL(){{
                 UPDATE("XY_CLB_ZC_ORDER");
-                SET("ORDER_ID=#{orderId}");
+                SET("ORDER_ID=#{orderId,jdbcType=VARCHAR}");
                 if (orderJe!=null && orderJe!=""){
                     SET("ORDER_JE=#{orderJe,jdbcType=VARCHAR}");
                 }
@@ -161,7 +161,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @param: [orderId]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId}</script>")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId,jdbcType=VARCHAR}</script>")
     public Map<String,Object> getOrderInfo(@Param("orderId") String orderId)throws SQLException;
 
 }

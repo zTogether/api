@@ -26,7 +26,7 @@ public interface XyBjdMainMapper extends Mapper<XyBjdMain>{
             "FROM\n" +
             "\tXY_BJD_MAIN xbm\t\n" +
             "WHERE\n" +
-            "\tCTR_CODE = #{ctrCode}" +
+            "\tCTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> bjdList(String ctrCode) throws SQLException;
 

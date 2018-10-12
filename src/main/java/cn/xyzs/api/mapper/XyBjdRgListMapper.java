@@ -29,7 +29,7 @@ public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
             "SELECT NVL(SUM(BRL.RG_XJ),0) PRJ_ZJ\t\n" +
             "FROM XY_BJD_RG_LIST BRL \n" +
             "LEFT JOIN XY_BJD_MAIN BM ON BRL.BJD_CODE=BM.BJD_CODE\n" +
-            "WHERE BM.CTR_CODE=#{ctrCode} AND BRL.BJD_CODE=#{bjdCode} AND BRL.BJD_RG_STAGE=#{rgStage}\n" +
+            "WHERE BM.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND BRL.BJD_CODE=#{bjdCode,jdbcType=VARCHAR} AND BRL.BJD_RG_STAGE=#{rgStage,jdbcType=VARCHAR}\n" +
             "ORDER BY TO_NUMBER(BRL.BJD_RG_NO)" +
             "</script>")
     public Map<String,Object> prjZongJi(@Param("ctrCode") String ctrCode,@Param("bjdCode") String bjdCode,

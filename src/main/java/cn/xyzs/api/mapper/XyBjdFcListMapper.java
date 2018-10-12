@@ -19,10 +19,10 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             "\t\t\tNVL(FC_QTY,0) FC_QTY,NVL(FC_PRICE,0) FC_PRICE,NVL(FC_XJ,0) FC_XJ,\n" +
             "\t\t\tNVL(FC_MARK,'-') FC_MARK,FC_YN\n" +
             "\tFROM XY_BJD_FC_LIST\n" +
-            "\tWHERE BJD_CODE = #{bjdCode} AND BJD_FC_STAGE = #{fcStage}\n" +
+            "\tWHERE BJD_CODE = #{bjdCode,jdbcType=VARCHAR} AND BJD_FC_STAGE = #{fcStage,jdbcType=VARCHAR}\n" +
             "\tORDER BY BJD_FC_NO\n" +
             "\t) A)\n" +
-            "WHERE RN BETWEEN #{startNum} AND #{endNum}" +
+            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> bjdFcList(@Param("bjdCode") String bjdCode, @Param("fcStage") String fcStage,
                                               @Param("startNum") String startNum,@Param("endNum") String endNum) throws SQLException;
@@ -33,7 +33,7 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             "FROM\n" +
             "\tXY_BJD_MAIN xbm\n" +
             "WHERE\n" +
-            "\txbm.BJD_CODE = #{bjdCode}" +
+            "\txbm.BJD_CODE = #{bjdCode,jdbcType=VARCHAR}" +
             "</script>")
     public String getZj(@Param("bjdCode") String ctrCode) throws SQLException;
 }
