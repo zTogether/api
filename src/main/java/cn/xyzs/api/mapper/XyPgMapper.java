@@ -60,7 +60,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tTO_CHAR(pg.PG_OP_DATE,'yyyy-MM-dd HH24:mi:ss') PG_OP_DATE,\n" +
             "\tpg.PG_STAGE,\n" +
             "\tpg.PG_GR,\n" +
-            "\tTO_CHAR(pg.PG_BEGIN_DATE,'yyyy-MM-dd HH24:mi:ss') PG_BEGIN_DATE,\n" +
+            "\tTO_CHAR(pg.PG_BEGIN_DATE,'yyyy-MM-dd') PG_BEGIN_DATE,\n" +
             "\tpg.PG_DAYS,\n" +
             "\tpg.PG_OP_USER,\n" +
             "\tpg.PG_MONEY_YN,\n" +
@@ -211,7 +211,6 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "UPDATE XY_PG SET PG_GR=#{pgGr,jdbcType=VARCHAR} WHERE PG_ID=#{pgId}" +
             "</script>")
     public void updatePgGrByPgId(@Param("pgGr") String pgGr ,@Param("pgId") String pgId) throws SQLException;
-}
 
     @Select("<script>" +
             "SELECT gr_id, del_sq\n" +
@@ -237,7 +236,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "                       999999 score,\n" +
             "                       '0' del_sq\n" +
             "                  FROM XY_PG A\n" +
-            "                 WHERE A.PG_ID = #{pgId}\n" +
+            "                 WHERE A.PG_ID = #{pgId,jdbcType=VARCHAR}\n" +
             "                   AND EXISTS (SELECT B.PG_GR\n" +
             "                          FROM XY_PG B\n" +
             "                         WHERE B.CTR_CODE = A.CTR_CODE\n" +
@@ -259,4 +258,57 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "                               END)))" +
             "</script>")
     public List<Map<String,Object>> getMaxGr(@Param("pgId") String pgId);
+
+    @Select("" +
+            "UPDATE XY_PG \n" +
+            "SET PG_DAYS = (\n" +
+            "\tSELECT\n" +
+            "\t\t(\n" +
+            "\t\tCASE\n" +
+            "\t\t\t\t\n" +
+            "\t\t\t\tWHEN A.PG_STAGE = '10' \n" +
+            "\t\t\t\tAND CTR_PRJ_TYPE = 0 THEN\n" +
+            "\t\t\t\t\t3 \n" +
+            "\t\t\t\t\tWHEN A.PG_STAGE = '21' \n" +
+            "\t\t\t\t\tAND CTR_PRJ_TYPE = 0 THEN\n" +
+            "\t\t\t\t\t\t3 \n" +
+            "\t\t\t\t\t\tWHEN A.PG_STAGE = '22' \n" +
+            "\t\t\t\t\t\tAND CTR_PRJ_TYPE = 0 THEN\n" +
+            "\t\t\t\t\t\t\t5 \n" +
+            "\t\t\t\t\t\t\tWHEN A.PG_STAGE = '60' \n" +
+            "\t\t\t\t\t\t\tAND CTR_PRJ_TYPE = 0 THEN\n" +
+            "\t\t\t\t\t\t\t\t0 ELSE (\n" +
+            "\t\t\t\t\t\t\t\tCASE\n" +
+            "\t\t\t\t\t\t\t\t\t\t\n" +
+            "\t\t\t\t\t\t\t\t\t\tWHEN CTR_PRJ_TYPE = 0 THEN\n" +
+            "\t\t\t\t\t\t\t\t\t\tFLOOR((\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\tsum( B.RG_HJ ) / 600 \n" +
+            "\t\t\t\t\t\t\t\t\t\t\t)) \n" +
+            "\t\t\t\t\t\t\t\t\t\tWHEN CTR_PRJ_TYPE = 1 \n" +
+            "\t\t\t\t\t\t\t\t\t\tAND FLOOR((\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\tsum( B.RG_HJ ) / 600 \n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t)) <= 3 THEN\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t3 ELSE FLOOR((\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\tsum( B.RG_HJ ) / 600 \n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t)) \n" +
+            "\t\t\t\t\t\t\t\t\t\tEND \n" +
+            "\t\t\t\t\t\t\t\t\t\t) \n" +
+            "\t\t\t\t\t\t\t\t\tEND \n" +
+            "\t\t\t\t\t\t\t\t\t) DAYS \n" +
+            "\t\t\t\t\t\t\t\tFROM\n" +
+            "\t\t\t\t\t\t\t\t\tXY_PG A\n" +
+            "\t\t\t\t\t\t\t\t\tLEFT JOIN XY_PG_LIST B ON A.PG_ID = B.PG_ID\n" +
+            "\t\t\t\t\t\t\t\t\tLEFT JOIN XY_CUSTOMER_INFO C ON A.CTR_CODE = C.CTR_CODE \n" +
+            "\t\t\t\t\t\t\t\tWHERE\n" +
+            "\t\t\t\t\t\t\t\t\tA.PG_ID = #{pgId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\t\t\t\tGROUP BY\n" +
+            "\t\t\t\t\t\t\t\t\tA.PG_ID,\n" +
+            "\t\t\t\t\t\t\t\t\tA.PG_STAGE,\n" +
+            "\t\t\t\t\t\t\t\t\tC.CTR_AREA,\n" +
+            "\t\t\t\t\t\t\t\t\tCTR_PRJ_TYPE \n" +
+            "\t\t\t\t\t\t\t\t) \n" +
+            "\t\t\t\t\t\tWHERE\n" +
+            "\tPG_ID = #{pgId,jdbcType=VARCHAR}" +
+            "")
+    public void updateDays(@Param("pgId") String pgId) throws SQLException;
 }

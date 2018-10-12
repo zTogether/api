@@ -240,7 +240,14 @@ public class IntermediateAcceptanceSrevice {
         xyPg.setPgBeginDate(pgBeginDate);
         xyPg.setPgOpUser(pgOpUser);
         xyPgMapper.addPg(xyPg);
+        xyPgMapper.updateDays(xyPg.getPgId());
         xyPgLsitMapper.addPgList(xyPg.getPgId(),ctrCode,pgStage);
+        List<Map<String ,Object>> maxGrMapLsit = xyPgMapper.getMaxGr(xyPg.getPgId());
+        if(maxGrMapLsit == null || maxGrMapLsit.size()==0) {
+
+        }else {
+            xyPgMapper.updatePgGrByPgId(maxGrMapLsit.get(0).get("GR_ID").toString(),xyPg.getPgId());
+        }
     }
 
 }
