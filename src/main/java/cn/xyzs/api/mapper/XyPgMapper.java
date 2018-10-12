@@ -313,7 +313,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
     public void updateDays(@Param("pgId") String pgId) throws SQLException;
 
     @Select("<script>" +
-            "SELECT pg.PG_ID,pg.CTR_CODE,TO_CHAR(pg.PG_OP_DATE,'yyyy-MM-dd HH24:mi:ss') PG_OP_DATE,\n" +
+            "SELECT pg.PG_ID,pg.CTR_CODE,TO_CHAR(pg.PG_OP_DATE,'yyyy-MM-dd') PG_OP_DATE,\n" +
             "\t\tpg.PG_STAGE,PG_GR,TO_CHAR(pg.PG_BEGIN_DATE,'yyyy-MM-dd') PG_BEGIN_DATE,\n" +
             "\t\tpg.PG_DAYS,pg.PG_OP_USER,pg.PG_MONEY_YN,pg.PG_PRINT_YN,pg.PG_ADD_MONEY,\n" +
             "\t\t(SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID=pg.PG_STAGE AND xv.VALSET_ID='B3B32F221FF14256988E7C0A218EBF5C') PG_STAGE_NAME,\n" +
