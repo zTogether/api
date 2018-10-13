@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -28,6 +29,14 @@ public class LoginController {
     @RequestMapping("/login")
     public Map<String,Object> login(String userTel, String password, String verificationCode, String roleFlag){
         return loginService.login(userTel,password,verificationCode,roleFlag);
+    }
+
+    @ResponseBody
+    @RequestMapping("/testLogin")
+    public Map<String,Object> testLogin(){
+        Map<String ,Object> map = new HashMap<>();
+        map.put("code","200");
+        return map;
     }
 
     /**

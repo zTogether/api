@@ -2,6 +2,7 @@ package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyPg;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -387,4 +388,64 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "</script>")
     public List<Map<String,Object>> getApplyEngineeringList(@Param("pgGr") String pgGr) throws SQLException;
 
+    /**
+     * 获取已发放工资的派工单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/13 16:55
+     * @param: [pgGr]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tgm.GRGZ_ID,\n" +
+            "\tTO_CHAR( gm.GRGZ_DATE, 'yyyy-MM-dd' )\tGRGZ_DATE,\n" +
+            "\tgm.GRGZ_STATU, \n" +
+            "\tgm.GR_ID, \n" +
+            "\tgm.CTR_CODE, \n" +
+            "\tgm.GRGZ_YF, \n" +
+            "\tgm.GRGZ_SF, \n" +
+            "\tgm.GRGZ_MARK \n" +
+            "FROM \n" +
+            "\tXY_CWB_GRGZ_MAIN gm \n" +
+            "WHERE \n" +
+            "\tgm.GRGZ_STATU = '2' \n" +
+            "AND \n" +
+            "\tgm.GR_ID = #{pgGr,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> getGrgzMainLsit(@Param("pgGr") String pgGr) throws SQLException;
+
+    /**
+     * 获取已发放工资的派工单Lsit
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/13 16:59
+     * @param: [grgzId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\txcgl.RG_JE,\n" +
+            "\tpg.PG_ID,\n" +
+            "\tpg.CTR_CODE,\n" +
+            "\tTO_CHAR( pg.PG_OP_DATE, 'yyyy-MM-dd' ) PG_OP_DATE,\n" +
+            "\tpg.PG_STAGE,\n" +
+            "\tpg.PG_GR,\n" +
+            "\tTO_CHAR( pg.PG_BEGIN_DATE, 'yyyy-MM-dd' ) PG_BEGIN_DATE,\n" +
+            "\tpg.PG_DAYS,\n" +
+            "\tpg.PG_OP_USER,\n" +
+            "\tpg.PG_MONEY_YN,\n" +
+            "\tpg.PG_PRINT_YN,\n" +
+            "\tpg.PG_ADD_MONEY,\n" +
+            "\t( SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = pg.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ) PG_STAGE_NAME,\n" +
+            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME \n" +
+            "FROM\n" +
+            "\tXY_CWB_GRGZ_LIST xcgl ,\n" +
+            "\tXY_PG pg\n" +
+            "WHERE\n" +
+            "\txcgl.GRGZ_ID = #{grgzId,jdbcType=VARCHAR}\n" +
+            "AND \n" +
+            "\tpg.PG_ID = xcgl.PG_ID" +
+            "</script>")
+    public List<Map<String ,Object>> getEndApplyEngineeringList(@Param("grgzId") String grgzId) throws SQLException;
 }

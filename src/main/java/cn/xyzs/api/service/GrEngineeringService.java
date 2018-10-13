@@ -32,12 +32,15 @@ public class GrEngineeringService {
         try {
             List<Map<String ,Object>> notApplyEngineeringList = xyPgMapper.getNotApplyEngineeringList(grId);
             List<Map<String ,Object>> applyEngineeringList = xyPgMapper.getApplyEngineeringList(grId);
-            List<Map<String ,Object>> endApplyEngineeringList = new ArrayList<>();
+            List<Map<String ,Object>> grgzMainLsit = xyPgMapper.getGrgzMainLsit(grId);
+            for (Map<String, Object> map : grgzMainLsit) {
+                map.put("endApplyEngineeringList",xyPgMapper.getEndApplyEngineeringList(String .valueOf(map.get("GRGZ_ID"))));
+            }
             code = "200";
             msg = "修改成功";
             obj.put("notApplyEngineeringList",notApplyEngineeringList);
             obj.put("applyEngineeringList",applyEngineeringList);
-            obj.put("endApplyEngineeringList",endApplyEngineeringList);
+            obj.put("grgzMainLsit",grgzMainLsit);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
