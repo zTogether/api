@@ -30,19 +30,9 @@ public class GrEngineeringService {
         String code = "500";
         String msg = "系统异常";
         try {
-            List<Map<String ,Object>> grEngineeringLsit = xyPgMapper.getMyPrjList(grId);
-            List<Map<String ,Object>> notApplyEngineeringList = new ArrayList<>();
-            List<Map<String ,Object>> applyEngineeringList = new ArrayList<>();
+            List<Map<String ,Object>> notApplyEngineeringList = xyPgMapper.getNotApplyEngineeringList(grId);
+            List<Map<String ,Object>> applyEngineeringList = xyPgMapper.getApplyEngineeringList(grId);
             List<Map<String ,Object>> endApplyEngineeringList = new ArrayList<>();
-            for (Map<String, Object> map : grEngineeringLsit) {
-                if ("0".equals(String.valueOf(map.get("PG_MONEY_YN")))){
-                    notApplyEngineeringList.add(map);
-                } else if ("1".equals(String.valueOf(map.get("PG_MONEY_YN")))){
-                    applyEngineeringList.add(map);
-                } else if ("2".equals(String.valueOf(map.get("PG_MONEY_YN")))){
-                    endApplyEngineeringList.add(map);
-                }
-            }
             code = "200";
             msg = "修改成功";
             obj.put("notApplyEngineeringList",notApplyEngineeringList);

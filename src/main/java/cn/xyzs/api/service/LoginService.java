@@ -1,9 +1,6 @@
 package cn.xyzs.api.service;
 
-import cn.xyzs.api.mapper.UserMapper;
-import cn.xyzs.api.mapper.XyCustomerInfoMapper;
-import cn.xyzs.api.mapper.XyGcbGrxxMapper;
-import cn.xyzs.api.mapper.XyRoleMapper;
+import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.pojo.TUser;
 import cn.xyzs.api.pojo.XyCustomerInfo;
 import cn.xyzs.api.pojo.XyGcbGrxx;
@@ -34,6 +31,9 @@ public class LoginService {
 
     @Resource
     private MvSysSmsService mvSysSmsService;
+
+    @Resource
+    private MvCompoMapper mvCompoMapper;
 
     /**
      * 登陆
@@ -153,6 +153,10 @@ public class LoginService {
         List<Map<String, Object>> menuList = null;
         try {
             menuList = userMapper.getMenuByRole(roleId);
+            List<Map<String, Object>> tempMenuList = mvCompoMapper.getMvCompoByRoleId(roleId);
+            for (Map<String, Object> map : tempMenuList) {
+                menuList.add(map);
+            }
             code = "200";
             msg = "登陆成功";
             obj.put("menuList", menuList);

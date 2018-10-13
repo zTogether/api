@@ -53,15 +53,29 @@ public interface MvCommoMenuMapper extends Mapper<MvCommoMenu>{
             "\t* \n" +
             "FROM\n" +
             "\tXY_COMPO xc \n" +
-            "WHERE\n" +
-            "\txc.COMPO_ID IN (\n" +
+            "WHERE xc.COMPO_ID IN (\n" +
             "\tSELECT\n" +
             "\t\tMV_COMMO_MENU.COMPO_ID \n" +
             "\tFROM\n" +
             "\t\tMV_COMMO_MENU \n" +
             "\tWHERE\n" +
-            "\t\tMV_COMMO_MENU.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
-            "\tAND MV_COMMO_MENU.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
-            ")</script>")
+            "\tMV_COMMO_MENU.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\tAND MV_COMMO_MENU.ROLE_ID = #{roleId,jdbcType=VARCHAR}\n" +
+            ") \n" +
+            "UNION ALL\n" +
+            "SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\tMV_COMPO mc \n" +
+            "WHERE mc.COMPO_ID IN (\n" +
+            "\tSELECT\n" +
+            "\t\tMV_COMMO_MENU.COMPO_ID \n" +
+            "\tFROM\n" +
+            "\t\tMV_COMMO_MENU \n" +
+            "\tWHERE\n" +
+            "\tMV_COMMO_MENU.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\tAND MV_COMMO_MENU.ROLE_ID = #{roleId,jdbcType=VARCHAR}\n" +
+            ")" +
+            "</script>")
     public List<Map<String ,Object>> getCommoMenu(MvCommoMenu mvCommoMenu) throws SQLException;
 }

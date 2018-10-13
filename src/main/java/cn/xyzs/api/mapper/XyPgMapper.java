@@ -312,16 +312,79 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "")
     public void updateDays(@Param("pgId") String pgId) throws SQLException;
 
+    /**
+     * 获取工资状态为未申请的派工单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/13 10:00
+     * @param: [pgGr]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
-            "SELECT pg.PG_ID,pg.CTR_CODE,TO_CHAR(pg.PG_OP_DATE,'yyyy-MM-dd') PG_OP_DATE,\n" +
-            "\t\tpg.PG_STAGE,PG_GR,TO_CHAR(pg.PG_BEGIN_DATE,'yyyy-MM-dd') PG_BEGIN_DATE,\n" +
-            "\t\tpg.PG_DAYS,pg.PG_OP_USER,pg.PG_MONEY_YN,pg.PG_PRINT_YN,pg.PG_ADD_MONEY,\n" +
-            "\t\t(SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID=pg.PG_STAGE AND xv.VALSET_ID='B3B32F221FF14256988E7C0A218EBF5C') PG_STAGE_NAME,\n" +
-            "\t\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID=pg.PG_OP_USER) OP_USER_NAME\n" +
-            "FROM XY_PG pg\n" +
-            "WHERE pg.PG_GR=#{pgGr,jdbcType=VARCHAR}" +
-            "ORDER BY pg.PG_BEGIN_DATE DESC" +
+            "SELECT\n" +
+            "\tpg.PG_ID,\n" +
+            "\tpg.CTR_CODE,\n" +
+            "\tTO_CHAR( pg.PG_OP_DATE, 'yyyy-MM-dd' ) PG_OP_DATE,\n" +
+            "\tpg.PG_STAGE,\n" +
+            "\tPG_GR,\n" +
+            "\tTO_CHAR( pg.PG_BEGIN_DATE, 'yyyy-MM-dd' ) PG_BEGIN_DATE,\n" +
+            "\tpg.PG_DAYS,\n" +
+            "\tpg.PG_OP_USER,\n" +
+            "\tpg.PG_MONEY_YN,\n" +
+            "\tpg.PG_PRINT_YN,\n" +
+            "\tpg.PG_ADD_MONEY,\n" +
+            "\t( SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = pg.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ) PG_STAGE_NAME,\n" +
+            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME \n" +
+            "FROM\n" +
+            "\tXY_PG pg \n" +
+            "WHERE\n" +
+            "\tpg.PG_GR = #{pgGr,jdbcType=VARCHAR} \n" +
+            "AND pg.PG_MONEY_YN = '0' \n" +
+            "ORDER BY\n" +
+            "\tpg.PG_BEGIN_DATE DESC" +
             "</script>")
-    public List<Map<String,Object>> getMyPrjList(@Param("pgGr") String pgGr) throws SQLException;
+    public List<Map<String,Object>> getNotApplyEngineeringList(@Param("pgGr") String pgGr) throws SQLException;
+
+    /**
+     * 获取工资状态为已申请申请的派工单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/13 10:27
+     * @param: [pgGr]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tpg.PG_ID,\n" +
+            "\tpg.CTR_CODE,\n" +
+            "\tTO_CHAR( pg.PG_OP_DATE, 'yyyy-MM-dd' ) PG_OP_DATE,\n" +
+            "\tpg.PG_STAGE,\n" +
+            "\tPG_GR,\n" +
+            "\tTO_CHAR( pg.PG_BEGIN_DATE, 'yyyy-MM-dd' ) PG_BEGIN_DATE,\n" +
+            "\tpg.PG_DAYS,\n" +
+            "\tpg.PG_OP_USER,\n" +
+            "\tpg.PG_MONEY_YN,\n" +
+            "\tpg.PG_PRINT_YN,\n" +
+            "\tpg.PG_ADD_MONEY,\n" +
+            "\t( SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = pg.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ) PG_STAGE_NAME,\n" +
+            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME \n" +
+            "FROM\n" +
+            "\tXY_PG pg \n" +
+            "WHERE\n" +
+            "\tpg.PG_MONEY_YN = '1' \n" +
+            "AND\n" +
+            "\tpg.PG_GR = #{pgGr,jdbcType=VARCHAR}\n" +
+            "AND pg.PG_ID NOT IN (\n" +
+            "\tSELECT\n" +
+            "\t\tgl.PG_ID \n" +
+            "\tFROM\n" +
+            "\t\tXY_CWB_GRGZ_LIST gl \n" +
+            "\tWHERE\n" +
+            "\t\tgl.GRGZ_ID IN ( SELECT gm.GRGZ_ID FROM XY_CWB_GRGZ_MAIN gm WHERE gm.GRGZ_STATU = '2' AND gm.GR_ID = #{pgGr,jdbcType=VARCHAR} )\n" +
+            ")" +
+            "ORDER BY\n" +
+            "\tpg.PG_BEGIN_DATE DESC" +
+            "</script>")
+    public List<Map<String,Object>> getApplyEngineeringList(@Param("pgGr") String pgGr) throws SQLException;
 
 }
