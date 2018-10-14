@@ -335,7 +335,8 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tpg.PG_PRINT_YN,\n" +
             "\tpg.PG_ADD_MONEY,\n" +
             "\t( SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = pg.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ) PG_STAGE_NAME,\n" +
-            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME \n" +
+            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME ,\n" +
+            "\t( SELECT xci.CTR_ADDR FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = pg.CTR_CODE ) CTR_ADDR\n" +
             "FROM\n" +
             "\tXY_PG pg \n" +
             "WHERE\n" +
@@ -368,7 +369,8 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tpg.PG_PRINT_YN,\n" +
             "\tpg.PG_ADD_MONEY,\n" +
             "\t( SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = pg.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ) PG_STAGE_NAME,\n" +
-            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME \n" +
+            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME ,\n" +
+            "\t( SELECT xci.CTR_ADDR FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = pg.CTR_CODE ) CTR_ADDR\n" +
             "FROM\n" +
             "\tXY_PG pg \n" +
             "WHERE\n" +
@@ -438,7 +440,8 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tpg.PG_PRINT_YN,\n" +
             "\tpg.PG_ADD_MONEY,\n" +
             "\t( SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = pg.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ) PG_STAGE_NAME,\n" +
-            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME \n" +
+            "\t( SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = pg.PG_OP_USER ) OP_USER_NAME ,\n" +
+            "\t( SELECT xci.CTR_ADDR FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = pg.CTR_CODE ) CTR_ADDR\n" +
             "FROM\n" +
             "\tXY_CWB_GRGZ_LIST xcgl ,\n" +
             "\tXY_PG pg\n" +
