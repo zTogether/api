@@ -16,7 +16,7 @@ public class GrEngineeringController {
     private GrEngineeringService grEngineeringService;
 
     /**
-     * 工人获取自己所有的工地信息
+     * 工人获取未申请工资的工地信息
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/12 10:54
@@ -24,8 +24,36 @@ public class GrEngineeringController {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @ResponseBody
-    @RequestMapping("/getGrEngineering")
-    public Map<String ,Object> getGrEngineering(String grId){
-        return grEngineeringService.getGrEngineering(grId);
+    @RequestMapping("/getNotApplyEngineeringList")
+    public Map<String ,Object> getNotApplyEngineeringList(String grId){
+        return grEngineeringService.getNotApplyEngineeringList(grId);
+    }
+
+    /**
+     * 工人获取已申请工资的工地信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/14 13:38
+     * @param: [grId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getApplyEngineeringList")
+    public Map<String ,Object> getApplyEngineeringList(String grId){
+        return grEngineeringService.getApplyEngineeringList(grId);
+    }
+
+    /**
+     * 工人获取已发放工资的工地信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/14 13:38
+     * @param: [grId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getGrgzMainLsit")
+    public Map<String ,Object> getGrgzMainLsit(String grId){
+        return grEngineeringService.getGrgzMainLsit(grId);
     }
 }

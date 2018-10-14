@@ -125,7 +125,7 @@ public class LoginService {
                     msg = "登陆成功";
                 } else {
                     code = "401";
-                    msg = "登陆失败";
+                    msg = "用户名或密码错误";
                 }
             }
         }
