@@ -31,14 +31,6 @@ public class LoginController {
         return loginService.login(userTel,password,verificationCode,roleFlag);
     }
 
-    @ResponseBody
-    @RequestMapping("/testLogin")
-    public Map<String,Object> testLogin(){
-        Map<String ,Object> map = new HashMap<>();
-        map.put("code","200");
-        return map;
-    }
-
     /**
      * 发送验证码
      * @Description:
