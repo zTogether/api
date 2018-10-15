@@ -41,6 +41,12 @@ public class IntermediateAcceptanceSrevice {
     @Resource
     private XyPgLsitMapper xyPgLsitMapper;
 
+    @Resource
+    private VwXyJdjsMapper vwXyJdjsMapper;
+
+    @Resource
+    private XyClbFcCkdMainMapper xyClbFcCkdMainMapper;
+
     /**
      * 根据ctrCode获取派工验收表里的信息
      * @Description:
@@ -250,4 +256,52 @@ public class IntermediateAcceptanceSrevice {
         }
     }
 
+    public Map<String,Object> getEngineeringExpenseSettlementList(String ctrCode){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            List<Map<String,Object>> engineeringExpenseSettlementList =  vwXyJdjsMapper.getJdjs(ctrCode);
+            obj.put("engineeringExpenseSettlementList",engineeringExpenseSettlementList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    public Map<String,Object> getEngineeringExpenseSettlementDetailInfo(String ctrCode,String ckdFcType){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String ysGz = "";
+        if("20".equals(ckdFcType)){
+            ysGz = "22";
+        }else{
+            ysGz = ckdFcType;
+        }
+        try {
+            List<Map<String,Object>> engineeringExpenseSettlementDetail =
+                    xyClbFcCkdMainMapper.getEngineeringExpenseSettlementDetail(ctrCode,ysGz,ckdFcType);
+            Map<String,Object> custInfo = xyCustomerInfoMapper.getCustInfoByCtrCode(ctrCode);
+            obj.put("custInfo",custInfo);
+            obj.put("engineeringExpenseSettlementDetail",engineeringExpenseSettlementDetail);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }
