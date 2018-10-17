@@ -92,7 +92,7 @@ public interface XyValMapper extends Mapper<XyVal>{
             "\t\t\txv.VAL_ID IN(10,21,22,30,40,50)\n" +
             "\t) val\n" +
             "WHERE val.VAL_ID NOT IN(\n" +
-            "\tSELECT xpy.YS_GZ FROM XY_PG_YS xpy WHERE xpy.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tSELECT xpy.YS_GZ FROM XY_PG_YS xpy WHERE xpy.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND xpy.YS_STATU <![CDATA[<>]]> '2'\n" +
             ")" +
             "</script>")
     public List<Map<String ,Object>> getSllowYsGz(String ctrCode) throws SQLException;

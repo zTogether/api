@@ -461,4 +461,22 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\txpw.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n")
     public void updateYsDate(@Param("ctrCode") String ctrCode,@Param("ysDate") String ysDate,@Param("pgStage") String pgStage);
 
+    /**
+     * 修改瓦工（30）派工验收时间
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/17 11:23
+     * @param: [ctrCode, ysDate, pgStage]
+     * @return: void
+     */
+    @Update("UPDATE XY_PG_WAITER xpw \n" +
+            "SET xpw.YS_DATE = TO_DATE(#{ysDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss')\n" +
+            "WHERE\n" +
+            "\txpw.PG_ID IN (SELECT xp.PG_ID FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND xp.PG_STAGE IN ('31','32') )\n" +
+            "AND\n" +
+            "\txpw.ZT = '抢单成功'\n" +
+            "AND\n" +
+            "\txpw.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n")
+    public void updateWgYsDate (@Param("ctrCode") String ctrCode,@Param("ysDate") String ysDate);
+
 }

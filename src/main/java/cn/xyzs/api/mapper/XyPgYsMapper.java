@@ -109,19 +109,34 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
                            @Param("custMark")String custMark) throws SQLException;
 
     /**
-     *
-     * @Description: 根据YS_ID修改验收
+     * 客户执行验收(同意)
+     * @Description:
      * @author: GeWeiliang
      * @date: 2018\9\28 0028 9:39
      * @param: [ysId, custMark, ysDate]
      * @return: void
      */
     @Update("<script>" +
-            "UPDATE XY_PG_YS SET CUST_MARK=#{custMark,jdbcType=VARCHAR},YS_DATE=TO_DATE(#{ysDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss')" +
-            "WHERE YS_ID=#{ysId,jdbcType=VARCHAR}" +
+            "UPDATE XY_PG_YS SET YS_STATU = '1',CUST_MARK=#{custMark,jdbcType=VARCHAR},YS_DATE=TO_DATE(#{sysDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:mi:ss') " +
+            "WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} " +
+            "AND YS_GZ = #{ysGz,jdbcType=VARCHAR}" +
             "</script>")
-    public void updateYanshou(@Param("ysId") String ysId,@Param("custMark") String custMark,
-                              @Param("ysDate") String ysDate) throws SQLException;
+    public void updateYanshou(@Param("custMark") String custMark, @Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz,@Param("sysDate") String sysDate) throws SQLException;
+
+    /**
+     * 客户执行验收(不同意)
+     * @Description:
+     * @author: GeWeiliang
+     * @date: 2018\9\28 0028 9:39
+     * @param: [ysId, custMark, ysDate]
+     * @return: void
+     */
+    @Update("<script>" +
+            "UPDATE XY_PG_YS xps SET YS_STATU=#{ysStatu,jdbcType=VARCHAR},CUST_MARK = #{custMark,jdbcType=VARCHAR} " +
+            "WHERE CTR_CODE = #{ctrCode,jdbcType=VARCHAR} " +
+            "AND YS_GZ = #{ysGz,jdbcType=VARCHAR}" +
+            "</script>")
+    public void updateYanShouYsStatuAndCustMark(@Param("custMark") String custMark, @Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz,@Param("ysStatu") String ysStatu) throws SQLException;
 
     /**
      * 根据ctrCode，ysId获取是否已提交验收
@@ -139,7 +154,21 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "WHERE \n" +
             "\txpy.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
             "AND\n" +
-            "\txpy.YS_GZ = #{ysGz,jdbcType=VARCHAR}" +
+            "\txpy.YS_GZ = #{ysGz,jdbcType=VARCHAR} " +
+            "AND xpy.YS_STATU <![CDATA[<>]]> '2'" +
             "</script>")
     public Integer getCountByCtrCodeAndYszt(@Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz) throws SQLException;
+
+    /**
+     * 客户验收时获取验收状态
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/15 16:49
+     * @param: [ctrCode, ysGz]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT xpy.ys_statu FROM XY_PG_YS xpy WHERE xpy.ctr_code = #{ctrCode,jdbcType=VARCHAR} AND xpy.ys_gz = #{ysGz,jdbcType=VARCHAR}" +
+            "</script>")
+    public String gteYsStatu(@Param("ctrCode") String ctrCode ,@Param("ysGz") String ysGz) throws SQLException;
 }

@@ -84,4 +84,46 @@ public class IntermediateAcceptanceController {
     public Map<String, Object> pg(String ctrCode ,String pgStage ,String pgBeginDate ,String pgOpUser){
         return intermediateAcceptanceSrevice.pg(ctrCode,pgStage,pgBeginDate,pgOpUser);
     }
+
+    /**
+     * 获取工程费用结算详情信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/15 16:11
+     * @param: [ctrCode, ckdFcType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getEngineeringExpenseSettlementDetailInfo")
+    public Map<String,Object> getEngineeringExpenseSettlementDetailInfo(String ctrCode,String ckdFcType){
+        return intermediateAcceptanceSrevice.getEngineeringExpenseSettlementDetailInfo(ctrCode,ckdFcType);
+    }
+
+    /**
+     * 获取工程费用结算List
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/17 9:52
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getEngineeringExpenseSettlementList")
+    public Map<String,Object> getEngineeringExpenseSettlementList(String ctrCode){
+        return intermediateAcceptanceSrevice.getEngineeringExpenseSettlementList(ctrCode);
+    }
+
+    /**
+     * 客户验收
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/17 13:03
+     * @param: [ctrCode, ckdFcType, custMark]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/customerInspection")
+    public Map<String ,Object> customerInspection(String ctrCode,String ckdFcType,String custMark,String isAgree){
+        return intermediateAcceptanceSrevice.customerInspection(ctrCode,ckdFcType,custMark,isAgree);
+    }
 }

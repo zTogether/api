@@ -30,7 +30,7 @@ public class XyPgYs {
     @Column(name = "OP_USERID")
 	private String opUserid;
 
-    //验收状态（0：草稿   1：已验收）
+    //验收状态（0：草稿   1：已验收  2：客户不同意）
     @Column(name = "YS_STATU")
 	private String ysStatu;
 

@@ -4,6 +4,7 @@ import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.pojo.XyBjdMain;
 import cn.xyzs.api.pojo.XyPg;
 import cn.xyzs.api.pojo.XyPgWaiter;
+import cn.xyzs.api.pojo.XyPgYs;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,7 +99,7 @@ public class IntermediateAcceptanceSrevice {
                     String sysDate = dateMapper.getSysDate();
                     xyPgYsMapper.addYanshou(ctrCode,ysGz,opUserId,"1",zxyMark,null,sysDate);
                     xyPgWaiterMapper.updateYsDate(ctrCode,sysDate,ysGz);
-                } else {
+                } else   {
                     xyPgYsMapper.addYanshouB(ctrCode,ysGz,opUserId,"0",zxyMark,null);
                 }
                 code = "200";
@@ -282,15 +283,27 @@ public class IntermediateAcceptanceSrevice {
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String ysGz = "";
-        if("20".equals(ckdFcType)){
-            ysGz = "22";
-        }else{
-            ysGz = ckdFcType;
-        }
+        String pgYsStatu = "1";
         try {
-            List<Map<String,Object>> engineeringExpenseSettlementDetail =
-                    xyClbFcCkdMainMapper.getEngineeringExpenseSettlementDetail(ctrCode,ysGz,ckdFcType);
+            List<Map<String,Object>> engineeringExpenseSettlementDetail = null;
+            if ("100".equals(ckdFcType)){
+                engineeringExpenseSettlementDetail = xyClbFcCkdMainMapper.getAllEngineeringExpenseSettlementDetail(ctrCode);
+            } else {
+                engineeringExpenseSettlementDetail = xyClbFcCkdMainMapper.getEngineeringExpenseSettlementDetail(ctrCode,ckdFcType);
+            }
             Map<String,Object> custInfo = xyCustomerInfoMapper.getCustInfoByCtrCode(ctrCode);
+            if ("20".equals(ckdFcType) || "30".equals(ckdFcType) || "40".equals(ckdFcType) || "50".equals(ckdFcType) ){
+                if("20".equals(ckdFcType)){
+                    ysGz = "22";
+                }else{
+                    ysGz = ckdFcType;
+                }
+                pgYsStatu = xyPgYsMapper.gteYsStatu(ctrCode,ysGz);
+            }
+            if (pgYsStatu == null){
+                pgYsStatu = "1";
+            }
+            obj.put("pgYsStatu",pgYsStatu);
             obj.put("custInfo",custInfo);
             obj.put("engineeringExpenseSettlementDetail",engineeringExpenseSettlementDetail);
             code = "200";
@@ -303,5 +316,57 @@ public class IntermediateAcceptanceSrevice {
             resultMap.put("resultData",obj);
         }
         return resultMap;
+    }
+
+    /**
+     * 客户验收
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/17 13:03
+     * @param: [ctrCode, ckdFcType, custMark, isAgree]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> customerInspection(String ctrCode,String ckdFcType,String custMark,String isAgree){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try {
+            String sysDate = dateMapper.getSysDate();
+            if ("20".equals(ckdFcType)){
+                if ("0".equals(isAgree)){
+                    xyPgYsMapper.updateYanshou(custMark,ctrCode,"22",sysDate);
+                    xyPgWaiterMapper.updateYsDate(ctrCode,sysDate,"22");
+                } else {
+                    upadteYsStatu(custMark,ctrCode,"22");
+                }
+            } else if ("30".equals(ckdFcType)){
+                if ("0".equals(isAgree)){
+                    xyPgYsMapper.updateYanshou(custMark,ctrCode,"30",sysDate);
+                    xyPgWaiterMapper.updateWgYsDate(ctrCode,sysDate);
+                } else {
+                    upadteYsStatu(custMark,ctrCode,"30");
+                }
+            } else {
+                if ("0".equals(isAgree)){
+                    xyPgYsMapper.updateYanshou(custMark,ctrCode,ckdFcType,sysDate);
+                    xyPgWaiterMapper.updateYsDate(ctrCode,sysDate,ckdFcType);
+                } else {
+                    upadteYsStatu(custMark,ctrCode,ckdFcType);
+                }
+            }
+            code = "200";
+            msg = "验收成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    private void upadteYsStatu(String custMark, String ctrCode, String ysGz) throws SQLException{
+        xyPgYsMapper.updateYanShouYsStatuAndCustMark(custMark,ctrCode,ysGz,"2");
     }
 }
