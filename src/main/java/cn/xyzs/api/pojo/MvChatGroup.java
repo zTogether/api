@@ -25,8 +25,8 @@ public class MvChatGroup {
     private String ctrCode;
 
     //创建时间
-    @Column(name = "CREATE_TIME")
-    private String createTime;
+    @Column(name = "CREATION_TIME")
+    private String creationTime;
 
     //是否在用(0:在用,1：停用)
     @Column(name = "IS_OCCUPIED")
