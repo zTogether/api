@@ -393,34 +393,6 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "</script>")
     public Map<String ,String> getServicePersonalByCtrCode(String ctrCode) throws SQLException;
 
-    /**
-     * 根据ctrCode获取所有服务人员姓名及ID
-     * @Description:
-     * @author: zheng shuai
-     * @date: 2018/10/4 8:21
-     * @param: [ctrCode]
-     * @return: java.util.Map<java.lang.String,java.lang.Object>
-     */
-    @Select("<script>" +
-            "SELECT\n" +
-            "\txui.CTR_WAITER,\n" +
-            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_WAITER) CTR_WAITER_NAME,\n" +
-            "\txui.CTR_SJS,\n" +
-            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_SJS) CTR_SJS_NAME,\n" +
-            "\txui.CTR_GCJL,\n" +
-            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_GCJL) CTR_GCJL_NAME,\n" +
-            "\txui.CTR_CLDD,\n" +
-            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_CLDD) CTR_CLDD_NAME,\n" +
-            "\txui.CTR_AREA_MA,\n" +
-            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_AREA_MA) CTR_AREA_MA_NAME,\n" +
-            "\txui.CTR_OWENER,\n" +
-            "\t(SELECT xu.USER_NAME FROM XY_USER xu WHERE xu.USER_ID = xui.CTR_OWENER) CTR_OWENER_NAME\n" +
-            "FROM\n" +
-            "\tXY_CUSTOMER_INFO xui \n" +
-            "WHERE\n" +
-            "\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
-            "</script>")
-    public Map<String ,Object> getServicePersonalInfoByCtrCode(String ctrCode) throws SQLException;
 
     /**
      *
