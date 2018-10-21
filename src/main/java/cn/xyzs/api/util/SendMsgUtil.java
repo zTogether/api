@@ -20,7 +20,7 @@ public class SendMsgUtil {
     // 短信模板ID，需要在短信应用中申请
     private static final int templateId1 = 193979; //验证码短信模板ID                  尊敬的客户您好，您有一个礼品待领取，请于收到短信起三天内联系我司工作人员，逾期作废，领取码{1}。回T退订
     private static final int templateId2 = 203858;//礼品码短信模板ID                   {1}为您的验证码，如非本人操作，请忽略本短信。
-    private static final int templateId3= 213921; //通知执行员派单成功短信模板ID       您好！{1}（档案号）{2}工程已成功派单，施工工长{3}，电话{4}，请您尽快联系交底！
+    private static final int templateId3 = 213921; //通知执行员派单成功短信模板ID      您好！{1}（档案号）{2}工程已成功派单，施工工长{3}，电话{4}，请您尽快联系交底！
     private static final int templateId4 = 213919;//抢单成功提醒短信模板ID             恭喜您抢单成功！档案号{1}，进场日期{2}，执行总监{3}，电话{4}，请尽快联系交底！
     // 签名
     private static final String smsSign = "江苏轩辕装饰工程有限公司"; // NOTE: 这里的签名"腾讯云"只是一个示例，真实的签名需要在短信控制台中申请，另外签名参数使用的是`签名内容`，而不是`签名ID`
