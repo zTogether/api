@@ -451,4 +451,48 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tpg.PG_ID = xcgl.PG_ID" +
             "</script>")
     public List<Map<String ,Object>> getEndApplyEngineeringList(@Param("grgzId") String grgzId) throws SQLException;
+
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tA.CTR_CODE,\n" +
+            "\tB.USER_NAME ZXY_NAME,\n" +
+            "\tB.USER_TEL ZXY_TEL,\n" +
+            "\tC.GR_NAME GR_NAME,\n" +
+            "\tC.GR_TEL GR_TEL,\n" +
+            "\t(\n" +
+            "\tCASE\n" +
+            "\t\t\tA.PG_STAGE \n" +
+            "\t\t\tWHEN '32' THEN\n" +
+            "\t\t\t'镶贴' \n" +
+            "\t\t\tWHEN '31' THEN\n" +
+            "\t\t\t'砌筑' \n" +
+            "\t\t\tWHEN '22' THEN\n" +
+            "\t\t\t'电工' \n" +
+            "\t\t\tWHEN '50' THEN\n" +
+            "\t\t\t'油漆' \n" +
+            "\t\t\tWHEN '40' THEN\n" +
+            "\t\t\t'木工' \n" +
+            "\t\t\tWHEN '10' THEN\n" +
+            "\t\t\t'基础' \n" +
+            "\t\t\tWHEN '60' THEN\n" +
+            "\t\t\t'安装' \n" +
+            "\t\t\tWHEN '20' THEN\n" +
+            "\t\t\t'水电' \n" +
+            "\t\t\tWHEN '30' THEN\n" +
+            "\t\t\t'瓦工' \n" +
+            "\t\t\tWHEN '21' THEN\n" +
+            "\t\t\t'水工' \n" +
+            "\t\tEND \n" +
+            "\t\t) GZNAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_PG A,\n" +
+            "\t\tXY_USER B,\n" +
+            "\t\tXY_GCB_GRXX C,\n" +
+            "\t\tXY_CUSTOMER_INFO D \n" +
+            "\tWHERE A.PG_GR = C.GR_ID \n" +
+            "\tAND A.PG_ID = #{pgId}\n" +
+            "\tAND A.CTR_CODE = D.CTR_CODE \n" +
+            "\tAND D.CTR_GCJL = B.USER_ID" +
+            "</script>")
+    public Map<String,Object> getPgMsg(String pgId) throws SQLException;
 }
