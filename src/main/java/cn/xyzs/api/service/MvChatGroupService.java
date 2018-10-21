@@ -15,6 +15,14 @@ public class MvChatGroupService {
     @Resource
     private MvChatGroupMapper mvChatGroupMapper;
 
+    /**
+     *
+     * @Description: 动态查询聊天群组
+     * @author: GeWeiliang
+     * @date: 2018\10\18 0018 17:29
+     * @param: [chatGroup]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public Map<String,Object> queryChatGroup(MvChatGroup chatGroup){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
