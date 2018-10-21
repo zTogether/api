@@ -50,7 +50,7 @@ public class PcApiService {
      * @Description:
      * @author: GeWeiliang
      * @date: 2018\10\21 0021 11:26
-     * @param: [ctrCode, date(进场日期), exDir(执行总监), tel(执行总监电话), phone(抢单者电话)]
+     * @param: [ctrCode, exDir(执行总监), tel(执行总监电话), phone(抢单者电话)]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     public Map<String,Object> sendQdMsg(String ctrCode,String date,String exDir,String tel,String phone){

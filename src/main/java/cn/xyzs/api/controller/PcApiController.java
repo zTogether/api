@@ -22,7 +22,7 @@ public class PcApiController {
     }
 
     /**
-     *
+     *  http://192.168.11.51:8081/pcApi/sendPgMsg?ctrCode=&gongZhong=&gongZhang=&tel=&phone=
      * @Description: 通知执行员派单成功短信
      * @author: GeWeiliang
      * @date: 2018\10\21 0021 11:18
