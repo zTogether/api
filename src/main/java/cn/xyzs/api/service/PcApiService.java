@@ -36,7 +36,7 @@ public class PcApiService {
         String code = "500";
         String msg = "系统异常";
         String []params = {ctrCode,gongZhong,gongZhang,tel};
-        code = SendMsgUtil.sendMsg("3" , params ,phone);
+        code = SendMsgUtil.sendMsg("2" , params ,phone);
         if ("200".equals(code)){
             msg = "发送成功";
         }
@@ -57,8 +57,9 @@ public class PcApiService {
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
+        date = String.format(date, "yyyy-MM-dd");
         String []params = {ctrCode,date,exDir,tel};
-        code = SendMsgUtil.sendMsg("4" , params ,phone);
+        code = SendMsgUtil.sendMsg("3" , params ,phone);
         if ("200".equals(code)){
             msg = "发送成功";
         }
