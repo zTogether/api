@@ -118,8 +118,8 @@ public class SendMsgUtil {
 
 
     public static void main(String args[]) {
-        String []params = {"1234"};
-        String code = sendMsg("0",params,"15335194425");
+        String []params = {"2018000111","2018-10-21","葛伟亮","15250992995"};
+        String code = sendMsg("3",params,"15250992995");
         if ("200".equals(code)){
             System.out.println("发送成功");
         } else {
