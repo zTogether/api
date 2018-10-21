@@ -20,6 +20,8 @@ public class SendMsgUtil {
     // 短信模板ID，需要在短信应用中申请
     private static final int templateId1 = 193979; //验证码短信模板ID
     private static final int templateId2 = 203858;//礼品码短信模板ID
+    private static final int templateId3= 213921; //通知执行员派单成功短信模板ID
+    private static final int templateId4 = 213919;//抢单成功提醒短信模板ID
     // 签名
     private static final String smsSign = "江苏轩辕装饰工程有限公司"; // NOTE: 这里的签名"腾讯云"只是一个示例，真实的签名需要在短信控制台中申请，另外签名参数使用的是`签名内容`，而不是`签名ID`
     // 需要发送短信的手机号码
@@ -34,7 +36,7 @@ public class SendMsgUtil {
      * @param: [verificationCode, phone],sendType(0：短信验证码   1：礼品码)
      * @return: java.lang.String
      */
-    public static String sendMsg(String sendType ,String verificationCode ,String phone){
+    public static String sendMsg(String sendType ,String []params ,String phone){
         //定义code初始值
         String code = "500";
         String msg = "发送失败";
@@ -44,8 +46,11 @@ public class SendMsgUtil {
                 templateId = templateId1;
             } else if ("1".equals(sendType)){
                 templateId = templateId2;
+            } else if ("2".equals(sendType)){
+                templateId = templateId3;
+            } else if ("3".equals(sendType)){
+                templateId = templateId4;
             }
-            String[] params = {verificationCode};
             SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
             SmsSingleSenderResult result = ssender.sendWithParam("86", phone, templateId, params, smsSign, "", "");  // 签名参数未提供或者为空时，会使用默认签名发送短信
             JSONObject resultJson = JSON.parseObject(result.toString());
@@ -113,7 +118,8 @@ public class SendMsgUtil {
 
 
     public static void main(String args[]) {
-        String code = sendMsg("0","1234","15335194425");
+        String []params = {"1234"};
+        String code = sendMsg("0",params,"15335194425");
         if ("200".equals(code)){
             System.out.println("发送成功");
         } else {

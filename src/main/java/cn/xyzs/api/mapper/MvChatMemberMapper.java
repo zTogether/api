@@ -48,7 +48,7 @@ public interface MvChatMemberMapper extends Mapper<MvChatMember> {
                 SELECT("GROUP_ID," +
                         "USER_ID," +
                         "USER_ROLE_NAME," +
-                        "TO_CHAR(ADD_TIME,'yyyy-MM-dd HH24:mi:ss') ADD_TIME," +
+                        "TO_CHAR(ADD_TIME,'yyyy-MM-dd HH24:mi:ss') ADD_TIME" +
                         "");
                 FROM("MV_CHAT_MEMBER");
                 if (mvChatMember.getGroupId() != null && !"".equals(mvChatMember.getGroupId())){
@@ -120,6 +120,67 @@ public interface MvChatMemberMapper extends Mapper<MvChatMember> {
             "</script>")
     public List<Map<String ,Object>> getChatMemberInfoLsitByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
+    /**
+     * 根据userId获取聊天群(分页)
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/19 14:51
+     * @param: [userId, startNum, endNum]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT B.* FROM ( SELECT A.*, ROWNUM RN \n" +
+            "FROM ( \n" +
+            "\tSELECT \n" +
+            "\t\tmcm.GROUP_ID,\n" +
+            "\t\tmcm.USER_ID,\n" +
+            "\t\tmcm.USER_ROLE_NAME,\n" +
+            "\t\tTO_CHAR(mcm.ADD_TIME,'yyyy-MM-dd HH24:mi:ss') ADD_TIME,\n" +
+            "\t\txci.CTR_NAME,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_CODE\n" +
+            "\tFROM \n" +
+            "\t\tMV_CHAT_MEMBER mcm,\n" +
+            "\t\tMV_CHAT_GROUP mcg,\n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tWHERE mcm.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
+            "\tAND mcm.GROUP_ID = mcg.GROUP_ID\n" +
+            "\tAND mcg.CTR_CODE = xci.CTR_CODE\n" +
+            "\t) A  \n" +
+            ") B\n" +
+            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> getChatGroupListByUserIdLimit(@Param("userId") String userId ,@Param("startNum") String startNum ,@Param("endNum") String endNum) throws SQLException;
 
+    /**
+     * 根据条件和userId获取用户群组
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/19 15:17
+     * @param: [userId, condition]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT * FROM (\n" +
+            "\tSELECT \n" +
+            "\t\tmcm.GROUP_ID,\n" +
+            "\t\tmcm.USER_ID,\n" +
+            "\t\tmcm.USER_ROLE_NAME,\n" +
+            "\t\tTO_CHAR(mcm.ADD_TIME,'yyyy-MM-dd HH24:mi:ss') ADD_TIME,\n" +
+            "\t\txci.CTR_NAME,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_CODE\t\n" +
+            "\tFROM \n" +
+            "\t\tMV_CHAT_MEMBER mcm,\n" +
+            "\t\tMV_CHAT_GROUP mcg,\n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tWHERE mcm.GROUP_ID = mcg.GROUP_ID\n" +
+            "\tAND mcg.CTR_CODE = xci.CTR_CODE\n" +
+            "\tAND mcm.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
+            ") A\n" +
+            "WHERE A.CTR_CODE = #{condition,jdbcType=VARCHAR}\n" +
+            "OR A.CTR_NAME = #{condition,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> getChatGroupByConditionAndUserId(@Param("userId") String userId ,@Param("condition") String condition) throws SQLException;
 
 }

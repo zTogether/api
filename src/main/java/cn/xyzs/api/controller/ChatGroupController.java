@@ -42,4 +42,46 @@ public class ChatGroupController {
     public Map<String ,Object> getGrConstructionSiteByCondition(String grId , String condition ){
         return chatGroupService.getGrConstructionSiteByCondition(grId,condition);
     }
+
+    /**
+     * 获取用户所属的所有聊天分组
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/18 17:56
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getChatGroupByUserId")
+    public Map<String ,Object> getChatGroupByUserId(String userId) {
+        return chatGroupService.getChatGroupByUserId(userId);
+    }
+
+    /**
+     * 根据userId获取聊天群(分页)
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/19 14:56
+     * @param: [userId, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getChatGroupListByUserIdLimit")
+    public Map<String ,Object> getChatGroupListByUserIdLimit(String userId , String startNum , String endNum) {
+        return chatGroupService.getChatGroupListByUserIdLimit(userId,startNum,endNum);
+    }
+
+    /**
+     * 根据条件和userId获取用户群组
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/19 15:20
+     * @param: [userId, condition]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getChatGroupByConditionAndUserId")
+    public Map<String ,Object> getChatGroupByConditionAndUserId(String userId , String condition) {
+        return chatGroupService.getChatGroupByConditionAndUserId(userId,condition);
+    }
 }

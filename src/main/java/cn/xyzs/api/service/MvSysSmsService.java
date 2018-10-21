@@ -33,7 +33,8 @@ public class MvSysSmsService {
         try {
             //发送短信（sendResultCode = 200 为发送成功）
             String verificationCode = SendMsgUtil.getVerificationCode();
-            String sendResultCode = SendMsgUtil.sendMsg(sendType,verificationCode ,phone);
+            String []params = {verificationCode};
+            String sendResultCode = SendMsgUtil.sendMsg(sendType,params ,phone);
             //如果发送成功
             if ("200".equals(sendResultCode)){
                 MvSysSms mvSysSms = new MvSysSms();

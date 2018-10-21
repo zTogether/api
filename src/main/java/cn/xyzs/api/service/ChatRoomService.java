@@ -23,7 +23,7 @@ public class ChatRoomService {
     private MvChatMemberMapper mvChatMemberMapper;
 
     /**
-     *
+     * 根据ctrCode获取所有服务人员信息
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/4 9:21
