@@ -1,6 +1,8 @@
 package cn.xyzs.api.service;
 
+import cn.xyzs.api.mapper.MvSysSmsMapper;
 import cn.xyzs.api.mapper.XyPgMapper;
+import cn.xyzs.api.pojo.MvSysSms;
 import cn.xyzs.api.util.SendMsgUtil;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ import java.util.Map;
 public class PcApiService {
     @Resource
     private XyPgMapper xyPgMapper;
+
+    @Resource
+    private MvSysSmsMapper mvSysSmsMapper;
 
     public Map<String ,Object> sendGiftCode(String phone,String giftCode){
         Map<String, Object> resultMap = new HashMap<>();
@@ -52,7 +57,27 @@ public class PcApiService {
        code1 = SendMsgUtil.sendMsg("2" , params1 ,zxyTel);
        code2 = SendMsgUtil.sendMsg("3",params2,grTel);
        if ("200".equals(code1)&&"200".equals(code2)){
+           //如果发送成功
            msg = "发送成功";
+           try {
+               if ("200".equals(code1)){
+                   MvSysSms mvSysSms = new MvSysSms();
+                   mvSysSms.setTel(zxyTel);
+                   mvSysSms.setSmsContent("您好！"+ctrCode+"（档案号）"+gzName+"已成功派单，工长"+grName+"，电话"+grTel+"，请您尽快联系交底！");
+                   mvSysSms.setSendStatus(code1);
+                   mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
+               } else if ("200".equals(code2)){
+                   MvSysSms mvSysSms = new MvSysSms();
+                   mvSysSms.setTel(zxyTel);
+                   mvSysSms.setSmsContent("恭喜您抢单成功！档案号"+ctrCode+"，执行总监"+zxyName+"，电话"+zxyTel+"，请尽快联系交底！");
+                   mvSysSms.setSendStatus(code2);
+                   mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
+               }
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+
+
        }
        resultMap.put("code1",code1);
        resultMap.put("code2",code2);
