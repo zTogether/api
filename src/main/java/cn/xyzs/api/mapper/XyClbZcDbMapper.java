@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface XyClbZcDbMapper{
 
@@ -114,4 +115,11 @@ public interface XyClbZcDbMapper{
             "\txczd.ZC_CODE = #{zcCode,jdbcType=VARCHAR}" +
             "</script>")
     public String getZcVersion (@Param("zcCode") String zcCode) throws SQLException;
+
+
+    @Select("<script>" +
+            "SELECT ZC_CODE,ZC_NAME,ZC_PRICE_OUT,ZC_BRAND FROM XY_CLB_ZC_DB SAMPLE(10)\n" +
+            "WHERE ROWNUM &lt; 31" +
+            "</script>")
+    public List<Map<String,Object>> getRandGoods() throws SQLException;
 }

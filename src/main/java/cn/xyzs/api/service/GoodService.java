@@ -817,4 +817,32 @@ public class GoodService {
         }
         return resultMap;
     }
+
+    /**
+     *
+     * @Description: 随机选取商品展示
+     * @author: GeWeiliang
+     * @date: 2018\10\24 0024 9:57
+     * @param: []
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> getRandGoods(){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> goods = xyClbZcDbMapper.getRandGoods();
+            obj.put("goodsRandList",goods);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }
