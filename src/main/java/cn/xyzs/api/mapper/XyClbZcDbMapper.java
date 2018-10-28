@@ -118,8 +118,8 @@ public interface XyClbZcDbMapper{
 
 
     @Select("<script>" +
-            "SELECT ZC_CODE,ZC_NAME,ZC_PRICE_OUT,ZC_BRAND FROM XY_CLB_ZC_DB SAMPLE(10)\n" +
-            "WHERE ROWNUM &lt; 31" +
+            "SELECT ZC_CODE,ZC_NAME,ZC_PRICE_OUT,ZC_BRAND FROM XY_CLB_ZC_DB SAMPLE(5)\n" +
+            "WHERE ROWNUM &lt; 70" +
             "</script>")
     public List<Map<String,Object>> getRandGoods() throws SQLException;
 }

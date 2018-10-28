@@ -71,4 +71,18 @@ public class ChatRoomController {
     public Map<String ,Object> getOfflineMessageByDateNode (String ctrCode ,String dateNode ,String selectFlag){
         return chatRoomService.getOfflineMessageByDateNode(ctrCode,dateNode,selectFlag);
     }
+
+    /**
+     * 根据CtrCode和Jd获取jdJs（在聊天页面使用）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/27 14:25
+     * @param: [ctrCode, jd]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getJdjsVByCtrCodeAndJd")
+    public Map<String ,Object> getJdjsVByCtrCodeAndJd(String ctrCode , String jd){
+        return chatRoomService.getJdjsVByCtrCodeAndJd(ctrCode,jd);
+    }
 }
