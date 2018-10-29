@@ -62,6 +62,10 @@ public class LoginService {
                 Map<String ,Object> checkMap = mvSysSmsService.checkVerificationCode(verificationCode,ctrTel);
                 String checkCode = String.valueOf(checkMap.get("code"));
                 if ("200".equals(checkCode)){
+                    XyCustomerInfo xyCustomerInfo = new XyCustomerInfo();
+                    xyCustomerInfo.setCtrTel(ctrTel);
+                    xyCustomerInfo = customerInfoMapper.selectOne(xyCustomerInfo);
+                    obj.put("xyCustomerInfo",xyCustomerInfo);
                     code = "200";
                     msg = "登陆成功";
                 } else if ("400".equals(checkCode)){

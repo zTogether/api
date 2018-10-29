@@ -35,49 +35,49 @@ public class PcApiService {
 
    public Map<String,Object> sendPgMsg(String pgId){
        Map<String, Object> resultMap = new HashMap<>();
-       Map<String,Object> obj = new HashMap<>();
        String code1 = "500";
        String code2 = "500";
        String msg = "系统异常";
        try{
-           obj = xyPgMapper.getPgMsg(pgId);
+           Integer isSendMsg = xyPgMapper.isSendMsg(pgId);
+           if (isSendMsg <= 1){
+               Map<String,Object> obj =  xyPgMapper.getPgMsg(pgId);
+               String ctrCode = obj.get("CTR_CODE").toString();
+               String zxyName = obj.get("ZXY_NAME").toString();
+               String zxyTel = obj.get("ZXY_TEL").toString();
+               String grName = obj.get("GR_NAME").toString();
+               String grTel = obj.get("GR_TEL").toString();
+               String gzName = obj.get("GZNAME").toString();
+
+               String []params1 = {ctrCode,gzName,grName,grTel};
+               String []params2 = {ctrCode,zxyName,zxyTel};
+
+               code1 = SendMsgUtil.sendMsg("2" , params1 ,zxyTel);
+               code2 = SendMsgUtil.sendMsg("3",params2,grTel);
+               if ("200".equals(code1)&&"200".equals(code2)){
+                   //如果发送成功
+                   msg = "发送成功";
+                   if ("200".equals(code1)){
+                       MvSysSms mvSysSms = new MvSysSms();
+                       mvSysSms.setTel(zxyTel);
+                       mvSysSms.setSmsContent("您好！"+ctrCode+"（档案号）"+gzName+"已成功派单，工长"+grName+"，电话"+grTel+"，请您尽快联系交底！");
+                       mvSysSms.setSendStatus(code1);
+                       mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
+                   }
+                   if ("200".equals(code2)){
+                       MvSysSms mvSysSms = new MvSysSms();
+                       mvSysSms.setTel(zxyTel);
+                       mvSysSms.setSmsContent("恭喜您抢单成功！档案号"+ctrCode+"，执行总监"+zxyName+"，电话"+zxyTel+"，请尽快联系交底！");
+                       mvSysSms.setSendStatus(code2);
+                       mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
+                   }
+               }
+           } else {
+               code1 = "200";
+               code2 = "200";
+           }
        }catch (SQLException e) {
            e.printStackTrace();
-       }
-       String ctrCode = obj.get("CTR_CODE").toString();
-       String zxyName = obj.get("ZXY_NAME").toString();
-       String zxyTel = obj.get("ZXY_TEL").toString();
-       String grName = obj.get("GR_NAME").toString();
-       String grTel = obj.get("GR_TEL").toString();
-       String gzName = obj.get("GZNAME").toString();
-
-       String []params1 = {ctrCode,gzName,grName,grTel};
-       String []params2 = {ctrCode,zxyName,zxyTel};
-
-       code1 = SendMsgUtil.sendMsg("2" , params1 ,zxyTel);
-       code2 = SendMsgUtil.sendMsg("3",params2,grTel);
-       if ("200".equals(code1)&&"200".equals(code2)){
-           //如果发送成功
-           msg = "发送成功";
-           try {
-               if ("200".equals(code1)){
-                   MvSysSms mvSysSms = new MvSysSms();
-                   mvSysSms.setTel(zxyTel);
-                   mvSysSms.setSmsContent("您好！"+ctrCode+"（档案号）"+gzName+"已成功派单，工长"+grName+"，电话"+grTel+"，请您尽快联系交底！");
-                   mvSysSms.setSendStatus(code1);
-                   mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
-               } else if ("200".equals(code2)){
-                   MvSysSms mvSysSms = new MvSysSms();
-                   mvSysSms.setTel(zxyTel);
-                   mvSysSms.setSmsContent("恭喜您抢单成功！档案号"+ctrCode+"，执行总监"+zxyName+"，电话"+zxyTel+"，请尽快联系交底！");
-                   mvSysSms.setSendStatus(code2);
-                   mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
-               }
-           } catch (SQLException e) {
-               e.printStackTrace();
-           }
-
-
        }
        resultMap.put("code1",code1);
        resultMap.put("code2",code2);

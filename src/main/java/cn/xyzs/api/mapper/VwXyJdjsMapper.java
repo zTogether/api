@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.VwXyJdjs;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -22,4 +23,24 @@ public interface VwXyJdjsMapper extends Mapper<VwXyJdjs> {
             "SELECT * FROM VW_XY_JDJS WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> getJdjs(String ctrCode) throws SQLException;
+
+    /**
+     * 根据CtrCode和Jd获取jdJs
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/27 14:23
+     * @param: [ctrCode, jd]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\tVW_XY_JDJS \n" +
+            "WHERE\n" +
+            "\tCTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "AND\n" +
+            "\tJD = #{jd,jdbcType=VARCHAR}" +
+            "</script>")
+    public Map<String ,Object> getJdjsVByCtrCodeAndJd(@Param("ctrCode") String ctrCode , @Param("jd")String jd) throws SQLException;
 }

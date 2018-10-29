@@ -67,8 +67,8 @@ public class ChatGroupController {
      */
     @ResponseBody
     @RequestMapping("/getChatGroupListByUserIdLimit")
-    public Map<String ,Object> getChatGroupListByUserIdLimit(String userId , String startNum , String endNum) {
-        return chatGroupService.getChatGroupListByUserIdLimit(userId,startNum,endNum);
+    public Map<String ,Object> getChatGroupListByUserIdLimit(String userId) {
+        return chatGroupService.getChatGroupListByUserIdLimit(userId);
     }
 
     /**

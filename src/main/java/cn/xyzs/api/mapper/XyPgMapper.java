@@ -490,9 +490,36 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\t\tXY_GCB_GRXX C,\n" +
             "\t\tXY_CUSTOMER_INFO D \n" +
             "\tWHERE A.PG_GR = C.GR_ID \n" +
-            "\tAND A.PG_ID = #{pgId}\n" +
+            "\tAND A.PG_ID = #{pgId,jdbcType=VARCHAR}\n" +
             "\tAND A.CTR_CODE = D.CTR_CODE \n" +
             "\tAND D.CTR_GCJL = B.USER_ID" +
             "</script>")
     public Map<String,Object> getPgMsg(String pgId) throws SQLException;
+
+    /**
+     * 判断是否需要发送信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/27 11:16
+     * @param: [pgId]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tCOUNT( 1 ) C_NUM \n" +
+            "FROM\n" +
+            "\tXY_PG A \n" +
+            "WHERE\n" +
+            "\tEXISTS (\n" +
+            "\tSELECT\n" +
+            "\t\t1 \n" +
+            "\tFROM\n" +
+            "\t\tXY_PG T \n" +
+            "\tWHERE\n" +
+            "\t\tT.PG_ID = #{pgId,jdbcType=VARCHAR} \n" +
+            "\t\tAND T.CTR_CODE = A.CTR_CODE \n" +
+            "\tAND T.PG_STAGE = A.PG_STAGE \n" +
+            "\t)" +
+            "</script>")
+    public Integer isSendMsg(String pgId) throws SQLException;
 }

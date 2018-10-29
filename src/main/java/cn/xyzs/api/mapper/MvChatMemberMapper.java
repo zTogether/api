@@ -121,7 +121,7 @@ public interface MvChatMemberMapper extends Mapper<MvChatMember> {
     public List<Map<String ,Object>> getChatMemberInfoLsitByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
     /**
-     * 根据userId获取聊天群(分页)
+     * 根据userId获取聊天群
      * @Description:
      * @author: zheng shuai
      * @date: 2018/10/19 14:51
@@ -129,28 +129,22 @@ public interface MvChatMemberMapper extends Mapper<MvChatMember> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT B.* FROM ( SELECT A.*, ROWNUM RN \n" +
-            "FROM ( \n" +
-            "\tSELECT \n" +
-            "\t\tmcm.GROUP_ID,\n" +
-            "\t\tmcm.USER_ID,\n" +
-            "\t\tmcm.USER_ROLE_NAME,\n" +
-            "\t\tTO_CHAR(mcm.ADD_TIME,'yyyy-MM-dd HH24:mi:ss') ADD_TIME,\n" +
-            "\t\txci.CTR_NAME,\n" +
-            "\t\txci.CTR_ADDR,\n" +
-            "\t\txci.CTR_CODE\n" +
-            "\tFROM \n" +
-            "\t\tMV_CHAT_MEMBER mcm,\n" +
-            "\t\tMV_CHAT_GROUP mcg,\n" +
-            "\t\tXY_CUSTOMER_INFO xci\n" +
-            "\tWHERE mcm.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
-            "\tAND mcm.GROUP_ID = mcg.GROUP_ID\n" +
-            "\tAND mcg.CTR_CODE = xci.CTR_CODE\n" +
-            "\t) A  \n" +
-            ") B\n" +
-            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
+            "SELECT DISTINCT\n" +
+            "\tmcm.GROUP_ID,\n" +
+            "\tmcm.USER_ID,\n" +
+            "\txci.CTR_NAME,\n" +
+            "\txci.CTR_ADDR,\n" +
+            "\txci.CTR_CODE\n" +
+            "FROM\n" +
+            "\tMV_CHAT_MEMBER mcm,\n" +
+            "\tMV_CHAT_GROUP mcg,\n" +
+            "\tXY_CUSTOMER_INFO xci \n" +
+            "WHERE\n" +
+            "\tmcm.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
+            "AND mcm.GROUP_ID = mcg.GROUP_ID \n" +
+            "AND mcg.CTR_CODE = xci.CTR_CODE " +
             "</script>")
-    public List<Map<String ,Object>> getChatGroupListByUserIdLimit(@Param("userId") String userId ,@Param("startNum") String startNum ,@Param("endNum") String endNum) throws SQLException;
+    public List<Map<String ,Object>> getChatGroupListByUserIdLimit(@Param("userId") String userId ) throws SQLException;
 
     /**
      * 根据条件和userId获取用户群组
@@ -161,25 +155,28 @@ public interface MvChatMemberMapper extends Mapper<MvChatMember> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT * FROM (\n" +
-            "\tSELECT \n" +
+            "SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT DISTINCT\n" +
             "\t\tmcm.GROUP_ID,\n" +
             "\t\tmcm.USER_ID,\n" +
-            "\t\tmcm.USER_ROLE_NAME,\n" +
-            "\t\tTO_CHAR(mcm.ADD_TIME,'yyyy-MM-dd HH24:mi:ss') ADD_TIME,\n" +
             "\t\txci.CTR_NAME,\n" +
             "\t\txci.CTR_ADDR,\n" +
-            "\t\txci.CTR_CODE\t\n" +
-            "\tFROM \n" +
+            "\t\txci.CTR_CODE \n" +
+            "\tFROM\n" +
             "\t\tMV_CHAT_MEMBER mcm,\n" +
             "\t\tMV_CHAT_GROUP mcg,\n" +
-            "\t\tXY_CUSTOMER_INFO xci\n" +
-            "\tWHERE mcm.GROUP_ID = mcg.GROUP_ID\n" +
-            "\tAND mcg.CTR_CODE = xci.CTR_CODE\n" +
-            "\tAND mcm.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
-            ") A\n" +
-            "WHERE A.CTR_CODE = #{condition,jdbcType=VARCHAR}\n" +
-            "OR A.CTR_NAME = #{condition,jdbcType=VARCHAR}" +
+            "\t\tXY_CUSTOMER_INFO xci \n" +
+            "\tWHERE\n" +
+            "\t\tmcm.GROUP_ID = mcg.GROUP_ID \n" +
+            "\t\tAND mcg.CTR_CODE = xci.CTR_CODE \n" +
+            "\t\tAND mcm.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
+            "\t) A \n" +
+            "WHERE\n" +
+            "\tA.CTR_CODE = #{condition,jdbcType=VARCHAR}\n" +
+            "\tOR A.CTR_NAME = #{condition,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getChatGroupByConditionAndUserId(@Param("userId") String userId ,@Param("condition") String condition) throws SQLException;
 

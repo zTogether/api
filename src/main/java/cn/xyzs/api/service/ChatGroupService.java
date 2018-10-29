@@ -114,13 +114,13 @@ public class ChatGroupService {
      * @param: [userId, startNum, endNum]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String ,Object> getChatGroupListByUserIdLimit(String userId , String startNum , String endNum) {
+    public Map<String ,Object> getChatGroupListByUserIdLimit(String userId) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
-            List<Map<String ,Object>> userHaveChatGroup = mvChatMemberMapper.getChatGroupListByUserIdLimit(userId,startNum,endNum);
+            List<Map<String ,Object>> userHaveChatGroup = mvChatMemberMapper.getChatGroupListByUserIdLimit(userId);
             obj.put("userHaveChatGroup",userHaveChatGroup);
             code = "200";
             msg = "验收成功";
