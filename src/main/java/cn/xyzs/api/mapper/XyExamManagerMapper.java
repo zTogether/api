@@ -26,9 +26,12 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT * FROM XY_QUESTION_MIND WHERE QUESTIONNO = #{questionNo}" +
+            "SELECT m.*,a.ANSWER empAnswer FROM XY_QUESTION_MIND m \n" +
+            "LEFT JOIN XY_EXAM_ANSWER a ON a.QUESTIONNO=m.QUESTIONNO AND a.EXAMCODE=#{examCode,jdbcType=VARCHAR} AND a.EMPNO=#{empNo,jdbcType=VARCHAR}\n" +
+            "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
-    public Map<String,Object> getMindQuestion(String questionNo) throws SQLException;
+    public Map<String,Object> getMindQuestion(@Param("questionNo") String questionNo,
+                                              @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
 
     /**
      *
@@ -39,9 +42,12 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT * FROM XY_QUESTION_FILL WHERE QUESTIONNO = #{questionNo}" +
+            "SELECT m.*,a.ANSWER empAnswer FROM XY_QUESTION_FILL m \n" +
+            "LEFT JOIN XY_EXAM_ANSWER a ON a.QUESTIONNO=m.QUESTIONNO AND a.EXAMCODE=#{examCode,jdbcType=VARCHAR} AND a.EMPNO=#{empNo,jdbcType=VARCHAR}\n" +
+            "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
-    public Map<String,Object> getFillQuestion(String questionNo) throws SQLException;
+    public Map<String,Object> getFillQuestion(@Param("questionNo") String questionNo,
+                                              @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
 
     /**
      *
@@ -52,9 +58,12 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT * FROM XY_QUESTION_Multi WHERE QUESTIONNO = #{questionNo}" +
+            "SELECT m.*,a.ANSWER empAnswer FROM XY_QUESTION_Multi m \n" +
+            "LEFT JOIN XY_EXAM_ANSWER a ON a.QUESTIONNO=m.QUESTIONNO AND a.EXAMCODE=#{examCode,jdbcType=VARCHAR} AND a.EMPNO=#{empNo,jdbcType=VARCHAR}\n" +
+            "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
-    public Map<String,Object> getMultiQuestion(String questionNo) throws SQLException;
+    public Map<String,Object> getMultiQuestion(@Param("questionNo") String questionNo,
+                                               @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
 
     /**
      *
@@ -65,9 +74,12 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT * FROM XY_QUESTION_YN WHERE QUESTIONNO = #{questionNo}" +
+            "SELECT m.*,a.ANSWER empAnswer FROM XY_QUESTION_YN m \n" +
+            "LEFT JOIN XY_EXAM_ANSWER a ON a.QUESTIONNO=m.QUESTIONNO AND a.EXAMCODE=#{examCode,jdbcType=VARCHAR} AND a.EMPNO=#{empNo,jdbcType=VARCHAR}\n" +
+            "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
-    public Map<String,Object> getYnQuestion(String questionNo) throws SQLException;
+    public Map<String,Object> getYnQuestion(@Param("questionNo") String questionNo,
+                                            @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
 
     @Insert("<script>" +
             "INSERT INTO XY_EXAM_ANSWER " +
@@ -106,4 +118,11 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "</script>")
     public void updateAnswer(@Param("examCode") String examCode,@Param("empNo") String empNo,
                              @Param("questionNo") String questionNo, @Param("answer") String answer) throws SQLException;
+
+    @Select("<script>" +
+            "SELECT * FROM XY_EXAM_ANSWER \n" +
+            "WHERE EXAMCODE=#{empCode,jdbcType=VARCHAR} AND EMPNO=#{empNo,jdbcType=VARCHAR} AND QUESTIONNO=#{questionNo,jdbcType=VARCHAR}  " +
+            "</script>")
+    public Map<String,Object> getMyAnswer(@Param("empCode") String examCode,
+                                                @Param("empNo") String empNo,@Param("questionNo") String questionNo);
 }

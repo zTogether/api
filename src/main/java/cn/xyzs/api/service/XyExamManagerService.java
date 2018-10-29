@@ -23,7 +23,7 @@ public class XyExamManagerService {
      * @param: [examCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> getExamPaper(String examCode){
+    public Map<String,Object> getExamPaper(String examCode,String empNo){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String msg = "系统异常";
@@ -42,19 +42,19 @@ public class XyExamManagerService {
                 String questionType = map.get("QUESTIONTYPE").toString();
                 String questionNo = map.get("QUESTIONNO").toString();
                 if ("2".equals(questionType)){
-                    Map<String,Object> question = xyExamManagerMapper.getMindQuestion(questionNo);
+                    Map<String,Object> question = xyExamManagerMapper.getMindQuestion(questionNo,examCode,empNo);
                     mindCount++;
                     mind.add(question);
                 }else if("1".equals(questionType)){
-                    Map<String,Object> question = xyExamManagerMapper.getMultiQuestion(questionNo);
+                    Map<String,Object> question = xyExamManagerMapper.getMultiQuestion(questionNo,examCode,empNo);
                     multiCount++;
                     multi.add(question);
                 }else if("0".equals(questionType)){
-                    Map<String,Object> question = xyExamManagerMapper.getYnQuestion(questionNo);
+                    Map<String,Object> question = xyExamManagerMapper.getYnQuestion(questionNo,examCode,empNo);
                     ynCount++;
                     yn.add(question);
                 }else {
-                    Map<String,Object> question = xyExamManagerMapper.getFillQuestion(questionNo);
+                    Map<String,Object> question = xyExamManagerMapper.getFillQuestion(questionNo,examCode,empNo);
                     fillCount++;
                     fill.add(question);
                 }

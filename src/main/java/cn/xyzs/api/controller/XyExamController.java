@@ -16,8 +16,8 @@ public class XyExamController {
 
     @ResponseBody
     @RequestMapping("/exam")
-    public Map<String,Object> getExamPaer(String examCode){
-        return xyExamManagerService.getExamPaper(examCode);
+    public Map<String,Object> getExamPaer(String examCode,String empNo){
+        return xyExamManagerService.getExamPaper(examCode,empNo);
     }
 
     @ResponseBody
