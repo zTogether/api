@@ -93,7 +93,6 @@ public class FileCommon {
 				map.put("serverpath", PropertiesUtil.getSourcingValueBykey("fileserver")+path+"/"+fileName+nametype);
 				in.close();
 			}
-
 		}
 		return map;
 	}
