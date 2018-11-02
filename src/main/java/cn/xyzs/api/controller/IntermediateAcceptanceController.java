@@ -127,18 +127,4 @@ public class IntermediateAcceptanceController {
         return intermediateAcceptanceSrevice.customerInspection(ctrCode,ckdFcType,custMark,isAgree);
     }
 
-    /**
-     * 根据ctrCode获取groupId
-     * @Description:
-     * @author: zheng shuai
-     * @date: 2018/10/27 10:07
-     * @param: [ctrCode]
-     * @return: java.util.Map<java.lang.String,java.lang.Object>
-     */
-    @ResponseBody
-    @RequestMapping("/getChatGroupId")
-    public Map<String ,Object> getChatGroupId(String ctrCode){
-        return intermediateAcceptanceSrevice.getChatGroupId(ctrCode);
-    }
-
 }
