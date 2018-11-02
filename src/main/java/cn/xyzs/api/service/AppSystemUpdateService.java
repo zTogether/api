@@ -2,6 +2,7 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.MvSysConfigMapper;
 import cn.xyzs.api.pojo.MvSysConfig;
+import cn.xyzs.api.util.PropertiesUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,13 +30,11 @@ public class AppSystemUpdateService {
         String code = "500";
         String msg = "系统异常";
         try{
-            MvSysConfig mvSysConfig = new MvSysConfig();
-            mvSysConfig.setParameterKey("APP_SYSTEM_VERSION");
-            String appSystemVersion = String.valueOf(mvSysConfigMapper.getMvSysConfig(mvSysConfig).get("PARAMETER_VALUE"));
+            String appSystemVersion = PropertiesUtil.getSourcingValueBykey("APP_SYSTEM_VERSION");
             obj.put("appSystemVersion",appSystemVersion);
             code = "200";
             msg = "成功";
-        }catch (SQLException e){
+        }catch (Exception e){
             e.printStackTrace();
         }finally {
             resultMap.put("code",code);

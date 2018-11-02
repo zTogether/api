@@ -316,4 +316,10 @@ public class GoodController {
     public Map<String,Object> deleteOrderListFree(String rowId){
         return goodService.deleteOrderListFree(rowId);
     }
+
+    @ResponseBody
+    @RequestMapping("/getRandGoods")
+    public Map<String,Object> getRandGoods(){
+        return goodService.getRandGoods();
+    }
 }

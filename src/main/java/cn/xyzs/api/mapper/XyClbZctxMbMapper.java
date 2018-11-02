@@ -24,6 +24,30 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
     @Select("<script>SELECT * FROM XY_CLB_ZCTX_MB_VR WHERE VR_ID=#{vrId,jdbcType=VARCHAR}</script>")
     public Map<String,Object> vrDetail(@Param("vrId") String vrId) throws SQLException;
 
+    /**
+     * 首页展示的整装套系数据随机获取8个
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/28 10:10
+     * @param: []
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tVR_ID, \n" +
+            "\tVR_NAME, \n" +
+            "\tVR_TYPE, \n" +
+            "\tVR_STYLE, \n" +
+            "\tVR_URL, \n" +
+            "\tVR_PIC, \n" +
+            "\tVR_SPEC\n" +
+            "FROM\n" +
+            "\tXY_CLB_ZCTX_MB_VR sample(50)\n" +
+            "WHERE\n" +
+            "\tROWNUM <![CDATA[<]]> 9" +
+            "</script>")
+    public List<Map<String ,Object>> getRandZctx() throws SQLException;
+
     /***
      *
      * @Description: 套系材料列表

@@ -56,4 +56,18 @@ public class WholeDecoratesController {
         return wholeDecoratesService.getZctxMbInfo(vrId);
     }
 
+    /**
+     * 首页展示的整装套系数据随机获取8个
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/28 10:13
+     * @param: []
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getRandZctx")
+    public Map<String ,Object> getRandZctx(){
+        return wholeDecoratesService.getRandZctx();
+    }
+
 }

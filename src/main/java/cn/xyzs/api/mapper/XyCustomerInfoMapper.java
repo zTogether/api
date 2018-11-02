@@ -371,30 +371,6 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
     public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition,@Param("roleId") String roleId) throws SQLException;
 
     /**
-     * 根据ctrCode获取所有服务人员
-     * @Description:
-     * @author: zheng shuai
-     * @date: 2018/10/3 9:22
-     * @param: [ctrCode]
-     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
-     */
-    @Select("<script>" +
-            "SELECT\n" +
-            "\txui.CTR_WAITER,\n" +
-            "\txui.CTR_SJS,\n" +
-            "\txui.CTR_GCJL,\n" +
-            "\txui.CTR_CLDD,\n" +
-            "\txui.CTR_AREA_MA,\n" +
-            "\txui.CTR_OWENER\n" +
-            "FROM\n" +
-            "\tXY_CUSTOMER_INFO xui \n" +
-            "WHERE\n" +
-            "\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
-            "</script>")
-    public Map<String ,String> getServicePersonalByCtrCode(String ctrCode) throws SQLException;
-
-
-    /**
      *
      * @Description: 根据档案号查询RG_VER
      * @author: GeWeiliang
@@ -422,4 +398,205 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\tAND xc.CTR_CODE = #{ctrCode,jdbcType=VARCHAR,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String,Object> getRgVer(@Param("ctrCode") String ctrCode) throws SQLException;
+
+
+    /**
+     * 根据ctrCode获取聊天群组的信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/18 16:19
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT * FROM (\n" +
+            "SELECT \n" +
+            "\t\txui.CTR_CODE USER_ID, \n" +
+            "\t\t'客户'  USER_ROLE_NAME,\n" +
+            "\t\txui.CTR_NAME USER_NAME\n" +
+            "\tFROM XY_CUSTOMER_INFO xui\n" +
+            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL" +
+            "\tSELECT \n" +
+            "\t\txui.CTR_WAITER USER_ID,\n" +
+            "\t\t'家装顾问' USER_ROLE_NAME,\n" +
+            "\t\txu.USER_NAME\n" +
+            "\tFROM XY_CUSTOMER_INFO xui\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xui.CTR_WAITER = xu.USER_ID\n" +
+            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT \n" +
+            "\t\txui.CTR_SJS USER_ID,\n" +
+            "\t\t'设计师' USER_ROLE_NAME,\n" +
+            "\t\txu.USER_NAME\n" +
+            "\tFROM XY_CUSTOMER_INFO xui\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xui.CTR_SJS = xu.USER_ID\n" +
+            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT \n" +
+            "\t\txui.CTR_GCJL USER_ID,\n" +
+            "\t\t'执行员' USER_ROLE_NAME,\n" +
+            "\t\txu.USER_NAME\n" +
+            "\tFROM XY_CUSTOMER_INFO xui\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xui.CTR_GCJL = xu.USER_ID\n" +
+            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT \n" +
+            "\t\txui.CTR_CLDD USER_ID,\n" +
+            "\t\t'材料督导' USER_ROLE_NAME,\n" +
+            "\t\txu.USER_NAME\n" +
+            "\tFROM XY_CUSTOMER_INFO xui\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xui.CTR_CLDD = xu.USER_ID\n" +
+            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT \n" +
+            "\t\txui.CTR_AREA_MA USER_ID,\n" +
+            "\t\t'区域老总' USER_ROLE_NAME,\n" +
+            "\t\txu.USER_NAME\n" +
+            "\tFROM XY_CUSTOMER_INFO xui\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xui.CTR_AREA_MA = xu.USER_ID\n" +
+            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT \n" +
+            "\t\txui.CTR_OWENER USER_ID,\n" +
+            "\t\t'合约成效人' USER_ROLE_NAME,\n" +
+            "\t\txu.USER_NAME \n" +
+            "\tFROM XY_CUSTOMER_INFO xui\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xui.CTR_OWENER = xu.USER_ID\n" +
+            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT \n" +
+            "\t\txgg.GR_ID USER_ID,\n" +
+            "\t\tCONCAT(\n" +
+            "\t\t(SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = xp.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ),\n" +
+            "\t\t'工长' ) USER_ROLE_NAME,\n" +
+            "\t\txgg.GR_NAME USER_NAME\n" +
+            "\tFROM XY_PG xp \n" +
+            "\tRIGHT JOIN XY_GCB_GRXX xgg\n" +
+            "\tON xp.PG_GR = xgg.GR_ID\n" +
+            "\tWHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            ") A\n" +
+            "WHERE A.USER_ID IS NOT NULL" +
+            "</script>")
+    public List<Map<String ,Object>> getChatMemberInfoLsitByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
+
+    /**
+     * 根据手机号获取所有群组
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/31 12:02
+     * @param: [userTel]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT DISTINCT\n" +
+            "\tA.GROUP_ID,\n" +
+            "\tA.CTR_CODE,\n" +
+            "\tA.CTR_ADDR,\n" +
+            "\tA.CTR_NAME\n" +
+            "FROM (\n" +
+            "\tSELECT \n" +
+            "\t\txci.CTR_CODE GROUP_ID,\n" +
+            "\t\txci.CTR_CODE,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_NAME\n" +
+            "\tFROM \n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xu.USER_TEL = #{userTel,jdbcType=VARCHAR}\n" +
+            "\tWHERE xci.CTR_WAITER = xu.USER_ID\n" +
+            "\tOR xci.CTR_SJS = xu.USER_ID\n" +
+            "\tOR xci.CTR_GCJL = xu.USER_ID\n" +
+            "\tOR xci.CTR_CLDD = xu.USER_ID\n" +
+            "\tOR xci.CTR_AREA_MA = xu.USER_ID\n" +
+            "\tOR xci.CTR_OWENER = xu.USER_ID\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT\n" +
+            "\t\txci.CTR_CODE GROUP_ID,\n" +
+            "\t\txci.CTR_CODE,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_NAME\n" +
+            "\tFROM \n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tWHERE xci.CTR_TEL = #{userTel,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT\n" +
+            "\t\txci.CTR_CODE GROUP_ID,\n" +
+            "\t\txci.CTR_CODE,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_NAME\n" +
+            "\tFROM \n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tLEFT JOIN XY_PG xp\n" +
+            "\tON xci.CTR_CODE = xp.CTR_CODE\n" +
+            "\tLEFT JOIN XY_GCB_GRXX xgg\n" +
+            "\tON xp.PG_GR = xgg.GR_ID\n" +
+            "\tWHERE xgg.GR_TEL = #{userTel,jdbcType=VARCHAR}\n" +
+            ") A" +
+            "</script>")
+    public List<Map<String ,Object>> getChatGroupByUserTel(String userTel) throws SQLException;
+
+    /**
+     * 根据条件获取分组
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/10/31 12:47
+     * @param: [userTel, condition]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT DISTINCT\n" +
+            "\tA.GROUP_ID,\n" +
+            "\tA.CTR_CODE,\n" +
+            "\tA.CTR_ADDR,\n" +
+            "\tA.CTR_NAME\n" +
+            "FROM (\n" +
+            "\tSELECT \n" +
+            "\t\txci.CTR_CODE GROUP_ID,\n" +
+            "\t\txci.CTR_CODE,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_NAME\n" +
+            "\tFROM \n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tLEFT JOIN XY_USER xu\n" +
+            "\tON xu.USER_TEL =  #{userTel,jdbcType=VARCHAR}\n" +
+            "\tWHERE xci.CTR_WAITER = xu.USER_ID\n" +
+            "\tOR xci.CTR_SJS = xu.USER_ID\n" +
+            "\tOR xci.CTR_GCJL = xu.USER_ID\n" +
+            "\tOR xci.CTR_CLDD = xu.USER_ID\n" +
+            "\tOR xci.CTR_AREA_MA = xu.USER_ID\n" +
+            "\tOR xci.CTR_OWENER = xu.USER_ID\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT\n" +
+            "\t\txci.CTR_CODE GROUP_ID,\n" +
+            "\t\txci.CTR_CODE,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_NAME\n" +
+            "\tFROM \n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tWHERE xci.CTR_TEL =  #{userTel,jdbcType=VARCHAR}\n" +
+            "\tUNION ALL\n" +
+            "\tSELECT\n" +
+            "\t\txci.CTR_CODE GROUP_ID,\n" +
+            "\t\txci.CTR_CODE,\n" +
+            "\t\txci.CTR_ADDR,\n" +
+            "\t\txci.CTR_NAME\n" +
+            "\tFROM \n" +
+            "\t\tXY_CUSTOMER_INFO xci\n" +
+            "\tLEFT JOIN XY_PG xp\n" +
+            "\tON xci.CTR_CODE = xp.CTR_CODE\n" +
+            "\tLEFT JOIN XY_GCB_GRXX xgg\n" +
+            "\tON xp.PG_GR = xgg.GR_ID\n" +
+            "\tWHERE xgg.GR_TEL = #{userTel,jdbcType=VARCHAR}\n" +
+            ") A\n" +
+            "WHERE A.CTR_CODE =  #{condition,jdbcType=VARCHAR}\n" +
+            "OR A.CTR_NAME =  #{condition,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> getChatGroupByConditionAndUserTel(@Param("userTel") String userTel,@Param("condition") String condition) throws SQLException;
 }

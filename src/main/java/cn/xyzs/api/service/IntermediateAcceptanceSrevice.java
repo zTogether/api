@@ -1,10 +1,7 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.*;
-import cn.xyzs.api.pojo.XyBjdMain;
-import cn.xyzs.api.pojo.XyPg;
-import cn.xyzs.api.pojo.XyPgWaiter;
-import cn.xyzs.api.pojo.XyPgYs;
+import cn.xyzs.api.pojo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +44,7 @@ public class IntermediateAcceptanceSrevice {
 
     @Resource
     private XyClbFcCkdMainMapper xyClbFcCkdMainMapper;
+
 
     /**
      * 根据ctrCode获取派工验收表里的信息
@@ -97,6 +95,7 @@ public class IntermediateAcceptanceSrevice {
             } else {
                 if ("10".equals(ysGz) || "21".equals(ysGz)){
                     String sysDate = dateMapper.getSysDate();
+                    System.out.println(sysDate);
                     xyPgYsMapper.addYanshou(ctrCode,ysGz,opUserId,"1",zxyMark,null,sysDate);
                     xyPgWaiterMapper.updateYsDate(ctrCode,sysDate,ysGz);
                 } else   {
@@ -369,4 +368,5 @@ public class IntermediateAcceptanceSrevice {
     private void upadteYsStatu(String custMark, String ctrCode, String ysGz) throws SQLException{
         xyPgYsMapper.updateYanShouYsStatuAndCustMark(custMark,ctrCode,ysGz,"2");
     }
+
 }

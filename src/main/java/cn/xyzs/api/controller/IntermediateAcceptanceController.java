@@ -126,4 +126,5 @@ public class IntermediateAcceptanceController {
     public Map<String ,Object> customerInspection(String ctrCode,String ckdFcType,String custMark,String isAgree){
         return intermediateAcceptanceSrevice.customerInspection(ctrCode,ckdFcType,custMark,isAgree);
     }
+
 }

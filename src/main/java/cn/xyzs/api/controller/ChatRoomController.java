@@ -31,44 +31,16 @@ public class ChatRoomController {
     }
 
     /**
-     * 添加聊天记录
+     * 根据CtrCode和Jd获取jdJs（在聊天页面使用）
      * @Description:
      * @author: zheng shuai
-     * @date: 2018/10/4 16:49
-     * @param: [ctrCode, userId, chatingContent, contentType]
-     * @return: void
-     */
-    @ResponseBody
-    @RequestMapping("/addChattingRecords")
-    public Map<String ,Object> addChattingRecords (String ctrCode , String userId ,String sendDate ,String chatingContent , String contentType){
-        return chatRoomService.addChattingRecords(ctrCode,userId,sendDate,chatingContent,contentType);
-    }
-
-    /**
-     * 获取离线消息
-     * @Description:
-     * @author: zheng shuai
-     * @date: 2018/10/4 17:07
-     * @param: [lastSendDate, ctrCode]
+     * @date: 2018/10/27 14:25
+     * @param: [ctrCode, jd]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @ResponseBody
-    @RequestMapping("/getOfflineMessage")
-    public Map<String ,Object> getOfflineMessage (String userId ,String ctrCode , String [] sendDates){
-        return chatRoomService.getOfflineMessage(userId,ctrCode,sendDates);
-    }
-
-    /**
-     * 获取离线消息(2)
-     * @Description:
-     * @author: zheng shuai
-     * @date: 2018/10/4 17:07
-     * @param: [lastSendDate, ctrCode]
-     * @return: java.util.Map<java.lang.String,java.lang.Object>
-     */
-    @ResponseBody
-    @RequestMapping("/getOfflineMessageByDateNode")
-    public Map<String ,Object> getOfflineMessageByDateNode (String ctrCode ,String dateNode ,String selectFlag){
-        return chatRoomService.getOfflineMessageByDateNode(ctrCode,dateNode,selectFlag);
+    @RequestMapping("/getJdjsVByCtrCodeAndJd")
+    public Map<String ,Object> getJdjsVByCtrCodeAndJd(String ctrCode , String jd){
+        return chatRoomService.getJdjsVByCtrCodeAndJd(ctrCode,jd);
     }
 }
