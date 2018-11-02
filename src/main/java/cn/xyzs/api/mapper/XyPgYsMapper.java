@@ -74,7 +74,7 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "</script>")
     public void addYanshou(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,
                            @Param("opUserid")String opUserid,@Param("ysStatu")String ysStatu,@Param("zxyMark")String zxyMark,
-                           @Param("custMark")String custMark, @Param("ysdate")String ysDate) throws SQLException;
+                           @Param("custMark")String custMark, @Param("ysDate")String ysDate) throws SQLException;
 
     /**
      *
@@ -168,7 +168,7 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
      * @return: java.lang.String
      */
     @Select("<script>" +
-            "SELECT xpy.ys_statu FROM XY_PG_YS xpy WHERE xpy.ctr_code = #{ctrCode,jdbcType=VARCHAR} AND xpy.ys_gz = #{ysGz,jdbcType=VARCHAR}" +
+            "SELECT xpy.ys_statu FROM XY_PG_YS xpy WHERE xpy.ctr_code = #{ctrCode,jdbcType=VARCHAR} AND xpy.ys_gz = #{ysGz,jdbcType=VARCHAR} AND xpy.YS_STATU = 0" +
             "</script>")
     public String gteYsStatu(@Param("ctrCode") String ctrCode ,@Param("ysGz") String ysGz) throws SQLException;
 }

@@ -95,6 +95,7 @@ public class IntermediateAcceptanceSrevice {
             } else {
                 if ("10".equals(ysGz) || "21".equals(ysGz)){
                     String sysDate = dateMapper.getSysDate();
+                    System.out.println(sysDate);
                     xyPgYsMapper.addYanshou(ctrCode,ysGz,opUserId,"1",zxyMark,null,sysDate);
                     xyPgWaiterMapper.updateYsDate(ctrCode,sysDate,ysGz);
                 } else   {
