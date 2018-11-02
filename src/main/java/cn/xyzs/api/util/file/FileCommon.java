@@ -2,12 +2,16 @@ package cn.xyzs.api.util.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import cn.xyzs.api.util.FtpUtil;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -57,5 +61,40 @@ public class FileCommon {
 			} 
 		}  
 		return map;  
+	}
+
+	public static Map<String,Object> uploadFile1(HttpServletRequest request, HttpServletResponse response, String path, String name) throws Exception {
+		response.setContentType("text/html; charset=GBK");
+		Map<String, Object> map = new HashMap<String, Object>();
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		//将requset请求里面的内容转换成 FileItem 集合
+		List<FileItem> fileItems = upload.parseRequest(request);
+		//循环获取文件
+		Map<String, Object> formMap = new HashMap<>();
+		String fileName = "";
+		for (FileItem fileitem:fileItems) {
+			//判断是否是表单属性
+			if(fileitem.isFormField()){
+				formMap.put(fileitem.getFieldName(),fileitem.getString("UTF-8"));
+				map.put("formData", formMap);
+				System.out.println(fileitem.getFieldName()+":"+fileitem.getString("UTF-8"));
+				if("fileName".equals(fileitem.getFieldName())) {
+					fileName = fileitem.getString("UTF-8");
+				}
+			}else{
+
+				InputStream in =  fileitem.getInputStream();
+				String nametype = fileitem.getName();
+				nametype = nametype.substring(nametype.lastIndexOf("."));
+				FtpUtil.uploadFile(path, fileName+nametype, in);
+				map.put("filename", fileName+nametype);
+				map.put("filepath", path+"/"+fileName+nametype);
+				map.put("serverpath", PropertiesUtil.getSourcingValueBykey("fileserver")+path+"/"+fileName+nametype);
+				in.close();
+			}
+
+		}
+		return map;
 	}
 }
