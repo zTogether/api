@@ -83,7 +83,6 @@ public class FileCommon {
 					fileName = fileitem.getString("UTF-8");
 				}
 			}else{
-
 				InputStream in =  fileitem.getInputStream();
 				String nametype = fileitem.getName();
 				nametype = nametype.substring(nametype.lastIndexOf("."));
