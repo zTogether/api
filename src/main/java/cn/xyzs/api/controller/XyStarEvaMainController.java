@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/starEva")
+@RequestMapping("/App/starEva")
 public class XyStarEvaMainController {
     @Resource
     private XyStarEvaMainService xyStarEvaMainService;

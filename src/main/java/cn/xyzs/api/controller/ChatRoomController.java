@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/chatRoom")
+@RequestMapping("/App/chatRoom")
 public class ChatRoomController {
 
     @Resource
@@ -43,4 +42,5 @@ public class ChatRoomController {
     public Map<String ,Object> getJdjsVByCtrCodeAndJd(String ctrCode , String jd){
         return chatRoomService.getJdjsVByCtrCodeAndJd(ctrCode,jd);
     }
+
 }

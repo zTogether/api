@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping("/App/login")
 public class LoginController {
 
     @Resource

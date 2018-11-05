@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/CustomerInfo")
+@RequestMapping("/App/CustomerInfo")
 public class XyCustomerInfoController {
 
     @Resource
