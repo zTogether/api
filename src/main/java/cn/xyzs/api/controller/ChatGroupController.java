@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/chatGroup")
+@RequestMapping("/App/chatGroup")
 public class ChatGroupController {
 
     @Resource

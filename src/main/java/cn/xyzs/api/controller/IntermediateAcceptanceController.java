@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/IntermediateAcceptance")
+@RequestMapping("/App/IntermediateAcceptance")
 public class IntermediateAcceptanceController {
 
     @Resource

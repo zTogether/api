@@ -2,7 +2,6 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -116,4 +115,5 @@ public class ChatRoomService {
         }
         return resultMap;
     }
+
 }

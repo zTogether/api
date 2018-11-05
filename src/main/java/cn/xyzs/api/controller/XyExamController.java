@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/exam")
+@RequestMapping("/App/exam")
 public class XyExamController {
     @Resource
     private XyExamManagerService xyExamManagerService;

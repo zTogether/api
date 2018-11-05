@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/openTender")
+@RequestMapping("/App/openTender")
 public class OpenTenderController {
 
     @Resource

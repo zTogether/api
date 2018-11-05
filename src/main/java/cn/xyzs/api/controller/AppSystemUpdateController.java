@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/appSystemUpdate")
+@RequestMapping("/App/appSystemUpdate")
 public class AppSystemUpdateController{
 
     @Resource

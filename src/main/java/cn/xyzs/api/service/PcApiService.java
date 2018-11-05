@@ -66,7 +66,7 @@ public class PcApiService {
                    }
                    if ("200".equals(code2)){
                        MvSysSms mvSysSms = new MvSysSms();
-                       mvSysSms.setTel(zxyTel);
+                       mvSysSms.setTel(grTel);
                        mvSysSms.setSmsContent("恭喜您抢单成功！档案号"+ctrCode+"，执行总监"+zxyName+"，电话"+zxyTel+"，请尽快联系交底！");
                        mvSysSms.setSendStatus(code2);
                        mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
