@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/App/redis")
 public class RedisAction {
 
     @Resource

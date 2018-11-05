@@ -9,7 +9,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @Component
 public class RedisConnectionPool {
     //Redis服务器IP
-    private static String IP = "192.168.10.243";
+    private static String IP = "192.168.10.242";
 
     //Redis的端口号
     private static int PORT = 6379;
