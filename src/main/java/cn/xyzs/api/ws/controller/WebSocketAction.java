@@ -37,7 +37,6 @@ public class WebSocketAction {
         logger.info("接收到了"+message.getUserid()+"信息" + message.getContext()+"类型"+message.getMsgtype());
         //存储redis，并且推送给所有群组
         redisOperation.lset(message.getGroupid(),JSON.toJSONString(message));
-
         sendService.templateTest(message.getGroupid(),JSON.toJSONString(message));
     }
 

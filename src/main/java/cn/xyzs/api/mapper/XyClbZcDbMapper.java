@@ -33,7 +33,7 @@ public interface XyClbZcDbMapper{
             "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT >= #{minimum,jdbcType=VARCHAR}]]>\n" +
             "\t\tAND\n" +
             "\t\t\t<![CDATA[xczd.ZC_PRICE_OUT <= #{maximum,jdbcType=VARCHAR}]]>\n" +
-            "\t) A\n" +
+            "\t AND ZC_IS_USED = '0') A\n" +
             ") WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
     @Results(id="getGoodByZcType",value={
@@ -71,7 +71,7 @@ public interface XyClbZcDbMapper{
      * @param: [zcCode]
      * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcDb>
      */
-    @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode,jdbcType=VARCHAR}</script>")
+    @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode,jdbcType=VARCHAR} AND ZC_IS_USED = '0'</script>")
     @Results(id="queryZcDb",value={
             @Result(column = "ZC_CODE", property = "zcCode", javaType = String.class),
             @Result(column = "ZC_NAME", property = "zcName", javaType = String.class),
@@ -112,14 +112,14 @@ public interface XyClbZcDbMapper{
             "FROM\n" +
             "\tXY_CLB_ZC_DB xczd \n" +
             "WHERE\n" +
-            "\txczd.ZC_CODE = #{zcCode,jdbcType=VARCHAR}" +
+            "\txczd.ZC_CODE = #{zcCode,jdbcType=VARCHAR} AND ZC_IS_USED = '0'" +
             "</script>")
     public String getZcVersion (@Param("zcCode") String zcCode) throws SQLException;
 
 
     @Select("<script>" +
             "SELECT ZC_CODE,ZC_NAME,ZC_PRICE_OUT,ZC_BRAND FROM XY_CLB_ZC_DB SAMPLE(5)\n" +
-            "WHERE ROWNUM &lt; 70" +
+            "WHERE ROWNUM &lt; 70 AND ZC_IS_USED = '0'" +
             "</script>")
     public List<Map<String,Object>> getRandGoods() throws SQLException;
 }
