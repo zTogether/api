@@ -246,8 +246,8 @@ public class IntermediateAcceptanceSrevice {
         xyPg.setPgBeginDate(pgBeginDate);
         xyPg.setPgOpUser(pgOpUser);
         xyPgMapper.addPg(xyPg);
-        xyPgMapper.updateDays(xyPg.getPgId());
         xyPgLsitMapper.addPgList(xyPg.getPgId(),ctrCode,pgStage);
+        xyPgMapper.updateDays(xyPg.getPgId());
         List<Map<String ,Object>> maxGrMapLsit = xyPgMapper.getMaxGr(xyPg.getPgId());
         if(maxGrMapLsit == null || maxGrMapLsit.size()==0) {
 

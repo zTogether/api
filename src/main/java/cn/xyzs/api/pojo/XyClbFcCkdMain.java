@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Table(name = "XY_CLB_FC_CKD_MAIN")//辅材清单
 public class XyClbFcCkdMain {
     //编号
-    @Column(name = "CDK_CODE")
+    @Column(name = "CKD_CODE")
     private String ckdCode;
 
     //档案号
@@ -27,6 +27,10 @@ public class XyClbFcCkdMain {
     //材料大类(对应XY_VAL表)
     @Column(name = "CKD_FC_TYPE")
     private String ckdFcType;
+
+    //出库单仓库
+    @Column(name = "CKD_CK")
+    private String ckdCk;
 
     //开单人
     @Column(name = "CKD_OP_USER")

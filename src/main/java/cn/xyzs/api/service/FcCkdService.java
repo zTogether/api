@@ -1,0 +1,303 @@
+package cn.xyzs.api.service;
+
+import cn.xyzs.api.mapper.XyBjdMainMapper;
+import cn.xyzs.api.mapper.XyClbFcCkdListMapper;
+import cn.xyzs.api.mapper.XyClbFcCkdMainMapper;
+import cn.xyzs.api.mapper.XyClbFcDbMapper;
+import cn.xyzs.api.pojo.XyClbFcCkdList;
+import cn.xyzs.api.pojo.XyClbFcCkdMain;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.*;
+
+@Service
+public class FcCkdService {
+
+    @Resource
+    private XyClbFcDbMapper xyClbFcDbMapper;
+
+    @Resource
+    private XyClbFcCkdMainMapper xyClbFcCkdMainMapper;
+
+    @Resource
+    private XyClbFcCkdListMapper xyClbFcCkdListMapper;
+
+    @Resource
+    private XyBjdMainMapper xyBjdMainMapper;
+
+    /**
+     * 根据材料分类获取辅材商品
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/12 10:14
+     * @param: [ctrCode, fcType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getFcGoodByFcType(String ctrCode ,String fcType){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> fcGoodList = xyClbFcDbMapper.getFcGoodByFcType(ctrCode,fcType);
+            code = "200";
+            msg = "成功";
+            obj.put("fcGoodList",fcGoodList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 添加出库单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/12 15:31
+     * @param: [xyClbFcCkdMain, fcPriceCodeArray, fcQtyArray, fcPriceArray, fcMarkArray]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> addFcCkd(XyClbFcCkdMain xyClbFcCkdMain  ,String[] fcPriceCodeArray ,String[] fcQtyArray ,String[] fcPriceArray ,String[] fcMarkArray){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            String ckdCode = xyClbFcCkdMainMapper.getNewFcCkdCode(xyClbFcCkdMain.getCtrCode());
+            xyClbFcCkdMain.setCkdCode(ckdCode);
+            xyClbFcCkdMain.setCkdStatu("2");
+            xyClbFcCkdMain.setCkdCk("金盛仓库");
+            xyClbFcCkdMainMapper.insertSelective(xyClbFcCkdMain);
+            List<String> fcPriceCodeList = new ArrayList<>();
+            for (int i = 0; i <fcPriceCodeArray.length ; i++) {
+                fcPriceCodeList.add(fcPriceCodeArray[i]);
+            }
+            String fcMark = UUID.randomUUID().toString();
+            xyClbFcCkdListMapper.addFcCkdList(xyClbFcCkdMain.getCkdCode(), fcMark,fcPriceCodeList);
+
+            double ckdZj = 0;
+
+            for (int i = 0; i < fcPriceCodeList.size(); i++) {
+                XyClbFcCkdList xyClbFcCkdList = new XyClbFcCkdList();
+                //数量
+                xyClbFcCkdList.setFcQty(fcQtyArray[i]);
+                //金额
+                double fcJe = GetResult(Double.valueOf(fcQtyArray[i]) ,Double.valueOf(fcPriceArray[i]) ,"*");
+                xyClbFcCkdList.setFcJe(String.valueOf(fcJe));
+                //y运费
+                double fcYf = GetResult(fcJe ,0.06 ,"*");
+                xyClbFcCkdList.setFcYf(String.valueOf(fcYf));
+                //小计
+                String fcXj = String.valueOf(GetResult(fcJe,fcYf,"+"));
+                xyClbFcCkdList.setFcXj(fcXj);
+                //备注
+                xyClbFcCkdList.setFcMark(fcMarkArray[i]);
+                Example example = new Example(XyClbFcCkdList.class);
+                example.createCriteria().andEqualTo("fcPriceId",fcPriceCodeList.get(i));
+                example.createCriteria().andEqualTo("fcMark",fcMark);
+                xyClbFcCkdListMapper.updateByExampleSelective(xyClbFcCkdList,example);
+
+                //出库单总计
+                ckdZj += GetResult(fcJe,fcYf,"+");
+            }
+            Example example = new Example(XyClbFcCkdMain.class);
+            example.createCriteria().andEqualTo("ckdCode",ckdCode);
+            XyClbFcCkdMain fcCkdMain = new XyClbFcCkdMain();
+            fcCkdMain.setCkdZj(String.valueOf(ckdZj));
+            xyClbFcCkdMainMapper.updateByExampleSelective(fcCkdMain,example);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    private double GetResult(double numA, double numB, String operate){
+        double res = 0;
+        BigDecimal bigA = new BigDecimal(Double.toString(numA));
+        BigDecimal bigB = new BigDecimal(Double.toString(numB));
+        switch (operate) {
+
+            case "+":
+                res = bigA.add(bigB).doubleValue();
+                break;
+            case "-":
+                res = bigA.subtract(bigB).doubleValue();
+                break;
+            case "*":
+                res = bigA.multiply(bigB).doubleValue();
+                break;
+            case "/":
+                res = bigA.divide(bigB).doubleValue();
+                break;
+            default :
+                System.out.println("运算符不合法~");
+                break;
+        }
+        return res;
+    }
+
+    /**
+     * 获取退库商品
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/12 18:14
+     * @param: [ctrCode, ckdFcType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getTKFcGood(String ctrCode ,String ckdFcType){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> TKFcGoodList = xyClbFcCkdListMapper.getTKFcGood(ctrCode,ckdFcType);
+            code = "200";
+            msg = "成功";
+            obj.put("TKFcGoodList",TKFcGoodList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+
+    /** 添加出库单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/12 15:31
+     * @param: [xyClbFcCkdMain, fcPriceCodeArray, fcQtyArray, fcPriceArray, fcMarkArray]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> addFcTkd(XyClbFcCkdMain xyClbFcCkdMain  ,String[] fcPriceCodeArray ,String[] fcQtyArray ,String[] fcPriceArray ){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            String ckdCode = xyClbFcCkdMainMapper.getNewFcCkdCode(xyClbFcCkdMain.getCtrCode());
+            xyClbFcCkdMain.setCkdCode(ckdCode);
+            //退库单状态（待审）
+            xyClbFcCkdMain.setCkdStatu("1");
+            xyClbFcCkdMain.setCkdCk("金盛仓库");
+            xyClbFcCkdMainMapper.insertSelective(xyClbFcCkdMain);
+            List<String> fcPriceCodeList = new ArrayList<>();
+            for (int i = 0; i <fcPriceCodeArray.length ; i++) {
+                fcPriceCodeList.add(fcPriceCodeArray[i]);
+            }
+            String fcMark = UUID.randomUUID().toString();
+            xyClbFcCkdListMapper.addFcCkdList(xyClbFcCkdMain.getCkdCode(), fcMark,fcPriceCodeList);
+
+            double ckdZj = 0;
+
+            for (int i = 0; i < fcPriceCodeList.size(); i++) {
+                XyClbFcCkdList xyClbFcCkdList = new XyClbFcCkdList();
+                //数量
+                xyClbFcCkdList.setFcQty(fcQtyArray[i]);
+                //金额
+                double fcJe = GetResult(Double.valueOf(fcQtyArray[i]) ,Double.valueOf(fcPriceArray[i]) ,"*");
+                xyClbFcCkdList.setFcJe(String.valueOf(fcJe));
+                //y运费
+                double fcYf = GetResult(fcJe ,0.06 ,"*");
+                xyClbFcCkdList.setFcYf(String.valueOf(fcYf));
+                //小计
+                String fcXj = String.valueOf(GetResult(fcJe,fcYf,"+"));
+                xyClbFcCkdList.setFcXj(fcXj);
+                //备注
+                xyClbFcCkdList.setFcMark("");
+                Example example = new Example(XyClbFcCkdList.class);
+                example.createCriteria().andEqualTo("fcPriceId",fcPriceCodeList.get(i));
+                example.createCriteria().andEqualTo("fcMark",fcMark);
+                xyClbFcCkdListMapper.updateByExampleSelective(xyClbFcCkdList,example);
+                //出库单总计
+                ckdZj += GetResult(fcJe,fcYf,"+");
+                code = "200";
+                msg = "成功";
+            }
+            Example example = new Example(XyClbFcCkdMain.class);
+            example.createCriteria().andEqualTo("ckdCode",ckdCode);
+            XyClbFcCkdMain fcCkdMain = new XyClbFcCkdMain();
+            fcCkdMain.setCkdZj(String.valueOf(ckdZj));
+            xyClbFcCkdMainMapper.updateByExampleSelective(fcCkdMain,example);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据ctrCode获取当前的报价单金额与出库单金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/14 12:03
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getNowBjdjeAndCldjeByCtrCode(String ctrCode){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            Map<String ,Object> nowBjdjeAndCldje = xyBjdMainMapper.getNowBjdjeAndCldjeByCtrCode(ctrCode);
+            code = "200";
+            msg = "成功";
+            obj.put("nowBjdjeAndCldje",nowBjdjeAndCldje);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData" ,obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据ckdCode删除出库单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/14 14:06
+     * @param: [ckdCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> deleteCkdByCkdCode(String ckdCode){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            xyClbFcCkdMainMapper.deleteByCkdCode(ckdCode);
+            xyClbFcCkdListMapper.deleteByCkdCode(ckdCode);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+}
