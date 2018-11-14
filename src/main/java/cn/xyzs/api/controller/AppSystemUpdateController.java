@@ -51,9 +51,4 @@ public class AppSystemUpdateController{
         sendService.templateTest(message.getGroupid(), JSON.toJSONString(message));
     }
 
-
-    public static void main(String args[]) {
-        String test = MD5Util.md5Password("pushAppUpdateMsgGroup");
-        System.out.println(test);
-    }
 }
