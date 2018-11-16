@@ -127,4 +127,17 @@ public class IntermediateAcceptanceController {
         return intermediateAcceptanceSrevice.customerInspection(ctrCode,ckdFcType,custMark,isAgree);
     }
 
+    /**
+     * 获取最低开单日期
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/15 9:52
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getPgBeginDateflag")
+    public Map<String ,Object> getPgBeginDateflag(String ctrCode){
+        return intermediateAcceptanceSrevice.getPgBeginDateflag(ctrCode);
+    }
 }

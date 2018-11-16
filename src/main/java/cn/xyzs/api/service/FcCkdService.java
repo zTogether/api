@@ -1,11 +1,9 @@
 package cn.xyzs.api.service;
 
-import cn.xyzs.api.mapper.XyBjdMainMapper;
-import cn.xyzs.api.mapper.XyClbFcCkdListMapper;
-import cn.xyzs.api.mapper.XyClbFcCkdMainMapper;
-import cn.xyzs.api.mapper.XyClbFcDbMapper;
+import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.pojo.XyClbFcCkdList;
 import cn.xyzs.api.pojo.XyClbFcCkdMain;
+import cn.xyzs.api.pojo.XyCustomerInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -29,6 +27,12 @@ public class FcCkdService {
 
     @Resource
     private XyBjdMainMapper xyBjdMainMapper;
+
+    @Resource
+    private XyBjdFcTempMapper xyBjdFcTempMapper;
+
+    @Resource
+    private XyCustomerInfoMapper xyCustomerInfoMapper;
 
     /**
      * 根据材料分类获取辅材商品
@@ -289,6 +293,97 @@ public class FcCkdService {
         try {
             xyClbFcCkdMainMapper.deleteByCkdCode(ckdCode);
             xyClbFcCkdListMapper.deleteByCkdCode(ckdCode);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 判断是否为首次开单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/15 15:17
+     * @param: [ctrCode, ckdFcType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> isFristKd(String ctrCode ,String ckdFcType){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            Integer isFristKd = xyClbFcCkdMainMapper.isFristKd(ctrCode,ckdFcType);
+            XyCustomerInfo xyCustomerInfo = new XyCustomerInfo();
+            xyCustomerInfo.setCtrCode(ctrCode);
+            xyCustomerInfo = xyCustomerInfoMapper.selectOne(xyCustomerInfo);
+            String ctrPrjType = xyCustomerInfo.getCtrPrjType();
+            String isFristKdFlag = "否";
+            if (isFristKd < 1 && "0".equals(ctrPrjType)){
+                isFristKdFlag = "是";
+            }
+            code = "200";
+            msg = "成功";
+            obj.put("isFristKdFlag",isFristKdFlag);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultDate",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取本材料大类所选择的品牌
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/15 16:34
+     * @param: [ctrCode, rgStage]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getNameAndVal(String ctrCode ,String rgStage){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> nameAndVaList = xyBjdFcTempMapper.getNameAndVal(ctrCode,rgStage);
+            code = "200";
+            msg = "成功";
+            obj.put("nameAndVaList",nameAndVaList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 一键开单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/16 16:51
+     * @param: [xyClbFcCkdMain]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> autoOpenOrder(XyClbFcCkdMain xyClbFcCkdMain){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            xyClbFcCkdMainMapper.autoOpenOrderAddCkdMain(xyClbFcCkdMain);
+            xyClbFcCkdListMapper.autoOpenOrderAddCkdLsit(xyClbFcCkdMain.getCkdCode(),xyClbFcCkdMain.getCtrCode(),xyClbFcCkdMain.getCkdFcType());
             code = "200";
             msg = "成功";
         } catch (SQLException e) {

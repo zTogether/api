@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -599,4 +600,17 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "OR A.CTR_NAME =  #{condition,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getChatGroupByConditionAndUserTel(@Param("userTel") String userTel,@Param("condition") String condition) throws SQLException;
+
+    /**
+     * 获取用户开工时间
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/15 9:43
+     * @param: [ctrCode]
+     * @return: java.util.Date
+     */
+    @Select("<script>" +
+            "SELECT xci.CTR_KG_DATE FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = '2018000532'" +
+            "</script>")
+    public Date getCtrKgDate(String ctrCode) throws SQLException;
 }

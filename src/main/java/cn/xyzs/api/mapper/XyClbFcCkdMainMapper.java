@@ -137,4 +137,56 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "</script>")
     public void deleteByCkdCode(String ckdCode) throws SQLException;
 
+    /**
+     * 根据出库单类型判断是否为首次开单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/15 15:12
+     * @param: [ctrCode, ckdFcType]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT COUNT(1) FROM XY_CLB_FC_CKD_MAIN xcfcm WHERE xcfcm.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND CKD_FC_TYPE = #{ckdFcType,jdbcType=VARCHAR}" +
+            "</script>")
+    public Integer isFristKd(@Param("ctrCode") String ctrCode, @Param("ckdFcType") String ckdFcType) throws SQLException;
+
+    /**
+     * 一键开单添加出库单主表
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/16 16:39
+     * @param: [ctrCode, rgStage, ckdOpUser]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_CLB_FC_CKD_MAIN ( CKD_CODE, CTR_CODE, CKD_TYPE, CKD_FC_TYPE, CKD_CK, CKD_OP_USER, CKD_ZJ, CKD_STATU )\n" +
+            "VALUES\n" +
+            "\t(\n" +
+            "\t\t(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tB.CKD_CODE + 1 \n" +
+            "\t\tFROM\n" +
+            "\t\t\t(\n" +
+            "\t\t\tSELECT\n" +
+            "\t\t\t\tA.*,\n" +
+            "\t\t\t\tROWNUM RN \n" +
+            "\t\t\tFROM\n" +
+            "\t\t\t\t( SELECT xcfcm.CKD_CODE FROM XY_CLB_FC_CKD_MAIN xcfcm WHERE xcfcm.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} ORDER BY xcfcm.CKD_CODE DESC ) A \n" +
+            "\t\t\t) B \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tRN BETWEEN 1 \n" +
+            "\t\t\tAND 1 \n" +
+            "\t\t),\n" +
+            "\t\t#{ctrCode,jdbcType=VARCHAR},\n" +
+            "\t\t0,\n" +
+            "\t\t#{ckdFcType,jdbcType=VARCHAR},\n" +
+            "\t\t'金盛仓库',\n" +
+            "\t\t#{ckdOpUser,jdbcType=VARCHAR},\n" +
+            "\t\t( SELECT SUM( A.HJ ) FROM VW_XY_CLB_FC_CKD_FIRST A WHERE A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND A.RG_STAGE = #{ckdFcType,jdbcType=VARCHAR} ),\n" +
+            "\t0 \n" +
+            "\t)" +
+            "</script>")
+    @Options(useGeneratedKeys=true, keyProperty="ckdCode", keyColumn="CKD_CODE")
+    public void autoOpenOrderAddCkdMain(XyClbFcCkdMain xyClbFcCkdMain) throws SQLException;
+
 }

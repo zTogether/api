@@ -136,4 +136,39 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "</script>")
     public void deleteByCkdCode(String ckdCode) throws SQLException;
 
+    /**
+     * 一键开单添加list表
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/16 16:46
+     * @param: [ctrCode, rgStage]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_CLB_FC_CKD_LIST \n" +
+            "SELECT\n" +
+            "\t#{ckdCode,jdbcType=VARCHAR},\n" +
+            "\tA.ROW_ID,\n" +
+            "\tA.FC_PRICE_CODE,\n" +
+            "\tA.BRAND_NAME,\n" +
+            "\tA.FC_NAME,\n" +
+            "\tA.FC_UNIT,\n" +
+            "\tA.SL,\n" +
+            "\tA.DJ,\n" +
+            "\tA.XJ,\n" +
+            "\tA.YFL,\n" +
+            "\tA.YF,\n" +
+            "\tA.HJ,\n" +
+            "\tA.BZ,\n" +
+            "\tA.FC_PUR_STY,\n" +
+            "\tA.ISEDIT,\n" +
+            "\tA.FC_C1 \n" +
+            "FROM\n" +
+            "\tVW_XY_CLB_FC_CKD_FIRST A \n" +
+            "WHERE\n" +
+            "\tA.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} \n" +
+            "\tAND A.RG_STAGE = #{rgStage,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoOpenOrderAddCkdLsit(@Param("ckdCode") String ckdCode ,@Param("ctrCode") String ctrCode ,@Param("rgStage") String rgStage) throws SQLException;
+
 }
