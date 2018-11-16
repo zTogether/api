@@ -6,7 +6,7 @@
     <groupId>cn.xyzs</groupId>
     <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>api</name>
     <description>轩辕装饰手机端api</description>
@@ -100,7 +100,6 @@
             <artifactId>httpmime</artifactId>
             <version>4.5.3</version>
         </dependency>
-
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -241,5 +240,15 @@
         <finalName>xyzsApp</finalName>
     </build>
 
+    <distributionManagement> <!-- 远程部署管理信息 -->
+        <repository> <!--部署项目产生的构件到远程仓库需要的信息 -->
+            <id>releases</id>
+            <url>http://192.168.10.243:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id >snapshots </id>
+            <url> http://192.168.10.243:8081/nexus/content/repositories/snapshots </url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
