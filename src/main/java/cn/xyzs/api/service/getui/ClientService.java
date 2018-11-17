@@ -24,6 +24,7 @@ public class ClientService {
     public int saveClientId(ClientAPI clientAPI){
         //1.检测设备是否已存在
         ClientAPI clientAPI1 = clientAPIMapper.selectByPrimaryKey(clientAPI.getClientId());
+        clientAPI.setLastLoginTime(System.currentTimeMillis());
         //2.如果不存在 直接新增
         if(clientAPI1==null){
             int r = clientAPIMapper.insertSelective(clientAPI);
