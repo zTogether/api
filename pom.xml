@@ -6,7 +6,7 @@
     <groupId>cn.xyzs</groupId>
     <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>api</name>
     <description>轩辕装饰手机端api</description>
@@ -91,8 +91,8 @@
         <!-- https://mvnrepository.com/artifact/com.oracle/ojdbc -->
         <dependency>
             <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.1.0</version>
+            <artifactId>ojdbc</artifactId>
+            <version>6</version>
         </dependency>
 
         <dependency>

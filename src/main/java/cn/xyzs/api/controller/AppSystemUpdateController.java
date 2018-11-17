@@ -20,7 +20,7 @@ public class AppSystemUpdateController{
     @Resource
     private AppSystemUpdateService appSystemUpdateService;
     @Resource
-    protected SendService sendService;
+    private SendService sendService;
 
 
     /**
