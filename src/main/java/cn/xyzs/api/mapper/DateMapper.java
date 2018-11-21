@@ -3,6 +3,7 @@ package cn.xyzs.api.mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 public interface DateMapper {
     /**
@@ -17,4 +18,9 @@ public interface DateMapper {
             "SELECT TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss') FROM dual" +
             "</script>")
     public String getSysDate() throws SQLException;
+
+    @Select("<script>" +
+            "SELECT TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss') FROM dual" +
+            "</script>")
+    public Date getNowDate() throws SQLException;
 }
