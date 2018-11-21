@@ -12,6 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface XyExamManagerMapper extends Mapper<XyExamManager> {
+    /**
+     *
+     * @Description: 抽取试卷呢
+     * @author: GeWeiliang
+     * @date: 2018\11\2 0002 13:19
+     * @param: [examCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
             "SELECT p.*  FROM XY_EXAM_MANAGER m,XY_EXAM_PAPER p WHERE p.PAPERNO=m.PAPERNO AND m.EXAMCODE=#{examCode,jdbcType=VARCHAR}" +
             "</script>")
@@ -35,7 +43,7 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
 
     /**
      *
-     * @Description: 抽取填空题,type=
+     * @Description: 抽取填空题,type=3
      * @author: GeWeiliang
      * @date: 2018\10\27 0027 14:52
      * @param: [questionNo]
