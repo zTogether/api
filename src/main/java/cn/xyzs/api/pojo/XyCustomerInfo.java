@@ -103,8 +103,8 @@ public class XyCustomerInfo {
     @Setter
     @Getter
     @Column(name="CTR_SJS")
-    //执行总监
     private String ctrSjs;
+    //执行总监
     @Setter
     @Getter
     @Column(name="CTR_GCJL")
