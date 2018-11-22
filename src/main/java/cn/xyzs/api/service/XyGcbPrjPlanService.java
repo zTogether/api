@@ -144,6 +144,7 @@ public class XyGcbPrjPlanService {
         Map<String,Object> obj = new HashMap<>();
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
             Date d = new Date();
             String dd = dateFormat.format(d);
             Date nowDate = dateFormat.parse(dd);

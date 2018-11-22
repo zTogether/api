@@ -79,4 +79,36 @@ public class UserService {
          Map<String,Object> map = userMapper.getUserInfo(userTel);
          return map;
     }
+
+    /**
+     *
+     * @Description: 员工通讯录
+     * @author: GeWeiliang
+     * @date: 2018\11\21 0021 17:04
+     * @param: [condition]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> phoneBook(String condition){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try{
+            if(condition==null){
+                condition = "";
+            }
+            condition = condition.trim();
+            List userList = userMapper.phoneBook("%"+condition+"%");
+            obj.put("phoneBook",userList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }
