@@ -126,4 +126,20 @@ public interface UserMapper extends Mapper<TUser> {
     @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel,jdbcType=VARCHAR}</script>")
     Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 
+
+    /**
+     *
+     * @Description: 员工通讯录
+     * @author: GeWeiliang
+     * @date: 2018\11\21 0021 11:24
+     * @param: [condition]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT u.USER_NAME,u.USER_TEL,r.ROLE_NAME FROM XY_USER u,XY_ROLE r,XY_USER_ROLE ur\n" +
+            "WHERE u.USER_ID=ur.USER_ID AND ur.ROLE_ID=r.ROLE_ID AND u.USER_NAME LIKE #{condition,jdbcType=VARCHAR}" +
+            "ORDER BY u.USER_NAME" +
+            "</script>")
+    List<Map<String,Object>> phoneBook(@Param("condition") String condition) throws SQLException;
+
 }
