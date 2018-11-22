@@ -22,6 +22,7 @@ public class SendMsgUtil {
     private static final int templateId2 = 203858;//礼品码短信模板ID                   {1}为您的验证码，如非本人操作，请忽略本短信。
     private static final int templateId3 = 214290; //通知执行员派单成功短信模板ID      您好！{1}（档案号）{2}已成功派单，工长{3}，电话{4}，请您尽快联系交底！
     private static final int templateId4 = 214246;//抢单成功提醒短信模板ID             恭喜您抢单成功！档案号{1}，执行总监{2}，电话{3}，请尽快联系交底！
+    private static final int templateId5 = 230953;//活动提醒信息短信模板ID             尊敬的{1}您好《豪门盛宴十周年——名家名房名车》终极赢家将于本月25日在新城总部大厦揭晓，特邀您参加，回T退订
     // 签名
     private static final String smsSign = "江苏轩辕装饰工程有限公司"; // NOTE: 这里的签名"腾讯云"只是一个示例，真实的签名需要在短信控制台中申请，另外签名参数使用的是`签名内容`，而不是`签名ID`
     // 需要发送短信的手机号码
@@ -50,6 +51,8 @@ public class SendMsgUtil {
                 templateId = templateId3;
             } else if ("3".equals(sendType)){
                 templateId = templateId4;
+            } else if("4".equals(sendType)){
+                templateId = templateId5;
             }
             SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
             SmsSingleSenderResult result = ssender.sendWithParam("86", phone, templateId, params, smsSign, "", "");  // 签名参数未提供或者为空时，会使用默认签名发送短信
@@ -118,8 +121,8 @@ public class SendMsgUtil {
 
 
     public static void main(String args[]) {
-        String []params = {"2018000111","2018-10-21","葛伟亮","15250992995"};
-        String code = sendMsg("3",params,"15895838592");
+        String []params = {"韩敏"};
+        String code = sendMsg("4",params,"17372273669");
         if ("200".equals(code)){
             System.out.println("发送成功");
         } else {

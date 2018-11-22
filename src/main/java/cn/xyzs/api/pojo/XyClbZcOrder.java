@@ -60,7 +60,7 @@ public class XyClbZcOrder {
     //编辑类型
     @Setter
     @Getter
-    @Column(name = "ORDER_TYPE")
+    @Column(name = "EDIT_TYPE")
     private String editType;
     //优惠备注
     @Setter

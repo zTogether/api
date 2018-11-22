@@ -164,4 +164,45 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId,jdbcType=VARCHAR}</script>")
     public Map<String,Object> getOrderInfo(@Param("orderId") String orderId)throws SQLException;
 
+    /**
+     * 获取允许执行员发送主材订单验收的主材订单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/19 13:22
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tXCZO.ORDER_ID, \n" +
+            "\tTO_CHAR(XCZO.ORDER_DATE,'yyyy-MM-dd HH24:mi:ss') ORDER_DATE, \n" +
+            "\tXCZO.CTR_CODE, \n" +
+            "\tXCZO.OP_USERID, \n" +
+            "\tXCZO.ORDER_JE, \n" +
+            "\tXCZO.ORDER_MARK, \n" +
+            "\tXCZO.ORDER_STATUS, \n" +
+            "\tXCZO.ORDER_TYPE, \n" +
+            "\tXCZO.ORDER_SUP, \n" +
+            "\tXCZO.EDIT_TYPE, \n" +
+            "\tXCZO.ORDER_DIS, \n" +
+            "\tXCZO.ORDER_DIS_MARK, \n" +
+            "\tXCZO.ORDER_ISRETURN,\n" +
+            "\tTO_CHAR(XCZO.PRINT_DATE,'yyyy-MM-dd HH24:mi:ss') PRINT_DATE,\n" +
+            "\txs.SUP_NAME\n" +
+            "FROM\n" +
+            "\tXY_CLB_ZC_ORDER XCZO,\n" +
+            "\tXY_SUPPLIER xs\n" +
+            "WHERE\n" +
+            "\tXCZO.ORDER_ISRETURN = 0 \n" +
+            "AND XCZO.PRINT_DATE IS NOT NULL \n" +
+            "AND XCZO.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "AND XCZO.ORDER_SUP = xs.SUP_CODE\n" +
+            "AND XCZO.ORDER_ID NOT IN (\n" +
+            "\tSELECT A.ORDER_ID FROM XY_CLB_ZC_ORDER_FH A WHERE A.ORDER_ID IN (\n" +
+            "\t\tSELECT B.ORDER_ID FROM XY_CLB_ZC_ORDER B WHERE B.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND B.PRINT_DATE IS NOT NULL \n" +
+            "\t) AND A.KH_STATU = 1\n" +
+            ")" +
+            "</script>")
+    public List<Map<String ,Object>> getZxySendZcYsOrder(String ctrCode) throws SQLException;
+
 }
