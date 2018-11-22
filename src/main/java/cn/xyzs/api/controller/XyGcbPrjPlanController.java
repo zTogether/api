@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/gcbPrj")
+@RequestMapping("/App/gcbPrj")
 public class XyGcbPrjPlanController {
     @Resource
     private XyGcbPrjPlanService xyGcbPrjPlanService;
