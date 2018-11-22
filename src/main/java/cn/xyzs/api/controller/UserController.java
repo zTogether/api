@@ -55,4 +55,18 @@ public class UserController {
     public Map<String,Object> getUserInfo(String userTel){
        return userService.getUserInfo(userTel);
     }
+
+    /**
+     *
+     * @Description: 员工通讯录
+     * @author: GeWeiliang
+     * @date: 2018\11\21 0021 17:05
+     * @param: [condition]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/phoneBook")
+    public Map<String,Object> phoneBook(String condition){
+        return userService.phoneBook(condition);
+    }
 }
