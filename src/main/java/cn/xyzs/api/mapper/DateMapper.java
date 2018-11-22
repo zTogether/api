@@ -20,7 +20,7 @@ public interface DateMapper {
     public String getSysDate() throws SQLException;
 
     @Select("<script>" +
-            "SELECT TO_CHAR(SYSDATE,'yyyy-MM-dd HH24:mi:ss') FROM dual" +
+            "SELECT SYSDATE FROM dual" +
             "</script>")
     public Date getNowDate() throws SQLException;
 }
