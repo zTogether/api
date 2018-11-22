@@ -53,4 +53,57 @@ public interface XyBjdMainMapper extends Mapper<XyBjdMain>{
             ")" +
             "</script>")
     public Integer getIsPg(@Param("ctrCode") String ctrCode ,@Param("pgStage") String pgStage) throws SQLException;
+
+    /**
+     * 根据ctrCode获取当前的报价单金额与出库单金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/14 11:58
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tA.CTR_CODE,\n" +
+            "\tsum( bjd_je ) BJD_JE,\n" +
+            "\tSUM( CLD_JE ) CLD_JE \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tT.CTR_CODE,\n" +
+            "\t\tT.BJD_FC_ZJ BJD_JE,\n" +
+            "\t\t0 CLD_JE \n" +
+            "\tFROM\n" +
+            "\t\tXY_BJD_MAIN T \n" +
+            "\tWHERE\n" +
+            "\t\tT.BJD_STAGE = '3' UNION ALL\n" +
+            "\tSELECT\n" +
+            "\t\tT.CTR_CODE,\n" +
+            "\t\tT.FCSJ_JE,\n" +
+            "\t\t0 \n" +
+            "\tFROM\n" +
+            "\t\tXY_BJD_FCSJ_MAIN T \n" +
+            "\tWHERE\n" +
+            "\t\tT.FCSJ_STATU = '1' UNION ALL\n" +
+            "\tSELECT\n" +
+            "\t\tT.CTR_CODE,\n" +
+            "\t\t0,\n" +
+            "\t\t( CASE T.CKD_TYPE WHEN '0' THEN T.CKD_ZJ ELSE - T.CKD_ZJ END ) \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CLB_FC_CKD_MAIN T \n" +
+            "\t\tWHERE\n" +
+            "\t\t\t(( T.CKD_TYPE = '1' AND T.CKD_STATU = '3' ) OR T.CKD_TYPE = '0' ) UNION ALL\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tT.CTR_CODE,\n" +
+            "\t\t\t0,\n" +
+            "\t\t\t0 \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CUSTOMER_INFO T \n" +
+            "\t\t) A \n" +
+            "\tWHERE\n" +
+            "\t\tA.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} \n" +
+            "GROUP BY\n" +
+            "\tA.CTR_CODE" +
+            "</script>")
+    public Map<String ,Object> getNowBjdjeAndCldjeByCtrCode(String ctrCode) throws SQLException;
 }

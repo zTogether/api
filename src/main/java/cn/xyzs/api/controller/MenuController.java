@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/menu")
+@RequestMapping("/App/menu")
 public class MenuController {
 
     @Resource

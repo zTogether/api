@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/fieldSupervision")
+@RequestMapping("/App/fieldSupervision")
 public class FieldSupervisionController {
 
     @Resource

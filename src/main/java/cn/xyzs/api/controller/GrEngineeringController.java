@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/grEngineering")
+@RequestMapping("/App/grEngineering")
 public class GrEngineeringController {
 
     @Resource

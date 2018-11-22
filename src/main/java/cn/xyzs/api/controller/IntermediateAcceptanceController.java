@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/IntermediateAcceptance")
+@RequestMapping("/App/IntermediateAcceptance")
 public class IntermediateAcceptanceController {
 
     @Resource
@@ -128,17 +128,16 @@ public class IntermediateAcceptanceController {
     }
 
     /**
-     * 根据ctrCode获取groupId
+     * 获取最低开单日期
      * @Description:
      * @author: zheng shuai
-     * @date: 2018/10/27 10:07
+     * @date: 2018/11/15 9:52
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @ResponseBody
-    @RequestMapping("/getChatGroupId")
-    public Map<String ,Object> getChatGroupId(String ctrCode){
-        return intermediateAcceptanceSrevice.getChatGroupId(ctrCode);
+    @RequestMapping("/getPgBeginDateflag")
+    public Map<String ,Object> getPgBeginDateflag(String ctrCode){
+        return intermediateAcceptanceSrevice.getPgBeginDateflag(ctrCode);
     }
-
 }

@@ -1,6 +1,8 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyClbFcCkdMain;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -32,13 +34,10 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "\tTO_CHAR(fcm.CKD_AUDIT_DATE,'yyyy-MM-dd HH24:mi:ss') CKD_AUDIT_DATE, \n" +
             "\tfcm.CKD_STATU, \n" +
             "\tfcm.CKD_MARK,\n" +
-            "\tu.USER_NAME,\n" +
-            "\txv.VAL_NAME \n" +
+            "\tu.USER_NAME\n" +
             "FROM\n" +
             "\tXY_CLB_FC_CKD_MAIN fcm\n" +
             "\tLEFT JOIN XY_USER u ON u.USER_ID = fcm.CKD_OP_USER\n" +
-            "\tLEFT JOIN XY_VAL xv ON fcm.CKD_FC_TYPE = xv.VAL_ID \n" +
-            "\tAND xv.VALSET_ID = '39AB9E59F1EF4CF6ACD71CF9D89F8129' \n" +
             "WHERE\n" +
             "\tCTR_CODE = #{ctrCcode,jdbcType=VARCHAR}" +
             "</script>")
@@ -99,5 +98,95 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "FROM XY_CLB_FC_CKD_MAIN C WHERE C.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getAllEngineeringExpenseSettlementDetail(@Param("ctrCode") String ctrCode)throws SQLException;
+
+    /**
+     * 获取最新fcCkdCode
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/12 17:38
+     * @param: [ctrCode]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT B.CKD_CODE+1  FROM ( \n" +
+            "\tSELECT A.*, ROWNUM RN \n" +
+            "\t\tFROM ( \n" +
+            "\t\t\tSELECT \n" +
+            "\t\t\t\txcfcm.CKD_CODE \n" +
+            "\t\t\tFROM \n" +
+            "\t\t\t\tXY_CLB_FC_CKD_MAIN xcfcm\n" +
+            "\t\t\tWHERE \n" +
+            "\t\t\t\txcfcm.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "\t\t\tORDER BY xcfcm.CKD_CODE DESC\n" +
+            "\t\t) A\n" +
+            "\t) B\n" +
+            "WHERE RN BETWEEN 1 AND 1" +
+            "</script>")
+    public String getNewFcCkdCode(@Param("ctrCode") String ctrCode) throws SQLException;
+
+    /**
+     * 根据ckdCode删除
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/14 14:03
+     * @param: [ckdCode]
+     * @return: void
+     */
+    @Select("<script>" +
+            "DELETE FROM XY_CLB_FC_CKD_MAIN WHERE CKD_CODE = #{ckdCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void deleteByCkdCode(String ckdCode) throws SQLException;
+
+    /**
+     * 根据出库单类型判断是否为首次开单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/15 15:12
+     * @param: [ctrCode, ckdFcType]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT COUNT(1) FROM XY_CLB_FC_CKD_MAIN xcfcm WHERE xcfcm.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND CKD_FC_TYPE = #{ckdFcType,jdbcType=VARCHAR}" +
+            "</script>")
+    public Integer isFristKd(@Param("ctrCode") String ctrCode, @Param("ckdFcType") String ckdFcType) throws SQLException;
+
+    /**
+     * 一键开单添加出库单主表
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/16 16:39
+     * @param: [ctrCode, rgStage, ckdOpUser]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_CLB_FC_CKD_MAIN ( CKD_CODE, CTR_CODE, CKD_TYPE, CKD_FC_TYPE, CKD_CK, CKD_OP_USER, CKD_ZJ, CKD_STATU )\n" +
+            "VALUES\n" +
+            "\t(\n" +
+            "\t\t(\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tB.CKD_CODE + 1 \n" +
+            "\t\tFROM\n" +
+            "\t\t\t(\n" +
+            "\t\t\tSELECT\n" +
+            "\t\t\t\tA.*,\n" +
+            "\t\t\t\tROWNUM RN \n" +
+            "\t\t\tFROM\n" +
+            "\t\t\t\t( SELECT xcfcm.CKD_CODE FROM XY_CLB_FC_CKD_MAIN xcfcm WHERE xcfcm.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} ORDER BY xcfcm.CKD_CODE DESC ) A \n" +
+            "\t\t\t) B \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tRN BETWEEN 1 \n" +
+            "\t\t\tAND 1 \n" +
+            "\t\t),\n" +
+            "\t\t#{ctrCode,jdbcType=VARCHAR},\n" +
+            "\t\t0,\n" +
+            "\t\t#{ckdFcType,jdbcType=VARCHAR},\n" +
+            "\t\t'金盛仓库',\n" +
+            "\t\t#{ckdOpUser,jdbcType=VARCHAR},\n" +
+            "\t\t( SELECT SUM( A.HJ ) FROM VW_XY_CLB_FC_CKD_FIRST A WHERE A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND A.RG_STAGE = #{ckdFcType,jdbcType=VARCHAR} ),\n" +
+            "\t0 \n" +
+            "\t)" +
+            "</script>")
+    @Options(useGeneratedKeys=true, keyProperty="ckdCode", keyColumn="CKD_CODE")
+    public void autoOpenOrderAddCkdMain(XyClbFcCkdMain xyClbFcCkdMain) throws SQLException;
 
 }

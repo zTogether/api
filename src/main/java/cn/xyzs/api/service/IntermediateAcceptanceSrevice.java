@@ -7,10 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class IntermediateAcceptanceSrevice {
@@ -45,8 +44,6 @@ public class IntermediateAcceptanceSrevice {
     @Resource
     private XyClbFcCkdMainMapper xyClbFcCkdMainMapper;
 
-    @Resource
-    private MvChatGroupMapper mvChatGroupMapper;
 
     /**
      * 根据ctrCode获取派工验收表里的信息
@@ -97,6 +94,7 @@ public class IntermediateAcceptanceSrevice {
             } else {
                 if ("10".equals(ysGz) || "21".equals(ysGz)){
                     String sysDate = dateMapper.getSysDate();
+                    System.out.println(sysDate);
                     xyPgYsMapper.addYanshou(ctrCode,ysGz,opUserId,"1",zxyMark,null,sysDate);
                     xyPgWaiterMapper.updateYsDate(ctrCode,sysDate,ysGz);
                 } else   {
@@ -247,8 +245,8 @@ public class IntermediateAcceptanceSrevice {
         xyPg.setPgBeginDate(pgBeginDate);
         xyPg.setPgOpUser(pgOpUser);
         xyPgMapper.addPg(xyPg);
-        xyPgMapper.updateDays(xyPg.getPgId());
         xyPgLsitMapper.addPgList(xyPg.getPgId(),ctrCode,pgStage);
+        xyPgMapper.updateDays(xyPg.getPgId());
         List<Map<String ,Object>> maxGrMapLsit = xyPgMapper.getMaxGr(xyPg.getPgId());
         if(maxGrMapLsit == null || maxGrMapLsit.size()==0) {
 
@@ -371,39 +369,77 @@ public class IntermediateAcceptanceSrevice {
     }
 
     /**
-     * 根据ctrCode获取groupId
+     * 获取最低开单日期
      * @Description:
      * @author: zheng shuai
-     * @date: 2018/10/27 10:07
+     * @date: 2018/11/15 9:52
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String ,Object> getChatGroupId(String ctrCode){
+    public Map<String ,Object> getPgBeginDateflag(String ctrCode){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
-        MvChatGroup mvChatGroup = new MvChatGroup();
-        mvChatGroup.setCtrCode(ctrCode);
         try {
-            List<Map<String,Object>> tempLsit = mvChatGroupMapper.queryChatGroup(mvChatGroup);
-            if (tempLsit != null && tempLsit.size() > 0){
-                String groupId = String.valueOf(tempLsit.get(0).get("GROUP_ID"));
-                obj.put("groupId",groupId);
-                code = "200";
-                msg = "";
+            String pgBeginDateflag = "";
+            Date ctrKgDate = xyCustomerInfoMapper.getCtrKgDate(ctrCode);
+            Date nowDate = new Date();
+            int timeDifference = differentDays(ctrKgDate,nowDate);
+            if(timeDifference == 0){
+                pgBeginDateflag = "A";
+            } else if(timeDifference == 1){
+                pgBeginDateflag = "B";
+            } else if(timeDifference == 2){
+                pgBeginDateflag = "C";
             } else {
-                code = "300";
-                msg = "未建立群组,暂时无法进行客户验收信息推送";
+                pgBeginDateflag = "D";
             }
+            code = "200";
+            msg = "验收成功";
+            obj.put("pgBeginDateflag",pgBeginDateflag);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            resultMap.put("resultData",obj);
             resultMap.put("code",code);
             resultMap.put("msg",msg);
+            resultMap.put("resultDate",obj);
         }
         return resultMap;
+    }
+
+
+    private static int differentDays(Date date1,Date date2)
+    {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+        int day1= cal1.get(Calendar.DAY_OF_YEAR);
+        int day2 = cal2.get(Calendar.DAY_OF_YEAR);
+        int year1 = cal1.get(Calendar.YEAR);
+        int year2 = cal2.get(Calendar.YEAR);
+        if(year1 != year2)   //同一年
+        {
+            int timeDistance = 0 ;
+            for(int i = year1 ; i < year2 ; i ++)
+            {
+                if(i%4==0 && i%100!=0 || i%400==0)    //闰年
+                {
+                    timeDistance += 366;
+                }
+                else    //不是闰年
+                {
+                    timeDistance += 365;
+                }
+            }
+
+            return timeDistance + (day2-day1) ;
+        }
+        else    //不同年
+        {
+            return day2-day1;
+        }
     }
 
 }
