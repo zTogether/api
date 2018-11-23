@@ -126,6 +126,41 @@ public interface UserMapper extends Mapper<TUser> {
     @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel,jdbcType=VARCHAR}</script>")
     Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 
+
+    /**
+     *
+     * @Description: 员工通讯录
+     * @author: GeWeiliang
+     * @date: 2018\11\21 0021 11:24
+     * @param: [condition]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @SelectProvider(type = getPhoneBook.class,method = "getPhoneBook")
+    List<Map<String,Object>> phoneBook(@Param("name") String name,@Param("role") String role,@Param("orgName") String orgName) throws SQLException;
+    class getPhoneBook{
+     public String getPhoneBook(@Param("name") String name,@Param("role") String role,@Param("orgName") String orgName){
+            return new SQL(){{
+                SELECT("A.USER_ID,A.USER_NAME,A.USER_CODE,A.USER_TEL,C.ROLE_NAME,\n" +
+                        "D.ORG_CODE,E.ORG_NAME");
+                FROM("XY_USER A");
+                LEFT_OUTER_JOIN("XY_USER_ROLE B ON A.USER_ID=B.USER_ID");
+                LEFT_OUTER_JOIN("XY_ROLE C ON B.ROLE_ID=C.ROLE_ID");
+                LEFT_OUTER_JOIN("XY_USER_ROLE_ORG D ON B.UR_ID=D.UR_ID ");
+                LEFT_OUTER_JOIN("XY_ORG E ON D.ORG_CODE=E.ORG_CODE");
+                if (name!=null&&name!=""){
+                    WHERE("A.USER_NAME LIKE #{name}");
+                }
+                if(role!=null&&role!=""){
+                    WHERE("C.ROLE_NAME = #{role}");
+                }
+                if (orgName!=null&&orgName!=""){
+                    WHERE("E.ORG_NAME = #{orgName}");
+                }
+                ORDER_BY("E.ORG_CODE,A.USER_NAME");
+            }}.toString();
+        }
+    }
+
     /**
      * 根据成员id获取成员电话
      * @Description:

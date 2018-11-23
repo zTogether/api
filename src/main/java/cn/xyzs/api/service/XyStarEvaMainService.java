@@ -12,7 +12,14 @@ import java.util.Map;
 public class XyStarEvaMainService {
     @Resource
     private XyStarEvaMainMapper xyStarEvaMainMapper;
-
+    /**
+     *
+     * @Description: 添加星级评论
+     * @author: GeWeiliang
+     * @date: 2018\11\2 0002 13:15
+     * @param: [evaNo, evaType, level, evaluation, evaName]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public Map<String,Object> addStarEva(String evaNo,String evaType,String level,String evaluation,String evaName){
         Map<String,Object> resultMap = new HashMap<>();
         String msg = "系统异常";

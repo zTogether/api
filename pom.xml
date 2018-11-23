@@ -205,6 +205,7 @@
             <artifactId>gexin-rp-sdk-http</artifactId>
             <version>4.0.1.7</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.gexin.platform/gexin-rp-sdk-base -->
         <dependency>
             <groupId>com.gexin.platform</groupId>
@@ -250,5 +251,18 @@
             <url>http://192.168.10.243:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
+    <!-- 设定主仓库 -->
+    <repositories>
+        <!-- nexus私服 -->
+        <repository>
+            <id> public</id>
+            <url> http://192.168.10.243:8081/nexus/content/groups/public/</url >
+            <releases>
+                <enabled> true</enabled>
+            </releases>
+            <snapshots>
+                <enabled> true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
