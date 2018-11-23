@@ -241,13 +241,13 @@ public class IntermediateAcceptanceSrevice {
     }
 
     private void addPgAndList(String ctrCode ,String pgStage ,String pgBeginDate ,String pgOpUser) throws SQLException{
-        XyPg xyPg = new XyPg();
-        // #{ctrCode,jdbcType=VARCHAR}, #{pgStage,jdbcType=VARCHAR}, TO_DATE( #{pgBeginDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss' ), #{pgOpUser,jdbcType=VARCHAR}
-        xyPg.setCtrCode(ctrCode);
-        int isFristPg = xyPgMapper.selectCount(xyPg);
+        int isFristPg = xyPgMapper.isFristPg(ctrCode);
         if (isFristPg < 1) {
             xyGcbPrjPlanMapper.createEngineeringPlan(ctrCode,pgBeginDate);
         }
+        XyPg xyPg = new XyPg();
+        // #{ctrCode,jdbcType=VARCHAR}, #{pgStage,jdbcType=VARCHAR}, TO_DATE( #{pgBeginDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss' ), #{pgOpUser,jdbcType=VARCHAR}
+        xyPg.setCtrCode(ctrCode);
         xyPg.setPgStage(pgStage);
         xyPg.setPgBeginDate(pgBeginDate);
         xyPg.setPgOpUser(pgOpUser);
