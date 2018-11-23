@@ -44,6 +44,9 @@ public class IntermediateAcceptanceSrevice {
     @Resource
     private XyClbFcCkdMainMapper xyClbFcCkdMainMapper;
 
+    @Resource
+    private XyGcbPrjPlanMapper xyGcbPrjPlanMapper;
+
 
     /**
      * 根据ctrCode获取派工验收表里的信息
@@ -243,7 +246,7 @@ public class IntermediateAcceptanceSrevice {
         xyPg.setCtrCode(ctrCode);
         int isFristPg = xyPgMapper.selectCount(xyPg);
         if (isFristPg < 1) {
-
+            xyGcbPrjPlanMapper.createEngineeringPlan(ctrCode,pgBeginDate);
         }
         xyPg.setPgStage(pgStage);
         xyPg.setPgBeginDate(pgBeginDate);
