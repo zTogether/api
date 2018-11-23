@@ -175,7 +175,7 @@ public class XyGcbPrjPlanService {
      * @param: [rowId, content]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> isDG(String rowId,String content,String userId){
+    public Map<String,Object> isDG(String prjId,String content,String userId){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
@@ -183,11 +183,26 @@ public class XyGcbPrjPlanService {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String d = dateMapper.getSysDate();
             Date date = dateFormat.parse(d);
-            xyGcbPrjPlanMapper.isDaiGou(date,rowId,content,userId);
+            xyGcbPrjPlanMapper.isDaiGou(date,prjId,content,userId);
+            if(content.equals("客户自购")){
+                String conIdList = xyGcbPrjPlanMapper.getConPrj(prjId);
+                String[] arr = conIdList.split(",");
+                for(int i=0;i<arr.length;i++){
+                    String rowId = arr[i];
+                    Map<String,Object> onePrj = xyGcbPrjPlanMapper.getOnePrj(rowId);
+                    if(onePrj.get("ROEL_NAME").toString().equals("材料中心")){
+                        xyGcbPrjPlanMapper.toEnsure(date,rowId,userId);
+                    }
+                    xyGcbPrjPlanMapper.addPrjMark(rowId,content);
+                }
+            }
             if (content.equals("无需要")){
-                List<String> prjIdList = xyGcbPrjPlanMapper.getConPrj(rowId);
-                for (String prjId : prjIdList) {
-                    xyGcbPrjPlanMapper.toEnsure(date,prjId,userId);
+                String conIdList = xyGcbPrjPlanMapper.getConPrj(prjId);
+                String[] arr = conIdList.split(",");
+                for(int i=0;i<arr.length;i++){
+                    String rowId = arr[i];
+                    xyGcbPrjPlanMapper.toEnsure(date,rowId,userId);
+                    xyGcbPrjPlanMapper.addPrjMark(rowId,content);
                 }
             }
             code = "200";
@@ -246,14 +261,20 @@ public class XyGcbPrjPlanService {
         Map<String,Object> resultMap = new HashMap<>();
         String zcpbId = "";
         String quantity = "";
+        String lcdMark = "";
         try{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String d = dateMapper.getSysDate();
             Date date = dateFormat.parse(d);
             for (Map<String, Object> map : lcdList) {
                 zcpbId = map.get("zcpbId").toString();
-                quantity = map.get("quantity").toString();
-                xyGcbPrjPlanMapper.addLcd(prjId,zcpbId,quantity,ctrCode);
+                if(map.get("quantity")!=null&&map.get("quantity")!=""){
+                    quantity = map.get("quantity").toString();
+                }
+                if(map.get("lcdMark")!=null&&map.get("lcdMark")!=""){
+                    lcdMark = map.get("lcdMark").toString();
+                }
+                xyGcbPrjPlanMapper.addLcd(prjId,zcpbId,quantity,ctrCode,lcdMark);
             }
             xyGcbPrjPlanMapper.toEnsure(date,prjId,userId);
             xyGcbPrjPlanMapper.addPrjMark(prjId,prjMark);

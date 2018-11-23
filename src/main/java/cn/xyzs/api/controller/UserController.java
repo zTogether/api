@@ -66,7 +66,7 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/phoneBook")
-    public Map<String,Object> phoneBook(String condition){
-        return userService.phoneBook(condition);
+    public Map<String,Object> phoneBook(String name,String role,String orgName){
+        return userService.phoneBook(name,role,orgName);
     }
 }

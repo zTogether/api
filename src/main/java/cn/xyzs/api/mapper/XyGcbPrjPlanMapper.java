@@ -24,7 +24,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "LEFT JOIN XY_USER u ON u.USER_ID=p.EDIT_USER \n" +
             "WHERE p.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} ORDER BY p.DAYS,p.XH" +
             "</script>")
-    public List<Map<String,Object>> getGcbPrjPlan(String ctrCode) throws SQLException;
+    List<Map<String,Object>> getGcbPrjPlan(String ctrCode) throws SQLException;
 
     /**
      *
@@ -37,7 +37,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Update("<script>" +
             "UPDATE XY_GCB_PRJ_PLAN SET EDIT_STATU=1,EDIT_DATE=#{editDate},EDIT_USER=#{editUser} WHERE ROW_ID=#{rowId}" +
             "</script>")
-    public void toEnsure(@Param("editDate") Date editDate, @Param("rowId") String rowId,@Param("editUser") String userId) throws SQLException;
+    void toEnsure(@Param("editDate") Date editDate, @Param("rowId") String rowId,@Param("editUser") String userId) throws SQLException;
 
     /**
      *
@@ -52,7 +52,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "EDIT_DATE=#{editDate,jdbcType=VARCHAR},EDIT_USER=#{editUser,jdbcType=VARCHAR}\n" +
             " WHERE ROW_ID=#{rowId}" +
             "</script>")
-    public void isDaiGou(@Param("editDate") Date editDate,@Param("rowId") String rowId,
+    void isDaiGou(@Param("editDate") Date editDate,@Param("rowId") String prjId,
                          @Param("content") String content,@Param("editUser") String userId) throws SQLException;
 
     /**
@@ -66,12 +66,12 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Update("<script>" +
             "UPDATE XY_GCB_PRJ_PLAN SET EDIT_MARK=#{prjMark} WHERE ROW_ID=#{prjId}" +
             "</script>")
-    public void addPrjMark(@Param("prjId") String prjId,@Param("prjMark") String prjMark) throws SQLException;
+    void addPrjMark(@Param("prjId") String prjId,@Param("prjMark") String prjMark) throws SQLException;
 
     @Select("<script>" +
             "SELECT ROW_ID,DAYS,PLAN_TYPE,EDIT_STATU FROM XY_GCB_PRJ_PLAN WHERE ROW_ID = #{rowId}" +
             "</script>")
-    public Map<String,Object> getOnePlan(String rowId) throws SQLException;
+    Map<String,Object> getOnePlan(String rowId) throws SQLException;
 
 
     /**
@@ -87,7 +87,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "FROM XY_CLB_ZCPB_LIST l,XY_GCB_PRJ_PLAN p,XY_GCB_PRJ_LCD_LIST t \n" +
             "WHERE p.PLAN_LCDID=t.PLAN_LCDID AND t.ZCPB_ID=l.ZCPB_ROWID AND p.ROW_ID=#{rowId} " +
             "</script>")
-    public List<Map<String,Object>> getLcd(String rowId) throws SQLException;
+    List<Map<String,Object>> getLcd(String rowId) throws SQLException;
 
 
     /**
@@ -99,11 +99,11 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: void
      */
     @InsertProvider(type = addLcd.class,method = "addLcd")
-    public void addLcd(@Param("prjId") String prjId,@Param("zcpbId") String zcpbId,@Param("quantity") String quantity,
-                      @Param("ctrCode") String ctrCode) throws SQLException;
+    void addLcd(@Param("prjId") String prjId,@Param("zcpbId") String zcpbId,@Param("quantity") String quantity,
+                      @Param("ctrCode") String ctrCode,@Param("mark") String lcdMark) throws SQLException;
     class addLcd{
         public String addLcd(@Param("prjId") String prjId,@Param("zcpbId") String zcpbId,@Param("quantity") String quantity,
-                             @Param("ctrCode") String ctrCode){
+                             @Param("ctrCode") String ctrCode,@Param("mark") String lcdMark){
             return new SQL(){{
                 INSERT_INTO("XY_GCB_PRJ_LCD");
                 VALUES("ZCPB_ID","#{zcpbId,jdbcType=VARCHAR}");
@@ -111,6 +111,9 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
                 VALUES("CTR_CODE","#{ctrCode,jdbcType=VARCHAR}");
                 if(quantity!=null&&quantity!=""){
                     VALUES("QUANTITY","#{quantity}");
+                }
+                if(lcdMark!=null&&lcdMark!=""){
+                    VALUES("MARK","#{mark}");
                 }
             }}.toString();
         }
@@ -128,7 +131,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "SELECT d.*,l.ZCPB_MX,l.ZCPB_QTY,l.ZCPB_PRICE,l.ZCPB_PP FROM XY_CLB_ZCPB_LIST l,XY_GCB_PRJ_LCD d \n" +
             "WHERE  d.ZCPB_ID=l.ZCPB_ROWID AND d.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String,Object>> showLcdByCtrCode(String ctrCode) throws SQLException;
+    List<Map<String,Object>> showLcdByCtrCode(String ctrCode) throws SQLException;
 
     /**
      *
@@ -143,7 +146,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "LEFT JOIN XY_CUSTOMER_INFO i ON p.CTR_CODE=i.CTR_CODE\n" +
             "WHERE i.CTR_GCJL=#{userId} OR i.CTR_CLDD=#{userId}  ORDER BY p.DAYS" +
             "</script>")
-    public List<Map<String,Object>> showMyPlan(String userId) throws SQLException;
+    List<Map<String,Object>> showMyPlan(String userId) throws SQLException;
 
     /**
      *
@@ -154,7 +157,12 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.List<java.lang.String>
      */
     @Select("<script>" +
-            "SELECT ROW_ID FROM XY_GCB_PRJ_PLAN WHERE CON_ROWID=#{prjId,jdbcType=VARCHAR}" +
+            "SELECT CON_ROWID FROM XY_GCB_PRJ_PLAN WHERE ROW_ID=#{prjId,jdbcType=VARCHAR}" +
             "</script>")
-    public List<String> getConPrj(@Param("prjId") String prjId) throws SQLException;
+    String getConPrj(@Param("prjId") String prjId) throws SQLException;
+
+    @Select("<script>" +
+            "SELECT * FROM XY_GCB_PRJ_PLAN WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
+            "</script>")
+    Map<String,Object> getOnePrj(@Param("rowId") String rowId) throws SQLException;
 }

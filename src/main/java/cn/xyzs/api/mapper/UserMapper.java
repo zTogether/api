@@ -135,11 +135,30 @@ public interface UserMapper extends Mapper<TUser> {
      * @param: [condition]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("<script>" +
-            "SELECT u.USER_NAME,u.USER_TEL,r.ROLE_NAME FROM XY_USER u,XY_ROLE r,XY_USER_ROLE ur\n" +
-            "WHERE u.USER_ID=ur.USER_ID AND ur.ROLE_ID=r.ROLE_ID AND u.USER_NAME LIKE #{condition,jdbcType=VARCHAR}" +
-            "ORDER BY u.USER_NAME" +
-            "</script>")
-    List<Map<String,Object>> phoneBook(@Param("condition") String condition) throws SQLException;
+    @SelectProvider(type = getPhoneBook.class,method = "getPhoneBook")
+    List<Map<String,Object>> phoneBook(@Param("name") String name,@Param("role") String role,@Param("orgName") String orgName) throws SQLException;
+    class getPhoneBook{
+     public String getPhoneBook(@Param("name") String name,@Param("role") String role,@Param("orgName") String orgName){
+            return new SQL(){{
+                SELECT("A.USER_ID,A.USER_NAME,A.USER_CODE,A.USER_TEL,C.ROLE_NAME,\n" +
+                        "D.ORG_CODE,E.ORG_NAME");
+                FROM("XY_USER A");
+                LEFT_OUTER_JOIN("XY_USER_ROLE B ON A.USER_ID=B.USER_ID");
+                LEFT_OUTER_JOIN("XY_ROLE C ON B.ROLE_ID=C.ROLE_ID");
+                LEFT_OUTER_JOIN("XY_USER_ROLE_ORG D ON B.UR_ID=D.UR_ID ");
+                LEFT_OUTER_JOIN("XY_ORG E ON D.ORG_CODE=E.ORG_CODE");
+                if (name!=null&&name!=""){
+                    WHERE("A.USER_NAME LIKE #{name}");
+                }
+                if(role!=null&&role!=""){
+                    WHERE("C.ROLE_NAME = #{role}");
+                }
+                if (orgName!=null&&orgName!=""){
+                    WHERE("E.ORG_NAME = #{orgName}");
+                }
+                ORDER_BY("E.ORG_CODE,A.USER_NAME");
+            }}.toString();
+        }
+    }
 
 }

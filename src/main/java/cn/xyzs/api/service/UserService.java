@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -88,18 +86,38 @@ public class UserService {
      * @param: [condition]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> phoneBook(String condition){
+    public Map<String,Object> phoneBook(String name,String role,String orgName){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
-        Map<String,Object> obj = new HashMap<>();
+        Map<String,Object> phone = new LinkedHashMap<>();
         try{
-            if(condition==null){
-                condition = "";
+            if (name!=null&&name!=""){
+                name = "%"+name+"%";
             }
-            condition = condition.trim();
-            List userList = userMapper.phoneBook("%"+condition+"%");
-            obj.put("phoneBook",userList);
+            List<Map<String,Object>> list = userMapper.phoneBook(name,role,orgName);
+            for (Map<String, Object> map : list) {
+                List phoneList = new ArrayList();
+                if (map.get("ORG_NAME")!=null&&map.get("ORG_NAME")!=""){
+                    if(phone.containsKey(map.get("ORG_NAME").toString())){
+                        List<Map<String,Object>> existList =(List<Map<String,Object>>) phone.get(map.get("ORG_NAME").toString());
+                        existList.add(map);
+                        phone.put(map.get("ORG_NAME").toString(),existList);
+                    }else{
+                        phoneList.add(map);
+                        phone.put(map.get("ORG_NAME").toString(),phoneList);
+                    }
+                }else {
+                    if(phone.containsKey("其他")){
+                        List<Map<String,Object>> existList =(List<Map<String,Object>>) phone.get("其他");
+                        existList.add(map);
+                        phone.put("其他",existList);
+                    }else{
+                        phoneList.add(map);
+                        phone.put("其他",phoneList);
+                    }
+                }
+            }
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -107,7 +125,7 @@ public class UserService {
         }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
-            resultMap.put("resultData",obj);
+            resultMap.put("resultData",phone);
         }
         return resultMap;
     }

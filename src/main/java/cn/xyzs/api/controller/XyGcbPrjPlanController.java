@@ -83,8 +83,8 @@ public class XyGcbPrjPlanController {
      */
     @ResponseBody
     @RequestMapping("/isDg")
-    public Map<String,Object> isDaiGou(String rowId,String content,String userId){
-        return xyGcbPrjPlanService.isDG(rowId,content,userId);
+    public Map<String,Object> isDaiGou(String prjId,String content,String userId){
+        return xyGcbPrjPlanService.isDG(prjId,content,userId);
     }
 
     /**
@@ -114,6 +114,7 @@ public class XyGcbPrjPlanController {
     public Map<String,Object> addLcd(String prjId, String userId, String ctrCode,String lcd,String prjMark){
         JSONArray arr = JSONArray.parseArray(lcd);
         List lcdList = JSONObject.parseArray(arr.toJSONString());
+        System.err.println(lcdList);
         return xyGcbPrjPlanService.addLcd(prjId,userId,ctrCode,lcdList,prjMark);
     }
 
