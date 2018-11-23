@@ -126,4 +126,35 @@ public interface UserMapper extends Mapper<TUser> {
     @Select("<script>SELECT * FROM XY_USER WHERE USER_TEL=#{userTel,jdbcType=VARCHAR}</script>")
     Map<String,Object> getUserInfo(@Param("userTel") String userTel);
 
+    /**
+     * 根据成员id获取成员电话
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/23 14:50
+     * @param: [menberId]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tA.USER_TEL MENEBERTEL\n" +
+            "FROM\n" +
+            "\tXY_USER A\n" +
+            "WHERE\n" +
+            "\tA.USER_ID = #{menberId,jdbcType=VARCHAR}\n" +
+            "UNION ALL\t\n" +
+            "SELECT\n" +
+            "\tB.GR_TEL MENEBERTEL\n" +
+            "FROM\n" +
+            "\tXY_GCB_GRXX B\n" +
+            "WHERE\n" +
+            "\tB.GR_ID = #{menberId,jdbcType=VARCHAR}" +
+            "UNION ALL\t\n" +
+            "SELECT\n" +
+            "\tC.CTR_TEL MENEBERTEL\n" +
+            "FROM\n" +
+            "\tXY_CUSTOMER_INFO C\n" +
+            "WHERE\n" +
+            "\tC.CTR_CODE = #{menberId,jdbcType=VARCHAR}" +
+            "</script>")
+    public String getMemberTel(String menberId) throws SQLException;
 }

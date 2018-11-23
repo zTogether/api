@@ -241,6 +241,10 @@ public class IntermediateAcceptanceSrevice {
         XyPg xyPg = new XyPg();
         // #{ctrCode,jdbcType=VARCHAR}, #{pgStage,jdbcType=VARCHAR}, TO_DATE( #{pgBeginDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss' ), #{pgOpUser,jdbcType=VARCHAR}
         xyPg.setCtrCode(ctrCode);
+        int isFristPg = xyPgMapper.selectCount(xyPg);
+        if (isFristPg < 1) {
+
+        }
         xyPg.setPgStage(pgStage);
         xyPg.setPgBeginDate(pgBeginDate);
         xyPg.setPgOpUser(pgOpUser);

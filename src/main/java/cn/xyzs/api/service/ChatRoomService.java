@@ -21,6 +21,8 @@ public class ChatRoomService {
     private XyClbZcOrderMapper xyClbZcOrderMapper;
     @Resource
     private XyClbZcOrderFhMapper xyClbZcOrderFhMapper;
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 根据ctrCode获取所有服务人员信息
@@ -198,6 +200,34 @@ public class ChatRoomService {
             } else {
                 obj.put("isKhYs","否");
             }
+            code = "200";
+            msg = "验收成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据成员id获取成员电话
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/23 14:52
+     * @param: [memberId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getMemberTel(String memberId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            String memberTel = userMapper.getMemberTel(memberId);
+            obj.put("memberTel",memberTel);
             code = "200";
             msg = "验收成功";
         } catch (SQLException e) {

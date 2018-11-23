@@ -85,4 +85,18 @@ public class ChatRoomController {
         return chatRoomService.isZcOrderYs(orderId);
     }
 
+    /**
+     * 根据成员id获取成员电话
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/23 14:52
+     * @param: [memberId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getMemberTel")
+    public Map<String ,Object> getMemberTel(String memberId){
+        return chatRoomService.getMemberTel(memberId);
+    }
+
 }
