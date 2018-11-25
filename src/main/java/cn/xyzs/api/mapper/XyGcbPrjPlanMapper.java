@@ -50,7 +50,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Update("<script>" +
             "UPDATE XY_GCB_PRJ_PLAN SET EDIT_STATU=1,EDIT_MARK=#{content,jdbcType=VARCHAR}," +
             "EDIT_DATE=#{editDate,jdbcType=VARCHAR},EDIT_USER=#{editUser,jdbcType=VARCHAR}\n" +
-            " WHERE ROW_ID=#{rowId}" +
+            " WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
             "</script>")
     void isDaiGou(@Param("editDate") Date editDate,@Param("rowId") String prjId,
                          @Param("content") String content,@Param("editUser") String userId) throws SQLException;

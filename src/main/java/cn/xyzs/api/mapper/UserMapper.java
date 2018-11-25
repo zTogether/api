@@ -4,6 +4,7 @@ import cn.xyzs.api.pojo.TUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -192,4 +193,29 @@ public interface UserMapper extends Mapper<TUser> {
             "\tC.CTR_CODE = #{menberId,jdbcType=VARCHAR}" +
             "</script>")
     public String getMemberTel(String menberId) throws SQLException;
+
+
+    /**
+     * 获取临时活动提醒成员表信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/24 11:06
+     * @param: []
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tNAME,\n" +
+            "\tTEL,\n" +
+            "\tSEND_STATUS,\n" +
+            "\tTO_CHAR(SEND_DATE,'yyyy-MM-dd HH24:mi:ss') SEND_DATE\n" +
+            "FROM\n" +
+            "\tTEMP_SEND_MEMBER" +
+            "</script>")
+    public List<Map<String ,Object>> getTempMember() throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE TEMP_SEND_MEMBER SET SEND_STATUS = #{sendStatu,jdbcType=VARCHAR},SEND_DATE = SYSDATE WHERE TEL = #{tel,jdbcType=VARCHAR}" +
+            "</script>")
+    public void  updateTemp(@Param("sendStatu") String sendStatu ,@Param("tel") String tel) throws SQLException;
 }
