@@ -114,7 +114,6 @@ public class XyGcbPrjPlanController {
     public Map<String,Object> addLcd(String prjId, String userId, String ctrCode,String lcd,String prjMark){
         JSONArray arr = JSONArray.parseArray(lcd);
         List lcdList = JSONObject.parseArray(arr.toJSONString());
-        System.err.println(lcdList);
         return xyGcbPrjPlanService.addLcd(prjId,userId,ctrCode,lcdList,prjMark);
     }
 
@@ -132,6 +131,14 @@ public class XyGcbPrjPlanController {
         return xyGcbPrjPlanService.showLcd(ctrCode);
     }
 
+    /**
+     *
+     * @Description: 获取我的工地日程
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 9:20
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/myPlan")
     public Map<String,Object> getMyPlan(String userId){
