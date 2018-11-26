@@ -1,6 +1,6 @@
 package cn.xyzs.api.controller;
 
-import cn.xyzs.api.service.XyStarEvaMainService;
+import cn.xyzs.api.service.XyStarEvaListService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,9 +10,9 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/App/starEva")
-public class XyStarEvaMainController {
+public class XyStarEvaListController {
     @Resource
-    private XyStarEvaMainService xyStarEvaMainService;
+    private XyStarEvaListService xyStarEvaListService;
 
     /**
      *
@@ -25,6 +25,6 @@ public class XyStarEvaMainController {
     @ResponseBody
     @RequestMapping("addEva")
     public Map<String,Object> addStarEva(String evaNo,String evaType,String level,String evaluation,String evaName){
-        return xyStarEvaMainService.addStarEva(evaNo,evaType,level,evaluation,evaName);
+        return xyStarEvaListService.addStarEva(evaNo,evaType,level,evaluation,evaName);
     }
 }
