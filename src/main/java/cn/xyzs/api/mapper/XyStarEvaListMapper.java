@@ -10,9 +10,8 @@ import java.sql.SQLException;
 public interface XyStarEvaListMapper extends Mapper<XyStarEvaList> {
 
     @Insert("<script>" +
-            "INSERT INTO XY_STAR_EVA_LIST(EVA_NO,LEVEL,EVALUATION,EVA_NAME,EVA_TYPE,EVA_DATE) " +
-            "VALUES(#{evaNo,jdbcType=VARCHAR},#{level,jdbcType=VARCHAR},#{evaluation,jdbcType=VARCHAR},#{evaName,jdbcType=VARCHAR}," +
-            "#{evaType,jdbcType=VARCHAR},SYSDATE) " +
+            "INSERT INTO XY_STAR_EVA_LIST \n" +
+            "VALUES(#{evaNo,jdbcType=VARCHAR},#{level,jdbcType=VARCHAR},#{evaluation,jdbcType=VARCHAR},#{evaName,jdbcType=VARCHAR},sys_guid(),#{evaType,jdbcType=VARCHAR},SYSDATE) " +
             "</script>")
     public void addEvaList(@Param("evaNo") String evaNo,@Param("level") String level,
                            @Param("evaluation") String evaluation,@Param("evaName") String evaName,@Param("evaType") String evaType) throws SQLException;
