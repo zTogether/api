@@ -1,14 +1,13 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyStarEvaMain;
+import cn.xyzs.api.pojo.XyStarEvaList;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
 
-public interface XyStarEvaListMapper extends Mapper<XyStarEvaMain> {
+public interface XyStarEvaListMapper extends Mapper<XyStarEvaList> {
 
     @Insert("<script>" +
             "INSERT INTO XY_STAR_EVA_LIST(EVA_NO,LEVEL,EVALUATION,EVA_NAME,EVA_TYPE,EVA_DATE) " +
