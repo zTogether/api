@@ -1,6 +1,6 @@
 package cn.xyzs.api.service;
 
-import cn.xyzs.api.mapper.XyStarEvaMainMapper;
+import cn.xyzs.api.mapper.XyStarEvaListMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class XyStarEvaMainService {
+public class XyStarEvaListService {
     @Resource
-    private XyStarEvaMainMapper xyStarEvaMainMapper;
+    private XyStarEvaListMapper xyStarEvaMainMapper;
     /**
      *
      * @Description: 添加星级评论
@@ -25,8 +25,7 @@ public class XyStarEvaMainService {
         String msg = "系统异常";
         String code = "500";
         try{
-            xyStarEvaMainMapper.addEvaMain(evaNo,evaType);
-            xyStarEvaMainMapper.addEvaList(evaNo,level,evaluation,evaName);
+            xyStarEvaMainMapper.addEvaList(evaNo,level,evaluation,evaName,evaType);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
