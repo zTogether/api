@@ -50,7 +50,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Update("<script>" +
             "UPDATE XY_GCB_PRJ_PLAN SET EDIT_STATU=1,EDIT_MARK=#{content,jdbcType=VARCHAR}," +
             "EDIT_DATE=#{editDate,jdbcType=VARCHAR},EDIT_USER=#{editUser,jdbcType=VARCHAR}\n" +
-            " WHERE ROW_ID=#{rowId}" +
+            " WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
             "</script>")
     void isDaiGou(@Param("editDate") Date editDate,@Param("rowId") String prjId,
                          @Param("content") String content,@Param("editUser") String userId) throws SQLException;
@@ -165,4 +165,37 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "SELECT * FROM XY_GCB_PRJ_PLAN WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
             "</script>")
     Map<String,Object> getOnePrj(@Param("rowId") String rowId) throws SQLException;
+
+    /**
+     * 生成工程计划
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/23 16:40
+     * @param: [ctrCode, pgBeginDate]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_GCB_PRJ_PLAN A (\n" +
+            "\tSELECT\n" +
+            "\t\t#{ctrCode,jdbcType=VARCHAR} CTR_CODE,\n" +
+            "\t\tSYS_GUID () ROW_ID,\n" +
+            "\t\tADD_MONTHS( to_date( #{pgBeginDate,jdbcType=VARCHAR}, 'YYYY-MM-DD' ), 0 ) + DAYS DAYS,\n" +
+            "\t\tB.XH,\n" +
+            "\t\tB.PLAN_CONTENT,\n" +
+            "\t\tB.ROLE_NAME,\n" +
+            "\t\tB.PLAN_TYPE,\n" +
+            "\t\tB.PLAN_LCDID,\n" +
+            "\t\tB.CON_ROWID,\n" +
+            "\t\tNULL AS EDIT_DATE,\n" +
+            "\t\t'-' EDIT_MARK,\n" +
+            "\t\t0 EDIT_STATU,\n" +
+            "\t\tNULL AS EDIT_USER,\n" +
+            "\t\tB.ROW_ID MB_ROWID \n" +
+            "\tFROM\n" +
+            "\t\tXY_GCB_PRJ_PLAN_MB B \n" +
+            "\tWHERE\n" +
+            "\t\tB.DAYS &lt;&gt; 0 \n" +
+            ")" +
+            "</script>")
+    public void createEngineeringPlan(@Param("ctrCode") String ctrCode, @Param("pgBeginDate") String pgBeginDate) throws SQLException;
 }

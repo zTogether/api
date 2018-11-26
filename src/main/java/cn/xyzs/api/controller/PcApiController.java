@@ -1,5 +1,6 @@
 package cn.xyzs.api.controller;
 
+import cn.xyzs.api.service.MvSysSmsService;
 import cn.xyzs.api.service.PcApiService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,9 @@ public class PcApiController {
 
     @Resource
     private PcApiService pcApiService;
+
+    @Resource
+    private MvSysSmsService mvSysSmsService;
 
     @ResponseBody
     @RequestMapping("/sendGiftCode")
@@ -34,5 +38,20 @@ public class PcApiController {
     public Map<String,Object> sendPgMsg(String pgId){
         return pcApiService.sendPgMsg(pgId);
     }
+
+
+    /**
+     * 发送获取提醒
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/24 11:27
+     * @param: []
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    /*@ResponseBody
+    @RequestMapping("/sendActivityReminder")
+    public Map<String ,Object> sendActivityReminder(){
+        return mvSysSmsService.sendActivityReminder();
+    }*/
 
 }

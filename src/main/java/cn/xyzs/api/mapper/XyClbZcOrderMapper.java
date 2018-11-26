@@ -164,4 +164,116 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER WHERE ORDER_ID=#{orderId,jdbcType=VARCHAR}</script>")
     public Map<String,Object> getOrderInfo(@Param("orderId") String orderId)throws SQLException;
 
+    /**
+     * 获取允许执行员发送主材订单验收的主材订单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/19 13:22
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tXCZO.ORDER_ID, \n" +
+            "\tTO_CHAR(XCZO.ORDER_DATE,'yyyy-MM-dd HH24:mi:ss') ORDER_DATE, \n" +
+            "\tXCZO.CTR_CODE, \n" +
+            "\tXCZO.OP_USERID, \n" +
+            "\tXCZO.ORDER_JE, \n" +
+            "\tXCZO.ORDER_MARK, \n" +
+            "\tXCZO.ORDER_STATUS, \n" +
+            "\tXCZO.ORDER_TYPE, \n" +
+            "\tXCZO.ORDER_SUP, \n" +
+            "\tXCZO.EDIT_TYPE, \n" +
+            "\tXCZO.ORDER_DIS, \n" +
+            "\tXCZO.ORDER_DIS_MARK, \n" +
+            "\tXCZO.ORDER_ISRETURN,\n" +
+            "\tTO_CHAR(XCZO.PRINT_DATE,'yyyy-MM-dd HH24:mi:ss') PRINT_DATE,\n" +
+            "\txs.SUP_NAME\n" +
+            "FROM\n" +
+            "\tXY_CLB_ZC_ORDER XCZO,\n" +
+            "\tXY_SUPPLIER xs\n" +
+            "WHERE\n" +
+            "\tXCZO.ORDER_ISRETURN = 0 \n" +
+            "AND XCZO.PRINT_DATE IS NOT NULL \n" +
+            "AND XCZO.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
+            "AND XCZO.ORDER_SUP = xs.SUP_CODE\n" +
+            "AND XCZO.ORDER_ID NOT IN (\n" +
+            "\tSELECT A.ORDER_ID FROM XY_CLB_ZC_ORDER_FH A WHERE A.ORDER_ID IN (\n" +
+            "\t\tSELECT B.ORDER_ID FROM XY_CLB_ZC_ORDER B WHERE B.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND B.PRINT_DATE IS NOT NULL \n" +
+            "\t) AND A.KH_STATU = 1\n" +
+            ")" +
+            "</script>")
+    public List<Map<String ,Object>> getZxySendZcYsOrder(String ctrCode) throws SQLException;
+
+    /**
+     * 根据档案号获取所包含的供应商
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 11:55
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT DISTINCT\n" +
+            "\tB.SUP_NAME,\n" +
+            "\tB.SUP_CODE,\n" +
+            "\tA.CTR_CODE \n" +
+            "FROM\n" +
+            "\tXY_CLB_ZC_ORDER A,\n" +
+            "\tXY_SUPPLIER B \n" +
+            "WHERE\n" +
+            "\tA.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} \n" +
+            "AND \n" +
+            "\tA.ORDER_SUP = B.SUP_CODE" +
+            "</script>")
+    public List<Map<String ,Object>> getSupByCtrCode(String ctrCode) throws SQLException;
+
+    /**
+     * 添加退货单至order主表
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 15:39
+     * @param: [xyClbZcOrder]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO \n" +
+            "\tXY_CLB_ZC_ORDER ( \n" +
+            "\t\tORDER_ID,\n" +
+            "\t\tCTR_CODE,\n" +
+            "\t\tOP_USERID,\n" +
+            "\t\tORDER_STATUS,\n" +
+            "\t\tORDER_TYPE,\n" +
+            "\t\tORDER_SUP,\n" +
+            "\t\tEDIT_TYPE,\n" +
+            "\t\tORDER_ISRETURN\n" +
+            "\n" +
+            "\t) \n" +
+            "VALUES(\n" +
+            "\tsys_guid(),\n" +
+            "\t#{ctrCode,jdbcType=VARCHAR},\n" +
+            "\t#{opUserid,jdbcType=VARCHAR},\n" +
+            "\t'1',\n" +
+            "\t'0',\n" +
+            "\t#{orderSup,jdbcType=VARCHAR},\n" +
+            "\t'1',\n" +
+            "\t'1'\n" +
+            ")" +
+            "</script>")
+    @Options(useGeneratedKeys=true, keyProperty="orderId", keyColumn="ORDER_ID")
+    public void addTHDorder(XyClbZcOrder xyClbZcOrder) throws SQLException;
+
+    /**
+     * 根据orderid修改退货单金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 15:42
+     * @param: [orderId, orderJe]
+     * @return: void
+     */
+    @Update("<script>" +
+            "UPDATE XY_CLB_ZC_ORDER SET ORDER_JE = #{orderJe,jdbcType=VARCHAR} WHERE ORDER_ID = #{orderId,jdbcType=VARCHAR}" +
+            "</script>")
+    public void updateTHDJe(@Param("orderId") String orderId ,@Param("orderJe") String orderJe) throws SQLException;
+
 }

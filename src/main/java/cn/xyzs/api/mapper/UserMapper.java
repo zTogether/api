@@ -4,6 +4,7 @@ import cn.xyzs.api.pojo.TUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -161,4 +162,60 @@ public interface UserMapper extends Mapper<TUser> {
         }
     }
 
+    /**
+     * 根据成员id获取成员电话
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/23 14:50
+     * @param: [menberId]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tA.USER_TEL MENEBERTEL\n" +
+            "FROM\n" +
+            "\tXY_USER A\n" +
+            "WHERE\n" +
+            "\tA.USER_ID = #{menberId,jdbcType=VARCHAR}\n" +
+            "UNION ALL\t\n" +
+            "SELECT\n" +
+            "\tB.GR_TEL MENEBERTEL\n" +
+            "FROM\n" +
+            "\tXY_GCB_GRXX B\n" +
+            "WHERE\n" +
+            "\tB.GR_ID = #{menberId,jdbcType=VARCHAR}" +
+            "UNION ALL\t\n" +
+            "SELECT\n" +
+            "\tC.CTR_TEL MENEBERTEL\n" +
+            "FROM\n" +
+            "\tXY_CUSTOMER_INFO C\n" +
+            "WHERE\n" +
+            "\tC.CTR_CODE = #{menberId,jdbcType=VARCHAR}" +
+            "</script>")
+    public String getMemberTel(String menberId) throws SQLException;
+
+
+    /**
+     * 获取临时活动提醒成员表信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/24 11:06
+     * @param: []
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tNAME,\n" +
+            "\tTEL,\n" +
+            "\tSEND_STATUS,\n" +
+            "\tTO_CHAR(SEND_DATE,'yyyy-MM-dd HH24:mi:ss') SEND_DATE\n" +
+            "FROM\n" +
+            "\tTEMP_SEND_MEMBER" +
+            "</script>")
+    public List<Map<String ,Object>> getTempMember() throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE TEMP_SEND_MEMBER SET SEND_STATUS = #{sendStatu,jdbcType=VARCHAR},SEND_DATE = SYSDATE WHERE TEL = #{tel,jdbcType=VARCHAR}" +
+            "</script>")
+    public void  updateTemp(@Param("sendStatu") String sendStatu ,@Param("tel") String tel) throws SQLException;
 }

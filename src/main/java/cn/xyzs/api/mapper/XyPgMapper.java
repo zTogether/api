@@ -522,4 +522,17 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\t)" +
             "</script>")
     public Integer isSendMsg(String pgId) throws SQLException;
+
+    /**
+     * 是否为首次派工
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/23 16:58
+     * @param: [ctrCode]
+     * @return: int
+     */
+    @Select("<script>" +
+            "SELECT COUNT(1) FROM XY_PG WHERE CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public int isFristPg(String ctrCode) throws SQLException;
 }

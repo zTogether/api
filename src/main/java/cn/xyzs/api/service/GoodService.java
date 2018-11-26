@@ -9,10 +9,12 @@ import cn.xyzs.api.mapper.*;
 import cn.xyzs.api.pojo.XyClbZcDb;
 import cn.xyzs.api.pojo.XyVal;
 import cn.xyzs.api.pojo.*;
+import cn.xyzs.api.util.CalculateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -649,8 +651,8 @@ public class GoodService {
      */
     @Transactional
     public Map<String,Object> updateOrderList(String rowId,String zcQty,String zcArea, String zcMark,
-                                              String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
-                                              String editType,String orderDis, String orderDisMark, String orderIsreturn){
+           String orderId,String orderJe,String orderMark,String orderStatus,String orderType,
+           String editType,String orderDis, String orderDisMark, String orderIsreturn){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
@@ -739,8 +741,8 @@ public class GoodService {
      */
     @Transactional
     public Map<String,Object> updateOrderInfo( String orderId, String orderJe,  String orderMark, String orderStatus,
-                                               String orderType,  String editType, String orderDis, String orderDisMark,
-                                               String orderIsreturn){
+            String orderType,  String editType, String orderDis, String orderDisMark,
+            String orderIsreturn){
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         String code = "500";
@@ -771,8 +773,8 @@ public class GoodService {
      */
     @Transactional
     public Map<String,Object> updateOrderListFree(String rowId,String zcQty, String zcMark,String zcArea,String orderId,
-                                                  String orderJe,String orderMark,String orderStatus,String orderType,
-                                                  String orderDis,String orderDisMark,String editType,String orderIsreturn){
+               String orderJe,String orderMark,String orderStatus,String orderType,
+               String orderDis,String orderDisMark,String editType,String orderIsreturn){
         Map<String,Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
@@ -845,4 +847,120 @@ public class GoodService {
         }
         return resultMap;
     }
+
+    /**
+     * 根据档案号获取所包含的供应商
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 11:57
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getSupByCtrCode(String ctrCode){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> supList = xyClbZcOrderMapper.getSupByCtrCode(ctrCode);
+            obj.put("supList",supList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+    
+    /**
+     * 根据供应商和档案号获取可退货的的商品
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 14:15
+     * @param: [ctrCode, orderSup]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getZcByOrderSupAndCtrCode(String ctrCode ,String orderSup){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            List<Map<String,Object>> zcList = xyClbZcOrderListMapper.getZcByOrderSupAndCtrCode(ctrCode,orderSup);
+            obj.put("zcList",zcList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 添加主材退货单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 16:24
+     * @param: [xyClbZcOrder, zcCodeArray, zcNameArray, zcTypeArray, zcPriceInArray, zcPriceOutArray, zcQtyArray, zcBrandArray, zcSupArray, zcSpecArray, zcMaterialArray, zcColorArray, zcUnitArray, zcCycArray, zcAreaArray, zcVersionArray, zcShopStatusArray]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> addZcTHD(XyClbZcOrder xyClbZcOrder,
+                                        String[] zcCodeArray,  String[] zcNameArray, String[] zcTypeArray,
+                                        String[] zcPriceInArray, String[] zcPriceOutArray, String[] zcQtyArray,
+                                        String[] zcBrandArray,  String[] zcSupArray, String[] zcSpecArray,
+                                        String[] zcMaterialArray,  String[] zcColorArray,  String[] zcUnitArray,
+                                        String[] zcCycArray, String[] zcAreaArray , String[] zcVersionArray,
+                                        String[] zcShopStatusArray
+    ){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            //添加主表
+            xyClbZcOrderMapper.addTHDorder(xyClbZcOrder);
+            XyClbZcOrderList xyClbZcOrderList = new XyClbZcOrderList();
+            double orderJeD = 0;
+            for (int i = 0; i < zcCodeArray.length ; i++) {
+                xyClbZcOrderList.setOrderId(xyClbZcOrder.getOrderId());
+                xyClbZcOrderList.setZcCode(("-".equals(zcCodeArray[i])?"":zcCodeArray[i]));
+                xyClbZcOrderList.setZcName(("-".equals(zcNameArray[i])?"":zcNameArray[i]));
+                xyClbZcOrderList.setZcType(("-".equals(zcTypeArray[i])?"":zcTypeArray[i]));
+                xyClbZcOrderList.setZcPriceIn(("-".equals(zcPriceInArray[i])?"":zcPriceInArray[i]));
+                xyClbZcOrderList.setZcPriceOut(("-".equals(zcPriceOutArray[i])?"":zcPriceOutArray[i]));
+                xyClbZcOrderList.setZcQty(("-".equals(zcQtyArray[i])?"":zcQtyArray[i]));
+                xyClbZcOrderList.setZcBrand(("-".equals(zcBrandArray[i])?"":zcBrandArray[i]));
+                xyClbZcOrderList.setZcSup(("-".equals(zcSupArray[i])?"":zcSupArray[i]));
+                xyClbZcOrderList.setZcSpec(("-".equals(zcSpecArray[i])?"":zcSpecArray[i]));
+                xyClbZcOrderList.setZcMaterial(("-".equals(zcMaterialArray[i])?"":zcMaterialArray[i]));
+                xyClbZcOrderList.setZcColor(("-".equals(zcColorArray[i])?"":zcColorArray[i]));
+                xyClbZcOrderList.setZcUnit(("-".equals(zcUnitArray[i])?"":zcUnitArray[i]));
+                xyClbZcOrderList.setZcCyc(("-".equals(zcCycArray[i])?"":zcCycArray[i]));
+                xyClbZcOrderList.setZcArea(("-".equals(zcAreaArray[i])?"":zcAreaArray[i]));
+                xyClbZcOrderList.setZcVersion(("-".equals(zcVersionArray[i])?"":zcVersionArray[i]));
+                xyClbZcOrderList.setZcShopStatus(("-".equals(zcShopStatusArray[i])?"":zcShopStatusArray[i]));
+                xyClbZcOrderListMapper.addOrderList(xyClbZcOrderList);
+                orderJeD += CalculateUtil.GetResult(Double.valueOf(zcQtyArray[i]) ,Double.valueOf(zcPriceOutArray[i]),"*");
+            }
+            String orderJe = String.valueOf(orderJeD);
+            xyClbZcOrderMapper.updateTHDJe(xyClbZcOrder.getOrderId(),orderJe);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
 }

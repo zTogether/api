@@ -44,6 +44,9 @@ public class IntermediateAcceptanceSrevice {
     @Resource
     private XyClbFcCkdMainMapper xyClbFcCkdMainMapper;
 
+    @Resource
+    private XyGcbPrjPlanMapper xyGcbPrjPlanMapper;
+
 
     /**
      * 根据ctrCode获取派工验收表里的信息
@@ -238,6 +241,10 @@ public class IntermediateAcceptanceSrevice {
     }
 
     private void addPgAndList(String ctrCode ,String pgStage ,String pgBeginDate ,String pgOpUser) throws SQLException{
+        int isFristPg = xyPgMapper.isFristPg(ctrCode);
+        if (isFristPg < 1) {
+            xyGcbPrjPlanMapper.createEngineeringPlan(ctrCode,pgBeginDate);
+        }
         XyPg xyPg = new XyPg();
         // #{ctrCode,jdbcType=VARCHAR}, #{pgStage,jdbcType=VARCHAR}, TO_DATE( #{pgBeginDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss' ), #{pgOpUser,jdbcType=VARCHAR}
         xyPg.setCtrCode(ctrCode);

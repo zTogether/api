@@ -17,6 +17,12 @@ public class ChatRoomService {
     private XyCustomerInfoMapper xyCustomerInfoMapper;
     @Resource
     private VwXyJdjsMapper vwXyJdjsMapper;
+    @Resource
+    private XyClbZcOrderMapper xyClbZcOrderMapper;
+    @Resource
+    private XyClbZcOrderFhMapper xyClbZcOrderFhMapper;
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 根据ctrCode获取所有服务人员信息
@@ -112,6 +118,124 @@ public class ChatRoomService {
             resultMap.put("resultData",obj);
             resultMap.put("code",code);
             resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取允许执行员发送主材订单验收的主材订单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/19 13:24
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getZxySendZcYsOrder(String ctrCode){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> allowYsZcOrderList = xyClbZcOrderMapper.getZxySendZcYsOrder(ctrCode);
+            obj.put("allowYsZcOrderList",allowYsZcOrderList);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("resultData",obj);
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 客户主材订单验收
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/19 17:22
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> khZcOrderYs(String orderId){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            Integer count = xyClbZcOrderFhMapper.getCountByOderId(orderId);
+            if (count < 1){
+                xyClbZcOrderFhMapper.addZcOrderFh(orderId);
+            } else {
+                xyClbZcOrderFhMapper.updateKhYs(orderId);
+            }
+            code = "200";
+            msg = "验收成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 客户是否可以进行主材订单验收
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/19 17:38
+     * @param: [orderId]
+     * @return: \
+     */
+    public Map<String ,Object>isZcOrderYs(String orderId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            Integer count = xyClbZcOrderFhMapper.isKhYs(orderId);
+            if (count < 1){
+                obj.put("isKhYs","是");
+            } else {
+                obj.put("isKhYs","否");
+            }
+            code = "200";
+            msg = "验收成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据成员id获取成员电话
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/23 14:52
+     * @param: [memberId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getMemberTel(String memberId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            String memberTel = userMapper.getMemberTel(memberId);
+            obj.put("memberTel",memberTel);
+            code = "200";
+            msg = "验收成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
         }
         return resultMap;
     }

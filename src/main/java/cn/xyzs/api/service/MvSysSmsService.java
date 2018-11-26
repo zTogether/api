@@ -1,6 +1,7 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.MvSysSmsMapper;
+import cn.xyzs.api.mapper.UserMapper;
 import cn.xyzs.api.pojo.MvSysSms;
 import cn.xyzs.api.util.SendMsgUtil;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -16,6 +18,8 @@ public class MvSysSmsService {
 
     @Resource
     private MvSysSmsMapper mvSysSmsMapper;
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 发送短信验证码（单发）
@@ -95,4 +99,50 @@ public class MvSysSmsService {
         }
         return resultMap;
     }
+
+
+
+
+    /**
+     * 发送活动提醒
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/24 11:27
+     * @param: []
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    /*public Map<String ,Object> sendActivityReminder(){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> memberList = userMapper.getTempMember();
+
+            String sendResultCode = "";
+            String phone = "";
+
+            for (Map<String, Object> map : memberList) {
+                synchronized (this) {
+                    String[] params = {};
+                    phone = String.valueOf(map.get("TEL"));
+                    if (!"".equals(phone) && phone != null) {
+                        sendResultCode = SendMsgUtil.sendMsg("5", params, phone);
+                        userMapper.updateTemp(sendResultCode, phone);
+                    }
+                }
+            }
+            memberList = userMapper.getTempMember();
+            obj.put("memberList",memberList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }*/
 }

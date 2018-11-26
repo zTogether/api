@@ -1,5 +1,6 @@
 package cn.xyzs.api.controller;
 
+import cn.xyzs.api.pojo.XyClbZcOrder;
 import cn.xyzs.api.service.GoodService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -321,5 +322,56 @@ public class GoodController {
     @RequestMapping("/getRandGoods")
     public Map<String,Object> getRandGoods(){
         return goodService.getRandGoods();
+    }
+
+    /**
+     * 根据档案号获取所包含的供应商
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 11:57
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getSupByCtrCode")
+    public Map<String ,Object> getSupByCtrCode(String ctrCode){
+        return goodService.getSupByCtrCode(ctrCode);
+    }
+
+    /**
+     * 根据供应商和档案号获取可退货的的商品
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 14:15
+     * @param: [ctrCode, orderSup]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getZcByOrderSupAndCtrCode")
+    public Map<String ,Object> getZcByOrderSupAndCtrCode(String ctrCode ,String orderSup){
+        return goodService.getZcByOrderSupAndCtrCode(ctrCode,orderSup);
+    }
+
+    /**
+     * 添加主材退货单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/22 16:24
+     * @param: [xyClbZcOrder, zcCodeArray, zcNameArray, zcTypeArray, zcPriceInArray, zcPriceOutArray, zcQtyArray, zcBrandArray, zcSupArray, zcSpecArray, zcMaterialArray, zcColorArray, zcUnitArray, zcCycArray, zcAreaArray, zcVersionArray, zcShopStatusArray]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/addZcTHD")
+    public Map<String ,Object> addZcTHD(XyClbZcOrder xyClbZcOrder,
+                                        String[] zcCodeArray,  String[] zcNameArray, String[] zcTypeArray,
+                                        String[] zcPriceInArray, String[] zcPriceOutArray, String[] zcQtyArray,
+                                        String[] zcBrandArray,  String[] zcSupArray, String[] zcSpecArray,
+                                        String[] zcMaterialArray,  String[] zcColorArray,  String[] zcUnitArray,
+                                        String[] zcCycArray, String[] zcAreaArray , String[] zcVersionArray,
+                                        String[] zcShopStatusArray
+    ){
+        return goodService.addZcTHD(xyClbZcOrder,zcCodeArray,zcNameArray,zcTypeArray,zcPriceInArray,zcPriceOutArray,
+                zcQtyArray,zcBrandArray,zcSupArray,zcSpecArray,zcMaterialArray,zcColorArray,zcUnitArray,zcCycArray,
+                zcAreaArray,zcVersionArray,zcShopStatusArray);
     }
 }

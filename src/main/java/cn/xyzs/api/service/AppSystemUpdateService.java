@@ -30,8 +30,10 @@ public class AppSystemUpdateService {
         String code = "500";
         String msg = "系统异常";
         try{
-            String appSystemVersion = PropertiesUtil.getSourcingValueBykey("APP_SYSTEM_VERSION");
-            obj.put("appSystemVersion",appSystemVersion);
+            String appSystemVersionIos = PropertiesUtil.getSourcingValueBykey("APP_SYSTEM_VERSION_IOS");
+            String appSystemVersionAndroid = PropertiesUtil.getSourcingValueBykey("APP_SYSTEM_VERSION_ANDROID");
+            obj.put("appSystemVersionIos",appSystemVersionIos);
+            obj.put("appSystemVersionAndroid",appSystemVersionAndroid);
             code = "200";
             msg = "成功";
         }catch (Exception e){
