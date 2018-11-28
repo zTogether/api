@@ -42,4 +42,115 @@ public class XyPdcaController {
     public Map<String ,Object> getSubordinatePdca(String userId){
         return xyPdcaService.getSubordinatePdca(userId);
     }
+
+
+    /**
+     *
+     * @Description: 获取每周的工作问题需求资源以及总经理意见
+     * @author: GeWeiliang
+     * @date: 2018\11\25 0025 10:15
+     * @param: [userId, pdcaId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getWeekContent")
+    public Map<String,Object> getWeekContent(String userId,String pdcaId){
+        return xyPdcaService.getWeekContent(userId,pdcaId);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getWeekPlan")
+    public Map<String,Object> getWeekPlan(String pdcaId){
+        return xyPdcaService.getWeekPlan(pdcaId);
+    }
+
+    /**
+     *
+     * @Description: 获取每天的内容
+     * @author: GeWeiliang
+     * @date: 2018\11\25 0025 10:14
+     * @param: [pdcaId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getDayContent")
+    public Map<String,Object> getDatContent(String pdcaId){
+        return xyPdcaService.getDayContent(pdcaId);
+    }
+
+    /**
+     *
+     * @Description: 增加日工作内容行
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 9:19
+     * @param: [pdcaId, week, res]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/addDayContent")
+    public Map<String,Object> addPdcaList(String pdcaId,String week,String res){
+        return xyPdcaService.addPdcaList(pdcaId,week,res);
+    }
+
+    /**
+     *
+     * @Description: 删除日工作内容行
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 9:18
+     * @param: [pdcaId, week, res]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/deleteDayContent")
+    public Map<String,Object> deletePdcaList(String pdcaId,String week,String res){
+        return xyPdcaService.deletePdcaList(pdcaId,week,res);
+    }
+
+    /**
+     *
+     * @Description: 日工作内容
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 9:18
+     * @param: [pdcaId, week, res, content]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/updateDayPcontent")
+    public Map<String,Object> updatePdcaPcontent(String pdcaId,String week,String res,String content,String SContent){
+        return xyPdcaService.updatePdcaPcontent(pdcaId,week,res,content,SContent);
+    }
+
+    /**
+     *
+     * @Description: 日总结
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 9:18
+     * @param: [pdcaId, week, res, content]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/updateDayPsummary")
+    public Map<String,Object> updatePsummary(String pdcaId,String week,String content){
+        return xyPdcaService.updatePsummary(pdcaId,week,content);
+    }
+
+    /**
+     *
+     * @Description: 添加周总结以及下周计划
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 9:19
+     * @param: [pdcaId, classify, content]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/updateWeekPlan")
+    public Map<String,Object> updateWeekPlan(String pdcaId,String classify,String content){
+        return xyPdcaService.updateWeekPlan(pdcaId,classify,content);
+    }
+
+    @ResponseBody
+    @RequestMapping("/updatePdca")
+    public Map<String,Object> updatePdca(String pdcaId,String position,String opinion,String PResources,String issue){
+        return xyPdcaService.updatePdca(pdcaId,position,opinion,PResources,issue);
+    }
 }

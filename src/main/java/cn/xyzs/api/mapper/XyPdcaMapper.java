@@ -1,8 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.api.pojo.XyPdca;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;;import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +81,95 @@ public interface XyPdcaMapper extends Mapper<XyPdca> {
             "</script>")
     public List<Map<String ,Object>> getSubordinatePdca(String userId) throws SQLException;
 
+    /**
+     *
+     * @Description: 查询每周的工作问题，需要资源，总经理意见
+     * @author: GeWeiliang
+     * @date: 2018\11\24 0024 11:05
+     * @param: [userId, pdcaId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT * FROM XY_PDCA\n" +
+            "WHERE USER_ID=#{userId,jdbcType=VARCHAR} AND PDCA_ID=#{pdcaId,jdbcType=VARCHAR}" +
+            "</script>")
+    List<Map<String,Object>> getWeekContent(@Param("userId") String userId,@Param("pdcaId") String pdcaId) throws SQLException;
 
+    /**
+     *
+     * @Description: 获取周总结及计划
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 17:13
+     * @param: [pdcaId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT PDCA_ID,MAX(CASE CLASSIFY WHEN '1' THEN PCONTENT ELSE '' END ) THISSUM,MAX(CASE CLASSIFY WHEN '2' THEN PCONTENT ELSE '' END ) NEXTPLAN\n" +
+            "FROM XY_PDCA_LISTX WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR}\n" +
+            "GROUP BY PDCA_ID" +
+            "</script>")
+    Map<String,Object> getWeekPlan(@Param("pdcaId") String pdcaId) throws SQLException;
+    /**
+     *
+     * @Description: 获取每天的内容
+     * @author: GeWeiliang
+     * @date: 2018\11\25 0025 10:14
+     * @param: [pdcaId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT * FROM XY_PDCA_LIST \n" +
+            "WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} ORDER BY DATES,RES" +
+            "</script>")
+    List<Map<String,Object>> getDayContent(@Param("pdcaId") String pdcaId) throws SQLException;
 
+    /**
+     *
+     * @Description: 增加内容行
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 18:47
+     * @param: [pdcaId, week, date, res]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "\n" +
+            "INSERT INTO XY_PDCA_LIST VALUES(sys_guid(),#{pdcaId,jdbcType=VARCHAR},#{week,jdbcType=VARCHAR},TO_DATE(#{date},'yy-MM-dd'),'','','',#{res,jdbcType=VARCHAR})" +
+            "</script>")
+    void addPdcaList(@Param("pdcaId") String pdcaId,@Param("week") String week,@Param("date") String date,@Param("res") String res) throws SQLException;
+
+    /**
+     *
+     * @Description: 删除内容行
+     * @author: GeWeiliang
+     * @date: 2018\11\26 0026 18:47
+     * @param: [pdcaId, week, res]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_PDCA_LIST WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR}  AND WEEK=#{week,jdbcType=VARCHAR} AND RES=#{res,jdbcType=VARCHAR}" +
+            "</script>")
+    void deletePdcaList(@Param("pdcaId") String pdcaId,@Param("week") String week,@Param("res") String res) throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE XY_PDCA_LIST SET PCONTENT=#{content,jdbcType=VARCHAR},PSUMMARY=#{SContent,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND RES =#{res,jdbcType=VARCHAR} AND WEEK=#{week,jdbcType=VARCHAR} " +
+            "</script>")
+    void updatePdcaPcontent(@Param("pdcaId") String pdcaId,@Param("week") String week,@Param("res") String res,
+                            @Param("content") String content,@Param("SContent") String SContent) throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE XY_PDCA_LIST SET PSUMMARY=#{content,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND WEEK=#{week,jdbcType=VARCHAR}" +
+            "</script>")
+    void updatePdcaSummary(@Param("pdcaId") String pdcaId,@Param("week") String week,@Param("content") String content) throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE XY_PDCA_LISTX SET PCONTENT =#{content,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND CLASSIFY=#{classify,jdbcType=VARCHAR}" +
+            "</script>")
+    void updateWeekPlan(@Param("pdcaId") String pdcaId,@Param("classify") String classify,@Param("content") String content) throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE XY_PDCA SET POSITION=#{position,jdbcType=VARCHAR} ,PRESOURCE=#{PResources,jdbcType=VARCHAR} ,OPINION=#{opinion,jdbcType=VARCHAR} ,ISSUE=#{issue,jdbcType=VARCHAR}\n" +
+            "WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR}" +
+            "</script>")
+    void updatePdca(@Param("pdcaId") String pdcaId,@Param("position") String position,@Param("PResources") String PResources,
+                    @Param("opinion") String opinion,@Param("issue") String issue) throws SQLException;
 }
