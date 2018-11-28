@@ -72,7 +72,7 @@ public interface XyPdcaMapper extends Mapper<XyPdca> {
             "\t\tSELECT\n" +
             "\t\t\txur.FOLLOWER_ID \n" +
             "\t\tFROM\n" +
-            "\t\t\tXY_USER_RELATION xur \n" +
+            "\t\t\tXY_USER_RELATION_PDCA xur \n" +
             "\t\tWHERE \n" +
             "\t\t\txur.LEADER_ID <![CDATA[!=]]> #{userId,jdbcType=VARCHAR}\n" +
             "\t\tSTART WITH xur.LEADER_ID = #{userId,jdbcType=VARCHAR} \n" +
