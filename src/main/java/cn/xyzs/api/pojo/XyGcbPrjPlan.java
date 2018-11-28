@@ -11,7 +11,7 @@ import java.util.Date;
 public class XyGcbPrjPlan {
     @Column(name = "CTR_CODE")
     private String ctrCode;
-
+    //主键
     @Column(name = "ROW_ID")
     private String rowId;
 
@@ -47,4 +47,7 @@ public class XyGcbPrjPlan {
 
     @Column(name = "EDIT_USER")
     private String editUser;
+
+    @Column(name = "MB_ROWID")
+    private String mbRowid;
 }
