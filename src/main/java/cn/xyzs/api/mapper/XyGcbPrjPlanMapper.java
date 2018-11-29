@@ -1,5 +1,6 @@
 package cn.xyzs.api.mapper;
 
+import cn.xyzs.api.pojo.XyClbZcOrder;
 import cn.xyzs.api.pojo.XyGcbPrjPlan;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
@@ -85,7 +86,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Select("<script>" +
             "SELECT p.ROW_ID,l.ZCPB_ROWID,l.ZCPB_MX,l.ZCPB_QTY,l.ZCPB_PRICE,l.ZCPB_PP \n" +
             "FROM XY_CLB_ZCPB_LIST l,XY_GCB_PRJ_PLAN p,XY_GCB_PRJ_LCD_LIST t \n" +
-            "WHERE p.PLAN_LCDID=t.PLAN_LCDID AND t.ZCPB_ID=l.ZCPB_ROWID AND p.ROW_ID=#{rowId} " +
+            "WHERE p.PLAN_LCDID=t.PLAN_LCDID AND t.ZCPB_ID=l.ZCPB_ROWID AND p.ROW_ID=#{rowId} AND l.ZCPB_ZC_CODE IS NOT NULL" +
             "</script>")
     List<Map<String,Object>> getLcd(String rowId) throws SQLException;
 
@@ -121,6 +122,78 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
 
     /**
      *
+     * @Description: 获取生成的量尺单
+     * @author: GeWeiliang
+     * @date: 2018\11\29 0029 9:13
+     * @param: []
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,SUM(A.QUANTITY*B.ZCPB_PRICE)JE,A.MARK \n" +
+            "FROM XY_GCB_PRJ_LCD A\n" +
+            "LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID\n" +
+            "LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE\n" +
+            "LEFT JOIN XY_GCB_PRJ_PLAN D ON  A.PRJ_ID=D.ROW_ID\n" +
+            "WHERE A.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND A.IS_ORDER=0\n" +
+            "GROUP BY A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,A.MARK " +
+            "</script>")
+    List<Map<String,Object>> getLcdList(@Param("ctrCode") String ctrCode) throws SQLException;
+
+
+    @Insert("<script>" +
+            "INSERT INTO\n" +
+            "\t\tXY_CLB_ZC_ORDER (ORDER_ID,ORDER_DATE,CTR_CODE,OP_USERID,ORDER_JE,\n" +
+            "\t\tORDER_STATUS,ORDER_TYPE,ORDER_SUP,EDIT_TYPE,ORDER_DIS)\n" +
+            "\t\tVALUES(sys_guid(),SYSDATE,#{ctrCode,jdbcType=VARCHAR},#{opUserid,jdbcType=VARCHAR},\n" +
+            "\t\t#{orderJe,jdbcType=VARCHAR},1,0,#{orderSup,jdbcType=VARCHAR},1,0)\n" +
+            "</script>")
+    @Options(useGeneratedKeys = true, keyProperty = "orderId", keyColumn = "ORDER_ID")
+    void addOrder(XyClbZcOrder xyClbZcOrder)throws SQLException;
+
+    @Select("<script>" +
+            "SELECT B.ZCPB_ZC_CODE,C.ZC_NAME,NVL(B.ZCPB_ZC_TYPE,'-') ZC_TYPE,C.ZC_PRICE_IN,B.ZCPB_PRICE ZC_PRICE_OUT,\n" +
+            "A.QUANTITY,NVL(B.ZCPB_PP,'-') ZC_BRAND,C.ZC_SUP,NVL(B.ZCPB_SPEC,'-') ZC_SPEC,NVL(C.ZC_MATERIAL,'-') ZC_MATERIAL,\n" +
+            "NVL(C.ZC_COLOR,'-') ZC_COLOR,NVL(B.ZCPB_UNIT,'-') ZC_UNIT,NVL(C.ZC_CYC,0) ZC_CYC,C.ZC_AREA,NVL(B.ZCPB_VERSION,'-') ZC_VERSION," +
+            "NVL(A.MARK,'-') MARK,A.ROW_ID LCDID\n" +
+            "FROM XY_GCB_PRJ_LCD A\n" +
+            "LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID\n" +
+            "LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE\n" +
+            "WHERE A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND C.ZC_SUP=#{sup,jdbcType=VARCHAR}" +
+            "</script>")
+    List<Map<String,Object>> getOrderList(@Param("ctrCode") String ctrCode,@Param("sup") String orderSup) throws SQLException;
+
+    @Insert("<script>" +
+            "INSERT INTO\n" +
+            "\t\tXY_CLB_ZC_ORDER_LIST\n" +
+            "\t\t(ORDER_ID,ROW_ID,ZC_CODE,ZC_NAME,ZC_TYPE,ZC_PRICE_IN,ZC_PRICE_OUT,\n" +
+            "\t\tZC_QTY,ZC_BRAND,ZC_SUP,ZC_SPEC,ZC_MATERIAL,ZC_COLOR,ZC_UNIT,ZC_MARK,ZC_CYC,\n" +
+            "\t\tZC_AREA,ZC_VERSION, ZC_SHOP_STATUS)\n" +
+            "\t\tVALUES(#{orderId,jdbcType=VARCHAR},sys_guid(),#{zcCode,jdbcType=VARCHAR},#{zcName,jdbcType=VARCHAR},#{zcType,jdbcType=VARCHAR},\n" +
+            "\t\t#{zcPriceIn,jdbcType=VARCHAR},#{zcPriceOut,jdbcType=VARCHAR},#{zcQty,jdbcType=VARCHAR},#{zcBrand,jdbcType=VARCHAR},#{zcSup,jdbcType=VARCHAR}," +
+            "\t\t#{zcSpec,jdbcType=VARCHAR},#{zcMaterial,jdbcType=VARCHAR},#{zcColor,jdbcType=VARCHAR},\n" +
+            "\t\t#{zcUnit,jdbcType=VARCHAR},#{zcMark,jdbcType=VARCHAR},#{zcCyc,jdbcType=VARCHAR},#{zcArea,jdbcType=VARCHAR},#{zcVersion,jdbcType=VARCHAR},0)" +
+            "</script>")
+    void addOrderList(@Param("orderId") String orderId,@Param("zcCode") String zcCode,@Param("zcName") String zcName,
+                      @Param("zcType") String zcType,@Param("zcPriceIn") String zcPriceIn,@Param("zcPriceOut") String zcPriceOut,
+                      @Param("zcQty") String zcQty,@Param("zcBrand") String zcBrand,@Param("zcSup") String zcSup,
+                      @Param("zcSpec") String zcSpec,@Param("zcMaterial") String zcMaterial,@Param("zcColor") String zcColor,
+                      @Param("zcUnit") String zcUnit,@Param("zcMark") String zcMark,@Param("zcCyc") String zcCyc,
+                      @Param("zcArea") String zcArea,@Param("zcVersion") String zcVersion)throws SQLException;
+
+    /**
+     *
+     * @Description: 修改量尺单状态为下单
+     * @author: GeWeiliang
+     * @date: 2018\11\29 0029 16:35
+     * @param: [lcdId]
+     * @return: void
+     */
+    @Update("UPDATE XY_GCB_PRJ_LCD SET IS_ORDER=1\n" +
+            "WHERE ROW_ID = #{lcdId,jdbcType=VARCHAR}")
+    void updateLcdOrderState(@Param("lcdId") String lcdId) throws SQLException;
+
+    /**
+     *
      * @Description: 根据客户号查看量尺单
      * @author: GeWeiliang
      * @date: 2018\11\14 0014 16:28
@@ -129,7 +202,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      */
     @Select("<script>" +
             "SELECT d.*,l.ZCPB_MX,l.ZCPB_QTY,l.ZCPB_PRICE,l.ZCPB_PP FROM XY_CLB_ZCPB_LIST l,XY_GCB_PRJ_LCD d \n" +
-            "WHERE  d.ZCPB_ID=l.ZCPB_ROWID AND d.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}" +
+            "WHERE  d.ZCPB_ID=l.ZCPB_ROWID AND d.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND l.ZCPB_ZC_CODE IS NOT NULL" +
             "</script>")
     List<Map<String,Object>> showLcdByCtrCode(String ctrCode) throws SQLException;
 
