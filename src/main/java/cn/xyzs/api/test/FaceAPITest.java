@@ -1,20 +1,26 @@
 package cn.xyzs.api.test;
 
-import cn.xyzs.api.util.Base64ImageUtils;
-import cn.xyzs.api.util.HttpClientUtils;
+import cn.xyzs.common.util.Base64ImageUtils;
+import cn.xyzs.common.util.HttpUtil;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.utils.HttpClientUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FaceAPITest {
     public static void main(String[] args) {
         //  getToKenTest() ;
-        faceDetecttest();
+//        faceDetecttest();
+        Date d = new Date(1543444951357L);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(d));
     }
 
     //获取token
-    public static void getToKenTest(){
+    public static void getToKenTest() throws Exception {
 
         //使用其测试百度云API---获取token
         //url: http://console.bce.baidu.com/ai
@@ -34,9 +40,9 @@ public class FaceAPITest {
         String access_token_url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials"
                 +"&client_id="+API_KEY +"&client_secret="+SERCET_KEY;
 
-        CloseableHttpResponse response =  HttpClientUtils.doHttpsGet(access_token_url,null);
+        String json =  HttpUtil.doPost(access_token_url,"");
 
-        System.out.println(HttpClientUtils.toString(response));
+        System.out.println(json);
 
 
         //得到token = 24.1d786b9cdbdd8ac7cf55d56c7f38372b.2592000.1509244497.282335-10201425
@@ -62,8 +68,8 @@ public class FaceAPITest {
         bodys.put("face_fields", "age,beauty,expression,gender,glasses,race,qualities");
 
         try {
-            CloseableHttpResponse response =  HttpClientUtils.doHttpsPost(url,headers,bodys);
-            System.out.println(HttpClientUtils.toString(response));
+            String json =  HttpUtil.doPost(url,"");
+            System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
         }
