@@ -1,6 +1,6 @@
 package cn.xyzs.api.controller;
 
-import cn.xyzs.api.pojo.TRole;
+import cn.xyzs.common.pojo.TRole;
 import cn.xyzs.api.service.RoleService;
 import cn.xyzs.api.service.UserService;
 import com.github.pagehelper.PageInfo;
@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/App")
 public class TestController {
 
     private static final String FAR_SERVICE_DIR = "http://127.0.0.1/xyzs";//远程服务器接受文件的路由

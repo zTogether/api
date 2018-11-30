@@ -1,7 +1,7 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.UserMapper;
-import cn.xyzs.api.util.MD5Util;
+import cn.xyzs.common.util.MD5Util;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
