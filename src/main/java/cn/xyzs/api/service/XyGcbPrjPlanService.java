@@ -2,6 +2,7 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.DateMapper;
 import cn.xyzs.api.mapper.XyGcbPrjPlanMapper;
+import cn.xyzs.api.pojo.XyClbZcOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -278,7 +279,40 @@ public class XyGcbPrjPlanService {
             }
             xyGcbPrjPlanMapper.toEnsure(date,prjId,userId);
             xyGcbPrjPlanMapper.addPrjMark(prjId,prjMark);
-
+            List<Map<String,Object>> lcdList1 = xyGcbPrjPlanMapper.getLcdList(ctrCode);
+            for (Map<String, Object> map : lcdList1) {
+                String orderJe = map.get("JE").toString();
+                String orderSup = map.get("ZC_SUP").toString();
+                XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
+                xyClbZcOrder.setCtrCode(ctrCode);
+                xyClbZcOrder.setOrderJe(orderJe);
+                xyClbZcOrder.setOpUserid(userId);
+                xyClbZcOrder.setOrderSup(orderSup);
+                xyGcbPrjPlanMapper.addOrder(xyClbZcOrder);
+                String orderId = xyClbZcOrder.getOrderId();
+                List<Map<String,Object>> orderList = xyGcbPrjPlanMapper.getOrderList(ctrCode,orderSup);
+                for (Map<String, Object> objectMap : orderList) {
+                    String zcCode = objectMap.get("ZCPB_ZC_CODE").toString();
+                    String zcName = objectMap.get("ZC_NAME").toString();
+                    String zcType = objectMap.get("ZC_TYPE").toString();
+                    String zcPriceIn = objectMap.get("ZC_PRICE_IN").toString();
+                    String zcPriceOut = objectMap.get("ZC_PRICE_OUT").toString();
+                    String zcQty = objectMap.get("QUANTITY").toString();
+                    String zcBrand = objectMap.get("ZC_BRAND").toString();
+                    String zcSpec = objectMap.get("ZC_SPEC").toString();
+                    String zcMaterial = objectMap.get("ZC_MATERIAL").toString();
+                    String zcColor = objectMap.get("ZC_COLOR").toString();
+                    String zcUnit = objectMap.get("ZC_UNIT").toString();
+                    String zcMark = objectMap.get("MARK").toString();
+                    String zcCyc = objectMap.get("ZC_CYC").toString();
+                    String zcArea = objectMap.get("ZC_AREA").toString();
+                    String zcVersion = objectMap.get("ZC_VERSION").toString();
+                    String lcdId = objectMap.get("LCDID").toString();
+                    xyGcbPrjPlanMapper.addOrderList(orderId,zcCode,zcName,zcType,zcPriceIn,zcPriceOut,zcQty,zcBrand,orderSup,
+                            zcSpec,zcMaterial,zcColor,zcUnit,zcMark,zcCyc,zcArea,zcVersion);
+                    xyGcbPrjPlanMapper.updateLcdOrderState(lcdId);
+                }
+            }
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -374,4 +408,5 @@ public class XyGcbPrjPlanService {
         }
         return resultMap;
     }
+
 }

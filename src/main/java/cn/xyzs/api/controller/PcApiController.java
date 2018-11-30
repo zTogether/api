@@ -40,4 +40,18 @@ public class PcApiController {
     }
 
 
+    /**
+     * 发送获取提醒
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/24 11:27
+     * @param: []
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/sendActivityReminder")
+    public Map<String ,Object> sendActivityReminder(){
+        return mvSysSmsService.sendActivityReminder();
+    }
+
 }
