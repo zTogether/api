@@ -374,4 +374,18 @@ public class GoodController {
                 zcQtyArray,zcBrandArray,zcSupArray,zcSpecArray,zcMaterialArray,zcColorArray,zcUnitArray,zcCycArray,
                 zcAreaArray,zcVersionArray,zcShopStatusArray);
     }
+
+    /**
+     * 获取订单金额与优惠金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/29 13:07
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getOrderJeAndYhJe")
+    public Map<String ,Object> getOrderJeAndYhJe(String orderId){
+        return goodService.getOrderJeAndYhJe(orderId);
+    }
 }

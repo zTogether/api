@@ -963,4 +963,32 @@ public class GoodService {
         return resultMap;
     }
 
+    /**
+     * 获取订单金额与优惠金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/29 13:07
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getOrderJeAndYhJe(String orderId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            Map<String ,Object> orderJeAndYhJe = xyClbZcOrderMapper.getOrderJeAndYhJe(orderId);
+            obj.put("orderJeAndYhJe",orderJeAndYhJe);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
 }

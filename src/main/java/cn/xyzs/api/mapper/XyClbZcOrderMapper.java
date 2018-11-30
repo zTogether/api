@@ -276,4 +276,17 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "</script>")
     public void updateTHDJe(@Param("orderId") String orderId ,@Param("orderJe") String orderJe) throws SQLException;
 
+    /**
+     * 获取订单金额与优惠金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/29 13:05
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT ORDER_JE,ORDER_DIS FROM XY_CLB_ZC_ORDER WHERE ORDER_ID = #{orderId,jdbcType=VARCHAR}" +
+            "</script>")
+    public Map<String ,Object> getOrderJeAndYhJe(String orderId) throws SQLException;
+
 }
