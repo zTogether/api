@@ -1,6 +1,6 @@
 package cn.xyzs.api.controller;
 
-import cn.xyzs.api.pojo.XyClbZcOrder;
+import cn.xyzs.common.pojo.XyClbZcOrder;
 import cn.xyzs.api.service.GoodService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

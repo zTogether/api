@@ -1,7 +1,7 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbZcDb;
-import cn.xyzs.api.pojo.XyClbZcShopping;
+import cn.xyzs.common.pojo.XyClbZcDb;
+import cn.xyzs.common.pojo.XyClbZcShopping;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;

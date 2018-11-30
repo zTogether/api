@@ -1,6 +1,6 @@
 package cn.xyzs.api.filter;
 
-import cn.xyzs.api.ws.radis.RedisOperation;
+//import cn.xyzs.api.ws.radis.RedisOperation;
 import org.springframework.context.annotation.ComponentScan;
 
 import javax.annotation.Resource;
@@ -24,8 +24,8 @@ public class VersionFilter implements Filter {
     //不需要版本检测url
     String[] includeUrls = new String[]{"/login","/register"};
 
-    @Resource
-    private RedisOperation redisOperation;
+//    @Resource
+//    private RedisOperation redisOperation;
 
 
     @Override

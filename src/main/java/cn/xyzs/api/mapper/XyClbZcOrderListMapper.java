@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbZcOrderList;
+import cn.xyzs.common.pojo.XyClbZcOrderList;
 import com.sun.corba.se.spi.ior.ObjectKey;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;

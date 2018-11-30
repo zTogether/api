@@ -6,7 +6,7 @@
     <groupId>cn.xyzs</groupId>
     <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>api</name>
     <description>轩辕装饰手机端api</description>
@@ -91,8 +91,8 @@
         <!-- https://mvnrepository.com/artifact/com.oracle/ojdbc -->
         <dependency>
             <groupId>com.oracle</groupId>
-            <artifactId>ojdbc</artifactId>
-            <version>6</version>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.1.0</version>
         </dependency>
 
         <dependency>
@@ -133,7 +133,6 @@
             <version>4.5.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -229,6 +228,12 @@
             <artifactId>gexin-rp-fastjson</artifactId>
             <version>1.0.0.1</version>
         </dependency>
+        <!--轩辕装饰公共组件-->
+        <dependency>
+            <groupId>cn.xyzs</groupId>
+            <artifactId>pt-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -256,7 +261,7 @@
         <!-- nexus私服 -->
         <repository>
             <id> public</id>
-            <url> http://192.168.10.243:8081/nexus/content/groups/public/</url >
+            <url>http://192.168.10.243:8081/nexus/content/groups/public/</url >
             <releases>
                 <enabled> true</enabled>
             </releases>

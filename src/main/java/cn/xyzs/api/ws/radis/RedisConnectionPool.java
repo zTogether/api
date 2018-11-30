@@ -9,8 +9,8 @@ import redis.clients.jedis.JedisPoolConfig;
 @Component
 public class RedisConnectionPool {
     //Redis服务器IP
-    private static String IP = "192.168.10.243";
-   //private static String IP = "192.168.10.242";
+//    private static String IP = "192.168.10.243";
+   private static String IP = "192.168.10.242";
 
     //Redis的端口号
     private static int PORT = 6379;
@@ -19,7 +19,7 @@ public class RedisConnectionPool {
 //    private static String AUTH = "admin";
     //可用连接实例的最大数目，默认值为8；
     //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
-    private static int MAX_ACTIVE = 1024;
+    private static int MAX_ACTIVE = -1;
 
     //控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
     private static int MAX_IDLE = 200;

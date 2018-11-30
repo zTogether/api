@@ -6,10 +6,10 @@ import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyValMapper;
 
 import cn.xyzs.api.mapper.*;
-import cn.xyzs.api.pojo.XyClbZcDb;
-import cn.xyzs.api.pojo.XyVal;
-import cn.xyzs.api.pojo.*;
-import cn.xyzs.api.util.CalculateUtil;
+import cn.xyzs.common.pojo.XyClbZcDb;
+import cn.xyzs.common.pojo.XyVal;
+import cn.xyzs.common.pojo.*;
+import cn.xyzs.common.util.CalculateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

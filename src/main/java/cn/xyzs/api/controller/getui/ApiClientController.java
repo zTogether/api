@@ -1,8 +1,8 @@
 package cn.xyzs.api.controller.getui;
 
-import cn.xyzs.api.pojo.API.ClientAPI;
+import cn.xyzs.common.pojo.API.ClientAPI;
 import cn.xyzs.api.service.getui.ClientService;
-import cn.xyzs.api.util.GetuiUtil;
+import cn.xyzs.common.util.GetuiUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,13 +20,17 @@ public class ApiClientController {
     public Integer checkAppClient(ClientAPI clientAPI){
         return clientService.saveClientId(clientAPI);
     }
-    @RequestMapping("pushTest.do")
-    public String pushTest(@RequestParam(defaultValue = "轩辕装饰") String title, @RequestParam(defaultValue = "抽宝马") String text){
-        try {
-            GetuiUtil.pushmsg(title,text,"f55274e072f41c79357f97c7d08f98e4");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "success";
-    }
+//    @RequestMapping("pushTest.do")
+//    public String pushTest(@RequestParam(defaultValue = "轩辕装饰") String title, @RequestParam(defaultValue = "抽宝马") String text){
+//        try {
+//            GetuiUtil getui = new GetuiUtil();
+//            getui.title = title;
+//            getui.text = text;
+//            getui.CID = "0667727b6b83950a8dc30e2c9e9ea653";
+//            getui.pushClient();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return "success";
+//    }
 }

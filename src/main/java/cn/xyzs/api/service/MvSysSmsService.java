@@ -2,8 +2,8 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.MvSysSmsMapper;
 import cn.xyzs.api.mapper.UserMapper;
-import cn.xyzs.api.pojo.MvSysSms;
-import cn.xyzs.api.util.SendMsgUtil;
+import cn.xyzs.common.pojo.MvSysSms;
+import cn.xyzs.common.util.SendMsgUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

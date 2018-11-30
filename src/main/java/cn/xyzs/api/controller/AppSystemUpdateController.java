@@ -1,7 +1,7 @@
 package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.AppSystemUpdateService;
-import cn.xyzs.api.util.MD5Util;
+import cn.xyzs.common.util.MD5Util;
 import cn.xyzs.api.ws.been.ClientMessage;
 import cn.xyzs.api.ws.service.SendService;
 import com.alibaba.fastjson.JSON;
