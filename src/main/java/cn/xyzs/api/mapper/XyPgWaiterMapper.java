@@ -384,7 +384,7 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\t#{ctrCode,jdbcType=VARCHAR}\n" +
             ")" +
             "</script>")
-    public void addXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId, @Param("endDate") String endDate ,@Param("ctrCode") String ctrCode ,@Param("zt") String zt) throws SQLException;
+    public void addXyPgWaiterInfo(@Param("grId") String grId, @Param("pgId") String pgId, @Param("endDate") String endDate, @Param("ctrCode") String ctrCode, @Param("zt") String zt) throws SQLException;
 
     /**
      * 修改状态
@@ -403,7 +403,7 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "AND\n" +
             "\tPG_ID = #{pgId,jdbcType=VARCHAR}" +
             "</script>")
-    public void updateXyPgWaiterInfo(@Param("grId") String grId,@Param("pgId") String pgId) throws SQLException;
+    public void updateXyPgWaiterInfo(@Param("grId") String grId, @Param("pgId") String pgId) throws SQLException;
 
     /**
      * 获取抢单成功在建的工地数量
@@ -459,7 +459,7 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\txpw.ZT = '抢单成功'\n" +
             "AND\n" +
             "\txpw.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n")
-    public void updateYsDate(@Param("ctrCode") String ctrCode,@Param("ysDate") String ysDate,@Param("pgStage") String pgStage);
+    public void updateYsDate(@Param("ctrCode") String ctrCode, @Param("ysDate") String ysDate, @Param("pgStage") String pgStage);
 
     /**
      * 修改瓦工（30）派工验收时间
@@ -477,6 +477,6 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\txpw.ZT = '抢单成功'\n" +
             "AND\n" +
             "\txpw.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n")
-    public void updateWgYsDate (@Param("ctrCode") String ctrCode,@Param("ysDate") String ysDate);
+    public void updateWgYsDate(@Param("ctrCode") String ctrCode, @Param("ysDate") String ysDate);
 
 }

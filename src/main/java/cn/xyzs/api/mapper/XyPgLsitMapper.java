@@ -92,5 +92,5 @@ public interface XyPgLsitMapper extends Mapper<XyPgLsit>{
             "\tE.RG_DES,\n" +
             "\tD.BJD_CODE" +
             "")
-    public void addPgList(@Param("pgId") String pgId ,@Param("ctrCode") String ctrCode ,@Param("pgStage") String pgStage ) throws SQLException;
+    public void addPgList(@Param("pgId") String pgId, @Param("ctrCode") String ctrCode, @Param("pgStage") String pgStage) throws SQLException;
 }

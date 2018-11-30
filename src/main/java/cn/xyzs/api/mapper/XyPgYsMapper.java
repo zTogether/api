@@ -72,9 +72,9 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
                 "#{custMark,jdbcType=VARCHAR}," +
                 "TO_DATE(#{ysDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss'))" +
             "</script>")
-    public void addYanshou(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,
-                           @Param("opUserid")String opUserid,@Param("ysStatu")String ysStatu,@Param("zxyMark")String zxyMark,
-                           @Param("custMark")String custMark, @Param("ysDate")String ysDate) throws SQLException;
+    public void addYanshou(@Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz,
+                           @Param("opUserid") String opUserid, @Param("ysStatu") String ysStatu, @Param("zxyMark") String zxyMark,
+                           @Param("custMark") String custMark, @Param("ysDate") String ysDate) throws SQLException;
 
     /**
      *
@@ -104,9 +104,9 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
                 "#{zxyMark,jdbcType=VARCHAR}," +
                 "#{custMark,jdbcType=VARCHAR})" +
             "</script>")
-    public void addYanshouB(@Param("ctrCode") String ctrCode,@Param("ysGz")String ysGz,
-                           @Param("opUserid")String opUserid,@Param("ysStatu")String ysStatu,@Param("zxyMark")String zxyMark,
-                           @Param("custMark")String custMark) throws SQLException;
+    public void addYanshouB(@Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz,
+                            @Param("opUserid") String opUserid, @Param("ysStatu") String ysStatu, @Param("zxyMark") String zxyMark,
+                            @Param("custMark") String custMark) throws SQLException;
 
     /**
      * 客户执行验收(同意)
@@ -121,7 +121,7 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} " +
             "AND YS_GZ = #{ysGz,jdbcType=VARCHAR}" +
             "</script>")
-    public void updateYanshou(@Param("custMark") String custMark, @Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz,@Param("sysDate") String sysDate) throws SQLException;
+    public void updateYanshou(@Param("custMark") String custMark, @Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz, @Param("sysDate") String sysDate) throws SQLException;
 
     /**
      * 客户执行验收(不同意)
@@ -136,7 +136,7 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
             "WHERE CTR_CODE = #{ctrCode,jdbcType=VARCHAR} " +
             "AND YS_GZ = #{ysGz,jdbcType=VARCHAR}" +
             "</script>")
-    public void updateYanShouYsStatuAndCustMark(@Param("custMark") String custMark, @Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz,@Param("ysStatu") String ysStatu) throws SQLException;
+    public void updateYanShouYsStatuAndCustMark(@Param("custMark") String custMark, @Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz, @Param("ysStatu") String ysStatu) throws SQLException;
 
     /**
      * 根据ctrCode，ysId获取是否已提交验收
@@ -170,5 +170,5 @@ public interface XyPgYsMapper extends Mapper<XyPgYs> {
     @Select("<script>" +
             "SELECT xpy.ys_statu FROM XY_PG_YS xpy WHERE xpy.ctr_code = #{ctrCode,jdbcType=VARCHAR} AND xpy.ys_gz = #{ysGz,jdbcType=VARCHAR} AND xpy.YS_STATU = 0" +
             "</script>")
-    public String gteYsStatu(@Param("ctrCode") String ctrCode ,@Param("ysGz") String ysGz) throws SQLException;
+    public String gteYsStatu(@Param("ctrCode") String ctrCode, @Param("ysGz") String ysGz) throws SQLException;
 }

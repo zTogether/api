@@ -30,7 +30,7 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
             "\t\t#{contentType,jdbcType=VARCHAR}\n" +
             ")" +
             "</script>")
-    public void addChattingRecords (@Param("ctrCode") String ctrCode , @Param("userId") String userId , @Param("sendDate") String sendDate , @Param("chatingContent") String chatingContent , @Param("contentType") String contentType) throws SQLException;
+    public void addChattingRecords(@Param("ctrCode") String ctrCode, @Param("userId") String userId, @Param("sendDate") String sendDate, @Param("chatingContent") String chatingContent, @Param("contentType") String contentType) throws SQLException;
 
     /**
      * 获取离线消息
@@ -76,7 +76,7 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
             "ORDER BY mcr.SEND_DATE " +
 
             "</script>")
-    public List<Map<String ,Object>> getOfflineMessage (@Param("userId") String userId ,@Param("ctrCode") String ctrCode, @Param("list") List<String> sendDateList) throws SQLException;
+    public List<Map<String ,Object>> getOfflineMessage(@Param("userId") String userId, @Param("ctrCode") String ctrCode, @Param("list") List<String> sendDateList) throws SQLException;
 
     /**
      * 根据时间节点查询离线消息
@@ -100,7 +100,7 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
             "AND\n" +
             "\tmcr.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getOfflineMessageByDateNode (@Param("ctrCode") String ctrCode , @Param("nodeDate") String nodeDate ) throws SQLException;
+    public List<Map<String ,Object>> getOfflineMessageByDateNode(@Param("ctrCode") String ctrCode, @Param("nodeDate") String nodeDate) throws SQLException;
 
     /**
      * 不根据时间节点查询离线消息
@@ -122,6 +122,6 @@ public interface MvChattingRecordsMapper extends Mapper<MvChattingRecords>{
             "WHERE\n" +
             "\tmcr.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getOfflineMessageNotByDateNode (@Param("ctrCode") String ctrCode) throws SQLException;
+    public List<Map<String ,Object>> getOfflineMessageNotByDateNode(@Param("ctrCode") String ctrCode) throws SQLException;
 
 }

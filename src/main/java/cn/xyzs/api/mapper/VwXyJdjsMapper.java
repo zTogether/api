@@ -42,5 +42,5 @@ public interface VwXyJdjsMapper extends Mapper<VwXyJdjs> {
             "AND\n" +
             "\tJD = #{jd,jdbcType=VARCHAR}" +
             "</script>")
-    public Map<String ,Object> getJdjsVByCtrCodeAndJd(@Param("ctrCode") String ctrCode , @Param("jd")String jd) throws SQLException;
+    public Map<String ,Object> getJdjsVByCtrCodeAndJd(@Param("ctrCode") String ctrCode, @Param("jd") String jd) throws SQLException;
 }

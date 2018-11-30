@@ -68,6 +68,6 @@ public interface XyClbZctxMbMapper extends Mapper<XyClbZctxMbVr> {
             "WHERE zm.VR_ID = #{vrId,jdbcType=VARCHAR} AND zm.FL_BH LIKE #{flBh,jdbcType=VARCHAR}||'%'\n" +
             "ORDER BY zm.ZC_CODE" +
             "</script>")
-    public List<Map<String ,Object>> getZctxMbList(@Param("vrId") String vrId,@Param("flBh") String flBh) throws SQLException;
+    public List<Map<String ,Object>> getZctxMbList(@Param("vrId") String vrId, @Param("flBh") String flBh) throws SQLException;
 
 }

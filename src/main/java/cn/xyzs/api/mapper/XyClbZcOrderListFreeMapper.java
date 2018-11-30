@@ -53,8 +53,8 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
      * @return: void
      */
     @UpdateProvider(type = updateOrderListFree.class,method = "updateOrderListFree")
-    public void updateOrderListFree(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
-                                    @Param("zcMark") String zcMark,@Param("zcArea") String zcArea)throws SQLException;
+    public void updateOrderListFree(@Param("rowId") String rowId, @Param("zcQty") String zcQty,
+                                    @Param("zcMark") String zcMark, @Param("zcArea") String zcArea)throws SQLException;
     class updateOrderListFree{
         public String updateOrderListFree(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
                                           @Param("zcMark") String zcMark,@Param("zcArea") String zcArea){
@@ -84,7 +84,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
      * @return: void
      */
     @DeleteProvider(type = deleteOrderListFree.class,method = "deleteOrderListFree")
-    public void deleteOrderListFree(@Param("orderId") String orderId,@Param("rowId") String rowId)throws SQLException;
+    public void deleteOrderListFree(@Param("orderId") String orderId, @Param("rowId") String rowId)throws SQLException;
     class deleteOrderListFree{
         public String deleteOrderListFree(@Param("orderId") String orderId,@Param("rowId") String rowId){
             return new SQL(){{

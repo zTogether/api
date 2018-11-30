@@ -57,5 +57,5 @@ public interface XyClbFcDbMapper extends Mapper<XyClbFcDb>{
             "ORDER BY\n" +
             "\t3,2" +
             "</script>")
-    public List<Map<String ,Object>> getFcGoodByFcType(@Param("ctrCode") String ctrCode , @Param("fcType")String fcType) throws SQLException;
+    public List<Map<String ,Object>> getFcGoodByFcType(@Param("ctrCode") String ctrCode, @Param("fcType") String fcType) throws SQLException;
 }

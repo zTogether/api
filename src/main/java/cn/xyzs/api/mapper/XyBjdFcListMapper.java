@@ -25,7 +25,7 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> bjdFcList(@Param("bjdCode") String bjdCode, @Param("fcStage") String fcStage,
-                                              @Param("startNum") String startNum,@Param("endNum") String endNum) throws SQLException;
+                                              @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
     @Select("<script>" +
             "SELECT\n" +

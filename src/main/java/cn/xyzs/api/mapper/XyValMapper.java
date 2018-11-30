@@ -112,5 +112,5 @@ public interface XyValMapper extends Mapper<XyVal>{
             "</foreach> " +
             " AND VALSET_ID = #{valsetId,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getValist(@Param("list") List<String> list ,@Param("valsetId") String valsetId) throws SQLException;
+    public List<Map<String ,Object>> getValist(@Param("list") List<String> list, @Param("valsetId") String valsetId) throws SQLException;
 }

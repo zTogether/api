@@ -39,7 +39,7 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
     public Map<String,Object> getMindQuestion(@Param("questionNo") String questionNo,
-                                              @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
+                                              @Param("examCode") String examCode, @Param("empNo") String empNo) throws SQLException;
 
     /**
      *
@@ -55,7 +55,7 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
     public Map<String,Object> getFillQuestion(@Param("questionNo") String questionNo,
-                                              @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
+                                              @Param("examCode") String examCode, @Param("empNo") String empNo) throws SQLException;
 
     /**
      *
@@ -71,7 +71,7 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
     public Map<String,Object> getMultiQuestion(@Param("questionNo") String questionNo,
-                                               @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
+                                               @Param("examCode") String examCode, @Param("empNo") String empNo) throws SQLException;
 
     /**
      *
@@ -87,14 +87,14 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "WHERE m.QUESTIONNO = #{questionNo,jdbcType=VARCHAR} " +
             "</script>")
     public Map<String,Object> getYnQuestion(@Param("questionNo") String questionNo,
-                                            @Param("examCode") String examCode,@Param("empNo") String empNo) throws SQLException;
+                                            @Param("examCode") String examCode, @Param("empNo") String empNo) throws SQLException;
 
     @Insert("<script>" +
             "INSERT INTO XY_EXAM_ANSWER " +
             "VALUES(#{examCode,jdbcType=VARCHAR},#{empNo,jdbcType=VARCHAR},#{questionNo,jdbcType=VARCHAR}," +
             "#{answer,jdbcType=VARCHAR},#{spare,jdbcType=VARCHAR})" +
             "</script>")
-    public void addAnswer(@Param("examCode") String examCode,@Param("empNo") String empNo,
+    public void addAnswer(@Param("examCode") String examCode, @Param("empNo") String empNo,
                           @Param("questionNo") String questionNo, @Param("answer") String answer,
                           @Param("spare") String spare) throws SQLException;
 
@@ -110,7 +110,7 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "SELECT COUNT(1) FROM XY_EXAM_ANSWER " +
             "WHERE EXAMCODE=#{examCode,jdbcType=VARCHAR} AND EMPNO=#{empNo,jdbcType=VARCHAR} AND QUESTIONNO=#{questionNo,jdbcType=VARCHAR} " +
             "</script>")
-    public int isExist(@Param("examCode") String examCode,@Param("empNo") String empNo,@Param("questionNo") String questionNo) throws SQLException;
+    public int isExist(@Param("examCode") String examCode, @Param("empNo") String empNo, @Param("questionNo") String questionNo) throws SQLException;
 
     /**
      *
@@ -124,7 +124,7 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "UPDATE XY_EXAM_ANSWER SET ANSWER=#{answer,jdbcType=VARCHAR}" +
             "WHERE EXAMCODE=#{examCode,jdbcType=VARCHAR} AND EMPNO=#{empNo,jdbcType=VARCHAR} AND QUESTIONNO=#{questionNo,jdbcType=VARCHAR}" +
             "</script>")
-    public void updateAnswer(@Param("examCode") String examCode,@Param("empNo") String empNo,
+    public void updateAnswer(@Param("examCode") String examCode, @Param("empNo") String empNo,
                              @Param("questionNo") String questionNo, @Param("answer") String answer) throws SQLException;
 
     @Select("<script>" +
@@ -132,5 +132,5 @@ public interface XyExamManagerMapper extends Mapper<XyExamManager> {
             "WHERE EXAMCODE=#{empCode,jdbcType=VARCHAR} AND EMPNO=#{empNo,jdbcType=VARCHAR} AND QUESTIONNO=#{questionNo,jdbcType=VARCHAR}  " +
             "</script>")
     public Map<String,Object> getMyAnswer(@Param("empCode") String examCode,
-                                                @Param("empNo") String empNo,@Param("questionNo") String questionNo);
+                                          @Param("empNo") String empNo, @Param("questionNo") String questionNo);
 }

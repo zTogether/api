@@ -1,13 +1,10 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.XyUserGpsMapper;
-import cn.xyzs.api.pojo.XyUserGps;
-import cn.xyzs.api.util.HttpClientUtil;
-import cn.xyzs.api.util.HttpClientUtils;
+import cn.xyzs.common.pojo.XyUserGps;
+import cn.xyzs.common.util.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +41,7 @@ public class XyUserGpsService {
                 parameterMap.put("coordsys","gps");
                 parameterMap.put("output","JSON");
                 parameterMap.put("key","1372b5856d762072e845b4b95b54fec3");
-                String result = HttpClientUtil.send("https://restapi.amap.com/v3/assistant/coordinate/convert",parameterMap,"utf-8");
+                String result = HttpUtil.doPost("https://restapi.amap.com/v3/assistant/coordinate/convert",parameterMap);
                 JSONObject resultJson = JSON.parseObject(result);
                 locations = resultJson.getString("locations");
                 String[] locationsArray = locations.split(",");

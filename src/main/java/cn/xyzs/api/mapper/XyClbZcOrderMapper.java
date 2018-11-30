@@ -87,7 +87,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "\t\t) A\n" +
             "\t) B WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode,@Param("startNum")String startNum,@Param("endNum" )String endNum) throws SQLException;
+    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
     /***
      *
@@ -110,10 +110,10 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @return: void
      */
     @UpdateProvider(type = updateOrder.class,method = "updateOrder")
-    public void updateOrder(@Param("orderId") String orderId,@Param("orderJe") String orderJe,
-                            @Param("orderMark") String orderMark,@Param("orderStatus") String orderStatus,
+    public void updateOrder(@Param("orderId") String orderId, @Param("orderJe") String orderJe,
+                            @Param("orderMark") String orderMark, @Param("orderStatus") String orderStatus,
                             @Param("orderType") String orderType, @Param("editType") String editType,
-                            @Param("orderDis") String orderDis,@Param("orderDisMark") String orderDisMark,
+                            @Param("orderDis") String orderDis, @Param("orderDisMark") String orderDisMark,
                             @Param("orderIsreturn") String orderIsreturn)throws SQLException;
     class updateOrder{
         public String updateOrder(@Param("orderId") String orderId,@Param("orderJe") String orderJe,
@@ -274,7 +274,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     @Update("<script>" +
             "UPDATE XY_CLB_ZC_ORDER SET ORDER_JE = #{orderJe,jdbcType=VARCHAR} WHERE ORDER_ID = #{orderId,jdbcType=VARCHAR}" +
             "</script>")
-    public void updateTHDJe(@Param("orderId") String orderId ,@Param("orderJe") String orderJe) throws SQLException;
+    public void updateTHDJe(@Param("orderId") String orderId, @Param("orderJe") String orderJe) throws SQLException;
 
     /**
      * 获取订单金额与优惠金额

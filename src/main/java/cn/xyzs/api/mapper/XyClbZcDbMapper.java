@@ -60,8 +60,8 @@ public interface XyClbZcDbMapper{
             @Result(column = "ZC_VERSION", property = "zcVersion", javaType = String.class),
             @Result(column = "ZC_AREA",property = "zcArea", javaType = String.class),
     })
-    public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list,@Param("startNum")String startNum,@Param("endNum" )String endNum,
-                                           @Param("minimum") String minimum,@Param("maximum") String maximum) throws SQLException;
+    public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list, @Param("startNum") String startNum, @Param("endNum") String endNum,
+                                           @Param("minimum") String minimum, @Param("maximum") String maximum) throws SQLException;
 
     /**
      *
@@ -114,7 +114,7 @@ public interface XyClbZcDbMapper{
             "WHERE\n" +
             "\txczd.ZC_CODE = #{zcCode,jdbcType=VARCHAR} AND ZC_IS_USED = '0'" +
             "</script>")
-    public String getZcVersion (@Param("zcCode") String zcCode) throws SQLException;
+    public String getZcVersion(@Param("zcCode") String zcCode) throws SQLException;
 
 
     @Select("<script>" +

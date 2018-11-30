@@ -72,7 +72,7 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "\tC.CKD_MARK\n" +
             "FROM XY_CLB_FC_CKD_MAIN C WHERE C.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND C.CKD_TYPE='1' AND C.CKD_FC_TYPE <![CDATA[<>]]> #{ckdFcType,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String,Object>> getEngineeringExpenseSettlementDetail(@Param("ctrCode") String ctrCode,@Param("ckdFcType") String ckdFcType) throws SQLException;
+    public List<Map<String,Object>> getEngineeringExpenseSettlementDetail(@Param("ctrCode") String ctrCode, @Param("ckdFcType") String ckdFcType) throws SQLException;
 
     /**
      * 

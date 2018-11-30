@@ -37,7 +37,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Update("<script>" +
             "UPDATE XY_GCB_PRJ_PLAN SET EDIT_STATU=1,EDIT_DATE=#{editDate},EDIT_USER=#{editUser} WHERE ROW_ID=#{rowId}" +
             "</script>")
-    void toEnsure(@Param("editDate") Date editDate, @Param("rowId") String rowId,@Param("editUser") String userId) throws SQLException;
+    void toEnsure(@Param("editDate") Date editDate, @Param("rowId") String rowId, @Param("editUser") String userId) throws SQLException;
 
     /**
      *
@@ -52,8 +52,8 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "EDIT_DATE=#{editDate,jdbcType=VARCHAR},EDIT_USER=#{editUser,jdbcType=VARCHAR}\n" +
             " WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
             "</script>")
-    void isDaiGou(@Param("editDate") Date editDate,@Param("rowId") String prjId,
-                         @Param("content") String content,@Param("editUser") String userId) throws SQLException;
+    void isDaiGou(@Param("editDate") Date editDate, @Param("rowId") String prjId,
+                  @Param("content") String content, @Param("editUser") String userId) throws SQLException;
 
     /**
      *
@@ -66,7 +66,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Update("<script>" +
             "UPDATE XY_GCB_PRJ_PLAN SET EDIT_MARK=#{prjMark} WHERE ROW_ID=#{prjId}" +
             "</script>")
-    void addPrjMark(@Param("prjId") String prjId,@Param("prjMark") String prjMark) throws SQLException;
+    void addPrjMark(@Param("prjId") String prjId, @Param("prjMark") String prjMark) throws SQLException;
 
     @Select("<script>" +
             "SELECT ROW_ID,DAYS,PLAN_TYPE,EDIT_STATU FROM XY_GCB_PRJ_PLAN WHERE ROW_ID = #{rowId}" +
@@ -99,8 +99,8 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: void
      */
     @InsertProvider(type = addLcd.class,method = "addLcd")
-    void addLcd(@Param("prjId") String prjId,@Param("zcpbId") String zcpbId,@Param("quantity") String quantity,
-                      @Param("ctrCode") String ctrCode,@Param("mark") String lcdMark) throws SQLException;
+    void addLcd(@Param("prjId") String prjId, @Param("zcpbId") String zcpbId, @Param("quantity") String quantity,
+                @Param("ctrCode") String ctrCode, @Param("mark") String lcdMark) throws SQLException;
     class addLcd{
         public String addLcd(@Param("prjId") String prjId,@Param("zcpbId") String zcpbId,@Param("quantity") String quantity,
                              @Param("ctrCode") String ctrCode,@Param("mark") String lcdMark){

@@ -283,7 +283,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "OR A.CTR_NAME = #{condition,jdbcType=VARCHAR}\n" +
             "OR A.CTR_TEL = #{condition,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String,Object>> getECuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition) throws SQLException;
+    public List<Map<String,Object>> getECuntomerInfoByCondition(@Param("userId") String userId, @Param("condition") String condition) throws SQLException;
 
     /**
      * 根据条件获取R类型下拥有的客户
@@ -369,7 +369,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "\tOR temptable.CTR_NAME = #{condition,jdbcType=VARCHAR} \n" +
             "\tOR temptable.CTR_TEL = #{condition,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId,@Param("condition") String condition,@Param("roleId") String roleId) throws SQLException;
+    public List<Map<String,Object>> getRCuntomerInfoByCondition(@Param("userId") String userId, @Param("condition") String condition, @Param("roleId") String roleId) throws SQLException;
 
     /**
      *
@@ -599,7 +599,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "WHERE A.CTR_CODE =  #{condition,jdbcType=VARCHAR}\n" +
             "OR A.CTR_NAME =  #{condition,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getChatGroupByConditionAndUserTel(@Param("userTel") String userTel,@Param("condition") String condition) throws SQLException;
+    public List<Map<String ,Object>> getChatGroupByConditionAndUserTel(@Param("userTel") String userTel, @Param("condition") String condition) throws SQLException;
 
     /**
      * 获取用户开工时间
