@@ -80,6 +80,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\tAND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' \n" +
             "WHERE\n" +
             "\tpg.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "\tORDER BY pg.PG_OP_DATE DESC" +
             "</script>")
     public List<Map<String,Object>> getPrjList(String ctrCode) throws SQLException;
 

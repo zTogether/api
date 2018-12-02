@@ -40,6 +40,7 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "\tLEFT JOIN XY_USER u ON u.USER_ID = fcm.CKD_OP_USER\n" +
             "WHERE\n" +
             "\tCTR_CODE = #{ctrCcode,jdbcType=VARCHAR}" +
+            "\tORDER BY fcm.CKD_INPUT_DATE DESC" +
             "</script>")
     public List<Map<String,Object>> fcList(String ctrCcode) throws SQLException;
 
@@ -188,5 +189,37 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "</script>")
     @Options(useGeneratedKeys=true, keyProperty="ckdCode", keyColumn="CKD_CODE")
     public void autoOpenOrderAddCkdMain(XyClbFcCkdMain xyClbFcCkdMain) throws SQLException;
+
+    /**
+     * 获取出库单信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/30 14:31
+     * @param: [ckdCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tCKD_CODE, \n" +
+            "\tCTR_CODE, \n" +
+            "\tCKD_TYPE, \n" +
+            "\tTO_CHAR(CKD_INPUT_DATE,'yyyy-MM-dd HH24:mi:ss') CKD_INPUT_DATE, \n" +
+            "\tCKD_FC_TYPE, \n" +
+            "\tCKD_CK, \n" +
+            "\tCKD_OP_USER, \n" +
+            "\tCKD_ZJ, \n" +
+            "\tTO_CHAR(CKD_AUDIT_DATE,'yyyy-MM-dd HH24:mi:ss') CKD_AUDIT_DATE, \n" +
+            "\tCKD_STATU, \n" +
+            "\tCKD_MARK ,\n" +
+            "\tB.USER_NAME CKD_OP_USER_NAME\n" +
+            "FROM\n" +
+            "\tXY_CLB_FC_CKD_MAIN A,\n" +
+            "\tXY_USER B\n" +
+            "WHERE\n" +
+            "\tA.CKD_CODE = #{ckdCode,jdbcType=VARCHAR}\n" +
+            "AND\n" +
+            "\tA.CKD_OP_USER = B.USER_ID" +
+            "</script>")
+    public Map<String ,Object> getCkdInfo(String ckdCode) throws SQLException;
 
 }

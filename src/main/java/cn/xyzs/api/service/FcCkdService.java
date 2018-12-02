@@ -6,6 +6,7 @@ import cn.xyzs.common.pojo.XyClbFcCkdMain;
 import cn.xyzs.common.pojo.XyCustomerInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.action.PutAllAction;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -379,11 +380,14 @@ public class FcCkdService {
     @Transactional
     public Map<String ,Object> autoOpenOrder(XyClbFcCkdMain xyClbFcCkdMain){
         Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
             xyClbFcCkdMainMapper.autoOpenOrderAddCkdMain(xyClbFcCkdMain);
             xyClbFcCkdListMapper.autoOpenOrderAddCkdLsit(xyClbFcCkdMain.getCkdCode(),xyClbFcCkdMain.getCtrCode(),xyClbFcCkdMain.getCkdFcType());
+            Map<String ,Object> ckdInfo = xyClbFcCkdMainMapper.getCkdInfo(xyClbFcCkdMain.getCkdCode());
+            obj.put("ckdInfo",ckdInfo);
             code = "200";
             msg = "成功";
         } catch (SQLException e) {
@@ -391,6 +395,7 @@ public class FcCkdService {
         } finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
         }
         return resultMap;
     }
