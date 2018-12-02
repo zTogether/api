@@ -202,9 +202,9 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      */
     @Select("<script>" +
             "SELECT d.*,l.ZCPB_MX,l.ZCPB_QTY,l.ZCPB_PRICE,l.ZCPB_PP FROM XY_CLB_ZCPB_LIST l,XY_GCB_PRJ_LCD d \n" +
-            "WHERE  d.ZCPB_ID=l.ZCPB_ROWID AND d.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND l.ZCPB_ZC_CODE IS NOT NULL" +
+            "WHERE  d.ZCPB_ID=l.ZCPB_ROWID AND d.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND d.PRJ_ID=#{prjId}" +
             "</script>")
-    List<Map<String,Object>> showLcdByCtrCode(String ctrCode) throws SQLException;
+    List<Map<String,Object>> showLcdByCtrCode(@Param("ctrCode") String ctrCode,@Param("prjId") String prjId) throws SQLException;
 
     /**
      *
