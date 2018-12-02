@@ -27,6 +27,7 @@ public interface XyBjdMainMapper extends Mapper<XyBjdMain>{
             "\tXY_BJD_MAIN xbm\t\n" +
             "WHERE\n" +
             "\tCTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "\tORDER BY xbm.CREATE_DATE DESC" +
             "</script>")
     public List<Map<String,Object>> bjdList(String ctrCode) throws SQLException;
 

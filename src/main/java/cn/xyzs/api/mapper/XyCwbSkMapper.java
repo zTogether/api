@@ -48,6 +48,7 @@ public interface XyCwbSkMapper extends Mapper<XyCwbSk>{
             "\tXY_CWB_SK xcs\n" +
             "WHERE\n" +
             "\tCTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "\tORDER BY xcs.CWB_SK_DATE DESC" +
             "</script>")
     public List<Map<String,Object>> skList(String ctrCode) throws SQLException;
 }
