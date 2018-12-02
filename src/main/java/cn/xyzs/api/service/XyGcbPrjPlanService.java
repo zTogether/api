@@ -254,7 +254,7 @@ public class XyGcbPrjPlanService {
      * @date: 2018\11\12 0012 17:43
      * @param: [mbId, prjId, quantity, length, width, heigth]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
-
+     */
     @Transactional
     public Map<String,Object> addLcd(String prjId,String userId,String ctrCode,List<Map<String,Object>> lcdList,String prjMark){
         String code = "500";
@@ -273,7 +273,7 @@ public class XyGcbPrjPlanService {
                     quantity = map.get("quantity").toString();
                 }
                 if(map.get("lcdMark")!=null&&map.get("lcdMark")!=""){
-                    lcdMark = map.get("lcdMark").toString();
+                    lcdMark = map.get("lcdU/Mark").toString();
                 }
                 xyGcbPrjPlanMapper.addLcd(prjId,zcpbId,quantity,ctrCode,lcdMark);
             }
@@ -325,7 +325,7 @@ public class XyGcbPrjPlanService {
         }
         return resultMap;
     }
-     */
+
     /**
      *
      * @Description: 获取量尺单列表
@@ -334,13 +334,13 @@ public class XyGcbPrjPlanService {
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> showLcd(String ctrCode){
+    public Map<String,Object> showLcd(String ctrCode,String prjId){
         String code = "";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         try {
-            List<Map<String,Object>> lcd =  xyGcbPrjPlanMapper.showLcdByCtrCode(ctrCode);
+            List<Map<String,Object>> lcd =  xyGcbPrjPlanMapper.showLcdByCtrCode(ctrCode,prjId);
             obj.put("lcdList",lcd);
             code = "200";
             msg = "成功";

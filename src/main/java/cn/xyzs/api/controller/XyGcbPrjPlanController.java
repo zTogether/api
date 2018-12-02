@@ -108,7 +108,7 @@ public class XyGcbPrjPlanController {
      * @date: 2018\11\12 0012 17:44
      * @param: [mbId, prjId, quantity, length, width, heigth]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
-
+     */
     @ResponseBody
     @RequestMapping("/addLcd")
     public Map<String,Object> addLcd(String prjId, String userId, String ctrCode,String lcd,String prjMark){
@@ -116,7 +116,7 @@ public class XyGcbPrjPlanController {
         List lcdList = JSONObject.parseArray(arr.toJSONString());
         return xyGcbPrjPlanService.addLcd(prjId,userId,ctrCode,lcdList,prjMark);
     }
-     */
+
 
     /**
      *
@@ -128,8 +128,8 @@ public class XyGcbPrjPlanController {
      */
     @RequestMapping("/lcdList")
     @ResponseBody
-    public Map<String,Object> lcdList(String ctrCode){
-        return xyGcbPrjPlanService.showLcd(ctrCode);
+    public Map<String,Object> lcdList(String ctrCode,String prjId){
+        return xyGcbPrjPlanService.showLcd(ctrCode,prjId);
     }
 
     /**
