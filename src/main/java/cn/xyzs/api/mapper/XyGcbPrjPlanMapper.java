@@ -20,12 +20,22 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @param: [ctrCode]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @Select("<script>" +
-            "SELECT p.*,u.USER_NAME FROM XY_GCB_PRJ_PLAN p\n" +
-            "LEFT JOIN XY_USER u ON u.USER_ID=p.EDIT_USER \n" +
-            "WHERE p.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} ORDER BY p.DAYS,p.XH" +
-            "</script>")
-    List<Map<String,Object>> getGcbPrjPlan(String ctrCode) throws SQLException;
+    @SelectProvider(type = getPrjPlan.class,method = "getPrjPlan")
+    List<Map<String,Object>> getGcbPrjPlan(@Param("ctrCode") String ctrCode,@Param("roleName") String roleName) throws SQLException;
+    class getPrjPlan{
+        public String getPrjPlan(@Param("ctrCode") String ctrCode,@Param("roleName") String roleName){
+            return new SQL(){{
+                SELECT("p.*,u.USER_NAME");
+                FROM("XY_GCB_PRJ_PLAN p");
+                LEFT_OUTER_JOIN("XY_USER u ON u.USER_ID=p.EDIT_USER");
+                WHERE(" p.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
+                if(roleName!=null&&roleName!=""){
+                    WHERE("p.ROLE_NAME=#{roleName}");
+                }
+                ORDER_BY("p.DAYS,p.XH");
+            }}.toString();
+        }
+    }
 
     /**
      *
@@ -84,9 +94,23 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Select("<script>" +
-            "SELECT p.ROW_ID,l.ZCPB_ROWID,l.ZCPB_MX,l.ZCPB_QTY,l.ZCPB_PRICE,l.ZCPB_PP \n" +
-            "FROM XY_CLB_ZCPB_LIST l,XY_GCB_PRJ_PLAN p,XY_GCB_PRJ_LCD_LIST t \n" +
-            "WHERE p.PLAN_LCDID=t.PLAN_LCDID AND t.ZCPB_ID=l.ZCPB_ROWID AND p.ROW_ID=#{rowId} AND l.ZCPB_ZC_CODE IS NOT NULL" +
+            "SELECT\n" +
+            "  p.ROW_ID,\n" +
+            "  l.ZCPB_ROWID,\n" +
+            "  l.ZCPB_MX,\n" +
+            "  l.ZCPB_QTY,\n" +
+            "  l.ZCPB_PRICE,\n" +
+            "  l.ZCPB_PP \n" +
+            "FROM\n" +
+            "  XY_CLB_ZCPB_LIST l,\n" +
+            "  XY_GCB_PRJ_PLAN p,\n" +
+            "  XY_GCB_PRJ_LCD_LIST t \n" +
+            "WHERE\n" +
+            "  p.PLAN_LCDID = t.PLAN_LCDID \n" +
+            "  AND t.ZCPB_ID = l.ZCPB_ID \n" +
+            "  AND p.ROW_ID = #{rowId,jdbcType=VARCHAR}\n" +
+            "  AND l.ZCPB_ZC_CODE IS NOT NULL\n" +
+            "  and p.ctr_code=l.ctr_code" +
             "</script>")
     List<Map<String,Object>> getLcd(String rowId) throws SQLException;
 
@@ -129,13 +153,13 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,SUM(A.QUANTITY*B.ZCPB_PRICE)JE,A.MARK \n" +
-            "FROM XY_GCB_PRJ_LCD A\n" +
-            "LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID\n" +
-            "LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE\n" +
-            "LEFT JOIN XY_GCB_PRJ_PLAN D ON  A.PRJ_ID=D.ROW_ID\n" +
-            "WHERE A.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND A.IS_ORDER=0\n" +
-            "GROUP BY A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,A.MARK " +
+            "SELECT A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,SUM(A.QUANTITY*B.ZCPB_PRICE)JE,A.MARK,(CASE WHEN B.ZCPB_DC LIKE '1%' THEN 0 ELSE 1 END)ZCPB_DC\n" +
+            " FROM XY_GCB_PRJ_LCD A \n" +
+            " LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID \n" +
+            " LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE \n" +
+            " LEFT JOIN XY_GCB_PRJ_PLAN D ON  A.PRJ_ID=D.ROW_ID \n" +
+            " WHERE A.CTR_CODE=#{ctrCode} AND A.IS_ORDER=0 \n" +
+            " GROUP BY A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,A.MARK,B.ZCPB_DC \n" +
             "</script>")
     List<Map<String,Object>> getLcdList(@Param("ctrCode") String ctrCode) throws SQLException;
 
@@ -145,7 +169,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             "\t\tXY_CLB_ZC_ORDER (ORDER_ID,ORDER_DATE,CTR_CODE,OP_USERID,ORDER_JE,\n" +
             "\t\tORDER_STATUS,ORDER_TYPE,ORDER_SUP,EDIT_TYPE,ORDER_DIS)\n" +
             "\t\tVALUES(sys_guid(),SYSDATE,#{ctrCode,jdbcType=VARCHAR},#{opUserid,jdbcType=VARCHAR},\n" +
-            "\t\t#{orderJe,jdbcType=VARCHAR},1,0,#{orderSup,jdbcType=VARCHAR},1,0)\n" +
+            "\t\t#{orderJe,jdbcType=VARCHAR},1,#{orderType,jdbcType=VARCHAR},#{orderSup,jdbcType=VARCHAR},1,0)\n" +
             "</script>")
     @Options(useGeneratedKeys = true, keyProperty = "orderId", keyColumn = "ORDER_ID")
     void addOrder(XyClbZcOrder xyClbZcOrder)throws SQLException;
