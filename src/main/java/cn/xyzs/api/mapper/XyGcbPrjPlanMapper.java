@@ -86,7 +86,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Select("<script>" +
             "SELECT p.ROW_ID,l.ZCPB_ROWID,l.ZCPB_MX,l.ZCPB_QTY,l.ZCPB_PRICE,l.ZCPB_PP \n" +
             "FROM XY_CLB_ZCPB_LIST l,XY_GCB_PRJ_PLAN p,XY_GCB_PRJ_LCD_LIST t \n" +
-            "WHERE p.PLAN_LCDID=t.PLAN_LCDID AND t.ZCPB_ID=l.ZCPB_ROWID AND p.ROW_ID=#{rowId} AND l.ZCPB_ZC_CODE IS NOT NULL" +
+            "WHERE p.PLAN_LCDID=t.PLAN_LCDID AND t.ZCPB_ID=l.ZCPB_ID AND p.ROW_ID=#{rowId} AND l.ZCPB_ZC_CODE IS NOT NULL AND p.ctr_code=l.ctr_code" +
             "</script>")
     List<Map<String,Object>> getLcd(String rowId) throws SQLException;
 
