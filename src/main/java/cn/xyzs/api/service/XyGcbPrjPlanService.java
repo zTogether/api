@@ -273,7 +273,7 @@ public class XyGcbPrjPlanService {
                     quantity = map.get("quantity").toString();
                 }
                 if(map.get("lcdMark")!=null&&map.get("lcdMark")!=""){
-                    lcdMark = map.get("lcdMark").toString();
+                    lcdMark = map.get("lcdU/Mark").toString();
                 }
                 xyGcbPrjPlanMapper.addLcd(prjId,zcpbId,quantity,ctrCode,lcdMark);
             }
@@ -334,13 +334,13 @@ public class XyGcbPrjPlanService {
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> showLcd(String ctrCode){
+    public Map<String,Object> showLcd(String ctrCode,String prjId){
         String code = "";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         try {
-            List<Map<String,Object>> lcd =  xyGcbPrjPlanMapper.showLcdByCtrCode(ctrCode);
+            List<Map<String,Object>> lcd =  xyGcbPrjPlanMapper.showLcdByCtrCode(ctrCode,prjId);
             obj.put("lcdList",lcd);
             code = "200";
             msg = "成功";
