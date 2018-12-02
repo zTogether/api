@@ -28,7 +28,7 @@ public class XyGcbPrjPlanService {
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> getPrjPlan(String ctrCode){
+    public Map<String,Object> getPrjPlan(String ctrCode,String roleName){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
@@ -38,7 +38,7 @@ public class XyGcbPrjPlanService {
             Date d = new Date();
             String dd = dateFormat.format(d);
             Date nowDate = dateFormat.parse(dd);
-            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getGcbPrjPlan(ctrCode);
+            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getGcbPrjPlan(ctrCode,roleName);
             for (int i=0;i<planList.size();i++){
                 Map<String,Object> map = planList.get(i);
                 Date date1 = dateFormat.parse(map.get("DAYS").toString());
@@ -273,7 +273,7 @@ public class XyGcbPrjPlanService {
                     quantity = map.get("quantity").toString();
                 }
                 if(map.get("lcdMark")!=null&&map.get("lcdMark")!=""){
-                    lcdMark = map.get("lcdU/Mark").toString();
+                    lcdMark = map.get("lcdMark").toString();
                 }
                 xyGcbPrjPlanMapper.addLcd(prjId,zcpbId,quantity,ctrCode,lcdMark);
             }
@@ -283,11 +283,14 @@ public class XyGcbPrjPlanService {
             for (Map<String, Object> map : lcdList1) {
                 String orderJe = map.get("JE").toString();
                 String orderSup = map.get("ZC_SUP").toString();
+                String orderType = map.get("ZCPB_DC").toString();
+                System.err.println(orderType);
                 XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
                 xyClbZcOrder.setCtrCode(ctrCode);
                 xyClbZcOrder.setOrderJe(orderJe);
                 xyClbZcOrder.setOpUserid(userId);
                 xyClbZcOrder.setOrderSup(orderSup);
+                xyClbZcOrder.setOrderType(orderType);
                 xyGcbPrjPlanMapper.addOrder(xyClbZcOrder);
                 String orderId = xyClbZcOrder.getOrderId();
                 List<Map<String,Object>> orderList = xyGcbPrjPlanMapper.getOrderList(ctrCode,orderSup);
