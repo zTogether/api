@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyPgLsit;
+import cn.xyzs.common.pojo.XyPgLsit;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -92,5 +92,5 @@ public interface XyPgLsitMapper extends Mapper<XyPgLsit>{
             "\tE.RG_DES,\n" +
             "\tD.BJD_CODE" +
             "")
-    public void addPgList(@Param("pgId") String pgId ,@Param("ctrCode") String ctrCode ,@Param("pgStage") String pgStage ) throws SQLException;
+    public void addPgList(@Param("pgId") String pgId, @Param("ctrCode") String ctrCode, @Param("pgStage") String pgStage) throws SQLException;
 }

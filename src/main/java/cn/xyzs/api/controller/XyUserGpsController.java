@@ -1,7 +1,7 @@
 package cn.xyzs.api.controller;
 
-import cn.xyzs.api.pojo.XyUserGps;
 import cn.xyzs.api.service.XyUserGpsService;
+import cn.xyzs.common.pojo.XyUserGps;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

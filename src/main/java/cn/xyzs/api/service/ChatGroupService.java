@@ -2,7 +2,7 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyPgMapper;
-import cn.xyzs.api.pojo.MvChatMember;
+import cn.xyzs.common.pojo.MvChatMember;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

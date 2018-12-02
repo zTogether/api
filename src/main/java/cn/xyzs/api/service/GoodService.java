@@ -6,10 +6,10 @@ import cn.xyzs.api.mapper.XyCustomerInfoMapper;
 import cn.xyzs.api.mapper.XyValMapper;
 
 import cn.xyzs.api.mapper.*;
-import cn.xyzs.api.pojo.XyClbZcDb;
-import cn.xyzs.api.pojo.XyVal;
-import cn.xyzs.api.pojo.*;
-import cn.xyzs.api.util.CalculateUtil;
+import cn.xyzs.common.pojo.XyClbZcDb;
+import cn.xyzs.common.pojo.XyVal;
+import cn.xyzs.common.pojo.*;
+import cn.xyzs.common.util.CalculateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -959,6 +959,34 @@ public class GoodService {
         }finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取订单金额与优惠金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/29 13:07
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getOrderJeAndYhJe(String orderId){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            Map<String ,Object> orderJeAndYhJe = xyClbZcOrderMapper.getOrderJeAndYhJe(orderId);
+            obj.put("orderJeAndYhJe",orderJeAndYhJe);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
         }
         return resultMap;
     }

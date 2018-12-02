@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbFcCkdList;
+import cn.xyzs.common.pojo.XyClbFcCkdList;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -86,7 +86,7 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "#{item,jdbcType=VARCHAR} "+
             "</foreach>"+
             "</script>")
-    public void addFcCkdList(@Param("ckdCode") String ckdCode ,@Param("fcMark") String fcMark , @Param("list") List<String> list) throws SQLException;
+    public void addFcCkdList(@Param("ckdCode") String ckdCode, @Param("fcMark") String fcMark, @Param("list") List<String> list) throws SQLException;
 
     /**
      * 获取退库商品
@@ -121,7 +121,7 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "\t\tB.FC_UNIT,b.fc_iswc,B.FC_PRICE,B.FC_PRINT_GROUP\n" +
             "\t\tORDER BY 3,2" +
             "</script>")
-    public List<Map<String ,Object>> getTKFcGood(@Param("ctrCode") String ctrCode ,@Param("ckdFcType") String ckdFcType) throws SQLException;
+    public List<Map<String ,Object>> getTKFcGood(@Param("ctrCode") String ctrCode, @Param("ckdFcType") String ckdFcType) throws SQLException;
 
     /**
      * 根据ckdCode删除
@@ -169,6 +169,6 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "\tA.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} \n" +
             "\tAND A.RG_STAGE = #{rgStage,jdbcType=VARCHAR}" +
             "</script>")
-    public void autoOpenOrderAddCkdLsit(@Param("ckdCode") String ckdCode ,@Param("ctrCode") String ctrCode ,@Param("rgStage") String rgStage) throws SQLException;
+    public void autoOpenOrderAddCkdLsit(@Param("ckdCode") String ckdCode, @Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage) throws SQLException;
 
 }

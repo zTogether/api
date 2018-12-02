@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbZcOrderListFree;
+import cn.xyzs.common.pojo.XyClbZcOrderListFree;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.FetchType;
@@ -17,7 +17,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
      * @author: zheng shuai
      * @date: 2018/8/31 10:51
      * @param: [orderId]
-     * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcOrderListFree>
+     * @return: java.util.List<cn.xyzs.common.pojo.XyClbZcOrderListFree>
      */
     @Select("<script>SELECT * FROM XY_CLB_ZC_ORDER_LIST_FREE xczolf WHERE xczolf.ORDER_ID = #{orderId,jdbcType=VARCHAR}</script>")
     @Results(id="getNonStandard",value={
@@ -53,8 +53,8 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
      * @return: void
      */
     @UpdateProvider(type = updateOrderListFree.class,method = "updateOrderListFree")
-    public void updateOrderListFree(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
-                                    @Param("zcMark") String zcMark,@Param("zcArea") String zcArea)throws SQLException;
+    public void updateOrderListFree(@Param("rowId") String rowId, @Param("zcQty") String zcQty,
+                                    @Param("zcMark") String zcMark, @Param("zcArea") String zcArea)throws SQLException;
     class updateOrderListFree{
         public String updateOrderListFree(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
                                           @Param("zcMark") String zcMark,@Param("zcArea") String zcArea){
@@ -84,7 +84,7 @@ public interface XyClbZcOrderListFreeMapper extends Mapper<XyClbZcOrderListFree>
      * @return: void
      */
     @DeleteProvider(type = deleteOrderListFree.class,method = "deleteOrderListFree")
-    public void deleteOrderListFree(@Param("orderId") String orderId,@Param("rowId") String rowId)throws SQLException;
+    public void deleteOrderListFree(@Param("orderId") String orderId, @Param("rowId") String rowId)throws SQLException;
     class deleteOrderListFree{
         public String deleteOrderListFree(@Param("orderId") String orderId,@Param("rowId") String rowId){
             return new SQL(){{

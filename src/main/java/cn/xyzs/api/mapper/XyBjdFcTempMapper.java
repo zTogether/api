@@ -31,5 +31,5 @@ public interface XyBjdFcTempMapper {
             "AND\n" +
             "\txbft.S_VAL IS NOT NULL" +
             "</script>")
-    public List<Map<String ,Object>> getNameAndVal(@Param("ctrCode") String ctrCode , @Param("rgStage") String rgStage) throws SQLException;
+    public List<Map<String ,Object>> getNameAndVal(@Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage) throws SQLException;
 }

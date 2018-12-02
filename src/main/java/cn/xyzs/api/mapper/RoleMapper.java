@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.TRole;
+import cn.xyzs.common.pojo.TRole;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.jdbc.SQL;

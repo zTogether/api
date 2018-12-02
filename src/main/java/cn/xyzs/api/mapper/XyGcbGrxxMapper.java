@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyGcbGrxx;
+import cn.xyzs.common.pojo.XyGcbGrxx;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -24,7 +24,7 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
      * @return: void
      */
     @Update("<script>UPDATE XY_GCB_GRXX SET PASSWORD=#{password} WHERE GR_TEL=#{grTel}</script>")
-    public void changeGrPassword(@Param("grTel") String grTel,@Param("password") String password)throws SQLException;
+    public void changeGrPassword(@Param("grTel") String grTel, @Param("password") String password)throws SQLException;
 
     /***
      *
@@ -35,8 +35,8 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
      * @return: void
      */
     @UpdateProvider(type = updateGrInfo.class,method = "updateGrInfo")
-    public void changeGrInfo(@Param("name") String name,@Param("idCard") String idCard,@Param("grTel") String grTel,
-                             @Param("grBankId") String grBankId,@Param("grAdd") String grAdd,
+    public void changeGrInfo(@Param("name") String name, @Param("idCard") String idCard, @Param("grTel") String grTel,
+                             @Param("grBankId") String grBankId, @Param("grAdd") String grAdd,
                              @Param("grId") String grId)throws SQLException;
     class updateGrInfo{
         public String updateGrInfo(@Param("name") String name,@Param("idCard") String idCard,@Param("grTel") String grTel,

@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbZcOrderList;
+import cn.xyzs.common.pojo.XyClbZcOrderList;
 import com.sun.corba.se.spi.ior.ObjectKey;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
@@ -89,8 +89,8 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
      * @return: void
      */
     @UpdateProvider(type = updateOrderList.class,method = "updateOrderList")
-    public void updateOrderList(@Param("rowId") String rowId,@Param("zcQty") String zcQty,
-                                @Param("zcArea") String zcArea,@Param("zcMark") String zcMark)throws SQLException;
+    public void updateOrderList(@Param("rowId") String rowId, @Param("zcQty") String zcQty,
+                                @Param("zcArea") String zcArea, @Param("zcMark") String zcMark)throws SQLException;
     class updateOrderList{
         public String updateOrderList(@Param("rowId") String rowId, @Param("zcQty") String zcQty,
                                       @Param("zcArea") String zcArea,@Param("zcMark") String zcMark){
@@ -120,7 +120,7 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
      * @return: void
      */
     @DeleteProvider(type = deleteFromOrderList.class,method = "deleteFromOrderGoods")
-    public void deleteFromOrderList(@Param("orderId") String orderId,@Param("rowId") String rowId) throws SQLException;
+    public void deleteFromOrderList(@Param("orderId") String orderId, @Param("rowId") String rowId) throws SQLException;
     class deleteFromOrderList{
         public String deleteFromOrderGoods(@Param("orderId") String orderId,@Param("rowId") String rowId){
             return new SQL(){{
@@ -177,7 +177,7 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
             "WHERE\n" +
             "\tB.ORDER_ID = C.ORDER_ID" +
             "</script>")
-    public List<Map<String ,Object>> getZcByOrderSupAndCtrCode(@Param("ctrCode") String ctrCode ,@Param("orderSup") String orderSup) throws SQLException;
+    public List<Map<String ,Object>> getZcByOrderSupAndCtrCode(@Param("ctrCode") String ctrCode, @Param("orderSup") String orderSup) throws SQLException;
 
     /**
      * 添加主材退库明细表

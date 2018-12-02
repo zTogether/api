@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.TUser;
+import cn.xyzs.common.pojo.TUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -15,7 +15,7 @@ import java.util.Map;
 @org.apache.ibatis.annotations.Mapper
 public interface UserMapper extends Mapper<TUser> {
     @SelectProvider(type = UserMapperProvider.class,method = "selectByCondition")
-    List<Map<String,Object>> selectByCondition(Map<String,Object> map);
+    List<Map<String,Object>> selectByCondition(Map<String, Object> map);
     class UserMapperProvider{
         public String selectByCondition(Map<String,Object> map){
             return new SQL(){{
@@ -68,7 +68,7 @@ public interface UserMapper extends Mapper<TUser> {
 
     //修改密码
     @Select("<script>UPDATE XY_USER SET PASSWORD=#{password,jdbcType=VARCHAR} WHERE USER_TEL=#{userTel,jdbcType=VARCHAR}</script>")
-    void changePassword(@Param("userTel") String userTel,@Param("password") String password) throws SQLException;
+    void changePassword(@Param("userTel") String userTel, @Param("password") String password) throws SQLException;
 
     /**
      *
@@ -79,10 +79,10 @@ public interface UserMapper extends Mapper<TUser> {
      * @return: int
      */
     @SelectProvider(type = updatePersonalInfo.class,method = "updatePersonalInfo")
-     void changePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
-                                  @Param("userBthd") String userBthd,@Param("idCard") String idCard,
-                                  @Param("bankIdBc") String bankIdBc,@Param("bankIdIcbc") String bankIdIcbc,
-                                  @Param("bankIdCmbc") String bankIdCmbc)throws SQLException;
+     void changePersonalInfo(@Param("userCode") String userCode, @Param("userTel") String userTel, @Param("userSex") String userSex,
+                             @Param("userBthd") String userBthd, @Param("idCard") String idCard,
+                             @Param("bankIdBc") String bankIdBc, @Param("bankIdIcbc") String bankIdIcbc,
+                             @Param("bankIdCmbc") String bankIdCmbc)throws SQLException;
     class updatePersonalInfo{
         public String updatePersonalInfo(@Param("userCode") String userCode,@Param("userTel") String userTel,@Param("userSex") String userSex,
                                          @Param("userBthd") String userBthd,@Param("idCard") String idCard,
@@ -137,7 +137,7 @@ public interface UserMapper extends Mapper<TUser> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @SelectProvider(type = getPhoneBook.class,method = "getPhoneBook")
-    List<Map<String,Object>> phoneBook(@Param("name") String name,@Param("role") String role,@Param("orgName") String orgName) throws SQLException;
+    List<Map<String,Object>> phoneBook(@Param("name") String name, @Param("role") String role, @Param("orgName") String orgName) throws SQLException;
     class getPhoneBook{
      public String getPhoneBook(@Param("name") String name,@Param("role") String role,@Param("orgName") String orgName){
             return new SQL(){{
@@ -217,5 +217,5 @@ public interface UserMapper extends Mapper<TUser> {
     @Update("<script>" +
             "UPDATE TEMP_SEND_MEMBER SET SEND_STATUS = #{sendStatu,jdbcType=VARCHAR},SEND_DATE = SYSDATE WHERE TEL = #{tel,jdbcType=VARCHAR}" +
             "</script>")
-    public void  updateTemp(@Param("sendStatu") String sendStatu ,@Param("tel") String tel) throws SQLException;
+    public void  updateTemp(@Param("sendStatu") String sendStatu, @Param("tel") String tel) throws SQLException;
 }

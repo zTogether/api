@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyPg;
+import cn.xyzs.common.pojo.XyPg;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
@@ -44,7 +44,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "WHERE\n" +
             "\tPG_ID = #{pgId,jdbcType=VARCHAR}\t" +
             "</script>")
-    public void updatePgGr(@Param("pgId") String pgId , @Param("grId") String grId) throws SQLException;
+    public void updatePgGr(@Param("pgId") String pgId, @Param("grId") String grId) throws SQLException;
 
     /**
      *
@@ -109,7 +109,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "\t)\n" +
             "WHERE RN BETWEEN #{startNum} AND #{endNum}" +
             "</script>")
-    public List<Map<String ,Object>> getGrConstructionSite(@Param("grId") String grId ,@Param("startNum") String startNum ,@Param("endNum") String endNum) throws SQLException;
+    public List<Map<String ,Object>> getGrConstructionSite(@Param("grId") String grId, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
     /**
      * 工人聊天群，根据条件获取工人工地
@@ -136,7 +136,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
             "OR A.CTR_NAME = #{condition,jdbcType=VARCHAR}\n" +
             "OR A.CTR_CODE = #{condition,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getGrConstructionSiteByCondition(@Param("grId") String grId ,@Param("condition") String condition) throws SQLException;
+    public List<Map<String ,Object>> getGrConstructionSiteByCondition(@Param("grId") String grId, @Param("condition") String condition) throws SQLException;
 
     /**
      * 根据ctrCode获取所有为其服务的工人
@@ -182,7 +182,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
     @Select("<script>" +
             "SELECT COUNT(1) FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND xp.PG_STAGE = #{pgStage,jdbcType=VARCHAR} AND xp.PG_GR IS NULL" +
             "</script>")
-    public Integer isRepetitionPg(@Param("ctrCode") String ctrCode ,@Param("pgStage") String pgStage ) throws SQLException;
+    public Integer isRepetitionPg(@Param("ctrCode") String ctrCode, @Param("pgStage") String pgStage) throws SQLException;
 
     /**
      * 添加派工主表信息
@@ -211,7 +211,7 @@ public interface XyPgMapper extends Mapper<XyPg>{
     @Update("<script>" +
             "UPDATE XY_PG SET PG_GR=#{pgGr,jdbcType=VARCHAR} WHERE PG_ID=#{pgId,jdbcType=VARCHAR}" +
             "</script>")
-    public void updatePgGrByPgId(@Param("pgGr") String pgGr ,@Param("pgId") String pgId) throws SQLException;
+    public void updatePgGrByPgId(@Param("pgGr") String pgGr, @Param("pgId") String pgId) throws SQLException;
 
     @Select("<script>" +
             "SELECT gr_id, del_sq\n" +

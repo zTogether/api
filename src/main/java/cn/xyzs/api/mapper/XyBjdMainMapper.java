@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyBjdMain;
+import cn.xyzs.common.pojo.XyBjdMain;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -52,7 +52,7 @@ public interface XyBjdMainMapper extends Mapper<XyBjdMain>{
             "  AND NOT EXISTS(SELECT 1 FROM XY_PG A,XY_PG_LIST B WHERE A.PG_ID=B.PG_ID AND A.PG_STAGE=#{pgStage,jdbcType=VARCHAR} AND A.CTR_CODE= #{ctrCode,jdbcType=VARCHAR} AND B.BJD_CODE=D.BJD_CODE)" +
             ")" +
             "</script>")
-    public Integer getIsPg(@Param("ctrCode") String ctrCode ,@Param("pgStage") String pgStage) throws SQLException;
+    public Integer getIsPg(@Param("ctrCode") String ctrCode, @Param("pgStage") String pgStage) throws SQLException;
 
     /**
      * 根据ctrCode获取当前的报价单金额与出库单金额

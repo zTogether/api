@@ -1,8 +1,8 @@
 package cn.xyzs.api.service.getui;
 
 import cn.xyzs.api.mapper.API.ClientAPIMapper;
-import cn.xyzs.api.pojo.API.ClientAPI;
-import cn.xyzs.api.util.GetuiUtil;
+import cn.xyzs.common.pojo.API.ClientAPI;
+import cn.xyzs.common.util.GetuiUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;

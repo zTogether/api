@@ -2,7 +2,7 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.XyClbZcFlMapper;
 import cn.xyzs.api.mapper.XyClbZctxMbMapper;
-import cn.xyzs.api.pojo.XyClbZcFl;
+import cn.xyzs.common.pojo.XyClbZcFl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

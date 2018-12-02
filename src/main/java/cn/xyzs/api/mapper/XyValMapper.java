@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyVal;
+import cn.xyzs.common.pojo.XyVal;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -19,7 +19,7 @@ public interface XyValMapper extends Mapper<XyVal>{
      * @author: zheng shuai
      * @date: 2018/9/1 13:14
      * @param: [list]
-     * @return: java.util.List<cn.xyzs.api.pojo.XyVal>
+     * @return: java.util.List<cn.xyzs.common.pojo.XyVal>
      */
     @Select("<script>" +
             "SELECT * FROM XY_VAL WHERE VAL_ID IN " +
@@ -41,7 +41,7 @@ public interface XyValMapper extends Mapper<XyVal>{
      * @author: zheng shuai
      * @date: 2018/9/1 13:14
      * @param: [valId]
-     * @return: cn.xyzs.api.pojo.XyVal
+     * @return: cn.xyzs.common.pojo.XyVal
      */
     @Select("<script>SELECT * FROM XY_VAL WHERE VAL_ID = #{valId,jdbcType=VARCHAR} AND VALSET_ID = 'A3B32F221FF17256988E7C0A218EBF5C' </script>")
     @Results(id="getZcArea",value={
@@ -57,7 +57,7 @@ public interface XyValMapper extends Mapper<XyVal>{
      * @author: zheng shuai
      * @date: 2018/9/1 13:15
      * @param: [valsetId]
-     * @return: java.util.List<cn.xyzs.api.pojo.XyVal>
+     * @return: java.util.List<cn.xyzs.common.pojo.XyVal>
      */
     @Select("<script>SELECT * FROM XY_VAL xv WHERE xv.VALSET_ID = #{valsetId,jdbcType=VARCHAR}</script>")
     @Results(id="getZcAreaListByValsetId",value={
@@ -103,7 +103,7 @@ public interface XyValMapper extends Mapper<XyVal>{
      * @author: zheng shuai
      * @date: 2018/9/1 13:14
      * @param: [list]
-     * @return: java.util.List<cn.xyzs.api.pojo.XyVal>
+     * @return: java.util.List<cn.xyzs.common.pojo.XyVal>
      */
     @Select("<script>" +
             "SELECT * FROM XY_VAL WHERE VAL_ID IN " +
@@ -112,5 +112,5 @@ public interface XyValMapper extends Mapper<XyVal>{
             "</foreach> " +
             " AND VALSET_ID = #{valsetId,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getValist(@Param("list") List<String> list ,@Param("valsetId") String valsetId) throws SQLException;
+    public List<Map<String ,Object>> getValist(@Param("list") List<String> list, @Param("valsetId") String valsetId) throws SQLException;
 }

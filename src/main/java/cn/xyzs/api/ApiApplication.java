@@ -29,7 +29,4 @@ public class ApiApplication {
 		config.setProperties(p);
 		return config;
 	}
-
-
-
 }

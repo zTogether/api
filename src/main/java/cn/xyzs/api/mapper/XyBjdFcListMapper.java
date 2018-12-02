@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyBjdFcList;
+import cn.xyzs.common.pojo.XyBjdFcList;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -25,7 +25,7 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String,Object>> bjdFcList(@Param("bjdCode") String bjdCode, @Param("fcStage") String fcStage,
-                                              @Param("startNum") String startNum,@Param("endNum") String endNum) throws SQLException;
+                                              @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
     @Select("<script>" +
             "SELECT\n" +

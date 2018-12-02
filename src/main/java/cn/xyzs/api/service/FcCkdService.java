@@ -1,9 +1,9 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.*;
-import cn.xyzs.api.pojo.XyClbFcCkdList;
-import cn.xyzs.api.pojo.XyClbFcCkdMain;
-import cn.xyzs.api.pojo.XyCustomerInfo;
+import cn.xyzs.common.pojo.XyClbFcCkdList;
+import cn.xyzs.common.pojo.XyClbFcCkdMain;
+import cn.xyzs.common.pojo.XyCustomerInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;

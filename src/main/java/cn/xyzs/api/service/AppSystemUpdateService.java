@@ -1,8 +1,8 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.MvSysConfigMapper;
-import cn.xyzs.api.pojo.MvSysConfig;
-import cn.xyzs.api.util.PropertiesUtil;
+import cn.xyzs.common.pojo.MvSysConfig;
+import cn.xyzs.common.util.PropertiesUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbFcDb;
+import cn.xyzs.common.pojo.XyClbFcDb;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -57,5 +57,5 @@ public interface XyClbFcDbMapper extends Mapper<XyClbFcDb>{
             "ORDER BY\n" +
             "\t3,2" +
             "</script>")
-    public List<Map<String ,Object>> getFcGoodByFcType(@Param("ctrCode") String ctrCode , @Param("fcType")String fcType) throws SQLException;
+    public List<Map<String ,Object>> getFcGoodByFcType(@Param("ctrCode") String ctrCode, @Param("fcType") String fcType) throws SQLException;
 }

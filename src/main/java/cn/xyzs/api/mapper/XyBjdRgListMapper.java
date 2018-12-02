@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyBjdRgList;
+import cn.xyzs.common.pojo.XyBjdRgList;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -32,6 +32,6 @@ public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
             "WHERE BM.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND BRL.BJD_CODE=#{bjdCode,jdbcType=VARCHAR} AND BRL.BJD_RG_STAGE=#{rgStage,jdbcType=VARCHAR}\n" +
             "ORDER BY TO_NUMBER(BRL.BJD_RG_NO)" +
             "</script>")
-    public Map<String,Object> prjZongJi(@Param("ctrCode") String ctrCode,@Param("bjdCode") String bjdCode,
+    public Map<String,Object> prjZongJi(@Param("ctrCode") String ctrCode, @Param("bjdCode") String bjdCode,
                                         @Param("rgStage") String rgStage) throws SQLException;
 }

@@ -1,6 +1,6 @@
 package cn.xyzs.api.controller;
 
-import cn.xyzs.api.pojo.XyClbFcCkdMain;
+import cn.xyzs.common.pojo.XyClbFcCkdMain;
 import cn.xyzs.api.service.FcCkdService;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;

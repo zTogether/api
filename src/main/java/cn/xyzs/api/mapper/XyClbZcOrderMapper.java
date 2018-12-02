@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbZcOrder;
+import cn.xyzs.common.pojo.XyClbZcOrder;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
@@ -87,7 +87,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "\t\t) A\n" +
             "\t) B WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode,@Param("startNum")String startNum,@Param("endNum" )String endNum) throws SQLException;
+    public List<Map<String,Object>> queryOrderByctrCode(@Param("ctrCode") String ctrCode, @Param("startNum") String startNum, @Param("endNum") String endNum) throws SQLException;
 
     /***
      *
@@ -110,10 +110,10 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
      * @return: void
      */
     @UpdateProvider(type = updateOrder.class,method = "updateOrder")
-    public void updateOrder(@Param("orderId") String orderId,@Param("orderJe") String orderJe,
-                            @Param("orderMark") String orderMark,@Param("orderStatus") String orderStatus,
+    public void updateOrder(@Param("orderId") String orderId, @Param("orderJe") String orderJe,
+                            @Param("orderMark") String orderMark, @Param("orderStatus") String orderStatus,
                             @Param("orderType") String orderType, @Param("editType") String editType,
-                            @Param("orderDis") String orderDis,@Param("orderDisMark") String orderDisMark,
+                            @Param("orderDis") String orderDis, @Param("orderDisMark") String orderDisMark,
                             @Param("orderIsreturn") String orderIsreturn)throws SQLException;
     class updateOrder{
         public String updateOrder(@Param("orderId") String orderId,@Param("orderJe") String orderJe,
@@ -274,6 +274,19 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     @Update("<script>" +
             "UPDATE XY_CLB_ZC_ORDER SET ORDER_JE = #{orderJe,jdbcType=VARCHAR} WHERE ORDER_ID = #{orderId,jdbcType=VARCHAR}" +
             "</script>")
-    public void updateTHDJe(@Param("orderId") String orderId ,@Param("orderJe") String orderJe) throws SQLException;
+    public void updateTHDJe(@Param("orderId") String orderId, @Param("orderJe") String orderJe) throws SQLException;
+
+    /**
+     * 获取订单金额与优惠金额
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/11/29 13:05
+     * @param: [orderId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT ORDER_JE,ORDER_DIS FROM XY_CLB_ZC_ORDER WHERE ORDER_ID = #{orderId,jdbcType=VARCHAR}" +
+            "</script>")
+    public Map<String ,Object> getOrderJeAndYhJe(String orderId) throws SQLException;
 
 }

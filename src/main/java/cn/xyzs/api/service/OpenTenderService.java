@@ -4,8 +4,8 @@ import cn.xyzs.api.mapper.VwXyPgWaiterMapper;
 import cn.xyzs.api.mapper.XyGcbGrxxMapper;
 import cn.xyzs.api.mapper.XyPgMapper;
 import cn.xyzs.api.mapper.XyPgWaiterMapper;
-import cn.xyzs.api.pojo.VwXyPgWaiter;
-import cn.xyzs.api.pojo.XyPgWaiter;
+import cn.xyzs.common.pojo.VwXyPgWaiter;
+import cn.xyzs.common.pojo.XyPgWaiter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

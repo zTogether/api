@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.VwXyJdjs;
+import cn.xyzs.common.pojo.VwXyJdjs;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -42,5 +42,5 @@ public interface VwXyJdjsMapper extends Mapper<VwXyJdjs> {
             "AND\n" +
             "\tJD = #{jd,jdbcType=VARCHAR}" +
             "</script>")
-    public Map<String ,Object> getJdjsVByCtrCodeAndJd(@Param("ctrCode") String ctrCode , @Param("jd")String jd) throws SQLException;
+    public Map<String ,Object> getJdjsVByCtrCodeAndJd(@Param("ctrCode") String ctrCode, @Param("jd") String jd) throws SQLException;
 }

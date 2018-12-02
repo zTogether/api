@@ -1,6 +1,6 @@
 package cn.xyzs.api.mapper;
 
-import cn.xyzs.api.pojo.XyClbZcDb;
+import cn.xyzs.common.pojo.XyClbZcDb;
 import org.apache.ibatis.annotations.*;
 
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ public interface XyClbZcDbMapper{
      * @author: zheng shuai
      * @date: 2018/9/1 13:10
      * @param: [list, startNum, endNum, minimum, maximum]
-     * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcDb>
+     * @return: java.util.List<cn.xyzs.common.pojo.XyClbZcDb>
      */
     @Select("<script>" +
             "SELECT * FROM(\n" +
@@ -60,8 +60,8 @@ public interface XyClbZcDbMapper{
             @Result(column = "ZC_VERSION", property = "zcVersion", javaType = String.class),
             @Result(column = "ZC_AREA",property = "zcArea", javaType = String.class),
     })
-    public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list,@Param("startNum")String startNum,@Param("endNum" )String endNum,
-                                           @Param("minimum") String minimum,@Param("maximum") String maximum) throws SQLException;
+    public List<XyClbZcDb> getGoodByZcType(@Param("list") List<String> list, @Param("startNum") String startNum, @Param("endNum") String endNum,
+                                           @Param("minimum") String minimum, @Param("maximum") String maximum) throws SQLException;
 
     /**
      *
@@ -69,7 +69,7 @@ public interface XyClbZcDbMapper{
      * @author: zheng shuai
      * @date: 2018/9/1 13:10
      * @param: [zcCode]
-     * @return: java.util.List<cn.xyzs.api.pojo.XyClbZcDb>
+     * @return: java.util.List<cn.xyzs.common.pojo.XyClbZcDb>
      */
     @Select("<script>SELECT * FROM XY_CLB_ZC_DB WHERE ZC_CODE=#{zcCode,jdbcType=VARCHAR} AND ZC_IS_USED = '0'</script>")
     @Results(id="queryZcDb",value={
@@ -114,7 +114,7 @@ public interface XyClbZcDbMapper{
             "WHERE\n" +
             "\txczd.ZC_CODE = #{zcCode,jdbcType=VARCHAR} AND ZC_IS_USED = '0'" +
             "</script>")
-    public String getZcVersion (@Param("zcCode") String zcCode) throws SQLException;
+    public String getZcVersion(@Param("zcCode") String zcCode) throws SQLException;
 
 
     @Select("<script>" +
