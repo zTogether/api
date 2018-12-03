@@ -38,7 +38,8 @@ public interface XyPdcaMapper extends Mapper<XyPdca> {
             "AND \n" +
             "\txp.PDCA_DATE\n" +
             "BETWEEN TO_DATE(#{beginDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss')\n" +
-            "AND TO_DATE(#{endDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss')" +
+            "AND TO_DATE(#{endDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss') " +
+            " ORDER BY xp.PDCA_DATE DESC" +
             "</script>")
     public List<Map<String ,Object>> getPdcaByUserId(@Param("userId") String userId, @Param("beginDate") String beginDate, @Param("endDate") String endDate) throws SQLException;
 

@@ -27,7 +27,7 @@ public class RedisOperation{
     }
 
     public String set(String key, List<String> list) {
-        Long aLong=-1l;
+        Long aLong=-1L;
         for (String value:list
                 ) {
             aLong = jedis.lpush(key,value);
@@ -36,7 +36,7 @@ public class RedisOperation{
     }
 
     public String set(byte[] key, List<byte[]> list) {
-        Long aLong=-1l;
+        Long aLong=-1L;
         for (byte[] value:list
                 ) {
             aLong=jedis.lpush(key,value);
@@ -53,7 +53,7 @@ public class RedisOperation{
     }
 
     public String set(String key, Set<String> set) {
-        Long aLong=-1l;
+        Long aLong=-1L;
         for (String value:set
                 ) {
             aLong=jedis.sadd(key,value);
@@ -62,7 +62,7 @@ public class RedisOperation{
     }
 
     public String set(byte[] key, Set<byte[]> set) {
-        Long aLong=-1l;
+        Long aLong=-1L;
         for (byte[] value:set
                 ) {
             aLong=jedis.sadd(key,value);
@@ -92,7 +92,7 @@ public class RedisOperation{
         Object object=null;
         //获取value的类型
         String type=jedis.type(key);
-        if(type.toLowerCase().equals("list")){
+        if("list".equals(type.toLowerCase())){
             object = jedis.lrange(key,start,end);
         }
         return object;
@@ -103,13 +103,13 @@ public class RedisOperation{
         //获取value的类型
         String type=jedis.type(key);
         //根据不同类型调用不同的获取方法
-        if(type.toLowerCase().equals("map")){
+        if("map".equals(type.toLowerCase())){
             object=jedis.hgetAll(key);
-        }else if(type.toLowerCase().equals("set")){
+        }else if("set".equals(type.toLowerCase())){
             object=jedis.smembers(key);
-        }else if(type.toLowerCase().equals("list")){
+        }else if("list".equals(type.toLowerCase())){
             object=jedis.lrange(key,0,-1);
-        }else if (type.toLowerCase().equals("string")){
+        }else if ("string".equals(type.toLowerCase())){
             byte[] bytes=jedis.get(key.getBytes());
             object=SerializeUtil.unserialize(bytes);
             if(object==null){

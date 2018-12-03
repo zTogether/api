@@ -610,7 +610,7 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @return: java.util.Date
      */
     @Select("<script>" +
-            "SELECT xci.CTR_KG_DATE FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = '2018000532'" +
+            "SELECT xci.CTR_KG_DATE FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public Date getCtrKgDate(String ctrCode) throws SQLException;
 }

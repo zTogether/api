@@ -399,12 +399,15 @@ public class IntermediateAcceptanceSrevice {
                 pgBeginDateflag = "B";
             } else if(timeDifference == 2){
                 pgBeginDateflag = "C";
+            } else if (timeDifference < 0){
+                pgBeginDateflag = "E";
             } else {
                 pgBeginDateflag = "D";
             }
             code = "200";
             msg = "验收成功";
             obj.put("pgBeginDateflag",pgBeginDateflag);
+            obj.put("timeDifference",Math.abs(timeDifference));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
