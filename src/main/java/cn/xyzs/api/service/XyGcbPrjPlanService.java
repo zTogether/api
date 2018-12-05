@@ -284,7 +284,6 @@ public class XyGcbPrjPlanService {
                 String orderJe = map.get("JE").toString();
                 String orderSup = map.get("ZC_SUP").toString();
                 String orderType = map.get("ZCPB_DC").toString();
-                System.err.println(orderType);
                 XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
                 xyClbZcOrder.setCtrCode(ctrCode);
                 xyClbZcOrder.setOrderJe(orderJe);
@@ -300,13 +299,13 @@ public class XyGcbPrjPlanService {
                     String zcType = objectMap.get("ZC_TYPE").toString();
                     String zcPriceIn = objectMap.get("ZC_PRICE_IN").toString();
                     String zcPriceOut = objectMap.get("ZC_PRICE_OUT").toString();
-                    String zcQty = objectMap.get("QUANTITY").toString();
+                    String zcQty = String.valueOf(objectMap.get("QUANTITY"));
                     String zcBrand = objectMap.get("ZC_BRAND").toString();
                     String zcSpec = objectMap.get("ZC_SPEC").toString();
                     String zcMaterial = objectMap.get("ZC_MATERIAL").toString();
                     String zcColor = objectMap.get("ZC_COLOR").toString();
                     String zcUnit = objectMap.get("ZC_UNIT").toString();
-                    String zcMark = objectMap.get("MARK").toString();
+                    String zcMark = String.valueOf(objectMap.get("MARK"));
                     String zcCyc = objectMap.get("ZC_CYC").toString();
                     String zcArea = objectMap.get("ZC_AREA").toString();
                     String zcVersion = objectMap.get("ZC_VERSION").toString();
