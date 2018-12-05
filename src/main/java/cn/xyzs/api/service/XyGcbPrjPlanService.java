@@ -28,7 +28,7 @@ public class XyGcbPrjPlanService {
      * @param: [ctrCode]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> getPrjPlan(String ctrCode,String roleName){
+    public Map<String,Object> getPrjPlan(String ctrCode,String roleName,String edit){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
@@ -38,7 +38,7 @@ public class XyGcbPrjPlanService {
             Date d = new Date();
             String dd = dateFormat.format(d);
             Date nowDate = dateFormat.parse(dd);
-            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getGcbPrjPlan(ctrCode,roleName);
+            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getGcbPrjPlan(ctrCode,roleName,edit);
             for (int i=0;i<planList.size();i++){
                 Map<String,Object> map = planList.get(i);
                 Date date1 = dateFormat.parse(map.get("DAYS").toString());

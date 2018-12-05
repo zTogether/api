@@ -21,16 +21,19 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @SelectProvider(type = getPrjPlan.class,method = "getPrjPlan")
-    List<Map<String,Object>> getGcbPrjPlan(@Param("ctrCode") String ctrCode,@Param("roleName") String roleName) throws SQLException;
+    List<Map<String,Object>> getGcbPrjPlan(@Param("ctrCode") String ctrCode,@Param("roleName") String roleName,@Param("edit") String edit) throws SQLException;
     class getPrjPlan{
-        public String getPrjPlan(@Param("ctrCode") String ctrCode,@Param("roleName") String roleName){
+        public String getPrjPlan(@Param("ctrCode") String ctrCode,@Param("roleName") String roleName,@Param("edit") String edit){
             return new SQL(){{
                 SELECT("p.*,u.USER_NAME");
                 FROM("XY_GCB_PRJ_PLAN p");
                 LEFT_OUTER_JOIN("XY_USER u ON u.USER_ID=p.EDIT_USER");
                 WHERE(" p.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
                 if(roleName!=null&&roleName!=""){
-                    WHERE("p.ROLE_NAME=#{roleName}");
+                    WHERE("p.ROLE_NAME=#{roleName,jdbcType=VARCHAR}");
+                }
+                if(edit!=null&&edit!=""){
+                    WHERE("p.EDIT_STATU=#{edit,jdbcType=VARCHAR}");
                 }
                 ORDER_BY("p.DAYS,p.XH");
             }}.toString();
