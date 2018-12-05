@@ -105,11 +105,13 @@ public interface XyPdcaMapper extends Mapper<XyPdca> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT PDCA_ID,MAX(CASE CLASSIFY WHEN '1' THEN PCONTENT ELSE '' END ) THISSUM,MAX(CASE CLASSIFY WHEN '2' THEN PCONTENT ELSE '' END ) NEXTPLAN\n" +
-            "FROM XY_PDCA_LISTX WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR}\n" +
-            "GROUP BY PDCA_ID" +
+            "SELECT * FROM XY_PDCA_LISTX WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND CLASSIFY='1' ORDER BY RES" +
             "</script>")
-    Map<String,Object> getWeekPlan(@Param("pdcaId") String pdcaId) throws SQLException;
+    List<Map<String,Object>> getWeekSummary(@Param("pdcaId") String pdcaId) throws SQLException;
+    @Select("<script>" +
+            "SELECT * FROM XY_PDCA_LISTX WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND CLASSIFY='2' ORDER BY RES" +
+            "</script>")
+    List<Map<String,Object>> getWeekPlan(@Param("pdcaId") String pdcaId) throws SQLException;
     /**
      *
      * @Description: 获取每天的内容
@@ -134,9 +136,9 @@ public interface XyPdcaMapper extends Mapper<XyPdca> {
      */
     @Insert("<script>" +
             "\n" +
-            "INSERT INTO XY_PDCA_LIST VALUES(sys_guid(),#{pdcaId,jdbcType=VARCHAR},#{week,jdbcType=VARCHAR},TO_DATE(#{date},'yy-MM-dd'),'','','',#{res,jdbcType=VARCHAR})" +
+            "INSERT INTO XY_PDCA_LIST VALUES(sys_guid(),#{pdcaId,jdbcType=VARCHAR},#{week,jdbcType=VARCHAR},TO_DATE(#{date},'yy-MM-dd'),'','',#{PSummary},#{res,jdbcType=VARCHAR})" +
             "</script>")
-    void addPdcaList(@Param("pdcaId") String pdcaId, @Param("week") String week, @Param("date") String date, @Param("res") String res) throws SQLException;
+    void addPdcaList(@Param("pdcaId") String pdcaId, @Param("week") String week, @Param("date") String date,@Param("PSummary") String PSummary, @Param("res") String res) throws SQLException;
 
     /**
      *
@@ -152,20 +154,46 @@ public interface XyPdcaMapper extends Mapper<XyPdca> {
     void deletePdcaList(@Param("pdcaId") String pdcaId, @Param("week") String week, @Param("res") String res) throws SQLException;
 
     @Update("<script>" +
-            "UPDATE XY_PDCA_LIST SET PCONTENT=#{content,jdbcType=VARCHAR},PSUMMARY=#{SContent,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND RES =#{res,jdbcType=VARCHAR} AND WEEK=#{week,jdbcType=VARCHAR} " +
+            "UPDATE XY_PDCA_LIST SET PCONTENT=#{content,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND RES =#{res,jdbcType=VARCHAR} AND WEEK=#{week,jdbcType=VARCHAR} " +
             "</script>")
     void updatePdcaPcontent(@Param("pdcaId") String pdcaId, @Param("week") String week, @Param("res") String res,
-                            @Param("content") String content, @Param("SContent") String SContent) throws SQLException;
+                            @Param("content") String content) throws SQLException;
 
     @Update("<script>" +
             "UPDATE XY_PDCA_LIST SET PSUMMARY=#{content,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND WEEK=#{week,jdbcType=VARCHAR}" +
             "</script>")
     void updatePdcaSummary(@Param("pdcaId") String pdcaId, @Param("week") String week, @Param("content") String content) throws SQLException;
 
+    //更新周总结
     @Update("<script>" +
-            "UPDATE XY_PDCA_LISTX SET PCONTENT =#{content,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND CLASSIFY=#{classify,jdbcType=VARCHAR}" +
+            "UPDATE XY_PDCA_LISTX SET PCONTENT =#{content,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND CLASSIFY='1' AND RES=#{res,jdbcType=VARCHAR}" +
             "</script>")
-    void updateWeekPlan(@Param("pdcaId") String pdcaId, @Param("classify") String classify, @Param("content") String content) throws SQLException;
+    void updateWeekSummary(@Param("pdcaId") String pdcaId,@Param("content") String content,@Param("res") String res) throws SQLException;
+    @Insert("<script>" +
+            "INSERT INTO XY_PDCA_LISTX VALUES(sys_guid(),#{pdcaId,jdbcType=VARCHAR},'1','',#{res,jdbcType=VARCHAR}) " +
+            "</script>")
+    void addSumCol(@Param("pdcaId") String pdcaId,@Param("res") String res) throws SQLException;
+
+    //更新下周计划
+    @Update("<script>" +
+            "UPDATE XY_PDCA_LISTX SET PCONTENT =#{content,jdbcType=VARCHAR} WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND CLASSIFY='2' AND RES=#{res,jdbcType=VARCHAR}" +
+            "</script>")
+    void updateWeekPlan(@Param("pdcaId") String pdcaId, @Param("content") String content,@Param("res") String res) throws SQLException;
+    @Insert("<script>" +
+            "INSERT INTO XY_PDCA_LISTX VALUES(sys_guid(),#{pdcaId,jdbcType=VARCHAR},'2','',#{res,jdbcType=VARCHAR})" +
+            "</script>")
+    void addPlanCol(@Param("pdcaId") String pdcaId,@Param("res") String res) throws SQLException;
+
+    //删除周总结
+    @Delete("<script>" +
+            "DELETE FROM XY_PDCA_LISTX WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND RES=#{res,jdbcType=VARCHAR} AND CLASSIFY='1'" +
+            "</script>")
+    void deleteWeekSum(@Param("pdcaId") String pdcaId,@Param("res") String res) throws SQLException;
+    //删除下周计划
+    @Delete("<script>" +
+            "DELETE FROM XY_PDCA_LISTX WHERE PDCA_ID=#{pdcaId,jdbcType=VARCHAR} AND RES=#{res,jdbcType=VARCHAR} AND CLASSIFY='2'" +
+            "</script>")
+    void deleteWeekPlan(@Param("pdcaId") String pdcaId,@Param("res") String res) throws SQLException;
 
     @Update("<script>" +
             "UPDATE XY_PDCA SET POSITION=#{position,jdbcType=VARCHAR} ,PRESOURCE=#{PResources,jdbcType=VARCHAR} ,OPINION=#{opinion,jdbcType=VARCHAR} ,ISSUE=#{issue,jdbcType=VARCHAR}\n" +

@@ -1,6 +1,7 @@
 package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.XyPdcaService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,6 +59,12 @@ public class XyPdcaController {
         return xyPdcaService.getWeekContent(userId,pdcaId);
     }
 
+
+    @ResponseBody
+    @RequestMapping("/getWeekSummary")
+    public Map<String,Object> getWeekSummary(String pdcaId){
+        return xyPdcaService.getWeekSummary(pdcaId);
+    }
     @ResponseBody
     @RequestMapping("/getWeekPlan")
     public Map<String,Object> getWeekPlan(String pdcaId){
@@ -88,8 +95,8 @@ public class XyPdcaController {
      */
     @ResponseBody
     @RequestMapping("/addDayContent")
-    public Map<String,Object> addPdcaList(String pdcaId,String week,String res){
-        return xyPdcaService.addPdcaList(pdcaId,week,res);
+    public Map<String,Object> addPdcaList(String pdcaId,String week,String PSummary,String res){
+        return xyPdcaService.addPdcaList(pdcaId,week,PSummary,res);
     }
 
     /**
@@ -116,8 +123,8 @@ public class XyPdcaController {
      */
     @ResponseBody
     @RequestMapping("/updateDayPcontent")
-    public Map<String,Object> updatePdcaPcontent(String pdcaId,String week,String res,String content,String SContent){
-        return xyPdcaService.updatePdcaPcontent(pdcaId,week,res,content,SContent);
+    public Map<String,Object> updatePdcaPcontent(String pdcaId,String week,String res,String content){
+        return xyPdcaService.updatePdcaPcontent(pdcaId,week,res,content);
     }
 
     /**
@@ -134,9 +141,15 @@ public class XyPdcaController {
         return xyPdcaService.updatePsummary(pdcaId,week,content);
     }
 
+    //更新本周总结
+    @ResponseBody
+    @RequestMapping("/updateWeekSummary")
+    public Map<String,Object> updateWeekSummary(String pdcaId,String content,String res){
+        return xyPdcaService.updateWeekSummary(pdcaId,content,res);
+    }
     /**
      *
-     * @Description: 添加周总结以及下周计划
+     * @Description: 添加下周计划
      * @author: GeWeiliang
      * @date: 2018\11\26 0026 9:19
      * @param: [pdcaId, classify, content]
@@ -144,13 +157,38 @@ public class XyPdcaController {
      */
     @ResponseBody
     @RequestMapping("/updateWeekPlan")
-    public Map<String,Object> updateWeekPlan(String pdcaId,String classify,String content){
-        return xyPdcaService.updateWeekPlan(pdcaId,classify,content);
+    public Map<String,Object> updateWeekPlan(String pdcaId,String content,String res){
+        return xyPdcaService.updateWeekPlan(pdcaId,content,res);
+    }
+
+    //添加总结行
+    @ResponseBody
+    @RequestMapping("/addSumCol")
+    public Map<String,Object> addSumCol(String pdcaId,String res){
+        return xyPdcaService.addSumCol(pdcaId,res);
+    }
+    //添加计划行
+    @ResponseBody
+    @RequestMapping("/addPlanCol")
+    public Map<String,Object> addPlanCol(String pdcaId,String res){
+        return xyPdcaService.addPlanCol(pdcaId,res);
     }
 
     @ResponseBody
     @RequestMapping("/updatePdca")
     public Map<String,Object> updatePdca(String pdcaId,String position,String opinion,String PResources,String issue){
         return xyPdcaService.updatePdca(pdcaId,position,opinion,PResources,issue);
+    }
+
+    @ResponseBody
+    @RequestMapping("/deleteWeekSum")
+    public Map<String,Object> deleteWeekSum(String pdcaId,String res){
+        return xyPdcaService.delelteWeekSum(pdcaId,res);
+    }
+
+    @ResponseBody
+    @RequestMapping("/deleteWeekPlan")
+    public Map<String,Object> deleteWeekPlan(String pdcaId,String res){
+        return xyPdcaService.deleteWeekPlan(pdcaId,res);
     }
 }

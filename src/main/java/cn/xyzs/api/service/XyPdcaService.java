@@ -102,14 +102,34 @@ public class XyPdcaService {
         return resultMap;
     }
 
+    public Map<String,Object> getWeekSummary(String pdcaId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try{
+            List sumList = xyPdcaMapper.getWeekSummary(pdcaId);
+            obj.put("SNP",sumList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
     public Map<String,Object> getWeekPlan(String pdcaId){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         try{
-            Map<String,Object> map = xyPdcaMapper.getWeekPlan(pdcaId);
-            obj.put("SNP",map);
+            List planList = xyPdcaMapper.getWeekPlan(pdcaId);
+            obj.put("SNP",planList);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -156,7 +176,7 @@ public class XyPdcaService {
         return resultMap;
     }
 
-    public Map<String,Object> addPdcaList(String pdcaId,String week,String res){
+    public Map<String,Object> addPdcaList(String pdcaId,String week,String PSummary,String res){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
@@ -164,7 +184,7 @@ public class XyPdcaService {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
             String date = dateFormat.format(d);
-            xyPdcaMapper.addPdcaList(pdcaId,week,date,res);
+            xyPdcaMapper.addPdcaList(pdcaId,week,date,PSummary,res);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -193,12 +213,12 @@ public class XyPdcaService {
         return resultMap;
     }
 
-    public Map<String,Object> updatePdcaPcontent(String pdcaId,String week,String res,String content,String SContent){
+    public Map<String,Object> updatePdcaPcontent(String pdcaId,String week,String res,String content){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try{
-            xyPdcaMapper.updatePdcaPcontent(pdcaId,week,res,content,SContent);
+            xyPdcaMapper.updatePdcaPcontent(pdcaId,week,res,content);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -227,12 +247,62 @@ public class XyPdcaService {
         return resultMap;
     }
 
-    public Map<String,Object> updateWeekPlan(String pdcaId,String classify,String content){
+    public Map<String,Object> addSumCol(String pdcaId,String res){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try {
+            xyPdcaMapper.addSumCol(pdcaId,res);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    public Map<String,Object> addPlanCol(String pdcaId,String res){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try{
-            xyPdcaMapper.updateWeekPlan(pdcaId,classify,content);
+            xyPdcaMapper.addPlanCol(pdcaId,res);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+    public Map<String,Object> updateWeekSummary(String pdcaId,String content,String res){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try {
+            xyPdcaMapper.updateWeekSummary(pdcaId,content,res);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    public Map<String,Object> updateWeekPlan(String pdcaId,String content,String res){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try{
+            xyPdcaMapper.updateWeekPlan(pdcaId,content,res);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -259,5 +329,39 @@ public class XyPdcaService {
             resultMap.put("msg",msg);
         }
         return resultMap;
+    }
+
+    public Map<String,Object> delelteWeekSum(String pdcaId,String res){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try{
+            xyPdcaMapper.deleteWeekSum(pdcaId,res);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    public Map<String,Object> deleteWeekPlan(String pdcaId,String res){
+            String code = "500";
+            String msg = "系统异常";
+            Map<String,Object> resultMap = new HashMap<>();
+            try{
+                xyPdcaMapper.deleteWeekPlan(pdcaId,res);
+                code = "200";
+                msg = "成功";
+            }catch (SQLException e){
+                e.printStackTrace();
+            }finally {
+                resultMap.put("code",code);
+                resultMap.put("msg",msg);
+            }
+            return resultMap;
     }
 }

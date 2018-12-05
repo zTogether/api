@@ -27,8 +27,8 @@ public class XyGcbPrjPlanController {
      */
     @RequestMapping("/prjPlan")
     @ResponseBody
-    public Map<String,Object> getPrjPlan(String ctrCode,String roleName){
-        return xyGcbPrjPlanService.getPrjPlan(ctrCode,roleName);
+    public Map<String,Object> getPrjPlan(String ctrCode,String roleName,String edit){
+        return xyGcbPrjPlanService.getPrjPlan(ctrCode,roleName,edit);
     }
 
     /**
