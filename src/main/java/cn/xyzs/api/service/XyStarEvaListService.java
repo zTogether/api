@@ -20,12 +20,13 @@ public class XyStarEvaListService {
      * @param: [evaNo, evaType, level, evaluation, evaName]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> addStarEva(String evaNo,String evaType,String level,String evaluation,String evaName){
+    public Map<String,Object> addStarEva(String evaNo,String evaType,String quality,String evaluation,String evaName,
+                                         String service,String days,String hygiene){
         Map<String,Object> resultMap = new HashMap<>();
         String msg = "系统异常";
         String code = "500";
         try{
-            xyStarEvaMainMapper.addEvaList(evaNo,level,evaluation,evaName,evaType);
+            xyStarEvaMainMapper.addEvaList(evaNo,quality,evaluation,evaName,evaType,service,days,hygiene);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
