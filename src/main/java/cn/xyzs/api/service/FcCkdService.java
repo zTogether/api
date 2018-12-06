@@ -79,7 +79,7 @@ public class FcCkdService {
         try {
             String ckdCode = xyClbFcCkdMainMapper.getNewFcCkdCode(xyClbFcCkdMain.getCtrCode());
             xyClbFcCkdMain.setCkdCode(ckdCode);
-            xyClbFcCkdMain.setCkdStatu("2");
+            xyClbFcCkdMain.setCkdStatu("0");
             xyClbFcCkdMain.setCkdCk("金盛仓库");
             xyClbFcCkdMainMapper.insertSelective(xyClbFcCkdMain);
             List<String> fcPriceCodeList = new ArrayList<>();
@@ -105,7 +105,7 @@ public class FcCkdService {
                 String fcXj = String.valueOf(GetResult(fcJe,fcYf,"+"));
                 xyClbFcCkdList.setFcXj(fcXj);
                 //备注
-                xyClbFcCkdList.setFcMark(fcMarkArray[i]);
+                xyClbFcCkdList.setFcMark("**".equals(fcMarkArray[i])?"":fcMarkArray[i]);
                 Example example = new Example(XyClbFcCkdList.class);
                 example.createCriteria().andEqualTo("fcPriceId",fcPriceCodeList.get(i));
                 example.createCriteria().andEqualTo("fcMark",fcMark);
@@ -117,7 +117,7 @@ public class FcCkdService {
             Example example = new Example(XyClbFcCkdMain.class);
             example.createCriteria().andEqualTo("ckdCode",ckdCode);
             XyClbFcCkdMain fcCkdMain = new XyClbFcCkdMain();
-            fcCkdMain.setCkdZj(String.valueOf(ckdZj));
+            fcCkdMain.setCkdZj(String.valueOf(Math.round(ckdZj * 100) * 0.01d));
             xyClbFcCkdMainMapper.updateByExampleSelective(fcCkdMain,example);
             code = "200";
             msg = "成功";
@@ -200,7 +200,7 @@ public class FcCkdService {
             String ckdCode = xyClbFcCkdMainMapper.getNewFcCkdCode(xyClbFcCkdMain.getCtrCode());
             xyClbFcCkdMain.setCkdCode(ckdCode);
             //退库单状态（待审）
-            xyClbFcCkdMain.setCkdStatu("1");
+            xyClbFcCkdMain.setCkdStatu("0");
             xyClbFcCkdMain.setCkdCk("金盛仓库");
             xyClbFcCkdMainMapper.insertSelective(xyClbFcCkdMain);
             List<String> fcPriceCodeList = new ArrayList<>();
@@ -239,7 +239,7 @@ public class FcCkdService {
             Example example = new Example(XyClbFcCkdMain.class);
             example.createCriteria().andEqualTo("ckdCode",ckdCode);
             XyClbFcCkdMain fcCkdMain = new XyClbFcCkdMain();
-            fcCkdMain.setCkdZj(String.valueOf(ckdZj));
+            fcCkdMain.setCkdZj(String.valueOf(Math.round(ckdZj * 100) * 0.01d));
             xyClbFcCkdMainMapper.updateByExampleSelective(fcCkdMain,example);
 
         } catch (SQLException e) {
