@@ -454,7 +454,7 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
     @Update("UPDATE XY_PG_WAITER xpw \n" +
             "SET xpw.YS_DATE = TO_DATE(#{ysDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:mi:ss')\n" +
             "WHERE\n" +
-            "\txpw.PG_ID = (SELECT xp.PG_ID FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND xp.PG_STAGE = #{pgStage,jdbcType=VARCHAR} )\n" +
+            "\txpw.PG_ID IN (SELECT xp.PG_ID FROM XY_PG xp WHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND xp.PG_STAGE = #{pgStage,jdbcType=VARCHAR} )\n" +
             "AND\n" +
             "\txpw.ZT = '抢单成功'\n" +
             "AND\n" +
