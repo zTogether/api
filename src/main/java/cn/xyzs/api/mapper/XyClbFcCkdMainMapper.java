@@ -152,6 +152,29 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
     public Integer isFristKd(@Param("ctrCode") String ctrCode, @Param("ckdFcType") String ckdFcType) throws SQLException;
 
     /**
+     * 获取CkdCode
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/6 9:42
+     * @param: [ctrCode]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tB.CKD_CODE + 1 CKD_CODE\n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tA.*,\n" +
+            "\t\tROWNUM RN \n" +
+            "\tFROM\n" +
+            "\t\t( SELECT xcfcm.CKD_CODE FROM XY_CLB_FC_CKD_MAIN xcfcm WHERE xcfcm.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} ORDER BY xcfcm.CKD_CODE DESC ) A \n" +
+            "\t) B \n" +
+            "WHERE RN BETWEEN 1 AND 1" +
+            "</script>")
+    public String getCkdCode(String ctrCode) throws SQLException;
+
+    /**
      * 一键开单添加出库单主表
      * @Description:
      * @author: zheng shuai
@@ -163,27 +186,22 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "INSERT INTO XY_CLB_FC_CKD_MAIN ( CKD_CODE, CTR_CODE, CKD_TYPE, CKD_FC_TYPE, CKD_CK, CKD_OP_USER, CKD_ZJ, CKD_STATU )\n" +
             "VALUES\n" +
             "\t(\n" +
+            "\t\t#{ ckdCode, jdbcType = VARCHAR }, \n" +
+            "\t\t#{ ctrCode, jdbcType = VARCHAR },\n" +
+            "\t\t0, \n" +
+            "\t\t#{ ckdFcType, jdbcType = VARCHAR },\n" +
+            "\t\t'金盛仓库', \n" +
+            "\t\t#{ ckdOpUser,\tjdbcType = VARCHAR },\n" +
             "\t\t(\n" +
             "\t\tSELECT\n" +
-            "\t\t\tB.CKD_CODE + 1 \n" +
+            "\t\t\tSUM( A.HJ ) \n" +
             "\t\tFROM\n" +
-            "\t\t\t(\n" +
-            "\t\t\tSELECT\n" +
-            "\t\t\t\tA.*,\n" +
-            "\t\t\t\tROWNUM RN \n" +
-            "\t\t\tFROM\n" +
-            "\t\t\t\t( SELECT xcfcm.CKD_CODE FROM XY_CLB_FC_CKD_MAIN xcfcm WHERE xcfcm.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} ORDER BY xcfcm.CKD_CODE DESC ) A \n" +
-            "\t\t\t) B \n" +
+            "\t\t\tVW_XY_CLB_FC_CKD_FIRST A \n" +
             "\t\tWHERE\n" +
-            "\t\t\tRN BETWEEN 1 \n" +
-            "\t\t\tAND 1 \n" +
+            "\t\t\tA.CTR_CODE = #{ ctrCode, jdbcType = VARCHAR } \n" +
+            "\t\tAND \n" +
+            "\t\t\tA.RG_STAGE = #{ ckdFcType, jdbcType = VARCHAR } \n" +
             "\t\t),\n" +
-            "\t\t#{ctrCode,jdbcType=VARCHAR},\n" +
-            "\t\t0,\n" +
-            "\t\t#{ckdFcType,jdbcType=VARCHAR},\n" +
-            "\t\t'金盛仓库',\n" +
-            "\t\t#{ckdOpUser,jdbcType=VARCHAR},\n" +
-            "\t\t( SELECT SUM( A.HJ ) FROM VW_XY_CLB_FC_CKD_FIRST A WHERE A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND A.RG_STAGE = #{ckdFcType,jdbcType=VARCHAR} ),\n" +
             "\t0 \n" +
             "\t)" +
             "</script>")

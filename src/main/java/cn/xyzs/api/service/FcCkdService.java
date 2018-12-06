@@ -384,6 +384,11 @@ public class FcCkdService {
         String code = "500";
         String msg = "系统异常";
         try {
+            String ckdCode = xyClbFcCkdMainMapper.getCkdCode(xyClbFcCkdMain.getCtrCode());
+            if (ckdCode == null || "".equals(ckdCode) || "null".equals(ckdCode)){
+                ckdCode = xyClbFcCkdMain.getCtrCode() + "01";
+            }
+            xyClbFcCkdMain.setCkdCode(ckdCode);
             xyClbFcCkdMainMapper.autoOpenOrderAddCkdMain(xyClbFcCkdMain);
             xyClbFcCkdListMapper.autoOpenOrderAddCkdLsit(xyClbFcCkdMain.getCkdCode(),xyClbFcCkdMain.getCtrCode(),xyClbFcCkdMain.getCkdFcType());
             Map<String ,Object> ckdInfo = xyClbFcCkdMainMapper.getCkdInfo(xyClbFcCkdMain.getCkdCode());
