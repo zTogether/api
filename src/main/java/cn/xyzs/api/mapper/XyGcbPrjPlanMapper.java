@@ -156,13 +156,13 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,SUM(A.QUANTITY*B.ZCPB_PRICE)JE,A.MARK,(CASE WHEN B.ZCPB_DC LIKE '1%' THEN 0 ELSE 1 END)ZCPB_DC\n" +
+            "SELECT B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,SUM(A.QUANTITY*B.ZCPB_PRICE)JE,(CASE WHEN B.ZCPB_DC LIKE '1%' THEN 0 ELSE 1 END)ZCPB_DC\n" +
             " FROM XY_GCB_PRJ_LCD A \n" +
             " LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID \n" +
             " LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE \n" +
             " LEFT JOIN XY_GCB_PRJ_PLAN D ON  A.PRJ_ID=D.ROW_ID \n" +
-            " WHERE A.CTR_CODE=#{ctrCode} AND A.IS_ORDER=0 \n" +
-            " GROUP BY A.ROW_ID,B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,A.MARK,B.ZCPB_DC \n" +
+            " WHERE A.CTR_CODE=#{ctrCode} AND A.IS_ORDER=0\n" +
+            " GROUP BY B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,B.ZCPB_DC" +
             "</script>")
     List<Map<String,Object>> getLcdList(@Param("ctrCode") String ctrCode) throws SQLException;
 
