@@ -107,8 +107,7 @@ public class FcCkdService {
                 //备注
                 xyClbFcCkdList.setFcMark("**".equals(fcMarkArray[i])?"":fcMarkArray[i]);
                 Example example = new Example(XyClbFcCkdList.class);
-                example.createCriteria().andEqualTo("fcPriceId",fcPriceCodeList.get(i));
-                example.createCriteria().andEqualTo("fcMark",fcMark);
+                example.createCriteria().andEqualTo("fcPriceId",fcPriceCodeList.get(i)).andEqualTo("fcMark",fcMark).andIsNotNull("fcMark");
                 xyClbFcCkdListMapper.updateByExampleSelective(xyClbFcCkdList,example);
 
                 //出库单总计
@@ -117,7 +116,7 @@ public class FcCkdService {
             Example example = new Example(XyClbFcCkdMain.class);
             example.createCriteria().andEqualTo("ckdCode",ckdCode);
             XyClbFcCkdMain fcCkdMain = new XyClbFcCkdMain();
-            fcCkdMain.setCkdZj(String.valueOf(Math.round(ckdZj * 100) * 0.01d));
+            fcCkdMain.setCkdZj(getRound(ckdZj,100));
             xyClbFcCkdMainMapper.updateByExampleSelective(fcCkdMain,example);
             code = "200";
             msg = "成功";
@@ -153,6 +152,13 @@ public class FcCkdService {
                 break;
         }
         return res;
+    }
+
+    private String getRound(double a ,int b){
+        a = a * b;
+        int c = (int)a;
+        c = (c-(int) a)>0.5? ((int) a)+1:(int) a;
+        return String.valueOf(Double.valueOf(c)  / b);
     }
 
     /**
@@ -228,8 +234,7 @@ public class FcCkdService {
                 //备注
                 xyClbFcCkdList.setFcMark("");
                 Example example = new Example(XyClbFcCkdList.class);
-                example.createCriteria().andEqualTo("fcPriceId",fcPriceCodeList.get(i));
-                example.createCriteria().andEqualTo("fcMark",fcMark);
+                example.createCriteria().andEqualTo("fcPriceId",fcPriceCodeList.get(i)).andEqualTo("fcMark",fcMark).andIsNotNull("fcMark");
                 xyClbFcCkdListMapper.updateByExampleSelective(xyClbFcCkdList,example);
                 //出库单总计
                 ckdZj += GetResult(fcJe,fcYf,"+");
@@ -239,7 +244,7 @@ public class FcCkdService {
             Example example = new Example(XyClbFcCkdMain.class);
             example.createCriteria().andEqualTo("ckdCode",ckdCode);
             XyClbFcCkdMain fcCkdMain = new XyClbFcCkdMain();
-            fcCkdMain.setCkdZj(String.valueOf(Math.round(ckdZj * 100) * 0.01d));
+            fcCkdMain.setCkdZj(getRound(ckdZj,100));
             xyClbFcCkdMainMapper.updateByExampleSelective(fcCkdMain,example);
 
         } catch (SQLException e) {
