@@ -141,8 +141,7 @@ public interface UserMapper extends Mapper<TUser> {
     class getPhoneBook{
      public String getPhoneBook(@Param("name") String name,@Param("role") String role,@Param("orgName") String orgName){
             return new SQL(){{
-                SELECT("A.USER_ID,A.USER_NAME,A.USER_CODE,A.USER_TEL,C.ROLE_NAME,\n" +
-                        "D.ORG_CODE,E.ORG_NAME");
+                SELECT("DISTINCT A.USER_ID,A.USER_NAME,A.USER_CODE,A.USER_TEL,C.ROLE_NAME,D.ORG_CODE,E.ORG_NAME ");
                 FROM("XY_USER A");
                 LEFT_OUTER_JOIN("XY_USER_ROLE B ON A.USER_ID=B.USER_ID");
                 LEFT_OUTER_JOIN("XY_ROLE C ON B.ROLE_ID=C.ROLE_ID");
@@ -157,7 +156,7 @@ public interface UserMapper extends Mapper<TUser> {
                 if (orgName!=null&&orgName!=""){
                     WHERE("E.ORG_NAME = #{orgName}");
                 }
-                ORDER_BY("E.ORG_CODE,A.USER_NAME");
+                ORDER_BY("D.ORG_CODE,A.USER_NAME");
             }}.toString();
         }
     }

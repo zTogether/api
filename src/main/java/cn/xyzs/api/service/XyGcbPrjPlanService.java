@@ -411,4 +411,41 @@ public class XyGcbPrjPlanService {
         return resultMap;
     }
 
+    public Map<String,Object> planTable(String userId,String roleName){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String dd = dateFormat.format(d);
+            Date nowDate = dateFormat.parse(dd);
+            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getMyPlan(userId,roleName);
+            for (int i=0;i<planList.size();i++){
+                Map<String,Object> map = planList.get(i);
+                Date date1 = dateFormat.parse(map.get("DAYS").toString());
+                String date = dateFormat.format(map.get("DAYS"));
+                map.put("DAYS",date);
+                if(map.containsKey("EDIT_DATE")){
+                    String opDate = dateFormat.format(map.get("EDIT_DATE"));
+                    map.put("opDate",opDate);
+                }
+                int compareTo = date1.compareTo(nowDate);
+                map.put("compareDate",compareTo);
+            }
+            obj.put("planList",planList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }

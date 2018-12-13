@@ -244,10 +244,35 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
     @Select("<script>" +
             "SELECT p.*,i.CTR_ADDR FROM XY_GCB_PRJ_PLAN p \n" +
             "LEFT JOIN XY_CUSTOMER_INFO i ON p.CTR_CODE=i.CTR_CODE\n" +
-            "WHERE i.CTR_GCJL=#{userId} OR i.CTR_CLDD=#{userId}  ORDER BY p.DAYS" +
+            "WHERE i.CTR_GCJL=#{userId} OR i.CTR_CLDD=#{userId}  ORDER BY p.DAYS,p.XH" +
             "</script>")
     List<Map<String,Object>> showMyPlan(String userId) throws SQLException;
 
+    /**
+     *
+     * @Description: 查看自己工地的日程
+     * @author: GeWeiliang
+     * @date: 2018\12\13 0013 14:40
+     * @param: [userId, roleName]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @SelectProvider(type = getMyPlan.class,method = "getMyPlan")
+    List<Map<String,Object>> getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName) throws SQLException;
+    class getMyPlan{
+        public String getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName){
+            return new SQL(){{
+                SELECT("p.*,i.CTR_ADDR,u.USER_NAME");
+                FROM("XY_GCB_PRJ_PLAN p");
+                LEFT_OUTER_JOIN("XY_CUSTOMER_INFO i ON p.CTR_CODE=i.CTR_CODE");
+                LEFT_OUTER_JOIN("XY_USER u ON u.USER_ID=p.EDIT_USER");
+                WHERE("(i.CTR_GCJL=#{userId} OR i.CTR_CLDD=#{userId})");
+                if(roleName!=null&&roleName!=""){
+                    WHERE("p.ROLE_NAME=#{roleName,jdbcType=VARCHAR}");
+                }
+                ORDER_BY("p.DAYS,p.XH");
+            }}.toString();
+        }
+    }
     /**
      *
      * @Description: 获取关联工程的rowid
