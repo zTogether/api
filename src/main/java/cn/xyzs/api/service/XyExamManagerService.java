@@ -43,20 +43,28 @@ public class XyExamManagerService {
                 String questionNo = map.get("QUESTIONNO").toString();
                 if ("2".equals(questionType)){
                     Map<String,Object> question = xyExamManagerMapper.getMindQuestion(questionNo,examCode,empNo);
-                    mindCount++;
-                    mind.add(question);
+                    if(question!=null) {
+                        mindCount++;
+                        mind.add(question);
+                    }
                 }else if("1".equals(questionType)){
                     Map<String,Object> question = xyExamManagerMapper.getMultiQuestion(questionNo,examCode,empNo);
-                    multiCount++;
-                    multi.add(question);
+                    if(question!=null) {
+                        multiCount++;
+                        multi.add(question);
+                    }
                 }else if("0".equals(questionType)){
                     Map<String,Object> question = xyExamManagerMapper.getYnQuestion(questionNo,examCode,empNo);
-                    ynCount++;
-                    yn.add(question);
+                    if(question!=null){
+                        ynCount++;
+                        yn.add(question);
+                    }
                 }else {
                     Map<String,Object> question = xyExamManagerMapper.getFillQuestion(questionNo,examCode,empNo);
-                    fillCount++;
-                    fill.add(question);
+                    if(question!=null){
+                        fillCount++;
+                        fill.add(question);
+                    }
                 }
             }
             code = "200";
