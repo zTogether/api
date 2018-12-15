@@ -257,9 +257,11 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @SelectProvider(type = getMyPlan.class,method = "getMyPlan")
-    List<Map<String,Object>> getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName) throws SQLException;
+    List<Map<String,Object>> getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName,
+                                       @Param("addr") String addr,@Param("date1") String date1,@Param("date2") String date2) throws SQLException;
     class getMyPlan{
-        public String getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName){
+        public String getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName,@Param("addr") String addr,
+                                @Param("date1") String date1,@Param("date2") String date2){
             return new SQL(){{
                 SELECT("p.*,i.CTR_ADDR,u.USER_NAME");
                 FROM("XY_GCB_PRJ_PLAN p");
@@ -268,6 +270,15 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
                 WHERE("(i.CTR_GCJL=#{userId} OR i.CTR_CLDD=#{userId})");
                 if(roleName!=null&&roleName!=""){
                     WHERE("p.ROLE_NAME=#{roleName,jdbcType=VARCHAR}");
+                }
+                if(addr!=null&&addr!=""){
+                    WHERE("i.CTR_ADDR=#{addr,jdbcType=VARCHAR}");
+                }
+                if (date1!=null&&date1!=""){
+                    WHERE("p.DAYS >= TO_DATE(#{date1,jdbcType=VARCHAR},'yyyy-MM-dd')");
+                }
+                if(date2!=null&&date2!=""){
+                    WHERE("p.DAYS <= TO_DATE(#{date2,jdbcType=VARCHAR}, 'yyyy-MM-dd')");
                 }
                 ORDER_BY("p.DAYS,p.XH");
             }}.toString();
@@ -323,4 +334,18 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
             ")" +
             "</script>")
     public void createEngineeringPlan(@Param("ctrCode") String ctrCode, @Param("pgBeginDate") String pgBeginDate) throws SQLException;
+
+    /**
+     *
+     * @Description: 根据userId获取所有的工程地址
+     * @author: GeWeiliang
+     * @date: 2018\12\14 0014 16:52
+     * @param: [userId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT DISTINCT(i.CTR_ADDR) FROM XY_CUSTOMER_INFO i,XY_GCB_PRJ_PLAN p\n" +
+            "WHERE p.CTR_CODE=i.CTR_CODE AND (i.CTR_GCJL=#{userId,jdbcType=VARCHAR} OR i.CTR_CLDD=#{userId,jdbcType=VARCHAR})" +
+            "</script>")
+    List<Map<String,Object>> getMyPrjAddr(String userId) throws SQLException;
 }
