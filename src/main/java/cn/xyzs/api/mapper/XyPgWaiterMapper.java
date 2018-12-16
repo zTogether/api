@@ -479,4 +479,16 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "\txpw.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n")
     public void updateWgYsDate(@Param("ctrCode") String ctrCode, @Param("ysDate") String ysDate);
 
+    @Update("<script>" +
+            "UPDATE XY_PG_WAITER SET (PRIV_YN,GR_LEVEL) =\n" +
+            "\t\t(SELECT (CASE WHEN GR_PRIV='0'THEN 0 ELSE 1 END)PRIV_YN,GR_LEVEL \n" +
+            "\t\tFROM XY_GCB_GRXX WHERE GR_ID=#{grId})\n" +
+            "\t\tWHERE GR_ID=#{grId,jdbcType=VARCHAR} AND PG_ID=#{pgId,jdbcType=VARCHAR}" +
+            "</script>")
+    void upLv(@Param("grId") String grId,@Param("pgId") String pgId) throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE XY_PG_WAITER SET ZT='抢单失败' WHERE PG_ID=#{pgId,jdbcType=VARCHAR} AND GR_ID !=#{grId,jdbcType=VARCHAR}\n" +
+            "</script>")
+    void updateZTType(@Param("pgId") String pgId,@Param("grId") String grId)throws SQLException;
 }

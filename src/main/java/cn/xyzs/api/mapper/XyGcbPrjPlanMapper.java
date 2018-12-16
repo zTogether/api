@@ -28,6 +28,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
                 SELECT("p.*,u.USER_NAME");
                 FROM("XY_GCB_PRJ_PLAN p");
                 LEFT_OUTER_JOIN("XY_USER u ON u.USER_ID=p.EDIT_USER");
+                LEFT_OUTER_JOIN("XY_CUSTOMER_INFO i ON i.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
                 WHERE(" p.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
                 if(roleName!=null&&roleName!=""){
                     WHERE("p.ROLE_NAME=#{roleName,jdbcType=VARCHAR}");
@@ -258,16 +259,23 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      */
     @SelectProvider(type = getMyPlan.class,method = "getMyPlan")
     List<Map<String,Object>> getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName,
-                                       @Param("addr") String addr,@Param("date1") String date1,@Param("date2") String date2) throws SQLException;
+                                       @Param("addr") String addr,@Param("date1") String date1,@Param("date2") String date2,
+                                       @Param("ctrTel") String ctrTel) throws SQLException;
     class getMyPlan{
         public String getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName,@Param("addr") String addr,
-                                @Param("date1") String date1,@Param("date2") String date2){
+                                @Param("date1") String date1,@Param("date2") String date2,@Param("ctrTel") String ctrTel){
             return new SQL(){{
                 SELECT("p.*,i.CTR_ADDR,u.USER_NAME");
                 FROM("XY_GCB_PRJ_PLAN p");
                 LEFT_OUTER_JOIN("XY_CUSTOMER_INFO i ON p.CTR_CODE=i.CTR_CODE");
                 LEFT_OUTER_JOIN("XY_USER u ON u.USER_ID=p.EDIT_USER");
-                WHERE("(i.CTR_GCJL=#{userId} OR i.CTR_CLDD=#{userId})");
+                WHERE("1=1");
+                if(userId!=null&&userId!=""){
+                    WHERE("(i.CTR_GCJL=#{userId,jdbcType=VARCHAR} OR i.CTR_CLDD=#{userId,jdbcType=VARCHAR})");
+                }
+                if(ctrTel!=null&&ctrTel!=""){
+                    WHERE("i.CTR_TEL=#{ctrTel,jdbcType=VARCHAR}");
+                }
                 if(roleName!=null&&roleName!=""){
                     WHERE("p.ROLE_NAME=#{roleName,jdbcType=VARCHAR}");
                 }
