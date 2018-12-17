@@ -46,6 +46,9 @@ public class XyStarEvaListService {
                 }
             }
 
+            if(evaName=="20"){
+                evaName = "22";
+            }
             //是否特权1:特权，0:非特权
             if(evaName=="30"){
                 pgStage1 = "31";
@@ -84,7 +87,9 @@ public class XyStarEvaListService {
                 if(minScore==5){//特权5星等级+1
                     curLevel = curLevel+1;
                 }else if (minScore==2||minScore==1){//特权，1-2星等级-1
-                    curLevel = curLevel-1;
+                    if(curLevel>0){
+                        curLevel = curLevel-1;
+                    }
                 }
                 //特权，3-4星等级不变
             }else{//非特权
@@ -103,7 +108,7 @@ public class XyStarEvaListService {
                     }
                     //等级等于6不变
                 }else if(minScore==1||minScore==2){
-                    if (curLevel<6){
+                    if (curLevel<6&&curLevel>0){
                         curLevel --;
                     }else if(curLevel==6){
                         curLevel = curLevel - 2;
