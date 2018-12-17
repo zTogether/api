@@ -201,4 +201,32 @@ public class LoginService {
         return resultMap;
     }
 
+    /**
+     * 获取角色List
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/17 11:27
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getRoleList(String userId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        try {
+            List<Map<String ,Object>>roleList = userMapper.getUserRole(userId);
+            obj.put("roleList",roleList);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }  finally {
+            resultMap.put("code", code);
+            resultMap.put("msg", msg);
+            resultMap.put("resultData", obj);
+        }
+        return resultMap;
+    }
+
 }
