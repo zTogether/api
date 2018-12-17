@@ -59,5 +59,19 @@ public class LoginController {
         return loginService.getMenuByRole(roleId);
     }
 
+    /**
+     * 获取角色List
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/17 11:27
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getRoleList")
+    public Map<String ,Object> getRoleList(String userId){
+        return loginService.getRoleList(userId);
+    }
+
 
 }

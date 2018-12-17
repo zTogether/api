@@ -122,11 +122,11 @@ public class OpenTenderService {
                     xyPgWaiterMapper.updateZTType(pgId,grId);
                     Integer constructionSiteIngCount = xyPgWaiterMapper.getConstructionSiteIngCount(grId);
                     if ("10".equals(grGz) || "21".equals(grGz)){
-                        if (constructionSiteIngCount == 5){
+                        if (constructionSiteIngCount > 4){
                             xyPgWaiterMapper.deleteRegisteredTenders(grId);
                         }
                     } else {
-                        if (constructionSiteIngCount == 1){
+                        if (constructionSiteIngCount > 0){
                             xyPgWaiterMapper.deleteRegisteredTenders(grId);
                         }
                     }
