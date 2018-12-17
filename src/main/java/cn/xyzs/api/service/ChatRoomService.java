@@ -1,6 +1,7 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.*;
+import cn.xyzs.common.pojo.XyCustomerInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -231,6 +232,36 @@ public class ChatRoomService {
             code = "200";
             msg = "验收成功";
         } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据ctrCode获取用户信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/15 17:00
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getCustomerInfo(String ctrCode){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            XyCustomerInfo xyCustomerInfo = new XyCustomerInfo();
+            xyCustomerInfo.setCtrCode(ctrCode);
+            xyCustomerInfo = xyCustomerInfoMapper.selectOne(xyCustomerInfo);
+            obj.put("xyCustomerInfo",xyCustomerInfo);
+            code = "200";
+            msg = "验收成功";
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             resultMap.put("code",code);

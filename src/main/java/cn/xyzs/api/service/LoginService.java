@@ -64,8 +64,8 @@ public class LoginService {
                 if ("200".equals(checkCode)){
                     XyCustomerInfo xyCustomerInfo = new XyCustomerInfo();
                     xyCustomerInfo.setCtrTel(ctrTel);
-                    xyCustomerInfo = customerInfoMapper.selectOne(xyCustomerInfo);
-                    obj.put("xyCustomerInfo",xyCustomerInfo);
+                    List<XyCustomerInfo> xyCustomerInfoList = customerInfoMapper.select(xyCustomerInfo);
+                    obj.put("xyCustomerInfo",xyCustomerInfoList.get(0));
                     code = "200";
                     msg = "登陆成功";
                 } else if ("400".equals(checkCode)){

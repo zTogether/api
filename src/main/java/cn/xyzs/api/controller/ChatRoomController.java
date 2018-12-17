@@ -99,4 +99,19 @@ public class ChatRoomController {
         return chatRoomService.getMemberTel(memberId);
     }
 
+    /**
+     * 根据ctrCode获取用户信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/15 17:00
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getCustomerInfo")
+    public Map<String ,Object> getCustomerInfo(String ctrCode){
+        return chatRoomService.getCustomerInfo(ctrCode);
+    }
+
+
 }
