@@ -23,7 +23,7 @@ public class XyStarEvaListController {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @ResponseBody
-    @RequestMapping("addEva")
+    @RequestMapping("/addEva")
     public Map<String,Object> addStarEva(String evaNo,String evaType,String quality,String evaluation,
                                          String evaName,String service,String days,String hygiene){
         return xyStarEvaListService.addStarEva(evaNo,evaType,quality,evaluation,evaName,service,days,hygiene);
