@@ -79,4 +79,15 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
             "\tGR_ID = #{grId,jdbcType=VARCHAR}\t" +
             "</script>")
     public void updateGrabSingleLevel(String grId) throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE XY_GCB_GRXX SET GR_PRIV = (CASE WHEN GR_PRIV =0 THEN 0 ELSE GR_PRIV-1 END)\n" +
+            "\t\tWHERE GR_ID=#{grId,jdbcType=VARCHAR}" +
+            "</script>")
+    void updatePriv(@Param("grId") String grId)throws SQLException;
+
+    @Select("<script>" +
+            "SELECT GR_PRIV,GR_LEVEL FROM XY_GCB_GRXX WHERE GR_ID=#{grId,jdbcType=VARCHAR}" +
+            "</script>")
+    Map<String,Object> getMyPriv(@Param("grId") String grId)throws SQLException;
 }

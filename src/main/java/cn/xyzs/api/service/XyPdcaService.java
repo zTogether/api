@@ -218,7 +218,11 @@ public class XyPdcaService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String date = dateFormat.format(d);
             xyPdcaMapper.updatePdcaPcontent(pdcaId,week,res,content);
+            xyPdcaMapper.updateLastDate(date,pdcaId);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -235,7 +239,11 @@ public class XyPdcaService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String date = dateFormat.format(d);
             xyPdcaMapper.updatePdcaSummary(pdcaId,week,content);
+            xyPdcaMapper.updateLastDate(date,pdcaId);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -285,7 +293,11 @@ public class XyPdcaService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String date = dateFormat.format(d);
             xyPdcaMapper.updateWeekSummary(pdcaId,content,res);
+            xyPdcaMapper.updateLastDate(date,pdcaId);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -302,7 +314,11 @@ public class XyPdcaService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String date = dateFormat.format(d);
             xyPdcaMapper.updateWeekPlan(pdcaId,content,res);
+            xyPdcaMapper.updateLastDate(date,pdcaId);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -319,7 +335,11 @@ public class XyPdcaService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String date = dateFormat.format(d);
             xyPdcaMapper.updatePdca(pdcaId,position,PResources,opinion,issue);
+            xyPdcaMapper.updateLastDate(date,pdcaId);
             code = "200";
             msg = "成功";
         }catch (SQLException e){

@@ -201,4 +201,9 @@ public interface XyPdcaMapper extends Mapper<XyPdca> {
             "</script>")
     void updatePdca(@Param("pdcaId") String pdcaId, @Param("position") String position, @Param("PResources") String PResources,
                     @Param("opinion") String opinion, @Param("issue") String issue) throws SQLException;
+
+    @Update("<script>" +
+            "UPDATE XY_PDCA SET POSITION=#{date} WHERE PDCA_ID=#{pdcaId}" +
+            "</script>")
+    void updateLastDate(@Param("date") String date,@Param("pdcaId") String pdcaId) throws SQLException;
 }

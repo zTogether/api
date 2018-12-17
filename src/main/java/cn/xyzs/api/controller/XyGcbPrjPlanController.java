@@ -145,4 +145,24 @@ public class XyGcbPrjPlanController {
     public Map<String,Object> getMyPlan(String userId){
         return xyGcbPrjPlanService.getMyPlan(userId);
     }
+
+    /**
+     *
+     * @Description: 我的工地日程(表格式)
+     * @author: GeWeiliang
+     * @date: 2018\12\12 0012 16:01
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/planList")
+    public Map<String,Object> getPlanList(String userId,String roleName,String addr,String date1,String date2,String ctrTel){
+        return xyGcbPrjPlanService.planTable(userId,roleName,addr,date1,date2,ctrTel);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getPrjAddr")
+    public  Map<String,Object> getMyPrjAddr(String userId){
+        return xyGcbPrjPlanService.getMyPrjAddr(userId);
+    }
 }

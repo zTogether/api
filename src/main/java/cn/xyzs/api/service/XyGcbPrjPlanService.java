@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -411,4 +412,86 @@ public class XyGcbPrjPlanService {
         return resultMap;
     }
 
+    /**
+     *
+     * @Description: 根据uerId获取日程
+     * @author: GeWeiliang
+     * @date: 2018\12\14 0014 18:16
+     * @param: [userId, roleName, addr]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> planTable(String userId,String roleName,String addr,String date1,String date2,String ctrTel){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String dd = dateFormat.format(d);
+            Date nowDate = dateFormat.parse(dd);
+            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getMyPlan(userId,roleName,addr,date1,date2,ctrTel);
+            for (int i=0;i<planList.size();i++){
+                Map<String,Object> map = planList.get(i);
+                Date date0 = dateFormat.parse(map.get("DAYS").toString());
+                String date = dateFormat.format(map.get("DAYS"));
+                long days = (date0.getTime()-nowDate.getTime())/(1000*3600*24);
+                if(days==0){
+                    map.put("DAYS","今天");
+                }else if(days==1){
+                    map.put("DAYS","明天");
+                }else if(days==2){
+                    map.put("DAYS","后天");
+                }else{
+                    map.put("DAYS",date);
+                }
+                if(map.containsKey("EDIT_DATE")){
+                    String opDate = dateFormat.format(map.get("EDIT_DATE"));
+                    map.put("opDate",opDate);
+                }
+                int compareTo = date0.compareTo(nowDate);
+                map.put("compareDate",compareTo);
+            }
+            obj.put("planList",planList);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     *
+     * @Description: 获取我的所有工地的地址
+     * @author: GeWeiliang
+     * @date: 2018\12\14 0014 16:52
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> getMyPrjAddr(String userId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            List<Map<String,Object>> list = xyGcbPrjPlanMapper.getMyPrjAddr(userId);
+            obj.put("addrList",list);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }

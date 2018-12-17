@@ -51,6 +51,7 @@ public class OpenTenderService {
             List<Map<String, Object>> registeredTenders = xyPgWaiterMapper.getTenderHistoryList(grId,"已报名");
             List<Map<String, Object>> constructionSiteIngList = xyPgWaiterMapper.getConstructionSiteIngList(grId);
             List<Map<String, Object>> constructionSiteList = xyPgWaiterMapper.getConstructionSiteList(grId);
+            Map<String,Object> grPriv = xyGcbGrxxMapper.getMyPriv(grId);
             code = "200";
             msg = "成功";
             obj.put("vwXyPgWaiters",vwXyPgWaiters);
@@ -58,6 +59,7 @@ public class OpenTenderService {
             obj.put("constructionSiteList",constructionSiteList);
             obj.put("failureTenders",failureTenders);
             obj.put("registeredTenders",registeredTenders);
+            obj.put("myPriv",grPriv);
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
@@ -115,6 +117,9 @@ public class OpenTenderService {
                     xyPgMapper.updatePgGr(pgId,grId);
                     xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"抢单成功");
                     xyGcbGrxxMapper.updateGrabSingleLevel(grId);
+                    xyPgWaiterMapper.upLv(grId,pgId);
+                    xyGcbGrxxMapper.updatePriv(grId);
+                    xyPgWaiterMapper.updateZTType(pgId,grId);
                     Integer constructionSiteIngCount = xyPgWaiterMapper.getConstructionSiteIngCount(grId);
                     if ("10".equals(grGz) || "21".equals(grGz)){
                         if (constructionSiteIngCount > 4){
