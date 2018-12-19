@@ -46,25 +46,31 @@ public class XyStarEvaListService {
                 }
             }
 
-            if(evaName=="20"){
+            if(evaName.equals("20")){
                 evaName = "22";
             }
             //是否特权1:特权，0:非特权
-            if(evaName=="30"){
+            if(evaName.equals("30")){
+                System.err.println("工种为30");
                 pgStage1 = "31";
                 pgStage2 = "32";
                 List<Map<String,Object>> list = xyStarEvaMainMapper.getIsPriv(evaNo,pgStage1,pgStage2);
-                priv = list.get(0).get("PRIV_YN").toString();
-                priv2 = list.get(1).get("PRIV_YN").toString();
-                grId = list.get(0).get("GR_ID").toString();
-                if(priv=="1"||priv2=="1"){
+                if(list.size()==1){
+                    priv = String.valueOf(list.get(0).get("PRIV_YN"));
+                }else{
+                    priv = String.valueOf(list.get(0).get("PRIV_YN"));
+                    priv2 = String.valueOf(list.get(1).get("PRIV_YN"));
+                }
+                grId = String.valueOf(list.get(0).get("GR_ID"));
+                if(priv.equals("1")||priv2.equals("1")){
                     priv = "1";
                 }
             }else{
+                System.err.println("工种不为30");
                 pgStage1 = evaName;
                 List<Map<String,Object>> list = xyStarEvaMainMapper.getIsPriv(evaNo,pgStage1,pgStage2);
-                priv = list.get(0).get("PRIV_YN").toString();
-                grId = list.get(0).get("GR_ID").toString();
+                priv = String.valueOf(list.get(0).get("PRIV_YN"));
+                grId = String.valueOf(list.get(0).get("GR_ID"));
             }
             //修改工人级别
             UpdateGrlevel(grId,priv,minScore);
@@ -83,7 +89,7 @@ public class XyStarEvaListService {
         try {
             //获取当前等级
             int curLevel = Integer.parseInt(xyStarEvaMainMapper.getCruLevel(grId).get("GR_LEVEL").toString());
-            if(priv=="1"){//特权
+            if(priv.equals("1")){//特权
                 if(minScore==5){//特权5星等级+1
                     curLevel = curLevel+1;
                 }else if (minScore==2||minScore==1){//特权，1-2星等级-1

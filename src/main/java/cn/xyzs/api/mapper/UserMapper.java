@@ -147,6 +147,7 @@ public interface UserMapper extends Mapper<TUser> {
                 LEFT_OUTER_JOIN("XY_ROLE C ON B.ROLE_ID=C.ROLE_ID");
                 LEFT_OUTER_JOIN("XY_USER_ROLE_ORG D ON B.UR_ID=D.UR_ID ");
                 LEFT_OUTER_JOIN("XY_ORG E ON D.ORG_CODE=E.ORG_CODE");
+                WHERE("A.USER_CODE <> '000001' AND A.USER_CODE <> '000002' AND A.IS_USED='1'");
                 if (name!=null&&name!=""){
                     WHERE("A.USER_NAME LIKE #{name}");
                 }
