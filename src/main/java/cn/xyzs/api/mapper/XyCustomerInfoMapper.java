@@ -410,80 +410,84 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT * FROM (\n" +
-            "SELECT \n" +
-            "\t\txui.CTR_CODE USER_ID, \n" +
-            "\t\t'客户'  USER_ROLE_NAME,\n" +
-            "\t\txui.CTR_NAME USER_NAME\n" +
-            "\tFROM XY_CUSTOMER_INFO xui\n" +
-            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            "\tUNION ALL" +
-            "\tSELECT \n" +
+            "SELECT\n" +
+            "\tDISTINCT * \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\txui.CTR_CODE USER_ID,\n" +
+            "\t\t'客户' USER_ROLE_NAME,\n" +
+            "\t\txui.CTR_NAME USER_NAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO xui \n" +
+            "\tWHERE\n" +
+            "\t\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} UNION ALL\n" +
+            "\tSELECT\n" +
             "\t\txui.CTR_WAITER USER_ID,\n" +
             "\t\t'家装顾问' USER_ROLE_NAME,\n" +
-            "\t\txu.USER_NAME\n" +
-            "\tFROM XY_CUSTOMER_INFO xui\n" +
-            "\tLEFT JOIN XY_USER xu\n" +
-            "\tON xui.CTR_WAITER = xu.USER_ID\n" +
-            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT \n" +
+            "\t\txu.USER_NAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO xui\n" +
+            "\t\tLEFT JOIN XY_USER xu ON xui.CTR_WAITER = xu.USER_ID \n" +
+            "\tWHERE\n" +
+            "\t\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} UNION ALL\n" +
+            "\tSELECT\n" +
             "\t\txui.CTR_SJS USER_ID,\n" +
             "\t\t'设计师' USER_ROLE_NAME,\n" +
-            "\t\txu.USER_NAME\n" +
-            "\tFROM XY_CUSTOMER_INFO xui\n" +
-            "\tLEFT JOIN XY_USER xu\n" +
-            "\tON xui.CTR_SJS = xu.USER_ID\n" +
-            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT \n" +
+            "\t\txu.USER_NAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO xui\n" +
+            "\t\tLEFT JOIN XY_USER xu ON xui.CTR_SJS = xu.USER_ID \n" +
+            "\tWHERE\n" +
+            "\t\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} UNION ALL\n" +
+            "\tSELECT\n" +
             "\t\txui.CTR_GCJL USER_ID,\n" +
             "\t\t'执行员' USER_ROLE_NAME,\n" +
-            "\t\txu.USER_NAME\n" +
-            "\tFROM XY_CUSTOMER_INFO xui\n" +
-            "\tLEFT JOIN XY_USER xu\n" +
-            "\tON xui.CTR_GCJL = xu.USER_ID\n" +
-            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT \n" +
+            "\t\txu.USER_NAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO xui\n" +
+            "\t\tLEFT JOIN XY_USER xu ON xui.CTR_GCJL = xu.USER_ID \n" +
+            "\tWHERE\n" +
+            "\t\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} UNION ALL\n" +
+            "\tSELECT\n" +
             "\t\txui.CTR_CLDD USER_ID,\n" +
             "\t\t'材料督导' USER_ROLE_NAME,\n" +
-            "\t\txu.USER_NAME\n" +
-            "\tFROM XY_CUSTOMER_INFO xui\n" +
-            "\tLEFT JOIN XY_USER xu\n" +
-            "\tON xui.CTR_CLDD = xu.USER_ID\n" +
-            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT \n" +
+            "\t\txu.USER_NAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO xui\n" +
+            "\t\tLEFT JOIN XY_USER xu ON xui.CTR_CLDD = xu.USER_ID \n" +
+            "\tWHERE\n" +
+            "\t\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} UNION ALL\n" +
+            "\tSELECT\n" +
             "\t\txui.CTR_AREA_MA USER_ID,\n" +
             "\t\t'区域老总' USER_ROLE_NAME,\n" +
-            "\t\txu.USER_NAME\n" +
-            "\tFROM XY_CUSTOMER_INFO xui\n" +
-            "\tLEFT JOIN XY_USER xu\n" +
-            "\tON xui.CTR_AREA_MA = xu.USER_ID\n" +
-            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT \n" +
+            "\t\txu.USER_NAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO xui\n" +
+            "\t\tLEFT JOIN XY_USER xu ON xui.CTR_AREA_MA = xu.USER_ID \n" +
+            "\tWHERE\n" +
+            "\t\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} UNION ALL\n" +
+            "\tSELECT\n" +
             "\t\txui.CTR_OWENER USER_ID,\n" +
             "\t\t'合约成效人' USER_ROLE_NAME,\n" +
             "\t\txu.USER_NAME \n" +
-            "\tFROM XY_CUSTOMER_INFO xui\n" +
-            "\tLEFT JOIN XY_USER xu\n" +
-            "\tON xui.CTR_OWENER = xu.USER_ID\n" +
-            "\tWHERE xui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO xui\n" +
+            "\t\tLEFT JOIN XY_USER xu ON xui.CTR_OWENER = xu.USER_ID \n" +
+            "\tWHERE\n" +
+            "\t\txui.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} UNION ALL\n" +
+            "\tSELECT\n" +
             "\t\txgg.GR_ID USER_ID,\n" +
-            "\t\tCONCAT(\n" +
-            "\t\t(SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = xp.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ),\n" +
-            "\t\t'工长' ) USER_ROLE_NAME,\n" +
-            "\t\txgg.GR_NAME USER_NAME\n" +
-            "\tFROM XY_PG xp \n" +
-            "\tRIGHT JOIN XY_GCB_GRXX xgg\n" +
-            "\tON xp.PG_GR = xgg.GR_ID\n" +
-            "\tWHERE xp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}\n" +
-            ") A\n" +
-            "WHERE A.USER_ID IS NOT NULL" +
+            "\t\tCONCAT( ( SELECT xv.VAL_NAME FROM XY_VAL xv WHERE xv.VAL_ID = xp.PG_STAGE AND xv.VALSET_ID = 'B3B32F221FF14256988E7C0A218EBF5C' ), '工长' ) USER_ROLE_NAME,\n" +
+            "\t\txgg.GR_NAME USER_NAME \n" +
+            "\tFROM\n" +
+            "\t\tXY_PG xp\n" +
+            "\t\tRIGHT JOIN XY_GCB_GRXX xgg ON xp.PG_GR = xgg.GR_ID \n" +
+            "\tWHERE\n" +
+            "\t\txp.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} \n" +
+            "\t) A \n" +
+            "WHERE\n" +
+            "\tA.USER_ID IS NOT NULL" +
             "</script>")
     public List<Map<String ,Object>> getChatMemberInfoLsitByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
