@@ -51,7 +51,6 @@ public class XyStarEvaListService {
             }
             //是否特权1:特权，0:非特权
             if(evaName.equals("30")){
-                System.err.println("工种为30");
                 pgStage1 = "31";
                 pgStage2 = "32";
                 List<Map<String,Object>> list = xyStarEvaMainMapper.getIsPriv(evaNo,pgStage1,pgStage2);
@@ -66,7 +65,6 @@ public class XyStarEvaListService {
                     priv = "1";
                 }
             }else{
-                System.err.println("工种不为30");
                 pgStage1 = evaName;
                 List<Map<String,Object>> list = xyStarEvaMainMapper.getIsPriv(evaNo,pgStage1,pgStage2);
                 priv = String.valueOf(list.get(0).get("PRIV_YN"));

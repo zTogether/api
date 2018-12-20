@@ -87,7 +87,7 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
     void updatePriv(@Param("grId") String grId)throws SQLException;
 
     @Select("<script>" +
-            "SELECT GR_PRIV,GR_LEVEL FROM XY_GCB_GRXX WHERE GR_ID=#{grId,jdbcType=VARCHAR}" +
+            "SELECT GR_PRIV,GR_LEVEL,GR_LEVEL_VM FROM XY_GCB_GRXX WHERE GR_ID=#{grId,jdbcType=VARCHAR}" +
             "</script>")
     Map<String,Object> getMyPriv(@Param("grId") String grId)throws SQLException;
 }
