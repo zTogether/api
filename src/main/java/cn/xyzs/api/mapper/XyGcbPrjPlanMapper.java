@@ -271,7 +271,8 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
                 LEFT_OUTER_JOIN("XY_USER u ON u.USER_ID=p.EDIT_USER");
                 WHERE("1=1");
                 if(userId!=null&&userId!=""){
-                    WHERE("(i.CTR_GCJL=#{userId,jdbcType=VARCHAR} OR i.CTR_CLDD=#{userId,jdbcType=VARCHAR}) OR i.CTR_WAITER=#{userId,jdbcType=VARCHAR} OR i.CTR_SJS=#{userId,jdbcType=VARCHAR}");
+                    WHERE("(i.CTR_GCJL=#{userId,jdbcType=VARCHAR} OR i.CTR_CLDD=#{userId,jdbcType=VARCHAR}) " +
+                            "OR i.CTR_WAITER=#{userId,jdbcType=VARCHAR} OR i.CTR_SJS=#{userId,jdbcType=VARCHAR} OR i.CTR_OWENER=#{userId,jdbcType=VARCHAR}");
                 }
                 if(ctrTel!=null&&ctrTel!=""){
                     WHERE("i.CTR_TEL=#{ctrTel,jdbcType=VARCHAR}");
