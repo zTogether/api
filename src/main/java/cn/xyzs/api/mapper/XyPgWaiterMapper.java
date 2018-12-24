@@ -491,4 +491,6 @@ public interface XyPgWaiterMapper extends Mapper<XyPgWaiter>{
             "UPDATE XY_PG_WAITER SET ZT='抢单失败' WHERE PG_ID=#{pgId,jdbcType=VARCHAR} AND GR_ID !=#{grId,jdbcType=VARCHAR}\n" +
             "</script>")
     void updateZTType(@Param("pgId") String pgId,@Param("grId") String grId)throws SQLException;
+
+
 }
