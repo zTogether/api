@@ -20,9 +20,10 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT DISTINCT(ZCPB_ML) FROM XY_CLB_ZCPB_LIST \n" +
-            "WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND ZCPB_STAGE=#{zcType,jdbcType=VARCHAR} AND ZCPB_ZC_CODE IS NOT NULL\n" +
-            "ORDER BY ZCPB_ML" +
+            "SELECT ZCPB_ML FROM XY_CLB_ZCPB_LIST\n" +
+            "WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND ZCPB_STAGE='A'\n" +
+            "GROUP BY ZCPB_XH,ZCPB_ML\n" +
+            "ORDER BY ZCPB_XH" +
             "</script>")
     List<Map<String,Object>> getFirstMl(@Param("ctrCode") String ctrCode,@Param("zcType") String zcType)throws SQLException;
 
@@ -41,9 +42,10 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
         public String getZcpbList(@Param("ctrCode") String ctrCode,@Param("mlName") String mlName,
                                   @Param("zcType") String zcType){
             return new SQL(){{
-                SELECT("zl.*");
+                SELECT("zl.*,zd.ZC_VERSION");
                 FROM("XY_CLB_ZCPB_LIST zl");
-                WHERE("ZL.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND ZL.ZCPB_ZC_CODE IS NOT NULL");
+                LEFT_OUTER_JOIN("XY_CLB_ZC_DB zd ON zl.ZCPB_ZC_CODE=zd.ZC_CODE");
+                WHERE("ZL.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
                 if(mlName!=null&&mlName!=""){
                     WHERE("zl.ZCPB_ML=#{mlName,jdbcType=VARCHAR}");
                 }
