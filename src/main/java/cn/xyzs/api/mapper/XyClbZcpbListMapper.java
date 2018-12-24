@@ -66,7 +66,7 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
             return new SQL(){{
                 SELECT("SUM(ZCPB_XJ) ZJ");
                 FROM("XY_CLB_ZCPB_LIST");
-                WHERE("CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
+                WHERE("CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND ZCPB_ZC_CODE IS NOT NULL");
                 if(mlName!=null&&mlName!=""){
                     WHERE("ZCPB_ML=#{mlName,jdbcType=VARCHAR}");
                 }
