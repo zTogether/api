@@ -90,4 +90,23 @@ public interface XyGcbGrxxMapper extends Mapper<XyGcbGrxx>{
             "SELECT GR_PRIV,GR_LEVEL,GR_LEVEL_VM FROM XY_GCB_GRXX WHERE GR_ID=#{grId,jdbcType=VARCHAR}" +
             "</script>")
     Map<String,Object> getMyPriv(@Param("grId") String grId)throws SQLException;
+
+    /**
+     *
+     * @Description: 查询此工人的限制抢单时间
+     * @author: GeWeiliang
+     * @date: 2018\12\24 0024 14:18
+     * @param: [grId]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT A.* FROM\n" +
+            "(SELECT gg.LIMIT_DATE,gi.MARK,gi.ADD_DATE\n" +
+            "FROM XY_GCB_GRXX gg\n" +
+            "LEFT JOIN XY_GCB_GRXX_IMPOSE gi ON gi.GR_ID=gg.GR_ID\n" +
+            "WHERE gg.GR_ID=#{grId,jdbcType=VARCHAR}\n" +
+            "ORDER BY gi.ADD_DATE DESC) A\n" +
+            "WHERE ROWNUM &lt; 2" +
+            "</script>")
+    Map<String,Object> getLimitDate(@Param("grId") String grId)throws SQLException;
 }

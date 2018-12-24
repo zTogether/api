@@ -11,10 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class OpenTenderService {
@@ -84,10 +83,30 @@ public class OpenTenderService {
         String code = "500";
         String msg = "系统异常";
         try {
-            xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"已报名");
-            code = "200";
-            msg = "报名成功";
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String dd = dateFormat.format(d);
+            Date nowDate = dateFormat.parse(dd);
+            Map<String,Object> limitList = xyGcbGrxxMapper.getLimitDate(grId);
+            //抢单限制日期
+            String date = String.valueOf(limitList.get("LIMIT_DATE"));
+            String limitReason = String.valueOf(limitList.get("MARK"));
+            if(date==null||date==""){
+                date = "2000-01-01";
+            }
+            Date limitDate = dateFormat.parse(date);
+            int compareDate = nowDate.compareTo(limitDate);
+            if(compareDate<=0){
+                code = "400";
+                msg = "当前限制抢单至:"+date+"\n"+"限制原因:"+limitReason;
+            }else{
+                xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"已报名");
+                code = "200";
+                msg = "报名成功";
+            }
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         } finally {
             resultMap.put("code",code);
@@ -111,33 +130,54 @@ public class OpenTenderService {
         String msg = "系统异常";
         try {
             Map<String ,Object> xyPgInfo =  xyPgMapper.getXyPgInfoByPgId(pgId);
-            if (xyPgInfo != null){
-                String PG_GR = String.valueOf(xyPgInfo.get("PG_GR"));
-                if (PG_GR == null || "".equals(PG_GR) || "null".equals(PG_GR)){
-                    xyPgMapper.updatePgGr(pgId,grId);
-                    xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"抢单成功");
-                    xyGcbGrxxMapper.updateGrabSingleLevel(grId);
-                    xyPgWaiterMapper.upLv(grId,pgId);
-                    xyGcbGrxxMapper.updatePriv(grId);
-                    xyPgWaiterMapper.updateZTType(pgId,grId);
-                    Integer constructionSiteIngCount = xyPgWaiterMapper.getConstructionSiteIngCount(grId);
-                    if ("10".equals(grGz) || "21".equals(grGz)){
-                        if (constructionSiteIngCount > 4){
-                            xyPgWaiterMapper.deleteRegisteredTenders(grId);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = new Date();
+            String dd = dateFormat.format(d);
+            Date nowDate = dateFormat.parse(dd);
+            Map<String,Object> limitList = xyGcbGrxxMapper.getLimitDate(grId);
+            //抢单限制日期
+            String date = String.valueOf(limitList.get("LIMIT_DATE"));
+            String limitReason = String.valueOf(limitList.get("MARK"));
+            if(date==null||date==""){
+                date = "2000-01-01";
+            }
+            Date limitDate = dateFormat.parse(date);
+            int compareDate = nowDate.compareTo(limitDate);
+            date = dateFormat.format(limitDate);
+            if(compareDate<=0){
+                code = "400";
+                msg = "当前限制抢单至:"+date+"\n"+"限制原因:"+limitReason;
+            }else{
+                if (xyPgInfo != null){
+                    String PG_GR = String.valueOf(xyPgInfo.get("PG_GR"));
+                    if (PG_GR == null || "".equals(PG_GR) || "null".equals(PG_GR)){
+                        xyPgMapper.updatePgGr(pgId,grId);
+                        xyPgWaiterMapper.addXyPgWaiterInfo(grId,pgId,endDate,ctrCode,"抢单成功");
+                        xyGcbGrxxMapper.updateGrabSingleLevel(grId);
+                        xyPgWaiterMapper.upLv(grId,pgId);
+                        xyGcbGrxxMapper.updatePriv(grId);
+                        xyPgWaiterMapper.updateZTType(pgId,grId);
+                        Integer constructionSiteIngCount = xyPgWaiterMapper.getConstructionSiteIngCount(grId);
+                        if ("10".equals(grGz) || "21".equals(grGz)){
+                            if (constructionSiteIngCount > 4){
+                                xyPgWaiterMapper.deleteRegisteredTenders(grId);
+                            }
+                        } else {
+                            if (constructionSiteIngCount > 0){
+                                xyPgWaiterMapper.deleteRegisteredTenders(grId);
+                            }
                         }
+                        code = "200";
+                        msg = "抢单成功";
                     } else {
-                        if (constructionSiteIngCount > 0){
-                            xyPgWaiterMapper.deleteRegisteredTenders(grId);
-                        }
+                        code = "300";
+                        msg = "抢单失败";
                     }
-                    code = "200";
-                    msg = "抢单成功";
-                } else {
-                    code = "300";
-                    msg = "抢单失败";
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         } finally {
             resultMap.put("code",code);
