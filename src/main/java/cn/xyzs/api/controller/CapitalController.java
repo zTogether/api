@@ -2,6 +2,7 @@ package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.CapitalService;
 import cn.xyzs.common.pojo.XyCwbCapital;
+import cn.xyzs.common.pojo.XyCwbCapitalYytx;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -84,5 +85,47 @@ public class CapitalController {
     @RequestMapping("/withdrawBeforeDetection")
     public Map<String ,Object> withdrawBeforeDetection(String userId){
         return capitalService.withdrawBeforeDetection(userId);
+    }
+
+    /**
+     * 添加预约提现记录（userId：用户id；  appointmentMoney：预约提现金额；  remark：备注；）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/26 16:10
+     * @param: [xyCwbCapitalYytx]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/addCapitalYytx")
+    public Map<String ,Object> addCapitalYytx(XyCwbCapitalYytx xyCwbCapitalYytx){
+        return capitalService.addCapitalYytx(xyCwbCapitalYytx);
+    }
+
+    /**
+     * 根据userId获取预约提现记录（分页）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/26 16:32
+     * @param: [userId, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getYytxRecord")
+    public Map<String ,Object> getYytxRecord(String userId, Integer startNum, Integer endNum){
+        return capitalService.getYytxRecord(userId,startNum,endNum);
+    }
+
+    /**
+     * 获取预约提现数据
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/26 17:14
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getYytxData")
+    public Map<String ,Object> getYytxData(String userId){
+        return capitalService.getYytxData(userId);
     }
 }

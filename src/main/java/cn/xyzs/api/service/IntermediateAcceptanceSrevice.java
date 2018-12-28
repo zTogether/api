@@ -308,6 +308,16 @@ public class IntermediateAcceptanceSrevice {
             if (pgYsStatu == null){
                 pgYsStatu = "1";
             }
+            XyCustomerInfo xyCustomerInfo = new XyCustomerInfo();
+            xyCustomerInfo.setCtrCode(ctrCode);
+            xyCustomerInfo = xyCustomerInfoMapper.selectOne(xyCustomerInfo);
+            if (!"001".equals(xyCustomerInfo.getRgVerCode()) && !"002".equals(xyCustomerInfo.getRgVerCode()) && !"003".equals(xyCustomerInfo.getRgVerCode())){
+                for (int i = 0; i < engineeringExpenseSettlementDetail.size(); i++) {
+                    if ("基础工程".equals(engineeringExpenseSettlementDetail.get(i).get("CKD_FC_TYPE"))){
+                        engineeringExpenseSettlementDetail.remove(i);
+                    }
+                }
+            }
             obj.put("pgYsStatu",pgYsStatu);
             obj.put("custInfo",custInfo);
             obj.put("engineeringExpenseSettlementDetail",engineeringExpenseSettlementDetail);

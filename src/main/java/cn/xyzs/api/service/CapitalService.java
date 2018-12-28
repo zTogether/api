@@ -2,13 +2,14 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.XyCwbCapitalDetailMapper;
 import cn.xyzs.api.mapper.XyCwbCapitalMapper;
+import cn.xyzs.api.mapper.XyCwbCapitalYytxMapper;
 import cn.xyzs.common.pojo.XyCwbCapital;
+import cn.xyzs.common.pojo.XyCwbCapitalYytx;
 import cn.xyzs.common.util.CalculateUtil;
 import cn.xyzs.common.util.DEStool;
 import cn.xyzs.common.util.MD5Util;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.applet.Main;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
@@ -23,6 +24,9 @@ public class CapitalService {
 
     @Resource
     private XyCwbCapitalDetailMapper xyCwbCapitalDetailMapper;
+
+    @Resource
+    private XyCwbCapitalYytxMapper xyCwbCapitalYytxMapper;
 
     /**
      * 获取证书
@@ -298,6 +302,139 @@ public class CapitalService {
         return resultMap;
     }
 
+    /**
+     * 添加预约提现记录（userId：用户id；  appointmentMoney：预约提现金额；  remark：备注；）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/26 16:10
+     * @param: [xyCwbCapitalYytx]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> addCapitalYytx(XyCwbCapitalYytx xyCwbCapitalYytx){
+        Map<String, Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            xyCwbCapitalYytxMapper.addCapitalYytx(xyCwbCapitalYytx);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据userId获取预约提现记录（分页）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/26 16:32
+     * @param: [userId, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getYytxRecord(String userId, Integer startNum, Integer endNum){
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> yytxRecordList = xyCwbCapitalYytxMapper.getYytxRecord(userId,startNum,endNum);
+            obj.put("yytxRecordList",yytxRecordList);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取预约提现数据
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/26 17:14
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getYytxData(String userId){
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            Map<String ,Object> yytxData = xyCwbCapitalYytxMapper.getAwdmoneyAndAmoney(userId);
+            String nowDayYytxMoney = String.valueOf(yytxData.get("APPOINTMENT_MONEY"));
+            Boolean existsYy = true;
+            if("".equals(nowDayYytxMoney) || "null".equals(nowDayYytxMoney) || nowDayYytxMoney == null){
+                existsYy = false;
+            }
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd");
+            Date nowDate = new Date();
+            nowDate = addAndSubtractDaysByGetTime(nowDate,1);
+            Integer day = nowDate.getDay();
+            String dayStr = "";
+            switch(day){
+                case 1:
+                    dayStr = "一";
+                    break;
+                case 2:
+                    dayStr = "二";
+                    break;
+                case 3:
+                    dayStr = "三";
+                    break;
+                case 4:
+                    dayStr = "四";
+                    break;
+                case 5:
+                    dayStr = "五";
+                    break;
+                case 6:
+                    dayStr = "六";
+                    break;
+                case 7:
+                    dayStr = "日";
+                    break;
+            }
+            String nowDateStr = format.format(nowDate);
+            nowDateStr += "(星期"+ dayStr +")";
+            yytxData.put("nowDateStr",nowDateStr);
+            yytxData.put("existsYy",existsYy);
+            obj.put("yytxData",yytxData);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    public static Date addAndSubtractDaysByGetTime(Date date,int n){
+        //日期格式
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(df.format(new Date(date.getTime() + n * 24 * 60 * 60 * 1000L)));
+        //注意这里一定要转换成Long类型，要不n超过25时会出现范围溢出，从而得不到想要的日期值
+        return new Date(date.getTime() + n * 24 * 60 * 60 * 1000L);
+    }
 
 
 }
