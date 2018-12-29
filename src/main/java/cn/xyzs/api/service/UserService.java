@@ -129,4 +129,36 @@ public class UserService {
         }
         return resultMap;
     }
+
+    /**
+     * 判断用户是否可用
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/28 13:52
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> userWhetherEnabled(String userId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new LinkedHashMap<>();
+        try{
+            String isUsed = userMapper.userWhetherEnabled(userId);
+            Boolean userWhetherEnabled = false;
+            if ("1".equals(isUsed)){
+                userWhetherEnabled = true;
+            }
+            obj.put("userWhetherEnabled",userWhetherEnabled);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
 }

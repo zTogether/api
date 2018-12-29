@@ -69,4 +69,19 @@ public class UserController {
     public Map<String,Object> phoneBook(String name,String role,String orgName){
         return userService.phoneBook(name,role,orgName);
     }
+
+    /**
+     * 判断用户是否可用
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/28 13:52
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/userWhetherEnabled")
+    public Map<String ,Object> userWhetherEnabled(String userId){
+        return userService.userWhetherEnabled(userId);
+    }
+
 }

@@ -1,5 +1,6 @@
 package cn.xyzs.api.mapper;
 
+import cn.xyzs.common.pojo.XyClbZcpbList;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;

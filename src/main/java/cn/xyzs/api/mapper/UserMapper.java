@@ -218,4 +218,29 @@ public interface UserMapper extends Mapper<TUser> {
             "UPDATE TEMP_SEND_MEMBER SET SEND_STATUS = #{sendStatu,jdbcType=VARCHAR},SEND_DATE = SYSDATE WHERE TEL = #{tel,jdbcType=VARCHAR}" +
             "</script>")
     public void  updateTemp(@Param("sendStatu") String sendStatu, @Param("tel") String tel) throws SQLException;
+
+    /**
+     * 判断员工是否可用
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/28 13:48
+     * @param: [userId]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tIS_USED IS_USED\n" +
+            "FROM\n" +
+            "\tXY_USER \n" +
+            "WHERE\n" +
+            "\tUSER_ID = #{userId,jdbcType=VARCHAR}\n" +
+            "UNION ALL\n" +
+            "SELECT\n" +
+            "\tGR_STATU IS_USED\n" +
+            "FROM\n" +
+            "\tXY_GCB_GRXX \n" +
+            "WHERE\n" +
+            "\tGR_ID = #{userId,jdbcType=VARCHAR} " +
+            "</script>")
+    public String userWhetherEnabled(String userId) throws SQLException;
 }
