@@ -1,7 +1,6 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.XyInfoManageConstrMapper;
-import org.apache.ibatis.annotations.Insert;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
