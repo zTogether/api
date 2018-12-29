@@ -42,4 +42,18 @@ public class XyCustomerInfoController {
     public Map<String,Object> getCustInfoByCtrCode(String ctrCode){
         return xyCustomerInfoService.getCustInfoByCtrCode(ctrCode);
     }
+
+    /**
+     * 获取客户姓名
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/28 17:04
+     * @param: [ctrTel]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getCtrName")
+    public Map<String,Object> getCtrName(String ctrTel){
+        return xyCustomerInfoService.getCtrName(ctrTel);
+    }
 }

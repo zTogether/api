@@ -617,4 +617,22 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "SELECT xci.CTR_KG_DATE FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public Date getCtrKgDate(String ctrCode) throws SQLException;
+
+    /**
+     * 获取用户姓名
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/28 17:01
+     * @param: [ctrTel]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT B.CTR_NAME  FROM ( SELECT A.*, ROWNUM RN \n" +
+            "FROM ( \n" +
+            "\t\tSELECT CTR_NAME FROM XY_CUSTOMER_INFO WHERE CTR_TEL = #{ctrTel,jdbcType=VARCHAR} ORDER BY CTR_CRT_DATE DESC\n" +
+            "\t) A  \n" +
+            ")B\n" +
+            "WHERE RN BETWEEN 1 AND 1" +
+            "</script>")
+    public String getCtrName(String ctrTel) throws SQLException;
 }

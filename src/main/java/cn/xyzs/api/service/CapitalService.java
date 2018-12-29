@@ -404,7 +404,7 @@ public class CapitalService {
                 case 6:
                     dayStr = "六";
                     break;
-                case 7:
+                case 0:
                     dayStr = "日";
                     break;
             }
