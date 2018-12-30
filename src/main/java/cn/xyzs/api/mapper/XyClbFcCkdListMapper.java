@@ -171,4 +171,18 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "</script>")
     public void autoOpenOrderAddCkdLsit(@Param("ckdCode") String ckdCode, @Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage) throws SQLException;
 
+
+    @Select("<script>" +
+            "SELECT DISTINCT\n" +
+            "\tT.P_ID,\n" +
+            "\tT.P_VAL \n" +
+            "FROM\n" +
+            "\tVW_XY_CLB_FC_CKD_FIRST T \n" +
+            "WHERE\n" +
+            "\tT.P_ID IS NOT NULL \n" +
+            "\tAND T.RG_STAGE = #{rgStage,jdbcType=VARCHAR} \n" +
+            "\tAND T.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> getPidAndPval(@Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage) throws SQLException;
+
 }

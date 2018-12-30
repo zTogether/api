@@ -78,6 +78,9 @@ public class FcCkdService {
         String msg = "系统异常";
         try {
             String ckdCode = xyClbFcCkdMainMapper.getNewFcCkdCode(xyClbFcCkdMain.getCtrCode());
+            if(ckdCode == null || "".equals(ckdCode) || "null".equals(ckdCode)){
+                ckdCode = xyClbFcCkdMain.getCtrCode() + "01";
+            }
             xyClbFcCkdMain.setCkdCode(ckdCode);
             xyClbFcCkdMain.setCkdStatu("0");
             xyClbFcCkdMain.setCkdCk("金盛仓库");
@@ -361,8 +364,27 @@ public class FcCkdService {
         String msg = "系统异常";
         try {
             List<Map<String ,Object>> nameAndVaList = xyBjdFcTempMapper.getNameAndVal(ctrCode,rgStage);
+            List<Map<String ,Object>> pidAndPval = xyClbFcCkdListMapper.getPidAndPval(ctrCode,rgStage);
+            List<Map<String ,Object>> pidAndPvalList = new ArrayList<>();
+            Set<String > tempPidSet = new HashSet<>();
+            for (Map<String, Object> map : pidAndPval) {
+                tempPidSet.add(String.valueOf(map.get("P_ID")));
+            }
+            for (String s : tempPidSet) {
+                Map<String ,Object> tempMap = new HashMap<>();
+                List<Object> tempList = new ArrayList<>();
+                for (Map<String, Object> map : pidAndPval) {
+                    if (s.equals(String.valueOf(map.get("P_ID")))){
+                        tempList.add(map.get("P_VAL"));
+                    }
+                }
+                tempMap.put("pid",s);
+                tempMap.put("pvalArray",tempList);
+                pidAndPvalList.add(tempMap);
+            }
             code = "200";
             msg = "成功";
+            obj.put("pidAndPvalList",pidAndPvalList);
             obj.put("nameAndVaList",nameAndVaList);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -409,5 +431,6 @@ public class FcCkdService {
         }
         return resultMap;
     }
+
 
 }
