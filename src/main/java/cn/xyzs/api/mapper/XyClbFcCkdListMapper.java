@@ -4,6 +4,8 @@ import cn.xyzs.common.pojo.XyClbFcCkdList;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -171,7 +173,14 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "</script>")
     public void autoOpenOrderAddCkdLsit(@Param("ckdCode") String ckdCode, @Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage) throws SQLException;
 
-
+    /**
+     * 获取pidAndPval
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/30 9:25
+     * @param: [ctrCode, rgStage]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
             "SELECT DISTINCT\n" +
             "\tT.P_ID,\n" +
@@ -184,5 +193,46 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "\tAND T.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
             "</script>")
     public List<Map<String ,Object>> getPidAndPval(@Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage) throws SQLException;
+
+    /**
+     * 一键开单2版
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/30 10:14
+     * @param: [ckdCode, ctrCode, rgStage, sqlStr]
+     * @return: void
+     */
+    @SelectProvider(type = autoOpenOrderAddCkdLsitTow.class,method = "autoOpenOrderAddCkdLsitTow")
+    public void autoOpenOrderAddCkdLsitTow(@Param("ckdCode") String ckdCode, @Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage ,String sqlStr) throws SQLException;
+    class autoOpenOrderAddCkdLsitTow{
+        public String autoOpenOrderAddCkdLsitTow(@Param("ckdCode") String ckdCode, @Param("ctrCode") String ctrCode, @Param("rgStage") String rgStage ,String sqlStr){
+            String tempSqlStr = "" +
+                    "INSERT INTO XY_CLB_FC_CKD_LIST \n" +
+                    "SELECT\n" +
+                    "\t#{ckdCode,jdbcType=VARCHAR},\n" +
+                    "\tT.ROW_ID,\n" +
+                    "\tT.FC_PRICE_CODE,\n" +
+                    "\tT.BRAND_NAME,\n" +
+                    "\tT.FC_NAME,\n" +
+                    "\tT.FC_UNIT,\n" +
+                    "\tT.SL,\n" +
+                    "\tT.DJ,\n" +
+                    "\tT.XJ,\n" +
+                    "\tT.YFL,\n" +
+                    "\tT.YF,\n" +
+                    "\tT.HJ,\n" +
+                    "\tT.BZ,\n" +
+                    "\tT.FC_PUR_STY,\n" +
+                    "\tT.ISEDIT,\n" +
+                    "\tT.FC_C1 \n" +
+                    "FROM\n" +
+                    "\tVW_XY_CLB_FC_CKD_FIRST T \n" +
+                    "WHERE\n" +
+                    "\t("+sqlStr+" T.P_ID IS NULL ) \n" +
+                    "\tAND T.RG_STAGE = #{rgStage,jdbcType=VARCHAR} \n" +
+                    "\tAND T.CTR_CODE = #{ctrCode,jdbcType=VARCHAR}";
+            return tempSqlStr;
+        }
+    }
 
 }

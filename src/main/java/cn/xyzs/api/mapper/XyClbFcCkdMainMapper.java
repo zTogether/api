@@ -1,10 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyClbFcCkdMain;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -207,6 +204,48 @@ public interface XyClbFcCkdMainMapper extends Mapper<XyClbFcCkdMain>{
             "</script>")
     @Options(useGeneratedKeys=true, keyProperty="ckdCode", keyColumn="CKD_CODE")
     public void autoOpenOrderAddCkdMain(XyClbFcCkdMain xyClbFcCkdMain) throws SQLException;
+
+    /**
+     * 添加出库单主表二版
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2018/12/30 10:22
+     * @param: [xyClbFcCkdMain, sqlStr]
+     * @return: void
+     */
+    @SelectProvider(type = autoOpenOrderAddCkdMainTow.class,method = "autoOpenOrderAddCkdMainTow")
+    @Options(useGeneratedKeys=true, keyProperty="ckdCode", keyColumn="CKD_CODE")
+    public void autoOpenOrderAddCkdMainTow(@Param("ckdCode") String ckdCode ,@Param("ctrCode") String ctrCode ,
+                                           @Param("ckdFcType") String ckdFcType ,@Param("ckdOpUser") String ckdOpUser,
+                                           String sqlStr) throws SQLException;
+    class autoOpenOrderAddCkdMainTow{
+        public String autoOpenOrderAddCkdMainTow(@Param("ckdCode") String ckdCode ,@Param("ctrCode") String ctrCode ,
+                                                 @Param("ckdFcType") String ckdFcType ,@Param("ckdOpUser") String ckdOpUser ,String sqlStr){
+            String tempSqlStr = "" +
+                    "INSERT INTO XY_CLB_FC_CKD_MAIN ( CKD_CODE, CTR_CODE, CKD_TYPE, CKD_FC_TYPE, CKD_CK, CKD_OP_USER, CKD_ZJ, CKD_STATU )\n" +
+                    "VALUES\n" +
+                    "\t(\n" +
+                    "\t\t#{ ckdCode, jdbcType = VARCHAR }, \n" +
+                    "\t\t#{ ctrCode, jdbcType = VARCHAR },\n" +
+                    "\t\t0, \n" +
+                    "\t\t#{ ckdFcType, jdbcType = VARCHAR },\n" +
+                    "\t\t'金盛仓库', \n" +
+                    "\t\t#{ ckdOpUser,\tjdbcType = VARCHAR },\n" +
+                    "\t\t(\n" +
+                    "SELECT\n" +
+                    "\t\t\tSUM( T.HJ ) \n" +
+                    "FROM\n" +
+                    "\tVW_XY_CLB_FC_CKD_FIRST T \n" +
+                    "WHERE\n" +
+                    "\t("+sqlStr+" T.P_ID IS NULL ) \n" +
+                    "\tAND T.RG_STAGE = #{ckdFcType,jdbcType=VARCHAR} \n" +
+                    "\tAND T.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} "  +
+                    "\t\t),\n" +
+                    "\t0 \n" +
+                    "\t)";
+            return tempSqlStr;
+        }
+    }
 
     /**
      * 获取出库单信息

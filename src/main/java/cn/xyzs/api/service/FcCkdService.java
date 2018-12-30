@@ -432,5 +432,39 @@ public class FcCkdService {
         return resultMap;
     }
 
+    @Transactional
+    public Map<String ,Object> autoOpenOrderTow(XyClbFcCkdMain xyClbFcCkdMain ,String []pidArray ,String []pvalArray){
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            //"( t.P_ID = '生态板系列' AND T.P_VAL = '莫干山，奶白' ) OR";
+            String sqlStr = "";
+            for (int i = 0; i < pidArray.length; i++) {
+                sqlStr += "( t.P_ID = '"+pidArray[i]+"' AND T.P_VAL = '"+pvalArray[i]+"' ) OR";
+            }
+            String ckdCode = xyClbFcCkdMainMapper.getCkdCode(xyClbFcCkdMain.getCtrCode());
+            if (ckdCode == null || "".equals(ckdCode) || "null".equals(ckdCode)){
+                ckdCode = xyClbFcCkdMain.getCtrCode() + "01";
+            }
+            xyClbFcCkdMain.setCkdCode(ckdCode);
+            xyClbFcCkdMainMapper.autoOpenOrderAddCkdMainTow(xyClbFcCkdMain.getCkdCode(),xyClbFcCkdMain.getCtrCode(),
+                    xyClbFcCkdMain.getCkdFcType(),xyClbFcCkdMain.getCkdOpUser() ,sqlStr);
+            xyClbFcCkdListMapper.autoOpenOrderAddCkdLsitTow(xyClbFcCkdMain.getCkdCode(),xyClbFcCkdMain.getCtrCode(),xyClbFcCkdMain.getCkdFcType(),sqlStr);
+            Map<String ,Object> ckdInfo = xyClbFcCkdMainMapper.getCkdInfo(xyClbFcCkdMain.getCkdCode());
+            obj.put("ckdInfo",ckdInfo);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
 
 }

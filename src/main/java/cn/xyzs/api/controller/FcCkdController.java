@@ -141,4 +141,10 @@ public class FcCkdController {
     public Map<String ,Object> autoOpenOrder(XyClbFcCkdMain xyClbFcCkdMain){
         return fcCkdService.autoOpenOrder(xyClbFcCkdMain);
     }
+
+    @ResponseBody
+    @RequestMapping("/autoOpenOrderTow")
+    public Map<String ,Object> autoOpenOrderTow(XyClbFcCkdMain xyClbFcCkdMain ,String []pidArray ,String []pvalArray){
+        return fcCkdService.autoOpenOrderTow(xyClbFcCkdMain,pidArray,pvalArray);
+    }
 }
