@@ -89,9 +89,9 @@ public class OpenTenderService {
             Date nowDate = dateFormat.parse(dd);
             Map<String,Object> limitList = xyGcbGrxxMapper.getLimitDate(grId);
             //抢单限制日期
-            String date = String.valueOf(limitList.get("LIMIT_DATE"));
-            String limitReason = String.valueOf(limitList.get("MARK"));
-            if(date==null||date==""){
+            String date = String.valueOf(limitList == null?"":limitList.get("LIMIT_DATE"));
+            String limitReason = String.valueOf(limitList == null?"":limitList.get("MARK"));
+            if(date==null || "".equals(date) || "null".equals(date)){
                 date = "2000-01-01";
             }
             Date limitDate = dateFormat.parse(date);
@@ -136,9 +136,9 @@ public class OpenTenderService {
             Date nowDate = dateFormat.parse(dd);
             Map<String,Object> limitList = xyGcbGrxxMapper.getLimitDate(grId);
             //抢单限制日期
-            String date = String.valueOf(limitList.get("LIMIT_DATE"));
-            String limitReason = String.valueOf(limitList.get("MARK"));
-            if(date==null||date==""){
+            String date = String.valueOf(limitList == null?"":limitList.get("LIMIT_DATE"));
+            String limitReason = String.valueOf(limitList == null?"":limitList.get("MARK"));
+            if(date==null || "".equals(date) || "null".equals(date)){
                 date = "2000-01-01";
             }
             Date limitDate = dateFormat.parse(date);
