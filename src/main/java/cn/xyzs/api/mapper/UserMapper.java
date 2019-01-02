@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.TUser;
+import cn.xyzs.common.pojo.XyUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -243,4 +244,31 @@ public interface UserMapper extends Mapper<TUser> {
             "\tGR_ID = #{userId,jdbcType=VARCHAR} " +
             "</script>")
     public String userWhetherEnabled(String userId) throws SQLException;
+
+    /**
+     * 获取信息提供人
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/1 9:58
+     * @param: [condition]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tA.USER_ID,\n" +
+            "\tA.USER_TEL,\n" +
+            "\tA.USER_SEX,\n" +
+            "\tA.USER_NAME,\n" +
+            "\tD.ORG_NAME\n" +
+            "FROM\n" +
+            "\tXY_USER A\n" +
+            "\tLEFT JOIN XY_USER_ROLE B ON A.USER_ID = B.USER_ID\n" +
+            "\tLEFT JOIN XY_USER_ROLE_ORG C ON B.UR_ID = C.UR_ID\n" +
+            "\tLEFT JOIN XY_ORG D ON C.ORG_CODE = D.ORG_CODE \n" +
+            "WHERE\n" +
+            "\tUSER_TEL = #{condition,jdbcType=VARCHAR} \n" +
+            "OR USER_NAME = #{condition,jdbcType=VARCHAR}\n" +
+            "AND IS_USED = '1'" +
+            "</script>")
+    public List<Map<String ,Object>> getCustProvider(String condition) throws SQLException;
 }
