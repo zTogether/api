@@ -176,15 +176,15 @@ public class XyPdcaService {
         return resultMap;
     }
 
-    public Map<String,Object> addPdcaList(String pdcaId,String week,String PSummary,String res){
+    public Map<String,Object> addPdcaList(String pdcaId,String week,String theDate,String PSummary,String res){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = new Date();
-            String date = dateFormat.format(d);
-            xyPdcaMapper.addPdcaList(pdcaId,week,date,PSummary,res);
+            System.err.println(theDate);
+
+            xyPdcaMapper.addPdcaList(pdcaId,week,theDate,PSummary,res);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
