@@ -95,8 +95,8 @@ public class XyPdcaController {
      */
     @ResponseBody
     @RequestMapping("/addDayContent")
-    public Map<String,Object> addPdcaList(String pdcaId,String week,String PSummary,String res){
-        return xyPdcaService.addPdcaList(pdcaId,week,PSummary,res);
+    public Map<String,Object> addPdcaList(String pdcaId,String week,String theDate,String PSummary,String res){
+        return xyPdcaService.addPdcaList(pdcaId,week,theDate,PSummary,res);
     }
 
     /**
