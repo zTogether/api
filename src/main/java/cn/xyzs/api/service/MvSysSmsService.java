@@ -127,7 +127,7 @@ public class MvSysSmsService {
                     String[] params = {};
                     phone = String.valueOf(map.get("TEL"));
                     if (!"".equals(phone) && phone != null) {
-                        sendResultCode = SendMsgUtil.sendMsg("6", params, phone);
+                        sendResultCode = SendMsgUtil.sendMsg("7", params, phone);
                         userMapper.updateTemp(sendResultCode, phone);
                     }
                 }
