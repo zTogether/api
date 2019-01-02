@@ -276,22 +276,32 @@ public class XyGcbPrjPlanService {
                 if(map.get("lcdMark")!=null&&map.get("lcdMark")!=""){
                     lcdMark = map.get("lcdMark").toString();
                 }
+                //添加到量尺单
                 xyGcbPrjPlanMapper.addLcd(prjId,zcpbId,quantity,ctrCode,lcdMark);
             }
+            //修改plan状态
             xyGcbPrjPlanMapper.toEnsure(date,prjId,userId);
             xyGcbPrjPlanMapper.addPrjMark(prjId,prjMark);
             List<Map<String,Object>> lcdList1 = xyGcbPrjPlanMapper.getLcdList(ctrCode);
             for (Map<String, Object> map : lcdList1) {
-                String orderJe = map.get("JE").toString();
-                String orderSup = map.get("ZC_SUP").toString();
-                String orderType = map.get("ZCPB_DC").toString();
+                String orderJe = String.valueOf(map.get("JE"));
+                String orderSup = String.valueOf(map.get("ZC_SUP"));
+                String type = String.valueOf(map.get("ZCPB_DC"));
+                String orderType;
+                if("11".equals(type)){//判断是否为后付费
+                    orderType = "1";//后附费
+                }else{
+                    orderType = "0";//代购
+                }
                 XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
                 xyClbZcOrder.setCtrCode(ctrCode);
                 xyClbZcOrder.setOrderJe(orderJe);
                 xyClbZcOrder.setOpUserid(userId);
                 xyClbZcOrder.setOrderSup(orderSup);
                 xyClbZcOrder.setOrderType(orderType);
+                //添加订单主表
                 xyGcbPrjPlanMapper.addOrder(xyClbZcOrder);
+                //获取生成的主表ID
                 String orderId = xyClbZcOrder.getOrderId();
                 List<Map<String,Object>> orderList = xyGcbPrjPlanMapper.getOrderList(ctrCode,orderSup);
                 for (Map<String, Object> objectMap : orderList) {
@@ -311,6 +321,7 @@ public class XyGcbPrjPlanService {
                     String zcArea = objectMap.get("ZC_AREA").toString();
                     String zcVersion = objectMap.get("ZC_VERSION").toString();
                     String lcdId = objectMap.get("LCDID").toString();
+                    //添加订单LIST表
                     xyGcbPrjPlanMapper.addOrderList(orderId,zcCode,zcName,zcType,zcPriceIn,zcPriceOut,zcQty,zcBrand,orderSup,
                             zcSpec,zcMaterial,zcColor,zcUnit,zcMark,zcCyc,zcArea,zcVersion);
                     xyGcbPrjPlanMapper.updateLcdOrderState(lcdId);
