@@ -287,18 +287,12 @@ public class XyGcbPrjPlanService {
                 String orderJe = String.valueOf(map.get("JE"));
                 String orderSup = String.valueOf(map.get("ZC_SUP"));
                 String type = String.valueOf(map.get("ZCPB_DC"));
-                String orderType;
-                if("11".equals(type)){//判断是否为后付费
-                    orderType = "1";//后附费
-                }else{
-                    orderType = "0";//代购
-                }
                 XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
                 xyClbZcOrder.setCtrCode(ctrCode);
                 xyClbZcOrder.setOrderJe(orderJe);
                 xyClbZcOrder.setOpUserid(userId);
                 xyClbZcOrder.setOrderSup(orderSup);
-                xyClbZcOrder.setOrderType(orderType);
+                xyClbZcOrder.setOrderType(type);
                 //添加订单主表
                 xyGcbPrjPlanMapper.addOrder(xyClbZcOrder);
                 //获取生成的主表ID
