@@ -179,7 +179,7 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Select("<script>" +
-            "SELECT \n" +
+            "SELECT\n" +
             "\tCUST_ID,\n" +
             "\tCUST_NAME,\n" +
             "\tCUST_ADDRESS,\n" +
@@ -194,14 +194,14 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             "\tCUST_STATE,\n" +
             "\tTO_CHAR( CREATE_TIME / ( 1000 * 60 * 60 * 24 ) + \n" +
             "\tTO_DATE( '1970-01-01 08:00:00', 'yyyy-MM-dd HH24:mi:ss' ), 'yyyy-MM-dd HH24:mi:ss' ) CREATE_TIME,\n" +
-            "\tCUST_PROVIDER,\n" +
+            "\t(SELECT USER_NAME FROM XY_USER WHERE USER_ID = CUST_PROVIDER ) CUST_PROVIDER,\n" +
             "\tCTR_CODE,\n" +
             "\tCUST_DELAY,\n" +
             "\tIS_VAILD,\n" +
             "\tJOIN_USERID \n" +
-            "FROM \n" +
+            "FROM\n" +
             "\tXY_CRM_CUST \n" +
-            "WHERE \n" +
+            "WHERE\n" +
             "\tCUST_ID = #{custId,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String ,Object> getCrmCustInfoByCustId(String custId) throws SQLException;
