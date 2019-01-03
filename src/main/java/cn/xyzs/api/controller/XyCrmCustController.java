@@ -86,4 +86,18 @@ public class XyCrmCustController {
         return xyCrmCustService.getCrmCustInfoByCustId(custId);
     }
 
+    /**
+     * 获取信息历史处理记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/3 17:15
+     * @param: [custId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getInfoHistoryFlow")
+    public Map<String ,Object> getInfoHistoryFlow(String custId){
+        return xyCrmCustService.getInfoHistoryFlow(custId);
+    }
+
 }

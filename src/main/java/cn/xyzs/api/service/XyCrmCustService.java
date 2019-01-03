@@ -2,6 +2,7 @@ package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.UserMapper;
 import cn.xyzs.api.mapper.XyCrmCustMapper;
+import cn.xyzs.api.mapper.XyWorkApplyMapper;
 import cn.xyzs.common.pojo.XyCrmCust;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,9 @@ public class XyCrmCustService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private XyWorkApplyMapper xyWorkApplyMapper;
 
     /**
      * 添加意向信息
@@ -160,6 +164,36 @@ public class XyCrmCustService {
         try {
             Map<String ,Object> custCust = xyCrmCustMapper.getCrmCustInfoByCustId(custId);
             obj.put("custCust",custCust);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取信息历史处理记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/3 17:15
+     * @param: [custId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getInfoHistoryFlow(String custId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            Map<String ,Object> custCust = xyCrmCustMapper.getCrmCustInfoByCustId(custId);
+            List<Map<String ,Object>> infoHistoryFlowList = xyWorkApplyMapper.getInfoHistoryFlow(custId);
+            obj.put("custCust",custCust);
+            obj.put("infoHistoryFlowList",infoHistoryFlowList);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
