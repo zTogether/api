@@ -431,7 +431,7 @@ public class XyGcbPrjPlanService {
      * @param: [userId, roleName, addr]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> planTable(String userId,String roleName,String addr,String date1,String date2,String ctrTel){
+    public Map<String,Object> planTable(String userId,String roleName,String ctrCode,String date1,String date2,String ctrTel){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
@@ -441,7 +441,7 @@ public class XyGcbPrjPlanService {
             Date d = new Date();
             String dd = dateFormat.format(d);
             Date nowDate = dateFormat.parse(dd);
-            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getMyPlan(userId,roleName,addr,date1,date2,ctrTel);
+            List<Map<String,Object>> planList = xyGcbPrjPlanMapper.getMyPlan(userId,roleName,ctrCode,date1,date2,ctrTel);
             for (int i=0;i<planList.size();i++){
                 Map<String,Object> map = planList.get(i);
                 Date date0 = dateFormat.parse(map.get("DAYS").toString());
