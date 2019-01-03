@@ -64,4 +64,18 @@ public class XyInfoManageConstrController {
     public Map<String,Object> addRevisit(String ctrCode,String content,String opUser){
         return xyInfoManageConstrService.addRevisit(ctrCode,content,opUser);
     }
+
+    /**
+     *
+     * @Description: 责任人回复
+     * @author: GeWeiliang
+     * @date: 2019\1\3 0003 16:55
+     * @param: [rowId, liableRes]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/resComp")
+    public Map<String,Object> resComp(String rowId,String liableRes){
+        return xyInfoManageConstrService.liableRes(rowId,liableRes);
+    }
 }
