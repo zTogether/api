@@ -157,7 +157,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,SUM(A.QUANTITY*B.ZCPB_PRICE)JE,(CASE WHEN B.ZCPB_DC LIKE '1%' THEN 0 ELSE 1 END)ZCPB_DC\n" +
+            "SELECT B.CTR_CODE,C.ZC_SUP,D.EDIT_USER,SUM(A.QUANTITY*B.ZCPB_PRICE)JE,(CASE WHEN B.ZCPB_DC = '11' THEN 1 ELSE 0 END)ZCPB_DC\n" +
             " FROM XY_GCB_PRJ_LCD A \n" +
             " LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID \n" +
             " LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE \n" +
