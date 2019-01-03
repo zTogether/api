@@ -156,8 +156,8 @@ public class XyGcbPrjPlanController {
      */
     @ResponseBody
     @RequestMapping("/planList")
-    public Map<String,Object> getPlanList(String userId,String roleName,String addr,String date1,String date2,String ctrTel){
-        return xyGcbPrjPlanService.planTable(userId,roleName,addr,date1,date2,ctrTel);
+    public Map<String,Object> getPlanList(String userId,String roleName,String ctrCode,String date1,String date2,String ctrTel){
+        return xyGcbPrjPlanService.planTable(userId,roleName,ctrCode,date1,date2,ctrTel);
     }
 
     @ResponseBody

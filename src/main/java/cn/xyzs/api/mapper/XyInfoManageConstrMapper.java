@@ -88,6 +88,14 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
             "</script>")
     List<Map<String,Object>> getRevisit(@Param("ctrCode") String ctrCode)throws SQLException;
 
+    /**
+     *
+     * @Description: 查询责任人
+     * @author: GeWeiliang
+     * @date: 2019\1\3 0003 16:39
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
     @Select("<script>" +
             "SELECT u.USER_NAME,u.USER_ID\n" +
             "FROM XY_USER u,XY_CUSTOMER_INFO i\n" +
@@ -95,6 +103,14 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
             "</script>")
     List<Map<String,Object>> getLiableUser(@Param("ctrCode") String ctrCode)throws SQLException;
 
+    /**
+     *
+     * @Description: 添加投诉
+     * @author: GeWeiliang
+     * @date: 2019\1\3 0003 16:25
+     * @param: [ctrCode, compContent, compType, limitDate, liableUser, opUser, xh]
+     * @return: void
+     */
     @Insert("<script>" +
             "INSERT INTO XY_INFOMANAGE_COMP\n" +
             "VALUES(sys_guid(),#{ctrCode,jdbcType=VARCHAR},#{compContent,jdbcType=VARCHAR},#{compType,jdbcType=VARCHAR}," +
@@ -112,12 +128,35 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
             "</script>")
     String getCompNum(@Param("ctrCode") String ctrCode)throws SQLException;
 
+    /**
+     *
+     * @Description: 删除投诉记录
+     * @author: GeWeiliang
+     * @date: 2019\1\2 0002 11:32
+     * @param: [rowId]
+     * @return: void
+     */
     @Delete("<script>" +
             "DELETE FROM XY_INFOMANAGE_COMP\n" +
             "WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
             "</script>")
     void deleteComp(@Param("rowId") String rowId)throws SQLException;
 
+    @Update("<script>" +
+            "UPDATE XY_INFOMANAGE_COMP \n" +
+            "SET LIABLE_RES=#{liableRes,jdbcType=VARCHAR},RES_DATE=SYSDATE\n" +
+            "WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
+            "</script>")
+    void resComp(@Param("rowId") String rowId,@Param("liableRes") String liableRes)throws SQLException;
+
+    /**
+     *
+     * @Description: 查询回访记录条数
+     * @author: GeWeiliang
+     * @date: 2019\1\2 0002 11:32
+     * @param: [ctrCode]
+     * @return: java.lang.String
+     */
     @Select("<script>" +
             "SELECT * FROM\n" +
             "(SELECT XH FROM XY_INFOMANAGE_REVISIT \n" +
@@ -127,6 +166,14 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
             "</script>")
     String getRevisitNum(@Param("ctrCode") String ctrCode)throws SQLException;
 
+    /**
+     *
+     * @Description: 添加回访记录
+     * @author: GeWeiliang
+     * @date: 2019\1\2 0002 11:32
+     * @param: [ctrCode, content, opUser, xh]
+     * @return: void
+     */
     @Insert("<script>" +
             "INSERT INTO XY_INFOMANAGE_REVISIT\n" +
             "VALUES(sys_guid(),#{ctrCode,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{opUser,jdbcType=VARCHAR},SYSDATE,#{xh,jdbcType=VARCHAR})" +

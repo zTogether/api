@@ -259,10 +259,10 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      */
     @SelectProvider(type = getMyPlan.class,method = "getMyPlan")
     List<Map<String,Object>> getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName,
-                                       @Param("addr") String addr,@Param("date1") String date1,@Param("date2") String date2,
+                                       @Param("ctrCode") String ctrCode,@Param("date1") String date1,@Param("date2") String date2,
                                        @Param("ctrTel") String ctrTel) throws SQLException;
     class getMyPlan{
-        public String getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName,@Param("addr") String addr,
+        public String getMyPlan(@Param("userId") String userId,@Param("roleName") String roleName,@Param("ctrCode") String ctrCode,
                                 @Param("date1") String date1,@Param("date2") String date2,@Param("ctrTel") String ctrTel){
             return new SQL(){{
                 SELECT("p.*,i.CTR_ADDR,u.USER_NAME");
@@ -271,9 +271,9 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
                 LEFT_OUTER_JOIN("XY_USER u ON u.USER_ID=p.EDIT_USER");
                 WHERE("1=1");
                 if(userId!=null&&userId!=""){
-                    WHERE("(i.CTR_GCJL=#{userId,jdbcType=VARCHAR} OR i.CTR_CLDD=#{userId,jdbcType=VARCHAR}) " +
+                    WHERE("(i.CTR_GCJL=#{userId,jdbcType=VARCHAR} OR i.CTR_CLDD=#{userId,jdbcType=VARCHAR} " +
                             "OR i.CTR_WAITER=#{userId,jdbcType=VARCHAR} OR i.CTR_SJS=#{userId,jdbcType=VARCHAR} " +
-                            "OR i.CTR_OWENER=#{userId,jdbcType=VARCHAR} OR i.CTR_AREA_MA=#{userId,jdbcType=VARCHAR}");
+                            "OR i.CTR_OWENER=#{userId,jdbcType=VARCHAR} OR i.CTR_AREA_MA=#{userId,jdbcType=VARCHAR})");
                 }
                 if(ctrTel!=null&&ctrTel!=""){
                     WHERE("i.CTR_TEL=#{ctrTel,jdbcType=VARCHAR}");
@@ -281,8 +281,8 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
                 if(roleName!=null&&roleName!=""){
                     WHERE("p.ROLE_NAME=#{roleName,jdbcType=VARCHAR}");
                 }
-                if(addr!=null&&addr!=""){
-                    WHERE("i.CTR_ADDR=#{addr,jdbcType=VARCHAR}");
+                if(ctrCode!=null&&ctrCode!=""){
+                    WHERE("i.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
                 }
                 if (date1!=null&&date1!=""){
                     WHERE("p.DAYS >= TO_DATE(#{date1,jdbcType=VARCHAR},'yyyy-MM-dd')");
@@ -354,7 +354,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT DISTINCT(i.CTR_ADDR) FROM XY_CUSTOMER_INFO i,XY_GCB_PRJ_PLAN p\n" +
+            "SELECT DISTINCT(i.CTR_CODE),i.CTR_ADDR FROM XY_CUSTOMER_INFO i,XY_GCB_PRJ_PLAN p\n" +
             "WHERE p.CTR_CODE=i.CTR_CODE AND (i.CTR_GCJL=#{userId,jdbcType=VARCHAR} OR i.CTR_CLDD=#{userId,jdbcType=VARCHAR})" +
             "</script>")
     List<Map<String,Object>> getMyPrjAddr(String userId) throws SQLException;

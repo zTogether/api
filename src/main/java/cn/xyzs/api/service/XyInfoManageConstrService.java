@@ -252,6 +252,39 @@ public class XyInfoManageConstrService {
         return resultMap;
     }
 
+    /**
+     *
+     * @Description: 责任人回复
+     * @author: GeWeiliang
+     * @date: 2019\1\3 0003 16:52
+     * @param: [rowId, laibleRes]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> liableRes(String rowId,String laibleRes){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try{
+            xyInfoManageConstrMapper.resComp(rowId,laibleRes);
+            code = "200";
+            msg = "成功";
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     *
+     * @Description: 添加回访记录
+     * @author: GeWeiliang
+     * @date: 2019\1\3 0003 16:49
+     * @param: [ctrCode, content, opUser]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     public Map<String,Object> addRevisit(String ctrCode,String content,String opUser ){
         String code = "500";
         String msg = "系统异常";
