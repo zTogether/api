@@ -112,12 +112,28 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
             "</script>")
     String getCompNum(@Param("ctrCode") String ctrCode)throws SQLException;
 
+    /**
+     *
+     * @Description: 删除投诉记录
+     * @author: GeWeiliang
+     * @date: 2019\1\2 0002 11:32
+     * @param: [rowId]
+     * @return: void
+     */
     @Delete("<script>" +
             "DELETE FROM XY_INFOMANAGE_COMP\n" +
             "WHERE ROW_ID=#{rowId,jdbcType=VARCHAR}" +
             "</script>")
     void deleteComp(@Param("rowId") String rowId)throws SQLException;
 
+    /**
+     *
+     * @Description: 查询回访记录条数
+     * @author: GeWeiliang
+     * @date: 2019\1\2 0002 11:32
+     * @param: [ctrCode]
+     * @return: java.lang.String
+     */
     @Select("<script>" +
             "SELECT * FROM\n" +
             "(SELECT XH FROM XY_INFOMANAGE_REVISIT \n" +
@@ -127,6 +143,14 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
             "</script>")
     String getRevisitNum(@Param("ctrCode") String ctrCode)throws SQLException;
 
+    /**
+     *
+     * @Description: 添加回访记录
+     * @author: GeWeiliang
+     * @date: 2019\1\2 0002 11:32
+     * @param: [ctrCode, content, opUser, xh]
+     * @return: void
+     */
     @Insert("<script>" +
             "INSERT INTO XY_INFOMANAGE_REVISIT\n" +
             "VALUES(sys_guid(),#{ctrCode,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{opUser,jdbcType=VARCHAR},SYSDATE,#{xh,jdbcType=VARCHAR})" +
