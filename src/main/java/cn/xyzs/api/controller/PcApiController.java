@@ -54,4 +54,17 @@ public class PcApiController {
         return mvSysSmsService.sendActivityReminder();
     }
 
+    /**
+     *
+     * @Description: 自定义短信接口
+     * @author: GeWeiliang
+     * @date: 2019\1\9 0009 13:28
+     * @param: [phoneNum, param, templateId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/sendMsgModel")
+    public Map<String,Object> msgModel(String phoneNum,String param,int templateId){
+        return mvSysSmsService.snedMsgModel(phoneNum,param,templateId);
+    }
 }
