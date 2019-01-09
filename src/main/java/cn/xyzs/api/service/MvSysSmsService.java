@@ -102,7 +102,6 @@ public class MvSysSmsService {
 
 
 
-
     /**
      * 发送活动提醒
      * @Description:
@@ -142,6 +141,38 @@ public class MvSysSmsService {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
             resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     *
+     * @Description: 自定义短信接口
+     * @author: GeWeiliang
+     * @date: 2019\1\9 0009 10:58
+     * @param: [phoneNum, param, templateId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String,Object> snedMsgModel(String phoneNum,String param,int templateId){
+        Map<String,Object> resultMap = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try{
+            String[] params = param.split(",");
+            String sendResultCode = SendMsgUtil.msgModel(phoneNum,params,templateId);
+            if("200".equals(sendResultCode)){
+                MvSysSms mvSysSms = new MvSysSms();
+                mvSysSms.setTel(phoneNum);
+                mvSysSms.setSendStatus(sendResultCode);
+                mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);
+                code = "200";
+                msg = "成功";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
         }
         return resultMap;
     }
