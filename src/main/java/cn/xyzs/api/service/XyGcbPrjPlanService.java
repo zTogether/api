@@ -285,6 +285,7 @@ public class XyGcbPrjPlanService {
             List<Map<String,Object>> lcdList1 = xyGcbPrjPlanMapper.getLcdList(ctrCode);
             for (Map<String, Object> map : lcdList1) {
                 String orderJe = String.valueOf(map.get("JE"));
+                System.err.println(orderJe);
                 String orderSup = String.valueOf(map.get("ZC_SUP"));
                 String type = String.valueOf(map.get("ZCPB_DC"));
                 XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
@@ -297,28 +298,14 @@ public class XyGcbPrjPlanService {
                 xyGcbPrjPlanMapper.addOrder(xyClbZcOrder);
                 //获取生成的主表ID
                 String orderId = xyClbZcOrder.getOrderId();
-                List<Map<String,Object>> orderList = xyGcbPrjPlanMapper.getOrderList(ctrCode,orderSup);
-                for (Map<String, Object> objectMap : orderList) {
-                    String zcCode = objectMap.get("ZCPB_ZC_CODE").toString();
-                    String zcName = objectMap.get("ZC_NAME").toString();
-                    String zcType = objectMap.get("ZC_TYPE").toString();
-                    String zcPriceIn = objectMap.get("ZC_PRICE_IN").toString();
-                    String zcPriceOut = objectMap.get("ZC_PRICE_OUT").toString();
-                    String zcQty = String.valueOf(objectMap.get("QUANTITY"));
-                    String zcBrand = objectMap.get("ZC_BRAND").toString();
-                    String zcSpec = objectMap.get("ZC_SPEC").toString();
-                    String zcMaterial = objectMap.get("ZC_MATERIAL").toString();
-                    String zcColor = objectMap.get("ZC_COLOR").toString();
-                    String zcUnit = objectMap.get("ZC_UNIT").toString();
-                    String zcMark = String.valueOf(objectMap.get("MARK"));
-                    String zcCyc = objectMap.get("ZC_CYC").toString();
-                    String zcArea = objectMap.get("ZC_AREA").toString();
-                    String zcVersion = objectMap.get("ZC_VERSION").toString();
-                    String lcdId = objectMap.get("LCDID").toString();
-                    //添加订单LIST表
-                    xyGcbPrjPlanMapper.addOrderList(orderId,zcCode,zcName,zcType,zcPriceIn,zcPriceOut,zcQty,zcBrand,orderSup,
-                            zcSpec,zcMaterial,zcColor,zcUnit,zcMark,zcCyc,zcArea,zcVersion);
-                    xyGcbPrjPlanMapper.updateLcdOrderState(lcdId);
+                if("1".equals(type)){
+                    //后付费list
+                    List<Map<String,Object>> orderList = xyGcbPrjPlanMapper.getOrderList(ctrCode,orderSup,"11");
+                    addList(orderList,orderId,orderSup);
+                }else{
+                    //代购list
+                    List<Map<String,Object>> orderList = xyGcbPrjPlanMapper.getOrderList(ctrCode,orderSup,"");
+                    addList(orderList,orderId,orderSup);
                 }
             }
             code = "200";
@@ -332,6 +319,36 @@ public class XyGcbPrjPlanService {
             resultMap.put("msg",msg);
         }
         return resultMap;
+    }
+
+    public void addList(List<Map<String,Object>> orderList,String orderId,String orderSup){
+        try{
+            for (Map<String, Object> objectMap : orderList) {
+                String zcCode = objectMap.get("ZCPB_ZC_CODE").toString();
+                String zcName = objectMap.get("ZC_NAME").toString();
+                String zcType = objectMap.get("ZC_TYPE").toString();
+                String zcPriceIn = objectMap.get("ZC_PRICE_IN").toString();
+                String zcPriceOut = objectMap.get("ZC_PRICE_OUT").toString();
+                String zcQty = String.valueOf(objectMap.get("QUANTITY"));
+                String zcBrand = objectMap.get("ZC_BRAND").toString();
+                String zcSpec = objectMap.get("ZC_SPEC").toString();
+                String zcMaterial = objectMap.get("ZC_MATERIAL").toString();
+                String zcColor = objectMap.get("ZC_COLOR").toString();
+                String zcUnit = objectMap.get("ZC_UNIT").toString();
+                String zcMark = String.valueOf(objectMap.get("MARK"));
+                String zcCyc = objectMap.get("ZC_CYC").toString();
+                String zcArea = objectMap.get("ZC_AREA").toString();
+                String zcVersion = objectMap.get("ZC_VERSION").toString();
+                String lcdId = objectMap.get("LCDID").toString();
+                //添加订单LIST表
+                xyGcbPrjPlanMapper.addOrderList(orderId,zcCode,zcName,zcType,zcPriceIn,zcPriceOut,zcQty,zcBrand,orderSup,
+                        zcSpec,zcMaterial,zcColor,zcUnit,zcMark,zcCyc,zcArea,zcVersion);
+                xyGcbPrjPlanMapper.updateLcdOrderState(lcdId);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
