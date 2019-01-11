@@ -162,6 +162,7 @@ public class MvSysSmsService {
             String sendResultCode = SendMsgUtil.msgModel(phoneNum,params,templateId);
             if("200".equals(sendResultCode)){
                 MvSysSms mvSysSms = new MvSysSms();
+                mvSysSms.setSmsContent(String.valueOf(templateId));
                 mvSysSms.setTel(phoneNum);
                 mvSysSms.setSendStatus(sendResultCode);
                 mvSysSmsMapper.addMvSysSmsInfo(mvSysSms);

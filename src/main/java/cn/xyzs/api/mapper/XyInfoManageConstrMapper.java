@@ -118,6 +118,11 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
             "</script>")
     void addComp(@Param("ctrCode") String ctrCode, @Param("compContent") String compContent, @Param("compType") String compType,
                  @Param("solveDate") Date limitDate,@Param("liableUser") String liableUser,@Param("opUser") String opUser,@Param("xh") int xh)throws SQLException;
+    //获取责任人电话
+    @Select("<script>" +
+            "SELECT USER_TEL FROM XY_USER WHERE USER_ID=#{userId,jdbcType=VARCHAR}" +
+            "</script>")
+    String userTel(@Param("userId") String userId)throws SQLException;
 
     @Select("<script>" +
             "SELECT * FROM\n" +
