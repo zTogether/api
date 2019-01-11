@@ -2,6 +2,7 @@ package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.XyCrmCustService;
 import cn.xyzs.common.pojo.XyCrmCust;
+import cn.xyzs.common.pojo.XyCrmRelation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,8 +69,37 @@ public class XyCrmCustController {
      */
     @ResponseBody
     @RequestMapping("/getCrmCustByCondition")
-    public Map<String ,Object> getCrmCustByCondition(XyCrmCust xyCrmCust , String condition , Integer startNum , Integer endNum){
-        return xyCrmCustService.getCrmCustByCondition(xyCrmCust,condition,startNum,endNum);
+    public Map<String ,Object> getCrmCustByCondition(XyCrmCust xyCrmCust , String condition , Integer startNum ,
+                                                     Integer endNum ,String selectFlag ,String roleId ,String userId){
+        return xyCrmCustService.getCrmCustByCondition(xyCrmCust,condition,startNum,endNum,selectFlag,roleId,userId);
+    }
+
+    /**
+     * 获取下属人数
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/4 16:58
+     * @param: [express, userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getSubordinateCount")
+    public Map<String ,Object> getSubordinateCount(String express ,String userId){
+        return xyCrmCustService.getSubordinateCount(express,userId);
+    }
+
+    /**
+     * 根据userId和roleId获取下属
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/4 13:27
+     * @param: [xyCrmRelation]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getSubordinateByUserIdAndRoleId")
+    public Map<String ,Object> getSubordinateByUserIdAndRoleId(String express ,String userId  ,String condition){
+        return xyCrmCustService.getSubordinateByUserIdAndRoleId(express,userId,condition);
     }
 
     /**
@@ -81,9 +111,9 @@ public class XyCrmCustController {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @ResponseBody
-    @RequestMapping("/getCrmCustInfoByCustId")
-    public Map<String ,Object> getCrmCustInfoByCustId(String custId){
-        return xyCrmCustService.getCrmCustInfoByCustId(custId);
+    @RequestMapping("/getInfoDetailData")
+    public Map<String ,Object> getInfoDetailData(String custId ,String roleId){
+        return xyCrmCustService.getInfoDetailData(custId,roleId);
     }
 
     /**
@@ -98,6 +128,121 @@ public class XyCrmCustController {
     @RequestMapping("/getInfoHistoryFlow")
     public Map<String ,Object> getInfoHistoryFlow(String custId){
         return xyCrmCustService.getInfoHistoryFlow(custId);
+    }
+
+    /**
+     * 获取分析图数据
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/4 10:35
+     * @param: []
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getAnalyzeImgData")
+    public Map<String ,Object> getAnalyzeImgData(String express , String userId){
+        return xyCrmCustService.getAnalyzeImgData(express,userId);
+    }
+
+    /**
+     * 信息处理
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 9:35
+     * @param: [custId, flag, afterNodeId, wadOperation, wadId, nodeName, wadRemark, xyUserId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/dispose")
+    public Map<String ,Object> dispose(String custId ,String flag ,String afterNodeId ,String wadOperation ,
+                                       String wadId ,String nodeName,String wadRemark ,String xyUserId ,String nodeFlag){
+        return xyCrmCustService.dispose(custId,flag,afterNodeId,wadOperation,wadId,nodeName,wadRemark,xyUserId,nodeFlag);
+    }
+
+    /**
+     * 获取设计成效人
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 9:48
+     * @param: []
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getSjcxrInfoList")
+    public Map<String ,Object> getSjcxrInfoList(){
+        return xyCrmCustService.getSjcxrInfoList();
+    }
+
+    /**
+     * 选择设计成效人
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 10:42
+     * @param: [custId, afterNodeId, wadOperation, wadId, wadRemark, xyUserId, sjcxr]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/selectSjcxr")
+    public Map<String ,Object> selectSjcxr(String custId ,String afterNodeId ,String wadOperation ,
+                                           String wadId ,String wadRemark ,String xyUserId ,String sjcxr){
+        return xyCrmCustService.selectSjcxr(custId,afterNodeId,wadOperation,wadId,wadRemark,xyUserId,sjcxr);
+    }
+
+    /**
+     *  获取设计师
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 12:45
+     * @param: [custId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getSjsList")
+    public Map<String ,Object> getSjsList(String custId) {
+        return xyCrmCustService.getSjsList(custId);
+    }
+
+    /**
+     * 选择设计师执行派单
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 13:51
+     * @param: [custId, afterNodeId, wadOperation, wadId, wadRemark, xyUserId, sjs]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/selectSjs")
+    public Map<String ,Object> selectSjs(String custId ,String afterNodeId ,String wadOperation ,
+                                         String wadId ,String wadRemark ,String xyUserId ,String sjs){
+        return xyCrmCustService.selectSjs(custId,afterNodeId,wadOperation,wadId,wadRemark,xyUserId,sjs);
+    }
+
+    /**
+     * 处理节点
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/10 10:25
+     * @param: [jobSchedule, custId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/disposeNode")
+    public Map<String ,Object> disposeNode(String jobSchedule ,String custId) {
+        return xyCrmCustService.disposeNode(jobSchedule,custId);
+    }
+
+    /**
+     * 获取提交信息详情信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/10 11:29
+     * @param: [custId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getCustInfoData")
+    public Map<String ,Object> getCustInfoData(String custId){
+        return xyCrmCustService.getCustInfoData(custId);
     }
 
 }

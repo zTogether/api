@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyCustomerInfo;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -635,4 +636,92 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "WHERE RN BETWEEN 1 AND 1" +
             "</script>")
     public String getCtrName(String ctrTel) throws SQLException;
+
+    /**
+     * 获取最新的档案号
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 13:13
+     * @param: [nowYear]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tB.CTR_CODE + 1 CTR_CODE\n" +
+            "FROM ( \n" +
+            "\tSELECT A.*, ROWNUM RN \n" +
+            "\tFROM ( \n" +
+            "\t\tSELECT CTR_CODE FROM XY_CUSTOMER_INFO WHERE CTR_CODE LIKE #{nowYear,jdbcType=VARCHAR}||'%'\n" +
+            "\t\tORDER BY CTR_CRT_DATE DESC\n" +
+            "\t) A  \n" +
+            ")B\n" +
+            "WHERE RN BETWEEN 1 AND 1" +
+            "</script>")
+    public String getNewestCtrCode(String nowYear) throws SQLException;
+
+    /**
+     * 派单执行添加操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 13:49
+     * @param: [ctrCode, sjs, custId]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_CUSTOMER_INFO (\n" +
+            "\tCTR_CODE,\n" +
+            "\tCTR_NAME,\n" +
+            "\tCTR_TEL,\n" +
+            "\tCTR_ADDR,\n" +
+            "\tCTR_SJS,\n" +
+            "\tCTR_WAITER\n" +
+            ") SELECT \n" +
+            "\t\t#{ctrCode,jdbcType=VARCHAR} CTR_CODE,\n" +
+            "\t\tTO_CHAR(CUST_NAME) CTR_NAME,\n" +
+            "\t\tTO_CHAR(CUST_MOBILE) CTR_TEL,\n" +
+            "\t\tTO_CHAR(CONCAT(CUST_ADDRESS,CUST_ADDRESS_DETAIL)) CTR_ADDR,\n" +
+            "\t\t#{sjs,jdbcType=VARCHAR} CTR_SJS,\n" +
+            "\t\tTO_CHAR(CUST_PROVIDER) CUST_PROVIDER\n" +
+            "\tFROM \n" +
+            "\t\tXY_CRM_CUST\n" +
+            "\tWHERE\n" +
+            "\t\tCUST_ID = #{custId,jdbcType=VARCHAR}" +
+            "</script>")
+    public void pdAddCustInfo(@Param("ctrCode") String ctrCode ,@Param("sjs") String sjs ,@Param("custId") String custId) throws SQLException;
+
+    /**
+     * 判断是否可显示（0：是    1：否）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/9 10:05
+     * @param: [ctrCode]
+     * @return: java.lang.String
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tCASE \n" +
+            "\tWHEN TO_CHAR(CTR_CRT_DATE + 9,'yyyy-MM-dd') <![CDATA[<=]]> TO_CHAR(SYSDATE,'yyyy-MM-dd') THEN\n" +
+            "\t\t'0'\n" +
+            "\tELSE\n" +
+            "\t\t'1'\n" +
+            "END CASE\n" +
+            "FROM\n" +
+            "\tXY_CUSTOMER_INFO \n" +
+            "WHERE\n" +
+            "\tCTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public String isShow(String ctrCode) throws SQLException;
+
+    /**
+     * 根据地址判断是否有重复的客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/10 15:51
+     * @param: [ctrAddr]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT COUNT(1) FROM XY_CUSTOMER_INFO WHERE CTR_ADDR = #{ctrAddr,jdbcType=VARCHAR}" +
+            "</script>")
+    public Integer existsByCtrAddr(String ctrAddr) throws SQLException;
 }

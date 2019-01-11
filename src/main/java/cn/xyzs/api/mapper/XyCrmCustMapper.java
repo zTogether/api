@@ -30,7 +30,8 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             "\tDECOR_TYPE, \n" +
             "\tCUST_MOBILE, \n" +
             "\tCREATE_TIME, \n" +
-            "\tCUST_PROVIDER \n" +
+            "\tCUST_PROVIDER, \n" +
+            "\tJOB_SCHEDULE \n" +
             ") VALUES(\n" +
             "\t#{custName,jdbcType=VARCHAR},\n" +
             "\t#{custAddress,jdbcType=VARCHAR},\n" +
@@ -38,7 +39,8 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             "\t#{decorType,jdbcType=VARCHAR},\n" +
             "\t#{custMobile,jdbcType=VARCHAR},\n" +
             "\t#{createTime,jdbcType=VARCHAR},\n" +
-            "\t#{custProvider,jdbcType=VARCHAR}\n" +
+            "\t#{custProvider,jdbcType=VARCHAR},\n" +
+            "\t'0000'\n" +
             ")" +
             "</script>")
     public void addCrmCust(XyCrmCust xyCrmCust) throws SQLException;
@@ -108,6 +110,9 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
                 if (xyCrmCust.getJoinUserid() != null && !"".equals(xyCrmCust.getJoinUserid())){
                     SET("JOIN_USERID = '"+xyCrmCust.getJoinUserid()+"'");
                 }
+                if (xyCrmCust.getJobSchedule() != null && !"".equals(xyCrmCust.getJobSchedule())){
+                    SET("JOB_SCHEDULE = '"+xyCrmCust.getJobSchedule()+"'");
+                }
                 WHERE("CUST_ID = '"+xyCrmCust.getCustId()+"'");
             }}.toString();
         }
@@ -122,9 +127,10 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @SelectProvider(type = getCrmCustByCondition.class,method = "getCrmCustByCondition")
-    public List<Map<String ,Object>> getCrmCustByCondition(XyCrmCust xyCrmCust , String condition , Integer startNum , Integer endNum) throws SQLException;
+    public List<Map<String ,Object>> getCrmCustByCondition(XyCrmCust xyCrmCust , String condition , Integer startNum ,
+                                                           Integer endNum ,String selectFlag ,String roleId ,String userId) throws SQLException;
     public class getCrmCustByCondition{
-        public String getCrmCustByCondition(XyCrmCust xyCrmCust ,String condition ,Integer startNum ,Integer endNum){
+        public String getCrmCustByCondition(XyCrmCust xyCrmCust ,String condition ,Integer startNum ,Integer endNum ,String selectFlag ,String roleId ,String userId){
             String tempSql = "";
             tempSql += "SELECT B.*  FROM ( SELECT A.*, ROWNUM RN \n" +
                     "FROM ( \n" +
@@ -150,22 +156,84 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
                     "\t\t\tIS_VAILD,\n" +
                     "\t\t\tJOIN_USERID \n" +
                     "\t\tFROM\n" +
-                    "\t\t\tXY_CRM_CUST \n" +
-                    "\t\tWHERE CUST_PROVIDER = '"+xyCrmCust.getCustProvider()+"' \n";
-                    if (xyCrmCust.getCustState() != null && !"".equals(xyCrmCust.getCustState())){
-                        tempSql += "\t\tAND CUST_STATE = "+xyCrmCust.getCustState()+"\n";
+                    "\t\t\tXY_CRM_CUST \n";
+            //判断是否为设计师
+            if ("90FFCAB4999A4A4E87BC1CC1125E952F".equals(roleId)){
+                tempSql += "\t\tWHERE JOIN_USERID = '"+userId+"' \n";
+            } else if("0081BD4E4C9B46BCBD0BD0F23FC481EA".equals(roleId)){
+                //判断是否为设计成效人
+                tempSql += "\t\tWHERE JOIN_USERID = '"+userId+"' \n";
+            } else {
+                tempSql += "\t\tWHERE CUST_PROVIDER IN  \n";
+                //判断是否为普通员工
+                if ("CE554D012D8C4E9B857B1228A33997EB".equals(roleId)){
+                    tempSql += "('"+userId+"')";
+                } else {
+                    //判断是否为首次进信息列表页
+                    if ("".equals(selectFlag) || selectFlag == null || "0".equals(selectFlag)){
+                        /*tempSql += "(SELECT\n" +
+                                "\tA.LOWER_USER_ID\n" +
+                                "FROM\n" +
+                                "\tXY_CRM_RELATION A \n" +
+                                "WHERE\n" +
+                                "\tA.EXPRESS = '" + roleId + "'\n" +
+                                "START WITH A.USER_ID = '" + userId + "'\n" +
+                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
+                                "UNION ALL\n" +
+                                "SELECT\n" +
+                                "\tA.LOWER_USER_ID\n" +
+                                "FROM\n" +
+                                "\tXY_CRM_RELATION A \n" +
+                                "START WITH A.USER_ID IN (\n" +
+                                "\tSELECT\n" +
+                                "\t\tB.LOWER_USER_ID\n" +
+                                "\tFROM\n" +
+                                "\t\tXY_CRM_RELATION B\n" +
+                                "\tWHERE \n" +
+                                "\t\tB.EXPRESS = '" + roleId + "'\n" +
+                                "AND\n" +
+                                "\t\tB.USER_ID = '" + userId + "'" +
+                                ")\n" +
+                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID)";*/
+                        tempSql += "(" +
+                                "SELECT N'" + userId + "' LOWER_USER_ID FROM dual\n" +
+                                "UNION ALL\n" +
+                                "SELECT B.LOWER_USER_ID FROM (\n" +
+                                "\tSELECT\n" +
+                                "\t\tA.* \n" +
+                                "\tFROM\n" +
+                                "\t\tXY_CRM_RELATION A \n" +
+                                "\tSTART WITH A.USER_ID = '" + userId + "' CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
+                                ") B\n" +
+                                "WHERE B.EXPRESS = '" + roleId + "'" +
+                                ")";
+                    } else {
+                        tempSql += "(SELECT N'" + userId + "' LOWER_USER_ID FROM dual\n" +
+                                "UNION ALL\n" +
+                                "SELECT\n" +
+                                "\tA.LOWER_USER_ID\n" +
+                                "FROM\n" +
+                                "\tXY_CRM_RELATION A \n" +
+                                "START WITH A.USER_ID = '" + userId + "'\n" +
+                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID)";
                     }
-                    tempSql += "\t\tORDER BY CREATE_TIME DESC\n" +
-                    "\t) \n";
-                    if (condition != null && !"".equals(condition)){
-                        tempSql += "\tWHERE CUST_NAME LIKE '%"+condition+"%' \n" +
-                                "\tOR CUST_MOBILE = '"+condition+"' \n" +
-                                "\tOR CUST_ADDRESS LIKE '%"+condition+"%' \n" +
-                                "\tOR CUST_ADDRESS_DETAIL LIKE '%"+condition+"%' \n";
-                    }
-                    tempSql += "\t) A  \n" +
-                                ")B\n" +
-                                "WHERE RN BETWEEN "+startNum+" AND "+endNum;
+                }
+            }
+            //判断是否根据信息状态查询
+            if (xyCrmCust.getCustState() != null && !"".equals(xyCrmCust.getCustState())){
+                tempSql += "\t\tAND CUST_STATE = "+xyCrmCust.getCustState()+"\n";
+            }
+            tempSql += "\t\tORDER BY CREATE_TIME DESC\n \t) \n";
+            //判断是否有查询条件
+            if (condition != null && !"".equals(condition)){
+                tempSql += "\tWHERE CUST_NAME LIKE '%"+condition+"%' \n" +
+                        "\tOR CUST_MOBILE = '"+condition+"' \n" +
+                        "\tOR CUST_ADDRESS LIKE '%"+condition+"%' \n" +
+                        "\tOR CUST_ADDRESS_DETAIL LIKE '%"+condition+"%' \n";
+            }
+            tempSql += "\t) A  \n" +
+                    ")B\n" +
+                    "WHERE RN BETWEEN "+startNum+" AND "+endNum;
             return tempSql;
         }
     }
@@ -198,7 +266,8 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             "\tCTR_CODE,\n" +
             "\tCUST_DELAY,\n" +
             "\tIS_VAILD,\n" +
-            "\tJOIN_USERID \n" +
+            "\tJOIN_USERID, \n" +
+            "\tJOB_SCHEDULE \n" +
             "FROM\n" +
             "\tXY_CRM_CUST \n" +
             "WHERE\n" +
@@ -206,5 +275,26 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             "</script>")
     public Map<String ,Object> getCrmCustInfoByCustId(String custId) throws SQLException;
 
+    /**
+     * 获取节点情况
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/9 16:52
+     * @param: [custId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\t(SELECT COUNT( 1 ) FROM XY_CWB_SK WHERE CTR_CODE = A.CTR_CODE) XY,\n" +
+            "\t(SELECT COUNT( 1 ) FROM XY_CUSTOMER_INFO WHERE CTR_CODE = A.CTR_CODE AND CTR_DRAW IS NOT NULL\t) LF,\n" +
+            "\t(SELECT COUNT( 1 ) FROM XY_HT_INFO WHERE CTR_CODE = A.CTR_CODE) HT,\n" +
+            "\t(SELECT COUNT( 1 ) FROM XY_BJD_MAIN WHERE CTR_CODE = A.CTR_CODE) JCBJ,\n" +
+            "\tA.JOB_SCHEDULE\n" +
+            "FROM \n" +
+            "\tXY_CRM_CUST A\n" +
+            "WHERE\n" +
+            "\tCUST_ID = #{custId,jdbcType=VARCHAR}" +
+            "</script>")
+    public Map<String ,Object> getNodeStatu(String custId) throws SQLException;
 
 }

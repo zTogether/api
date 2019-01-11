@@ -271,4 +271,67 @@ public interface UserMapper extends Mapper<TUser> {
             "AND IS_USED = '1'" +
             "</script>")
     public List<Map<String ,Object>> getCustProvider(String condition) throws SQLException;
+
+    /**
+     * 根据角色id获取用户信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 9:34
+     * @param: [roleId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tA.USER_ID,\n" +
+            "\tA.USER_TEL,\n" +
+            "\tA.USER_SEX,\n" +
+            "\tA.USER_NAME,\n" +
+            "\tD.ORG_NAME \n" +
+            "FROM\n" +
+            "\tXY_USER A\n" +
+            "\tLEFT JOIN XY_USER_ROLE B ON A.USER_ID = B.USER_ID\n" +
+            "\tLEFT JOIN XY_USER_ROLE_ORG C ON B.UR_ID = C.UR_ID\n" +
+            "\tLEFT JOIN XY_ORG D ON C.ORG_CODE = D.ORG_CODE \n" +
+            "WHERE\n" +
+            "\tB.ROLE_ID = #{roleId,jdbcType=VARCHAR}" +
+            "\tAND A.IS_USED = '1'" +
+            "</script>")
+    public List<Map<String ,Object>> getUserInfoByRoleId(String roleId) throws SQLException;
+
+    /**
+     * 根据custId获取某个旗舰店的设计师
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/6 12:42
+     * @param: [custId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT DISTINCT\n" +
+            "\tA.USER_ID,\n" +
+            "\tA.USER_TEL,\n" +
+            "\tA.USER_SEX,\n" +
+            "\tA.USER_NAME,\n" +
+            "\tD.ORG_NAME\n" +
+            "FROM\n" +
+            "\tXY_USER A\n" +
+            "\tLEFT JOIN XY_USER_ROLE B ON A.USER_ID = B.USER_ID\n" +
+            "\tLEFT JOIN XY_USER_ROLE_ORG C ON B.UR_ID = C.UR_ID\n" +
+            "\tLEFT JOIN XY_ORG D ON C.ORG_CODE = D.ORG_CODE \n" +
+            "WHERE\n" +
+            "\tB.ROLE_ID = '90FFCAB4999A4A4E87BC1CC1125E952F'\n" +
+            "AND\n" +
+            "\tD.ORG_CODE = (\n" +
+            "\t\tSELECT F.ORG_CODE \n" +
+            "\t\tFROM XY_USER_ROLE E\n" +
+            "\t\tLEFT JOIN XY_USER_ROLE_ORG F\n" +
+            "\t\tON E.UR_ID = F.UR_ID\n" +
+            "\t\tWHERE E.USER_ID = (SELECT JOIN_USERID FROM XY_CRM_CUST WHERE CUST_ID = #{custId,jdbcType=VARCHAR})\n" +
+            "\t\tAND E.ROLE_ID = '0081BD4E4C9B46BCBD0BD0F23FC481EA'\n" +
+            "\t)\n" +
+            "AND IS_USED = '1'\n" +
+            "ORDER BY A.USER_NAME" +
+            "</script>")
+    public List<Map<String ,Object>> getShopSjsByCustId(String custId) throws SQLException;
+
 }
