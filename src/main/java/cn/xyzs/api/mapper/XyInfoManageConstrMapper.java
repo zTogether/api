@@ -60,7 +60,7 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
     @Insert("<script>" +
             "INSERT INTO XY_INFOMANAGE_CONSTR(CTR_CODE,CONSTRUCTION_TYPE,BELONG_USER,ED_RECODE,RB_RECODE,BELONG_USER_TYPE,XH)\n" +
             "VALUES(#{ctrCode,jdbcType=VARCHAR},#{consType,jdbcType=VARCHAR},#{belongUser,jdbcType=VARCHAR}," +
-            "#{edRecode,jdbcType=VARCHAR},#{rbRecode,jdbcType=VARCHAR},#{userType,jdbcType=VARCHAR},#{xh,jdbcType=VARCHAR})" +
+            "#{edRecode,jdbcType=VARCHAR},#{rbRecode,jdbcType=VARCHAR},#{userType,jdbcType=VARCHAR},sysdate,#{xh,jdbcType=VARCHAR})" +
             "</script>")
     void addConstr(@Param("ctrCode") String ctrCode,@Param("consType") String consType,@Param("belongUser") String belongUser,
                    @Param("edRecode") String edRecode,@Param("rbRecode") String rbRecode,@Param("userType") String userType,@Param("xh") String xh)throws SQLException;
