@@ -65,7 +65,6 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
     void addConstr(@Param("ctrCode") String ctrCode,@Param("consType") String consType,@Param("belongUser") String belongUser,
                    @Param("edRecode") String edRecode,@Param("rbRecode") String rbRecode,@Param("userType") String userType,@Param("xh") String xh)throws SQLException;
 
-
     @Delete("<script>" +
             "DELETE FROM XY_INFOMANAGE_CONSTR\n" +
             "WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND CONSTRUCTION_TYPE=#{constrType,jdbcType=VARCHAR} " +
