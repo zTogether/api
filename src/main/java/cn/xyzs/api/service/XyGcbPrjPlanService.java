@@ -285,7 +285,6 @@ public class XyGcbPrjPlanService {
             List<Map<String,Object>> lcdList1 = xyGcbPrjPlanMapper.getLcdList(ctrCode);
             for (Map<String, Object> map : lcdList1) {
                 String orderJe = String.valueOf(map.get("JE"));
-                System.err.println(orderJe);
                 String orderSup = String.valueOf(map.get("ZC_SUP"));
                 String type = String.valueOf(map.get("ZCPB_DC"));
                 XyClbZcOrder xyClbZcOrder = new XyClbZcOrder();
