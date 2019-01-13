@@ -368,12 +368,13 @@ public class GoodController {
                                         String[] zcBrandArray,  String[] zcSupArray, String[] zcSpecArray,
                                         String[] zcMaterialArray,  String[] zcColorArray,  String[] zcUnitArray,
                                         String[] zcCycArray, String[] zcAreaArray , String[] zcVersionArray,
-                                        String[] zcShopStatusArray
+                                        String[] zcShopStatusArray,String[] zcpbDcArray,String orderIsReturn
     ){
         return goodService.addZcTHD(xyClbZcOrder,zcCodeArray,zcNameArray,zcTypeArray,zcPriceInArray,zcPriceOutArray,
                 zcQtyArray,zcBrandArray,zcSupArray,zcSpecArray,zcMaterialArray,zcColorArray,zcUnitArray,zcCycArray,
-                zcAreaArray,zcVersionArray,zcShopStatusArray);
+                zcAreaArray,zcVersionArray,zcShopStatusArray,zcpbDcArray,orderIsReturn);
     }
+
 
     /**
      * 获取订单金额与优惠金额
@@ -387,5 +388,33 @@ public class GoodController {
     @RequestMapping("/getOrderJeAndYhJe")
     public Map<String ,Object> getOrderJeAndYhJe(String orderId){
         return goodService.getOrderJeAndYhJe(orderId);
+    }
+
+    /**
+     *
+     * @Description: 根据档案号查询ZCPB_LIST中所有供应商
+     * @author: GeWeiliang
+     * @date: 2019\1\12 0012 9:32
+     * @param: [ctrCode]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getAllSup")
+    public Map<String,Object> getAllSupByCtrCode(String ctrCode){
+        return goodService.getAllSupByCtrCode(ctrCode);
+    }
+
+    /**
+     *
+     * @Description: 根据档案号以及供应商获取zcpb_list
+     * @author: GeWeiliang
+     * @date: 2019\1\12 0012 10:01
+     * @param: [ctrCode, sup]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getBuGoods")
+    public Map<String,Object> getBuGoods(String ctrCode,String orderSup){
+        return goodService.getBuGoods(ctrCode,orderSup);
     }
 }

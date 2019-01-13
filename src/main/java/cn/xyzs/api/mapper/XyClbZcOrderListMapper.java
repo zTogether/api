@@ -231,4 +231,25 @@ public interface XyClbZcOrderListMapper extends Mapper<XyClbZcOrderList>{
             "</script>")
     public List<Map<String ,Object>> addTHDLsit(XyClbZcOrderList xyClbZcOrderList) throws SQLException;
 
+    /**
+     *
+     * @Description: 补货单
+     * @author: GeWeiliang
+     * @date: 2019\1\12 0012 15:57
+     * @param: [orderId, zcCode, zcName, zcType, zcPriceIn, zcPriceOut, zcQty, zcBrand, zcSup, zcSpec, zcMaterial, zcColor, zcUnit, zcMark, zcCyc, zcArea, zcVersion]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO\n" +
+            "\t\tXY_CLB_ZC_ORDER_LIST\n" +
+            "\t\t(ORDER_ID,ROW_ID,ZC_CODE,ZC_NAME,ZC_TYPE,ZC_PRICE_IN,ZC_PRICE_OUT,\n" +
+            "\t\tZC_QTY,ZC_BRAND,ZC_SUP,ZC_SPEC,ZC_MATERIAL,ZC_COLOR,ZC_UNIT,ZC_MARK,ZC_CYC,\n" +
+            "\t\tZC_AREA,ZC_VERSION, ZC_SHOP_STATUS)\n" +
+            "\t\tVALUES(#{orderId,jdbcType=VARCHAR},sys_guid(),#{zcCode,jdbcType=VARCHAR},#{zcName,jdbcType=VARCHAR},#{zcType,jdbcType=VARCHAR},\n" +
+            "\t\t#{zcPriceIn,jdbcType=VARCHAR},#{zcPriceOut,jdbcType=VARCHAR},#{zcQty,jdbcType=VARCHAR},#{zcBrand,jdbcType=VARCHAR},#{zcSup,jdbcType=VARCHAR}," +
+            "\t\t#{zcSpec,jdbcType=VARCHAR},#{zcMaterial,jdbcType=VARCHAR},#{zcColor,jdbcType=VARCHAR},\n" +
+            "\t\t#{zcUnit,jdbcType=VARCHAR},#{zcMark,jdbcType=VARCHAR},#{zcCyc,jdbcType=VARCHAR},#{zcArea,jdbcType=VARCHAR},#{zcVersion,jdbcType=VARCHAR},0)" +
+            "</script>")
+    void addBOrderList(XyClbZcOrderList xyClbZcOrderList)throws SQLException;
+
 }

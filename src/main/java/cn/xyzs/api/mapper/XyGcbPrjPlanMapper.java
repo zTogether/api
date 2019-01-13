@@ -170,25 +170,45 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
 
     @Insert("<script>" +
             "INSERT INTO\n" +
-            "\t\tXY_CLB_ZC_ORDER (ORDER_ID,ORDER_DATE,CTR_CODE,OP_USERID,ORDER_JE,\n" +
-            "\t\tORDER_STATUS,ORDER_TYPE,ORDER_SUP,EDIT_TYPE,ORDER_DIS)\n" +
-            "\t\tVALUES(sys_guid(),SYSDATE,#{ctrCode,jdbcType=VARCHAR},#{opUserid,jdbcType=VARCHAR},\n" +
-            "\t\t#{orderJe,jdbcType=VARCHAR},1,#{orderType,jdbcType=VARCHAR},#{orderSup,jdbcType=VARCHAR},1,0)\n" +
+            "\tXY_CLB_ZC_ORDER (ORDER_ID,ORDER_DATE,CTR_CODE,OP_USERID,ORDER_JE,\n" +
+            "\tORDER_STATUS,ORDER_TYPE,ORDER_SUP,EDIT_TYPE,ORDER_DIS)\n" +
+            "\tVALUES(sys_guid(),SYSDATE,#{ctrCode,jdbcType=VARCHAR},#{opUserid,jdbcType=VARCHAR},\n" +
+            "\t#{orderJe,jdbcType=VARCHAR},1,#{orderType,jdbcType=VARCHAR},#{orderSup,jdbcType=VARCHAR},1,0)\n" +
             "</script>")
     @Options(useGeneratedKeys = true, keyProperty = "orderId", keyColumn = "ORDER_ID")
     void addOrder(XyClbZcOrder xyClbZcOrder)throws SQLException;
 
-    @Select("<script>" +
-            "SELECT B.ZCPB_ZC_CODE,C.ZC_NAME,NVL(B.ZCPB_ZC_TYPE,'-') ZC_TYPE,C.ZC_PRICE_IN,B.ZCPB_PRICE ZC_PRICE_OUT,\n" +
-            "A.QUANTITY,NVL(B.ZCPB_PP,'-') ZC_BRAND,C.ZC_SUP,NVL(B.ZCPB_SPEC,'-') ZC_SPEC,NVL(C.ZC_MATERIAL,'-') ZC_MATERIAL,\n" +
-            "NVL(C.ZC_COLOR,'-') ZC_COLOR,NVL(B.ZCPB_UNIT,'-') ZC_UNIT,NVL(C.ZC_CYC,0) ZC_CYC,C.ZC_AREA,NVL(B.ZCPB_VERSION,'-') ZC_VERSION," +
-            "NVL(A.MARK,'-') MARK,A.ROW_ID LCDID\n" +
-            "FROM XY_GCB_PRJ_LCD A\n" +
-            "LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID\n" +
-            "LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE\n" +
-            "WHERE A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND C.ZC_SUP=#{sup,jdbcType=VARCHAR}" +
-            "</script>")
-    List<Map<String,Object>> getOrderList(@Param("ctrCode") String ctrCode,@Param("sup") String orderSup) throws SQLException;
+//    @Select("<script>" +
+//            "SELECT B.ZCPB_ZC_CODE,C.ZC_NAME,NVL(B.ZCPB_ZC_TYPE,'-') ZC_TYPE,C.ZC_PRICE_IN,B.ZCPB_PRICE ZC_PRICE_OUT,\n" +
+//            "A.QUANTITY,NVL(B.ZCPB_PP,'-') ZC_BRAND,C.ZC_SUP,NVL(B.ZCPB_SPEC,'-') ZC_SPEC,NVL(C.ZC_MATERIAL,'-') ZC_MATERIAL,\n" +
+//            "NVL(C.ZC_COLOR,'-') ZC_COLOR,NVL(B.ZCPB_UNIT,'-') ZC_UNIT,NVL(C.ZC_CYC,0) ZC_CYC,C.ZC_AREA,NVL(B.ZCPB_VERSION,'-') ZC_VERSION," +
+//            "NVL(A.MARK,'-') MARK,A.ROW_ID LCDID\n" +
+//            "FROM XY_GCB_PRJ_LCD A\n" +
+//            "LEFT JOIN XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID\n" +
+//            "LEFT JOIN XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE\n" +
+//            "WHERE A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND C.ZC_SUP=#{sup,jdbcType=VARCHAR} " +
+//            "</script>")
+    @SelectProvider(type = getOrderList.class,method = "getOrderList")
+    List<Map<String,Object>> getOrderList(@Param("ctrCode") String ctrCode,@Param("sup") String orderSup,@Param("zcpbDc") String zcpbDc) throws SQLException;
+    class getOrderList{
+        public String getOrderList(@Param("ctrCode") String ctrCode,@Param("sup") String orderSup,@Param("zcpbDc") String zcpbDc){
+            return new SQL(){{
+                SELECT("B.ZCPB_ZC_CODE,C.ZC_NAME,NVL(B.ZCPB_ZC_TYPE,'-') ZC_TYPE,C.ZC_PRICE_IN,B.ZCPB_PRICE ZC_PRICE_OUT,\n" +
+                        "A.QUANTITY,NVL(B.ZCPB_PP,'-') ZC_BRAND,C.ZC_SUP,NVL(B.ZCPB_SPEC,'-') ZC_SPEC,NVL(C.ZC_MATERIAL,'-') ZC_MATERIAL,\n" +
+                        "NVL(C.ZC_COLOR,'-') ZC_COLOR,NVL(B.ZCPB_UNIT,'-') ZC_UNIT,NVL(C.ZC_CYC,0) ZC_CYC,C.ZC_AREA,NVL(B.ZCPB_VERSION,'-') ZC_VERSION,\n" +
+                        "NVL(A.MARK,'-') MARK,A.ROW_ID LCDID\n");
+                FROM("XY_GCB_PRJ_LCD A");
+                LEFT_OUTER_JOIN("XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID");
+                LEFT_OUTER_JOIN("XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE");
+                WHERE("A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND C.ZC_SUP=#{sup,jdbcType=VARCHAR}");
+                if (zcpbDc!=null&&zcpbDc!=""){
+                    WHERE("B.ZCPB_DC='11'");
+                }else{
+                    WHERE("B.ZCPB_DC <> '11'");
+                }
+            }}.toString();
+        }
+    }
 
     @Insert("<script>" +
             "INSERT INTO\n" +

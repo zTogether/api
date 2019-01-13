@@ -14,6 +14,11 @@ public class XyInfoManageConstrService {
     @Resource
     private XyInfoManageConstrMapper xyInfoManageConstrMapper;
 
+    @Resource
+    private MvSysSmsService mvSysSmsService;
+
+
+
     /**
      *
      * @Description: 根据档案号获取记录
@@ -214,6 +219,9 @@ public class XyInfoManageConstrService {
             String x = xyInfoManageConstrMapper.getCompNum(ctrCode);
             int xh = Integer.parseInt(x)+1;
             xyInfoManageConstrMapper.addComp(ctrCode,compContent,compType,limitDate,liableUser,opUser,xh);
+            String tel = xyInfoManageConstrMapper.userTel(liableUser);
+            String param = ctrCode +","+solveDate;
+            mvSysSmsService.snedMsgModel(tel,param,261096);
             code = "200";
             msg = "成功";
         }catch (SQLException e){

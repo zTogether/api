@@ -263,6 +263,35 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     @Options(useGeneratedKeys=true, keyProperty="orderId", keyColumn="ORDER_ID")
     public void addTHDorder(XyClbZcOrder xyClbZcOrder) throws SQLException;
 
+    @Insert("<script>" +
+            "INSERT INTO \n" +
+            "\tXY_CLB_ZC_ORDER ( \n" +
+            "\t\tORDER_ID,\n" +
+            "\t\tCTR_CODE,\n" +
+            "\t\tOP_USERID," +
+            "\t\tORDER_JE,\n" +
+            "\t\tORDER_STATUS,\n" +
+            "\t\tORDER_TYPE,\n" +
+            "\t\tORDER_SUP,\n" +
+            "\t\tEDIT_TYPE,\n" +
+            "\t\tORDER_ISRETURN\n" +
+            "\n" +
+            "\t) \n" +
+            "VALUES(\n" +
+            "\tsys_guid(),\n" +
+            "\t#{ctrCode,jdbcType=VARCHAR},\n" +
+            "\t#{opUserid,jdbcType=VARCHAR},\n" +
+            "\t#{orderJe,jdbcType=VARCHAR},\n" +
+            "\t'1',\n" +
+            "\t#{orderType,jdbcType=VARCHAR},\n" +
+            "\t#{orderSup,jdbcType=VARCHAR},\n" +
+            "\t'1',\n" +
+            "\t'0'\n" +
+            ")" +
+            "</script>")
+    @Options(useGeneratedKeys=true, keyProperty="orderId", keyColumn="ORDER_ID")
+    public void addBHDorder(XyClbZcOrder xyClbZcOrder) throws SQLException;
+
     /**
      * 根据orderid修改退货单金额
      * @Description:
@@ -288,5 +317,36 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "SELECT ORDER_JE,ORDER_DIS FROM XY_CLB_ZC_ORDER WHERE ORDER_ID = #{orderId,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String ,Object> getOrderJeAndYhJe(String orderId) throws SQLException;
+
+    /**
+     *
+     * @Description: 根据档案号查询供应商
+     * @author: GeWeiliang
+     * @date: 2019\1\12 0012 9:21
+     * @param: [ctrCode]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT DISTINCT B.SUP_NAME,B.SUP_CODE,A.CTR_CODE\n" +
+            "FROM XY_CLB_ZCPB_LIST A\n" +
+            "LEFT JOIN XY_CLB_ZC_DB D ON D.ZC_CODE=A.ZCPB_ZC_CODE\n" +
+            "LEFT JOIN XY_SUPPLIER B ON B.SUP_CODE=D.ZC_SUP\n" +
+            "WHERE  A.CTR_CODE =#{ctrCode,jdbcType=VARCHAR} AND A.ZCPB_ZC_CODE IS NOT NULL AND B.SUP_CODE IS NOT NULL\n" +
+            "ORDER BY B.SUP_NAME" +
+            "</script>")
+    List<Map<String,Object>> getAllSupByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
+
+    @Select("<script>" +
+            "SELECT D.ZC_CODE,D.ZC_NAME,A.ZCPB_ZC_TYPE,A.ZCPB_PRICE,\n" +
+            "\tD.ZC_PRICE_OUT,D.ZC_PRICE_IN,A.ZCPB_PP,B.SUP_CODE,A.ZCPB_SPEC,D.ZC_MATERIAL,\n" +
+            "\tD.ZC_COLOR,A.ZCPB_UNIT,A.ZCPB_MARK,D.ZC_CYC,D.ZC_AREA,A.ZCPB_VERSION,A.ZCPB_DC\n" +
+            "FROM XY_CLB_ZCPB_LIST A\n" +
+            "LEFT JOIN XY_CLB_ZC_DB D ON D.ZC_CODE=A.ZCPB_ZC_CODE\n" +
+            "LEFT JOIN XY_SUPPLIER B ON B.SUP_CODE=D.ZC_SUP\n" +
+            "WHERE D.ZC_CODE=A.ZCPB_ZC_CODE AND A.CTR_CODE =#{ctrCode,jdbcType=VARCHAR} AND B.SUP_CODE=#{sup,jdbcType=VARCHAR}\n" +
+            "ORDER BY A.ZCPB_ML" +
+            "</script>")
+    List<Map<String,Object>> getBuGoods(@Param("ctrCode") String ctrCode,@Param("sup") String orderSup)throws SQLException;
+
 
 }
