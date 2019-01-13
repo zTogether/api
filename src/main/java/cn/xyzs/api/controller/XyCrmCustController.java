@@ -3,6 +3,7 @@ package cn.xyzs.api.controller;
 import cn.xyzs.api.service.XyCrmCustService;
 import cn.xyzs.common.pojo.XyCrmCust;
 import cn.xyzs.common.pojo.XyCrmRelation;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,8 +28,8 @@ public class XyCrmCustController {
      */
     @ResponseBody
     @RequestMapping("/addCrmCust")
-    public Map<String ,Object> addCrmCust(XyCrmCust xyCrmCust){
-        return xyCrmCustService.addCrmCust(xyCrmCust);
+    public Map<String ,Object> addCrmCust(XyCrmCust xyCrmCust ,String xyUserId){
+        return xyCrmCustService.addCrmCust(xyCrmCust,xyUserId);
     }
 
     /**
@@ -227,8 +228,9 @@ public class XyCrmCustController {
      */
     @ResponseBody
     @RequestMapping("/disposeNode")
-    public Map<String ,Object> disposeNode(String jobSchedule ,String custId) {
-        return xyCrmCustService.disposeNode(jobSchedule,custId);
+    public Map<String ,Object> disposeNode(HttpServletRequest request , String roleId , String userId , String jobSchedule ,
+                                           String custId , String nodeName) {
+        return xyCrmCustService.disposeNode(request,roleId,userId,jobSchedule,custId,nodeName);
     }
 
     /**

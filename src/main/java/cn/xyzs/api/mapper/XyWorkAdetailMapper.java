@@ -191,4 +191,24 @@ public interface XyWorkAdetailMapper extends Mapper<XyWorkAdetail> {
             "AND NODE_ID = #{nodeId,jdbcType=VARCHAR}" +
             "</script>")
     public String isShow(@Param("nodeId") String nodeId ,@Param("custId") String custId) throws SQLException;
+
+    /**
+     * 是否可以进行处理
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/13 14:54
+     * @param: [custId, nodeId]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tCOUNT(1) \n" +
+            "FROM \n" +
+            "\tXY_WORK_ADETAIL \n" +
+            "WHERE \n" +
+            "\tNODE_ID = #{nodeId,jdbcType=VARCHAR} \n" +
+            "AND \n" +
+            "\tAPPLY_ID IN (SELECT APPLY_ID FROM XY_WORK_APPLY WHERE APPLY_CONTENT = #{custId,jdbcType=VARCHAR})" +
+            "</script>")
+    public Integer isDispose(@Param("custId") String custId ,@Param("nodeId") String nodeId) throws SQLException;
 }

@@ -99,4 +99,5 @@ public interface XyCrmRelationMapper extends Mapper<XyCrmRelation> {
             "</script>")
     public Integer getSubordinateCount(@Param("express") String express ,@Param("userId") String userId) throws SQLException;
 
+
 }
