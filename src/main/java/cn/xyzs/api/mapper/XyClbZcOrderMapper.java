@@ -331,7 +331,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
             "FROM XY_CLB_ZCPB_LIST A\n" +
             "LEFT JOIN XY_CLB_ZC_DB D ON D.ZC_CODE=A.ZCPB_ZC_CODE\n" +
             "LEFT JOIN XY_SUPPLIER B ON B.SUP_CODE=D.ZC_SUP\n" +
-            "WHERE  A.CTR_CODE =#{ctrCode,jdbcType=VARCHAR} AND A.ZCPB_ZC_CODE IS NOT NULL\n" +
+            "WHERE  A.CTR_CODE =#{ctrCode,jdbcType=VARCHAR} AND A.ZCPB_ZC_CODE IS NOT NULL AND B.SUP_CODE IS NOT NULL\n" +
             "ORDER BY B.SUP_NAME" +
             "</script>")
     List<Map<String,Object>> getAllSupByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
