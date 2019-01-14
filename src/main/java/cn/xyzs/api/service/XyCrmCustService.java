@@ -3,8 +3,11 @@ package cn.xyzs.api.service;
 import cn.xyzs.api.mapper.*;
 import cn.xyzs.common.pojo.XyCrmCust;
 import cn.xyzs.common.pojo.XyCrmRelation;
+import cn.xyzs.common.pojo.XyLog;
+import cn.xyzs.common.pojo.XyRoleFuc;
 import cn.xyzs.common.pojo.sys.XyWorkAdetail;
 import cn.xyzs.common.pojo.sys.XyWorkApply;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +38,16 @@ public class XyCrmCustService {
     private XyWorkNodeMapper xyWorkNodeMapper;
 
     @Resource
-
     private XyCustomerInfoMapper xyCustomerInfoMapper;
+
+    @Resource
+    private XyLogMapper xyLogMapper;
+
+    @Resource
+    private  XyRoleFucMapper xyRoleFucMapper;
+
+    @Resource
+    private VwXyWorkInfoMapper vwXyWorkInfoMapper;
 
     /**
      * 添加意向信息
@@ -47,7 +58,7 @@ public class XyCrmCustService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String ,Object> addCrmCust(XyCrmCust xyCrmCust){
+    public Map<String ,Object> addCrmCust(XyCrmCust xyCrmCust ,String xyUserId){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
@@ -56,6 +67,17 @@ public class XyCrmCustService {
             Long nowTime = date.getTime();
             xyCrmCust.setCreateTime(String.valueOf(nowTime));
             xyCrmCustMapper.addCrmCust(xyCrmCust);
+            XyWorkApply xyWorkApply = new XyWorkApply();
+            xyWorkApply.setApplyUserid(xyUserId);
+            xyWorkApply.setApplyContent(xyCrmCust.getCustId());
+            xyWorkApply.setActId("ABBF0CF0C1C64B388AC2675DCE85B677");
+            xyWorkApply.setApplyTitle("有效信息转换");
+            xyWorkApply.setApplyAddtime(String.valueOf(nowTime));
+            xyWorkApplyMapper.addWorkApply(xyWorkApply);
+            XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
+            xyWorkAdetail.setNodeId(String.valueOf(xyWorkNodeMapper.getFristNodeInfoByFlowId("ABBF0CF0C1C64B388AC2675DCE85B677").get("NODE_ID")));
+            xyWorkAdetail.setApplyId(xyWorkApply.getApplyId());
+            xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -251,7 +273,7 @@ public class XyCrmCustService {
             Integer count = xyWorkApplyMapper.getCountByCustId(custId);
             //判断是否为店面成效人且count<1
             if (count < 1 && "5E9F63D495F8490BA6EF69F37322408B".equals(roleId)){
-                //虚拟第一个节点
+               /* //虚拟第一个节点
                 //节点名称
                 waitDisposeMatterNodeInfo.put("NODE_NAME","有效信息转换");
                 //操作按钮map
@@ -268,7 +290,7 @@ public class XyCrmCustService {
                 tempMap.put("nodeFlag","0");
                 btnsInfo.add(tempMap);
                 obj.put("btnsInfo",btnsInfo);
-                obj.put("waitDisposeMatterNodeInfo",waitDisposeMatterNodeInfo);
+                obj.put("waitDisposeMatterNodeInfo",waitDisposeMatterNodeInfo);*/
             } else {
                 //获取下一个代办节点信息
                 waitDisposeMatterNodeInfo = xyWorkAdetailMapper.getWaitDisposeMatterNodeInfo(custId,roleId,"ABBF0CF0C1C64B388AC2675DCE85B677");
@@ -296,7 +318,7 @@ public class XyCrmCustService {
                         tempMap.put("wadId",waitDisposeMatterNodeInfo.get("WAD_ID"));
                         tempMap.put("buttonName",waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON"));
                         tempMap.put("afterNodeId",waitDisposeMatterNodeInfo.get("CANCENODE_ID"));
-                        tempMap.put("wadOperation","2");
+                        tempMap.put("wadOperation","3");
                         tempMap.put("flag","1");
                         tempMap.put("nodeFlag","0");
                         btnsInfo.add(tempMap);
@@ -333,52 +355,58 @@ public class XyCrmCustService {
                             obj.put("waitDisposeMatterNodeInfo",waitDisposeMatterNodeInfo);
                         }
                     } else if (count == 2){
-                        boolean isShowB = false;
-                        //如果角色为普通员工
-                        if ("CE554D012D8C4E9B857B1228A33997EB".equals(roleId)){
-                            String isShow = xyWorkApplyMapper.isShow(custId);
-                            if ("0".equals(isShow)){
-                                isShowB = true;
+
+                        if (waitDisposeMatterNodeInfo != null){
+
+                            boolean isShowB = false;
+                            //如果角色为普通员工
+                            if ("CE554D012D8C4E9B857B1228A33997EB".equals(roleId)){
+                                String isShow = xyWorkApplyMapper.isShow(custId);
+                                if ("0".equals(isShow)){
+                                    isShowB = true;
+                                }
+                            } else if ("A3224B89C92A4F4593C8B755FE0BC645".equals(roleId)){
+                                //如果角色为品推
+                                String isShow = xyWorkAdetailMapper.isShow(custId,String.valueOf(xyWorkNodeMapper.getFristNodeInfoByFlowId("3B258CA43E8D46D68BB19EBA8772596C").get("NODE_ID")));
+                                if ("0".equals(isShow)){
+                                    isShowB = true;
+                                }
                             }
-                        } else if ("A3224B89C92A4F4593C8B755FE0BC645".equals(roleId)){
-                            //如果角色为品推
-                            String isShow = xyWorkAdetailMapper.isShow(custId,String.valueOf(xyWorkNodeMapper.getFristNodeInfoByFlowId("3B258CA43E8D46D68BB19EBA8772596C").get("NODE_ID")));
-                            if ("0".equals(isShow)){
-                                isShowB = true;
+
+                            if (isShowB){
+                                //是按钮
+                                if (!"".equals(waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON")) &&
+                                        !"null".equals(waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON")) &&
+                                        waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON") != null){
+                                    Map<String ,Object> tempMap = new HashMap<>();
+                                    tempMap.put("wadId",waitDisposeMatterNodeInfo.get("WAD_ID"));
+                                    tempMap.put("buttonName",waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON"));
+                                    tempMap.put("afterNodeId",waitDisposeMatterNodeInfo.get("CONFIRMNODE_ID"));
+                                    tempMap.put("wadOperation","1");
+                                    tempMap.put("flag","1");
+                                    tempMap.put("nodeFlag","1");
+                                    btnsInfo.add(tempMap);
+                                }
+
+                                //否按钮
+                                if (!"".equals(waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON")) &&
+                                        !"null".equals(waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON")) &&
+                                        waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON") != null){
+                                    Map<String ,Object> tempMap = new HashMap<>();
+                                    tempMap.put("wadId",waitDisposeMatterNodeInfo.get("WAD_ID"));
+                                    tempMap.put("buttonName",waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON"));
+                                    tempMap.put("afterNodeId",waitDisposeMatterNodeInfo.get("CANCENODE_ID"));
+                                    tempMap.put("wadOperation","3");
+                                    tempMap.put("flag","1");
+                                    tempMap.put("nodeFlag","1");
+                                    btnsInfo.add(tempMap);
+                                }
+                                obj.put("btnsInfo",btnsInfo);
+                                obj.put("waitDisposeMatterNodeInfo",waitDisposeMatterNodeInfo);
                             }
                         }
 
-                        if (isShowB){
-                            //是按钮
-                            if (!"".equals(waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON")) &&
-                                    !"null".equals(waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON")) &&
-                                    waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON") != null){
-                                Map<String ,Object> tempMap = new HashMap<>();
-                                tempMap.put("wadId",waitDisposeMatterNodeInfo.get("WAD_ID"));
-                                tempMap.put("buttonName",waitDisposeMatterNodeInfo.get("CONFIRMNODE_BUTTON"));
-                                tempMap.put("afterNodeId",waitDisposeMatterNodeInfo.get("CONFIRMNODE_ID"));
-                                tempMap.put("wadOperation","1");
-                                tempMap.put("flag","1");
-                                tempMap.put("nodeFlag","1");
-                                btnsInfo.add(tempMap);
-                            }
 
-                            //否按钮
-                            if (!"".equals(waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON")) &&
-                                    !"null".equals(waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON")) &&
-                                    waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON") != null){
-                                Map<String ,Object> tempMap = new HashMap<>();
-                                tempMap.put("wadId",waitDisposeMatterNodeInfo.get("WAD_ID"));
-                                tempMap.put("buttonName",waitDisposeMatterNodeInfo.get("CANCENODE_BUTTON"));
-                                tempMap.put("afterNodeId",waitDisposeMatterNodeInfo.get("CANCENODE_ID"));
-                                tempMap.put("wadOperation","2");
-                                tempMap.put("flag","1");
-                                tempMap.put("nodeFlag","1");
-                                btnsInfo.add(tempMap);
-                            }
-                            obj.put("btnsInfo",btnsInfo);
-                            obj.put("waitDisposeMatterNodeInfo",waitDisposeMatterNodeInfo);
-                        }
 
                     }
                 }
@@ -474,7 +502,20 @@ public class XyCrmCustService {
         Map<String,Object> obj = new HashMap<>();
         try {
             Map<String ,Object> custCust = xyCrmCustMapper.getCrmCustInfoByCustId(custId);
-            List<Map<String ,Object>> infoHistoryFlowList = xyWorkApplyMapper.getInfoHistoryFlow(custId);
+            List<Map<String ,Object>> infoHistoryFlowList = vwXyWorkInfoMapper.getInfoHistoryFlowList(custId);
+            for (Map<String, Object> map : infoHistoryFlowList) {
+                if ("初次报价".equals(map.get("RESULT"))){
+                    map.put("RESULT","基础报价");
+                } else if ("收款".equals(map.get("RESULT"))){
+                    map.put("RESULT","协议");
+                } else if ("确认图纸".equals(map.get("RESULT"))){
+                    map.put("RESULT","量房图纸");
+                } else if ("生成草稿合同".equals(map.get("RESULT"))){
+                    map.put("RESULT","合同");
+                }
+
+                map.put("BTIME",String.valueOf(map.get("BTIME")).substring(0,11));
+            }
             obj.put("custCust",custCust);
             obj.put("infoHistoryFlowList",infoHistoryFlowList);
             code = "200";
@@ -516,8 +557,16 @@ public class XyCrmCustService {
             countList.add(analyzeImgData.get("C"));
             countList.add(analyzeImgData.get("D"));
             countList.add(analyzeImgData.get("E"));
+
+            Integer count = Integer.valueOf(String.valueOf(analyzeImgData.get("A")));
+            count += Integer.valueOf(String.valueOf(analyzeImgData.get("B")));
+            count += Integer.valueOf(String.valueOf(analyzeImgData.get("C")));
+            count += Integer.valueOf(String.valueOf(analyzeImgData.get("D")));
+            count += Integer.valueOf(String.valueOf(analyzeImgData.get("E")));
+
             obj.put("dateList",dateList);
             obj.put("countList",countList);
+            obj.put("count",count);
             code = "200";
             msg = "成功";
         }catch (SQLException e){
@@ -546,79 +595,81 @@ public class XyCrmCustService {
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         try {
-            if ("0".equals(flag)){
-                XyWorkApply xyWorkApply = new XyWorkApply();
-                xyWorkApply.setApplyUserid(xyUserId);
-                xyWorkApply.setApplyContent(custId);
-                if ("0".equals(nodeFlag)){
-                    xyWorkApply.setActId("ABBF0CF0C1C64B388AC2675DCE85B677");
-                    xyWorkApply.setApplyTitle("有效信息转换");
-                } else  if ("1".equals(nodeFlag)) {
+
+            Integer isDispose = xyWorkAdetailMapper.isDispose(custId,afterNodeId);
+            if (isDispose < 1){
+                if ("0".equals(flag)){
+                    XyWorkApply xyWorkApply = new XyWorkApply();
+                    xyWorkApply.setApplyUserid(xyUserId);
+                    xyWorkApply.setApplyContent(custId);
                     XyCrmCust xyCrmCust = new XyCrmCust();
                     xyCrmCust.setCustState("3");
                     xyCrmCust.setCustId(custId);
                     xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
                     xyWorkApply.setActId("3B258CA43E8D46D68BB19EBA8772596C");
                     xyWorkApply.setApplyTitle("攻关单处理");
-                }
-                Date date = new Date();
-                Long nowTime = date.getTime();
-                xyWorkApply.setApplyAddtime(String.valueOf(nowTime));
-                xyWorkApplyMapper.addWorkApply(xyWorkApply);
-                XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
-                xyWorkAdetail.setNodeId(afterNodeId);
-                xyWorkAdetail.setApplyId(xyWorkApply.getApplyId());
-                xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
-                code = "200";
-                msg = "";
-            } else {
-                if ("合约成效人派单".equals(nodeName)){
-                    //告知前台需要选择设计成效人
-                    Map<String ,Object> resultDisposeInfo = new HashMap<>();
-                    resultDisposeInfo.put("afterNodeId",afterNodeId);
-                    resultDisposeInfo.put("wadOperation",wadOperation);
-                    resultDisposeInfo.put("wadId",wadId);
-                    resultDisposeInfo.put("custId",custId);
-                    obj.put("resultDisposeInfo",resultDisposeInfo);
-                    code = "801";
-                    msg = "需要选择设计成效人";
-                } else if ("设计派单".equals(nodeName)) {
-                    //告知前台需要选择下属设计师
-                    Map<String ,Object> resultDisposeInfo = new HashMap<>();
-                    resultDisposeInfo.put("afterNodeId",afterNodeId);
-                    resultDisposeInfo.put("wadOperation",wadOperation);
-                    resultDisposeInfo.put("wadId",wadId);
-                    resultDisposeInfo.put("custId",custId);
-                    obj.put("resultDisposeInfo",resultDisposeInfo);
-                    code = "802";
-                    msg = "需要选择下属设计师";
-                } else {
-                    XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
-                    xyWorkAdetail.setXyUserId(xyUserId);
-                    xyWorkAdetail.setWadRemark(wadRemark);
-                    xyWorkAdetail.setWadOperation(wadOperation);
                     Date date = new Date();
                     Long nowTime = date.getTime();
-                    xyWorkAdetail.setWadAddtime(String.valueOf(nowTime));
-                    xyWorkAdetail.setWadId(wadId);
-                    xyWorkAdetailMapper.updateWorkDetail(xyWorkAdetail);
-                    if (!"".equals(afterNodeId) && !"null".equals(afterNodeId) && afterNodeId != null){
-                        xyWorkAdetail.setNodeId(afterNodeId);
-                        xyWorkAdetail.setApplyId(xyWorkApplyMapper.getApplyId(custId));
-                        xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
-                    }
-                    xyWorkApplyMapper.updateApplyState(custId,wadId);
-                    XyCrmCust xyCrmCust = new XyCrmCust();
-                    if ("1".equals(wadOperation)){
-                        xyCrmCust.setCustState("2");
-                    } else {
-                        xyCrmCust.setCustState("1");
-                    }
-                    xyCrmCust.setCustId(custId);
-                    xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
+                    xyWorkApply.setApplyAddtime(String.valueOf(nowTime));
+                    xyWorkApplyMapper.addWorkApply(xyWorkApply);
+                    XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
+                    xyWorkAdetail.setNodeId(afterNodeId);
+                    xyWorkAdetail.setApplyId(xyWorkApply.getApplyId());
+                    xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
                     code = "200";
                     msg = "";
+                } else {
+                    if ("合约成效人派单".equals(nodeName)){
+                        //告知前台需要选择设计成效人
+                        Map<String ,Object> resultDisposeInfo = new HashMap<>();
+                        resultDisposeInfo.put("afterNodeId",afterNodeId);
+                        resultDisposeInfo.put("wadOperation",wadOperation);
+                        resultDisposeInfo.put("wadId",wadId);
+                        resultDisposeInfo.put("custId",custId);
+                        obj.put("resultDisposeInfo",resultDisposeInfo);
+                        code = "801";
+                        msg = "需要选择设计成效人";
+                    } else if ("设计派单".equals(nodeName)) {
+                        //告知前台需要选择下属设计师
+                        Map<String ,Object> resultDisposeInfo = new HashMap<>();
+                        resultDisposeInfo.put("afterNodeId",afterNodeId);
+                        resultDisposeInfo.put("wadOperation",wadOperation);
+                        resultDisposeInfo.put("wadId",wadId);
+                        resultDisposeInfo.put("custId",custId);
+                        obj.put("resultDisposeInfo",resultDisposeInfo);
+                        code = "802";
+                        msg = "需要选择下属设计师";
+                    } else {
+                        XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
+                        xyWorkAdetail.setXyUserId(xyUserId);
+                        xyWorkAdetail.setWadRemark(wadRemark);
+                        xyWorkAdetail.setWadOperation(wadOperation);
+                        Date date = new Date();
+                        Long nowTime = date.getTime();
+                        xyWorkAdetail.setWadAddtime(String.valueOf(nowTime));
+                        xyWorkAdetail.setWadId(wadId);
+                        xyWorkAdetailMapper.updateWorkDetail(xyWorkAdetail);
+                        if (!"".equals(afterNodeId) && !"null".equals(afterNodeId) && afterNodeId != null){
+                            xyWorkAdetail.setNodeId(afterNodeId);
+                            xyWorkAdetail.setApplyId(xyWorkApplyMapper.getApplyId(custId));
+                            xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
+                        }
+                        xyWorkApplyMapper.updateApplyState(custId,wadId);
+                        XyCrmCust xyCrmCust = new XyCrmCust();
+                        if ("1".equals(wadOperation)){
+                            xyCrmCust.setCustState("2");
+                        } else {
+                            xyCrmCust.setCustState("1");
+                        }
+                        xyCrmCust.setCustId(custId);
+                        xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
+                        code = "200";
+                        msg = "";
+                    }
                 }
+            } else {
+                code = "401";
+                msg = "此节点已被他人处理";
             }
 
         }catch (SQLException e){
@@ -674,25 +725,32 @@ public class XyCrmCustService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try {
-            XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
-            xyWorkAdetail.setXyUserId(xyUserId);
-            xyWorkAdetail.setWadRemark(wadRemark);
-            xyWorkAdetail.setWadOperation(wadOperation);
-            Date date = new Date();
-            Long nowTime = date.getTime();
-            xyWorkAdetail.setWadAddtime(String.valueOf(nowTime));
-            xyWorkAdetail.setWadId(wadId);
-            xyWorkAdetailMapper.updateWorkDetail(xyWorkAdetail);
-            xyWorkAdetail.setNodeId(afterNodeId);
-            xyWorkAdetail.setApplyId(xyWorkApplyMapper.getApplyId(custId));
-            xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
-            xyWorkApplyMapper.updateApplyState(custId,wadId);
-            XyCrmCust xyCrmCust = new XyCrmCust();
-            xyCrmCust.setCustId(custId);
-            xyCrmCust.setJoinUserid(sjcxr);
-            xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
-            code = "200";
-            msg = "";
+            Integer isDispose = xyWorkAdetailMapper.isDispose(custId,afterNodeId);
+            if (isDispose < 1){
+
+                XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
+                xyWorkAdetail.setXyUserId(xyUserId);
+                xyWorkAdetail.setWadRemark(wadRemark);
+                xyWorkAdetail.setWadOperation(wadOperation);
+                Date date = new Date();
+                Long nowTime = date.getTime();
+                xyWorkAdetail.setWadAddtime(String.valueOf(nowTime));
+                xyWorkAdetail.setWadId(wadId);
+                xyWorkAdetailMapper.updateWorkDetail(xyWorkAdetail);
+                xyWorkAdetail.setNodeId(afterNodeId);
+                xyWorkAdetail.setApplyId(xyWorkApplyMapper.getApplyId(custId));
+                xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
+                xyWorkApplyMapper.updateApplyState(custId,wadId);
+                XyCrmCust xyCrmCust = new XyCrmCust();
+                xyCrmCust.setCustId(custId);
+                xyCrmCust.setJoinUserid(sjcxr);
+                xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
+                code = "200";
+                msg = "";
+            } else {
+                code = "401";
+                msg = "此节点已被他人处理";
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
@@ -745,40 +803,45 @@ public class XyCrmCustService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try {
-
-            Map<String ,Object> custInfo = xyCrmCustMapper.getCrmCustInfoByCustId(custId);
-            String tempVariable = String.valueOf(custInfo.get("CUST_ADDRESS")) + String.valueOf(custInfo.get("CUST_ADDRESS_DETAIL"));
-            Integer exists = xyCustomerInfoMapper.existsByCtrAddr(tempVariable);
-            if (exists > 0){
-                code = "400";
-                msg = "此信息地址与现有客户地址重复，请核实后重试！";
-            } else {
-                Date date = new Date();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy");
-                String newestCtrCode = xyCustomerInfoMapper.getNewestCtrCode(format.format(date));
-                if (newestCtrCode == null || newestCtrCode == ""){
-                    newestCtrCode = format.format(date) + "000001";
+            Integer isDispose = xyWorkAdetailMapper.isDispose(custId,afterNodeId);
+            if (isDispose < 1){
+                Map<String ,Object> custInfo = xyCrmCustMapper.getCrmCustInfoByCustId(custId);
+                String tempVariable = String.valueOf(custInfo.get("CUST_ADDRESS")) + String.valueOf(custInfo.get("CUST_ADDRESS_DETAIL"));
+                Integer exists = xyCustomerInfoMapper.existsByCtrAddr(tempVariable);
+                if (exists > 0){
+                    code = "400";
+                    msg = "此信息地址与现有客户地址重复，请核实后重试！";
+                } else {
+                    Date date = new Date();
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy");
+                    String newestCtrCode = xyCustomerInfoMapper.getNewestCtrCode(format.format(date));
+                    if (newestCtrCode == null || newestCtrCode == ""){
+                        newestCtrCode = format.format(date) + "000001";
+                    }
+                    xyCustomerInfoMapper.pdAddCustInfo(newestCtrCode,sjs,custId);
+                    XyCrmCust xyCrmCust = new XyCrmCust();
+                    xyCrmCust.setCustId(custId);
+                    xyCrmCust.setCtrCode(newestCtrCode);
+                    //xyCrmCust.setJoinUserid(sjs);
+                    xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
+                    XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
+                    xyWorkAdetail.setXyUserId(xyUserId);
+                    xyWorkAdetail.setWadRemark(wadRemark);
+                    xyWorkAdetail.setWadOperation(wadOperation);
+                    Long nowTime = date.getTime();
+                    xyWorkAdetail.setWadAddtime(String.valueOf(nowTime));
+                    xyWorkAdetail.setWadId(wadId);
+                    xyWorkAdetailMapper.updateWorkDetail(xyWorkAdetail);
+                    //xyWorkAdetail.setNodeId(afterNodeId);
+                    //xyWorkAdetail.setApplyId(xyWorkApplyMapper.getApplyId(custId));
+                    //xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
+                    xyWorkApplyMapper.updateApplyState(custId,wadId);
+                    code = "200";
+                    msg = "";
                 }
-                xyCustomerInfoMapper.pdAddCustInfo(newestCtrCode,sjs,custId);
-                XyCrmCust xyCrmCust = new XyCrmCust();
-                xyCrmCust.setCustId(custId);
-                xyCrmCust.setCtrCode(newestCtrCode);
-                //xyCrmCust.setJoinUserid(sjs);
-                xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
-                XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
-                xyWorkAdetail.setXyUserId(xyUserId);
-                xyWorkAdetail.setWadRemark(wadRemark);
-                xyWorkAdetail.setWadOperation(wadOperation);
-                Long nowTime = date.getTime();
-                xyWorkAdetail.setWadAddtime(String.valueOf(nowTime));
-                xyWorkAdetail.setWadId(wadId);
-                xyWorkAdetailMapper.updateWorkDetail(xyWorkAdetail);
-                //xyWorkAdetail.setNodeId(afterNodeId);
-                //xyWorkAdetail.setApplyId(xyWorkApplyMapper.getApplyId(custId));
-                //xyWorkAdetailMapper.addAfterNodeInfo(xyWorkAdetail);
-                xyWorkApplyMapper.updateApplyState(custId,wadId);
-                code = "200";
-                msg = "";
+            } else {
+                code = "401";
+                msg = "此节点已被他人处理";
             }
 
         }catch (SQLException e){
@@ -798,11 +861,30 @@ public class XyCrmCustService {
      * @param: [jobSchedule, custId]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String ,Object> disposeNode(String jobSchedule ,String custId) {
+    @Transactional
+    public Map<String ,Object> disposeNode(HttpServletRequest request ,String roleId ,String userId ,String jobSchedule ,
+                                           String custId ,String nodeName) {
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try {
+            XyRoleFuc xyRoleFuc = new XyRoleFuc();
+            xyRoleFuc.setRoleId(roleId);
+            xyRoleFuc.setCompoId("FA7C6EC14556431494C88F9A5B9F3EB9");
+            List<Map<String ,Object>> roleFucList = xyRoleFucMapper.getRolefuc(xyRoleFuc);
+
+            XyLog xyLog = new XyLog();
+            //操作人id
+            xyLog.setUserId(userId);
+            xyLog.setCompoId(String.valueOf(roleFucList.get(0).get("COMPO_ID")));
+            xyLog.setOpId(String.valueOf(roleFucList.get(0).get("OP_ID")));
+            //操作人ip
+            xyLog.setLogIp(getIpAddr(request));
+            //节点名称
+            xyLog.setLogResult(nodeName);
+            //ctrCode
+            xyLog.setLogDataid(String.valueOf(xyCrmCustMapper.getCrmCustInfoByCustId(custId).get("CTR_CODE")));
+            xyLogMapper.addXyLog(xyLog);
             XyCrmCust xyCrmCust = new XyCrmCust();
             xyCrmCust.setCustId(custId);
             xyCrmCust.setJobSchedule(jobSchedule);
@@ -843,6 +925,52 @@ public class XyCrmCustService {
             resultMap.put("msg",msg);
         }
         return resultMap;
+    }
+
+    /**
+     * 获取用户真实IP地址，不使用request.getRemoteAddr()的原因是有可能用户使用了代理软件方式避免真实IP地址,
+     * 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/12 9:50
+     * @param: [request]
+     * @return: java.lang.String
+     */
+    private String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        System.out.println("x-forwarded-for ip: " + ip);
+        if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            if( ip.indexOf(",")!=-1 ){
+                ip = ip.split(",")[0];
+            }
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+            System.out.println("Proxy-Client-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+            System.out.println("WL-Proxy-Client-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+            System.out.println("HTTP_CLIENT_IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            System.out.println("HTTP_X_FORWARDED_FOR ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+            System.out.println("X-Real-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            System.out.println("getRemoteAddr ip: " + ip);
+        }
+        System.out.println("获取客户端ip: " + ip);
+        return ip;
     }
 
 }

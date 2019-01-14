@@ -33,7 +33,7 @@ public interface XyWorkApplyMapper extends Mapper<XyWorkApply> {
             "ON B.NODE_ID = C.NODE_ID\n" +
             "WHERE A.APPLY_CONTENT = #{custId,jdbcType=VARCHAR}\n" +
             "AND B.WAD_OPERATION <![CDATA[!=]]> '0'\n" +
-            "ORDER BY B.WAD_ADDTIME DESC" +
+            "ORDER BY B.WAD_ADDTIME " +
             "</script>")
     public List<Map<String ,Object>> getInfoHistoryFlow(String custId) throws SQLException;
 
@@ -96,14 +96,18 @@ public interface XyWorkApplyMapper extends Mapper<XyWorkApply> {
             "\t\tWHERE WAD_ID = #{wadId,jdbcType=VARCHAR}\n" +
             "\t)\n" +
             "WHERE\n" +
-            "\tAPPLY_ID = (\n" +
-            "\t\tSELECT\n" +
-            "\t\t\tAPPLY_ID \n" +
-            "\t\tFROM\n" +
-            "\t\t\tXY_WORK_APPLY \n" +
-            "\t\tWHERE\n" +
-            "\t\tAPPLY_CONTENT = #{custId,jdbcType=VARCHAR} \t\n" +
-            "\t)" +
+            "\tAPPLY_ID = (SELECT B.APPLY_ID  FROM ( SELECT A.*, ROWNUM RN \n" +
+            "FROM ( \n" +
+            "\tSELECT\n" +
+            "\t\tAPPLY_ID \n" +
+            "\tFROM\n" +
+            "\t\tXY_WORK_APPLY \n" +
+            "\tWHERE\n" +
+            "\t\tAPPLY_CONTENT = #{custId,jdbcType=VARCHAR}\n" +
+            "\tORDER BY APPLY_ADDTIME\n" +
+            "\t) A  \n" +
+            ")B\n" +
+            "WHERE RN BETWEEN 1 AND 1)" +
             "</script>")
     public void updateApplyState(@Param("custId") String custId , @Param("wadId") String wadId) throws SQLException;
 
@@ -116,12 +120,18 @@ public interface XyWorkApplyMapper extends Mapper<XyWorkApply> {
      * @return: java.lang.String
      */
     @Select("<script>" +
-            "SELECT \n" +
-            "\tAPPLY_ID  \n" +
-            "FROM \n" +
-            "    XY_WORK_APPLY  \n" +
-            "WHERE \n" +
-            "    APPLY_CONTENT = #{custId,jdbcType=VARCHAR}" +
+            "SELECT B.APPLY_ID  FROM ( SELECT A.*, ROWNUM RN \n" +
+            "FROM ( \n" +
+            "\tSELECT\n" +
+            "\t\tAPPLY_ID \n" +
+            "\tFROM\n" +
+            "\t\tXY_WORK_APPLY \n" +
+            "\tWHERE\n" +
+            "\t\tAPPLY_CONTENT = #{custId,jdbcType=VARCHAR}\n" +
+            "\tORDER BY APPLY_ADDTIME\n" +
+            "\t) A  \n" +
+            ")B\n" +
+            "WHERE RN BETWEEN 1 AND 1" +
             "</script>")
     public String getApplyId(String custId) throws SQLException;
 

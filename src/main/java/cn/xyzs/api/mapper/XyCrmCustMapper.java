@@ -1,10 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyCrmCust;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -43,6 +40,7 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             "\t'0000'\n" +
             ")" +
             "</script>")
+    @Options(useGeneratedKeys=true, keyProperty="custId", keyColumn="CUST_ID")
     public void addCrmCust(XyCrmCust xyCrmCust) throws SQLException;
 
     /**
@@ -135,77 +133,67 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             tempSql += "SELECT B.*  FROM ( SELECT A.*, ROWNUM RN \n" +
                     "FROM ( \n" +
                     "\tSELECT * FROM (\n" +
+                    "\tSELECT * FROM (\n" +
                     "\t\tSELECT\n" +
-                    "\t\t\tCUST_ID,\n" +
-                    "\t\t\tCUST_NAME,\n" +
-                    "\t\t\tCUST_ADDRESS,\n" +
-                    "\t\t\tCUST_ADDRESS_DETAIL,\n" +
-                    "\t\t\tDECOR_TYPE,\n" +
-                    "\t\t\tCUST_MOBILE,\n" +
-                    "\t\t\tPRIV_TIME,\n" +
-                    "\t\t\tPRIV_COMPANY,\n" +
-                    "\t\t\tPRIV_ASSESS,\n" +
-                    "\t\t\tNEW_CONTIME,\n" +
-                    "\t\t\tNEW_CONACT,\n" +
-                    "\t\t\tCUST_STATE,\n" +
-                    "\t\t\tTO_CHAR( CREATE_TIME / ( 1000 * 60 * 60 * 24 ) + \n" +
+                    "\t\t\txcc.CUST_ID,\n" +
+                    "\t\t\txcc.CUST_NAME,\n" +
+                    "\t\t\txcc.CUST_ADDRESS,\n" +
+                    "\t\t\txcc.CUST_ADDRESS_DETAIL,\n" +
+                    "\t\t\txcc.DECOR_TYPE,\n" +
+                    "\t\t\txcc.CUST_MOBILE,\n" +
+                    "\t\t\txcc.PRIV_TIME,\n" +
+                    "\t\t\txcc.PRIV_COMPANY,\n" +
+                    "\t\t\txcc.PRIV_ASSESS,\n" +
+                    "\t\t\txcc.NEW_CONTIME,\n" +
+                    "\t\t\txcc.NEW_CONACT,\n" +
+                    "\t\t\txcc.CUST_STATE,\n" +
+                    "\t\t\tTO_CHAR( xcc.CREATE_TIME / ( 1000 * 60 * 60 * 24 ) + \n" +
                     "\t\t\tTO_DATE( '1970-01-01 08:00:00', 'yyyy-MM-dd HH24:mi:ss' ), 'yyyy-MM-dd HH24:mi:ss' ) CREATE_TIME,\n" +
-                    "\t\t\tCUST_PROVIDER,\n" +
-                    "\t\t\tCTR_CODE,\n" +
-                    "\t\t\tCUST_DELAY,\n" +
-                    "\t\t\tIS_VAILD,\n" +
-                    "\t\t\tJOIN_USERID \n" +
+                    "\t\t\t(SELECT USER_NAME FROM XY_USER WHERE USER_ID = xcc.CUST_PROVIDER) CUST_PROVIDER,\n" +
+                    "\t\t\txcc.CTR_CODE,\n" +
+                    "\t\t\t(SELECT xci.CTR_KG_DATE FROM XY_CUSTOMER_INFO xci WHERE xci.CTR_CODE = xcc.CTR_CODE ) CTR_KG_DATE,\n" +
+                    "\t\t\txcc.CUST_DELAY,\n" +
+                    "\t\t\txcc.IS_VAILD,\n" +
+                    "\t\t\txcc.JOIN_USERID \n" +
                     "\t\tFROM\n" +
-                    "\t\t\tXY_CRM_CUST \n";
-            //判断是否为设计师
-            if ("90FFCAB4999A4A4E87BC1CC1125E952F".equals(roleId)){
-                tempSql += "\t\tWHERE JOIN_USERID = '"+userId+"' \n";
+                    "\t\t\tXY_CRM_CUST xcc \n";
+            //判断是否为品推中心
+            if ("A3224B89C92A4F4593C8B755FE0BC645".equals(roleId)){
+                tempSql += "\t\tLEFT JOIN XY_WORK_APPLY w\n" +
+                        "ON xcc.CUST_ID = w.APPLY_CONTENT\n" +
+                        "WHERE\n" +
+                        "\tw.ACT_ID = '3B258CA43E8D46D68BB19EBA8772596C' ";
+            } else if ("90FFCAB4999A4A4E87BC1CC1125E952F".equals(roleId)){
+                //判断是否为设计师
+                tempSql += "\t\tWHERE xcc.JOIN_USERID = '"+userId+"' \n";
             } else if("0081BD4E4C9B46BCBD0BD0F23FC481EA".equals(roleId)){
                 //判断是否为设计成效人
-                tempSql += "\t\tWHERE JOIN_USERID = '"+userId+"' \n";
+                tempSql += "\t\tWHERE xcc.JOIN_USERID = '"+userId+"' \n";
             } else {
-                tempSql += "\t\tWHERE CUST_PROVIDER IN  \n";
+                tempSql += "\t\tWHERE xcc.CUST_PROVIDER IN  \n";
                 //判断是否为普通员工
                 if ("CE554D012D8C4E9B857B1228A33997EB".equals(roleId)){
                     tempSql += "('"+userId+"')";
                 } else {
                     //判断是否为首次进信息列表页
                     if ("".equals(selectFlag) || selectFlag == null || "0".equals(selectFlag)){
-                        /*tempSql += "(SELECT\n" +
-                                "\tA.LOWER_USER_ID\n" +
-                                "FROM\n" +
-                                "\tXY_CRM_RELATION A \n" +
-                                "WHERE\n" +
-                                "\tA.EXPRESS = '" + roleId + "'\n" +
-                                "START WITH A.USER_ID = '" + userId + "'\n" +
-                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
-                                "UNION ALL\n" +
-                                "SELECT\n" +
-                                "\tA.LOWER_USER_ID\n" +
-                                "FROM\n" +
-                                "\tXY_CRM_RELATION A \n" +
-                                "START WITH A.USER_ID IN (\n" +
-                                "\tSELECT\n" +
-                                "\t\tB.LOWER_USER_ID\n" +
-                                "\tFROM\n" +
-                                "\t\tXY_CRM_RELATION B\n" +
-                                "\tWHERE \n" +
-                                "\t\tB.EXPRESS = '" + roleId + "'\n" +
-                                "AND\n" +
-                                "\t\tB.USER_ID = '" + userId + "'" +
-                                ")\n" +
-                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID)";*/
                         tempSql += "(" +
-                                "SELECT N'" + userId + "' LOWER_USER_ID FROM dual\n" +
+                                "SELECT\n" +
+                                "\tN'"+userId+"' LOWER_USER_ID \n" +
+                                "FROM\n" +
+                                "\tdual \n" +
                                 "UNION ALL\n" +
-                                "SELECT B.LOWER_USER_ID FROM (\n" +
-                                "\tSELECT\n" +
-                                "\t\tA.* \n" +
-                                "\tFROM\n" +
-                                "\t\tXY_CRM_RELATION A \n" +
-                                "\tSTART WITH A.USER_ID = '" + userId + "' CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
-                                ") B\n" +
-                                "WHERE B.EXPRESS = '" + roleId + "'" +
+                                "SELECT LOWER_USER_ID FROM XY_CRM_RELATION \n" +
+                                "\tWHERE USER_ID = '"+userId+"' AND EXPRESS = '"+roleId+"'\n" +
+                                "UNION ALL\n" +
+                                "SELECT \n" +
+                                "\tA.LOWER_USER_ID\n" +
+                                "FROM XY_CRM_RELATION A \n" +
+                                "START WITH A.USER_ID = (\n" +
+                                "\tSELECT LOWER_USER_ID FROM XY_CRM_RELATION \n" +
+                                "\tWHERE USER_ID = '"+userId+"' AND EXPRESS = '"+roleId+"'\n" +
+                                ")\n" +
+                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID" +
                                 ")";
                     } else {
                         tempSql += "(SELECT N'" + userId + "' LOWER_USER_ID FROM dual\n" +
@@ -221,9 +209,22 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
             }
             //判断是否根据信息状态查询
             if (xyCrmCust.getCustState() != null && !"".equals(xyCrmCust.getCustState())){
-                tempSql += "\t\tAND CUST_STATE = "+xyCrmCust.getCustState()+"\n";
+                if ("-1".equals(xyCrmCust.getCustState())){
+                    tempSql += "\t\tAND xcc.CUST_STATE = 2\n";
+                } else {
+                    tempSql += "\t\tAND xcc.CUST_STATE = "+xyCrmCust.getCustState()+"\n";
+                }
             }
-            tempSql += "\t\tORDER BY CREATE_TIME DESC\n \t) \n";
+
+            if ("-1".equals(xyCrmCust.getCustState())){
+                tempSql += "\t\tORDER BY xcc.CREATE_TIME DESC\n \t) X " +
+                        "LEFT JOIN XY_HT_INFO Y ON X.CTR_CODE = Y.CTR_CODE " +
+                        "WHERE X.CTR_KG_DATE IS NULL " +
+                        "AND Y.CTR_CODE IS NOT NULL) \n";
+            } else {
+                tempSql += "\t\tORDER BY xcc.CREATE_TIME DESC\n \t) WHERE CTR_KG_DATE IS NULL ) \n";
+            }
+
             //判断是否有查询条件
             if (condition != null && !"".equals(condition)){
                 tempSql += "\tWHERE CUST_NAME LIKE '%"+condition+"%' \n" +
