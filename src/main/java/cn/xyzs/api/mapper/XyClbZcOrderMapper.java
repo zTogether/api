@@ -337,7 +337,7 @@ public interface XyClbZcOrderMapper extends Mapper<XyClbZcOrder> {
     List<Map<String,Object>> getAllSupByCtrCode(@Param("ctrCode") String ctrCode) throws SQLException;
 
     @Select("<script>" +
-            "SELECT D.ZC_CODE,D.ZC_NAME,A.ZCPB_ZC_TYPE,A.ZCPB_PRICE,\n" +
+            "SELECT D.ZC_CODE,A.ZCPB_MX,D.ZC_NAME,A.ZCPB_ZC_TYPE,A.ZCPB_PRICE,\n" +
             "\tD.ZC_PRICE_OUT,D.ZC_PRICE_IN,A.ZCPB_PP,B.SUP_CODE,A.ZCPB_SPEC,D.ZC_MATERIAL,\n" +
             "\tD.ZC_COLOR,A.ZCPB_UNIT,A.ZCPB_MARK,D.ZC_CYC,D.ZC_AREA,A.ZCPB_VERSION,A.ZCPB_DC\n" +
             "FROM XY_CLB_ZCPB_LIST A\n" +
