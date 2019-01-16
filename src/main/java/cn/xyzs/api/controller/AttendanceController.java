@@ -30,9 +30,31 @@ public class AttendanceController {
         return attendanceService.getShopInfoList(xyAttendance);
     }
 
+    /**
+     * 执行考勤打卡
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/16 15:08
+     * @param: [xyAttendance]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
     @ResponseBody
     @RequestMapping("/executionAttendance")
     public Map<String ,Object> attendance(XyAttendance xyAttendance){
         return attendanceService.executionAttendance(xyAttendance);
+    }
+
+    /**
+     * 根据selectFlag查询考勤记录（0：当天，1：昨天：2：本周，3：本月，4：上月）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/16 15:07
+     * @param: [selectFlag, userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getAttendanceRecord")
+    public Map<String ,Object> getAttendanceRecord(String selectFlag , String userId){
+        return attendanceService.getAttendanceRecord(selectFlag,userId);
     }
 }
