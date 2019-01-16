@@ -185,12 +185,43 @@ public interface XyWorkAdetailMapper extends Mapper<XyWorkAdetail> {
             "FROM\n" +
             "\tXY_WORK_ADETAIL\n" +
             "WHERE\n" +
-            "\tAPPLY_ID = (\n" +
-            "\tSELECT APPLY_ID FROM XY_WORK_APPLY WHERE APPLY_CONTENT = #{custId,jdbcType=VARCHAR}\n" +
-            ")\n" +
+            "\tAPPLY_ID = (SELECT B.APPLY_ID  FROM ( SELECT A.*, ROWNUM RN \n" +
+            "FROM ( \n" +
+            "\tSELECT\n" +
+            "\t\tAPPLY_ID \n" +
+            "\tFROM\n" +
+            "\t\tXY_WORK_APPLY \n" +
+            "\tWHERE\n" +
+            "\t\tAPPLY_CONTENT = #{custId,jdbcType=VARCHAR}\n" +
+            "\tORDER BY APPLY_ADDTIME DESC\n" +
+            "\t) A  \n" +
+            ")B\n" +
+            "WHERE RN BETWEEN 1 AND 1)" +
             "AND NODE_ID = #{nodeId,jdbcType=VARCHAR}" +
             "</script>")
     public String isShow(@Param("nodeId") String nodeId ,@Param("custId") String custId) throws SQLException;
+
+    /**
+     * 是否可以进行处理
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/13 14:54
+     * @param: [custId, nodeId]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tCOUNT(1) \n" +
+            "FROM \n" +
+            "\tXY_WORK_ADETAIL \n" +
+            "WHERE \n" +
+            "\tWAD_ID = #{wadId,jdbcType=VARCHAR} \n" +
+            "AND \n" +
+            "\tAPPLY_ID IN (SELECT APPLY_ID FROM XY_WORK_APPLY WHERE APPLY_CONTENT = #{custId,jdbcType=VARCHAR})" +
+            "AND \n" +
+            "\tXY_USER_ID IS NOT NULL" +
+            "</script>")
+    public Integer isDispose(@Param("custId") String custId ,@Param("wadId") String wadId) throws SQLException;
 
     /**
      * 是否可以进行处理
@@ -210,5 +241,5 @@ public interface XyWorkAdetailMapper extends Mapper<XyWorkAdetail> {
             "AND \n" +
             "\tAPPLY_ID IN (SELECT APPLY_ID FROM XY_WORK_APPLY WHERE APPLY_CONTENT = #{custId,jdbcType=VARCHAR})" +
             "</script>")
-    public Integer isDispose(@Param("custId") String custId ,@Param("nodeId") String nodeId) throws SQLException;
+    public Integer isDispose1(@Param("custId") String custId ,@Param("nodeId") String nodeId) throws SQLException;
 }

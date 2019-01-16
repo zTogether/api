@@ -1,6 +1,7 @@
 package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.AttendanceService;
+import cn.xyzs.common.pojo.XyAttendance;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,7 +26,13 @@ public class AttendanceController {
      */
     @ResponseBody
     @RequestMapping("/getShopInfoList")
-    public Map<String ,Object> getShopInfoList(){
-        return attendanceService.getShopInfoList();
+    public Map<String ,Object> getShopInfoList(XyAttendance xyAttendance){
+        return attendanceService.getShopInfoList(xyAttendance);
+    }
+
+    @ResponseBody
+    @RequestMapping("/executionAttendance")
+    public Map<String ,Object> attendance(XyAttendance xyAttendance){
+        return attendanceService.executionAttendance(xyAttendance);
     }
 }

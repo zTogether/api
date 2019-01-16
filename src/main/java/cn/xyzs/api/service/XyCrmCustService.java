@@ -367,7 +367,9 @@ public class XyCrmCustService {
                                 }
                             } else if ("A3224B89C92A4F4593C8B755FE0BC645".equals(roleId)){
                                 //如果角色为品推
-                                String isShow = xyWorkAdetailMapper.isShow(custId,String.valueOf(xyWorkNodeMapper.getFristNodeInfoByFlowId("3B258CA43E8D46D68BB19EBA8772596C").get("NODE_ID")));
+                                String isShow = xyWorkAdetailMapper.isShow(
+                                        String.valueOf(xyWorkNodeMapper.getFristNodeInfoByFlowId("3B258CA43E8D46D68BB19EBA8772596C").get("NODE_ID")),
+                                        custId);
                                 if ("0".equals(isShow)){
                                     isShowB = true;
                                 }
@@ -596,7 +598,12 @@ public class XyCrmCustService {
         Map<String,Object> obj = new HashMap<>();
         try {
 
-            Integer isDispose = xyWorkAdetailMapper.isDispose(custId,afterNodeId);
+            Integer isDispose = null;
+            if (!"".equals(wadId) &&  !"null".equals(wadId) && wadId != null){
+                isDispose = xyWorkAdetailMapper.isDispose(custId,wadId);
+            } else {
+                isDispose = xyWorkAdetailMapper.isDispose1(custId,afterNodeId);
+            }
             if (isDispose < 1){
                 if ("0".equals(flag)){
                     XyWorkApply xyWorkApply = new XyWorkApply();
@@ -656,13 +663,17 @@ public class XyCrmCustService {
                         }
                         xyWorkApplyMapper.updateApplyState(custId,wadId);
                         XyCrmCust xyCrmCust = new XyCrmCust();
-                        if ("1".equals(wadOperation)){
-                            xyCrmCust.setCustState("2");
-                        } else {
-                            xyCrmCust.setCustState("1");
+
+                        if(!"流单确认".equals(nodeName) && !"品推信息转入".equals(nodeName) ){
+                            if ("1".equals(wadOperation)){
+                                xyCrmCust.setCustState("2");
+                            } else {
+                                xyCrmCust.setCustState("1");
+                            }
+                            xyCrmCust.setCustId(custId);
+                            xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
                         }
-                        xyCrmCust.setCustId(custId);
-                        xyCrmCustMapper.updateCrmCustByCustId(xyCrmCust);
+
                         code = "200";
                         msg = "";
                     }
@@ -725,7 +736,12 @@ public class XyCrmCustService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try {
-            Integer isDispose = xyWorkAdetailMapper.isDispose(custId,afterNodeId);
+            Integer isDispose = null;
+            if (!"".equals(wadId) &&  !"null".equals(wadId) && wadId != null){
+                isDispose = xyWorkAdetailMapper.isDispose(custId,wadId);
+            } else {
+                isDispose = xyWorkAdetailMapper.isDispose1(custId,afterNodeId);
+            }
             if (isDispose < 1){
 
                 XyWorkAdetail xyWorkAdetail = new XyWorkAdetail();
@@ -803,7 +819,12 @@ public class XyCrmCustService {
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         try {
-            Integer isDispose = xyWorkAdetailMapper.isDispose(custId,afterNodeId);
+            Integer isDispose = null;
+            if (!"".equals(wadId) &&  !"null".equals(wadId) && wadId != null){
+                isDispose = xyWorkAdetailMapper.isDispose(custId,wadId);
+            } else {
+                isDispose = xyWorkAdetailMapper.isDispose1(custId,afterNodeId);
+            }
             if (isDispose < 1){
                 Map<String ,Object> custInfo = xyCrmCustMapper.getCrmCustInfoByCustId(custId);
                 String tempVariable = String.valueOf(custInfo.get("CUST_ADDRESS")) + String.valueOf(custInfo.get("CUST_ADDRESS_DETAIL"));

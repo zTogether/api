@@ -104,7 +104,7 @@ public interface XyWorkApplyMapper extends Mapper<XyWorkApply> {
             "\t\tXY_WORK_APPLY \n" +
             "\tWHERE\n" +
             "\t\tAPPLY_CONTENT = #{custId,jdbcType=VARCHAR}\n" +
-            "\tORDER BY APPLY_ADDTIME\n" +
+            "\tORDER BY APPLY_ADDTIME DESC\n" +
             "\t) A  \n" +
             ")B\n" +
             "WHERE RN BETWEEN 1 AND 1)" +
@@ -128,7 +128,7 @@ public interface XyWorkApplyMapper extends Mapper<XyWorkApply> {
             "\t\tXY_WORK_APPLY \n" +
             "\tWHERE\n" +
             "\t\tAPPLY_CONTENT = #{custId,jdbcType=VARCHAR}\n" +
-            "\tORDER BY APPLY_ADDTIME\n" +
+            "\tORDER BY APPLY_ADDTIME DESC\n" +
             "\t) A  \n" +
             ")B\n" +
             "WHERE RN BETWEEN 1 AND 1" +
