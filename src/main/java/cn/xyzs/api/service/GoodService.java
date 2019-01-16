@@ -1007,9 +1007,9 @@ public class GoodService {
 
     @Transactional
     public void addOrder(XyClbZcOrder xyClbZcOrder, List<Map<String, Object>> list, String orderSup, String orderType) {
-        Integer jine = 0;
+        Double jine = 0.0;
         for (Map<String, Object> map : list) {
-            jine += (Integer.valueOf(String.valueOf(map.get("zcPriceOut"))) * Integer.valueOf(String.valueOf(map.get("zcQty"))));
+            jine += (Double.valueOf(String.valueOf(map.get("zcPriceOut"))) * Double.valueOf(String.valueOf(map.get("zcQty"))));
         }
         xyClbZcOrder.setOrderSup(orderSup);
         xyClbZcOrder.setOrderJe(String.valueOf(jine));
