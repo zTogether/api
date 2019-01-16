@@ -58,7 +58,7 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
     List<Map<String,Object>> getCompContent(@Param("ctrCode") String ctrCode)throws SQLException;
 
     @Insert("<script>" +
-            "INSERT INTO XY_INFOMANAGE_CONSTR(CTR_CODE,CONSTRUCTION_TYPE,BELONG_USER,ED_RECODE,RB_RECODE,BELONG_USER_TYPE,XH)\n" +
+            "INSERT INTO XY_INFOMANAGE_CONSTR(CTR_CODE,CONSTRUCTION_TYPE,BELONG_USER,ED_RECODE,RB_RECODE,BELONG_USER_TYPE,OP_DATE,XH)\n" +
             "VALUES(#{ctrCode,jdbcType=VARCHAR},#{consType,jdbcType=VARCHAR},#{belongUser,jdbcType=VARCHAR}," +
             "#{edRecode,jdbcType=VARCHAR},#{rbRecode,jdbcType=VARCHAR},#{userType,jdbcType=VARCHAR},sysdate,#{xh,jdbcType=VARCHAR})" +
             "</script>")
