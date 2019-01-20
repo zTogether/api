@@ -46,14 +46,16 @@ public class AutoBjService {
                 List<Map<String ,Object>> districtInfoList = xySysDistrictMapper.getSysDistrict(xySysDistrict);
                 obj.put("districtInfoList",districtInfoList);
             }
-            //根据区/县获取小区(参数：districtId)
-            List<Map<String ,Object>> communityInfoList = xyMainAreaMapper.getCommunityByDistrictId(xyMainArea);
-            //根据条件获取小区的附加查询信息(参数：areaId，houseStyle，houseLevel)
-            List<Map<String ,Object>> additionalInfoList = xyMainHouserMapper.getAdditionalInfo(xyMainHouser);
+            if(!"552717F82EF442CA81FAAD9AAA3C055D".equals(xySysDistrict.getDistrictId())){
+                //根据区/县获取小区(参数：districtId)
+                List<Map<String ,Object>> communityInfoList = xyMainAreaMapper.getCommunityByDistrictId(xyMainArea);
+                //根据条件获取小区的附加查询信息(参数：areaId，houseStyle，houseLevel)
+                List<Map<String ,Object>> additionalInfoList = xyMainHouserMapper.getAdditionalInfo(xyMainHouser);
+                obj.put("communityInfoList",communityInfoList);
+                obj.put("additionalInfoList",additionalInfoList);
+            }
             //根据条件获取房屋信息(参数：districtId，areaId，houseSty，houseLevel)
             List<Map<String ,Object>> houserInfoList = xyMainHouserMapper.getHouseInfoByCondition(xyMainHouser,xyMainArea,xySysDistrict);
-            obj.put("communityInfoList",communityInfoList);
-            obj.put("additionalInfoList",additionalInfoList);
             obj.put("houserInfoList",houserInfoList);
             code = "200";
             msg = "";
