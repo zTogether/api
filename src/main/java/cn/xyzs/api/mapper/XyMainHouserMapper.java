@@ -81,6 +81,7 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
                         "\tA.HOUSE_STYLE,\n" +
                         "\tA.EFFECTS_URL,\n" +
                         "\tA.VR_URL,\n" +
+                        "\tU.USER_NAME,\n" +
                         "\tA.HOUSE_AUTHOR,\n" +
                         "\tA.CREATE_TIME,\n" +
                         "\tA.HOUSE_DESC,\n" +
@@ -88,10 +89,12 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
                         "\tA.CAD_DECORATION_URL,\n" +
                         "\tA.FLOOR_HEIGHT, \n" +
                         "\tA.FLOOR_FACT_HEIGHT,\n" +
-                        "\tA.HOUSE_LEVEL");
+                        "\tA.HOUSE_LEVEL,\n" +
+                        "\tROUND(TO_NUMBER(SYSDATE - A.CREATE_TIME)) days\n");
                 FROM("XY_MAIN_HOUSER A");
                 LEFT_OUTER_JOIN("XY_MAIN_AREA B ON A.AREA_ID = B.AREA_ID");
                 LEFT_OUTER_JOIN("XY_SYS_DISTRICT C ON B.DISTRICT_ID = C.DISTRICT_ID");
+                LEFT_OUTER_JOIN("XY_USER U ON U.USER_ID=A.HOUSE_AUTHOR");
                 //根据市/区/县查询
                 if (!"".equals(xySysDistrict.getDistrictId()) && !"null".equals(xySysDistrict.getDistrictId())
                         && xySysDistrict.getDistrictId() != null){
