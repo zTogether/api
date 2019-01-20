@@ -2,6 +2,7 @@ package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyMainArea;
 import cn.xyzs.common.pojo.XySysDistrict;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
@@ -52,4 +53,8 @@ public interface XyMainAreaMapper extends Mapper<XyMainArea> {
         }
     }
 
+    @Select("script>" +
+            "" +
+            "</script>")
+    List<Map<String,Object>> getHouseStyle();
 }
