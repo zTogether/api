@@ -200,7 +200,7 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
                 FROM("XY_GCB_PRJ_LCD A");
                 LEFT_OUTER_JOIN("XY_CLB_ZCPB_LIST B ON A.ZCPB_ID=B.ZCPB_ROWID");
                 LEFT_OUTER_JOIN("XY_CLB_ZC_DB C ON B.ZCPB_ZC_CODE=C.ZC_CODE");
-                WHERE("A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND C.ZC_SUP=#{sup,jdbcType=VARCHAR}");
+                WHERE("A.CTR_CODE = #{ctrCode,jdbcType=VARCHAR} AND C.ZC_SUP=#{sup,jdbcType=VARCHAR} AND A.IS_ORDER = '0'");
                 if (zcpbDc!=null&&zcpbDc!=""){
                     WHERE("B.ZCPB_DC='11'");
                 }else{
