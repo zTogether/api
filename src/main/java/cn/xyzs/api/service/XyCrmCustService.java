@@ -1,10 +1,7 @@
 package cn.xyzs.api.service;
 
 import cn.xyzs.api.mapper.*;
-import cn.xyzs.common.pojo.XyCrmCust;
-import cn.xyzs.common.pojo.XyCrmRelation;
-import cn.xyzs.common.pojo.XyLog;
-import cn.xyzs.common.pojo.XyRoleFuc;
+import cn.xyzs.common.pojo.*;
 import cn.xyzs.common.pojo.sys.XyWorkAdetail;
 import cn.xyzs.common.pojo.sys.XyWorkApply;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -48,6 +45,9 @@ public class XyCrmCustService {
 
     @Resource
     private VwXyWorkInfoMapper vwXyWorkInfoMapper;
+    
+    @Resource
+    private XyCrmKgcjMapper xyCrmKgcjMapper;
 
     /**
      * 添加意向信息
@@ -992,6 +992,60 @@ public class XyCrmCustService {
         }
         System.out.println("获取客户端ip: " + ip);
         return ip;
+    }
+    
+    /**
+     * 获取开工促进处理记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 10:27
+     * @param: [custId, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getKgcjRecord(String custId ,Integer startNum ,Integer endNum){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            List<Map<String ,Object>> kgcjRecordList = xyCrmKgcjMapper.getKgcjRecord(custId,startNum,endNum);
+            obj.put("kgcjRecordList",kgcjRecordList);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 添加开工促进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 10:47
+     * @param: [xyCrmKgcj]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> addKgcjRecord(XyCrmKgcj xyCrmKgcj){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try {
+            xyCrmKgcjMapper.addKgcjRecord(xyCrmKgcj);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
     }
 
 }

@@ -29,8 +29,65 @@ public class AutoBjController {
     @ResponseBody
     @RequestMapping("/getFontPageData")
     public Map<String ,Object> getFontPageData(XyMainHouser xyMainHouser, XyMainArea xyMainArea ,
-                                               XySysDistrict xySysDistrict ,String flag){
-        return autoBjService.getFontPageData(xyMainHouser,xyMainArea,xySysDistrict,flag);
+                                               XySysDistrict xySysDistrict ,String flag,Integer startNum, Integer endNum){
+        return autoBjService.getFontPageData(xyMainHouser,xyMainArea,xySysDistrict,flag,startNum,endNum);
     }
+
+    /**
+     * 获取模板主材list
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/20 17:21
+     * @param: [xyClbZcpbTemplateList, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getMbZcList")
+    public Map<String ,Object> getMbZcList(String houseId ,Integer startNum , Integer endNum){
+        return autoBjService.getMbZcList(houseId,startNum,endNum);
+    }
+
+    /**
+     * 获取模板软装list
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/20 17:22
+     * @param: [xyClbZcpbTemplateList, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getMbRzList")
+    public Map<String ,Object> getMbRzList(String houseId ,Integer startNum , Integer endNum){
+        return autoBjService.getMbRzList(houseId,startNum,endNum);
+    }
+
+    /**
+     * 获取模板人工费项目
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/20 17:30
+     * @param: [houseId, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getMbRgList")
+    public Map<String ,Object> getMbRgList( String houseId,Integer startNum , Integer endNum){
+        return autoBjService.getMbRgList(houseId,startNum,endNum);
+    }
+
+    /**
+     * 获取房屋信息
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/20 18:04
+     * @param: [houseId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getHouseInfo")
+    public Map<String ,Object> getHouseInfo( String houseId){
+        return autoBjService.getHouseInfo(houseId);
+    }
+
 
 }

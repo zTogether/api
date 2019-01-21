@@ -2,6 +2,7 @@ package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.XyCrmCustService;
 import cn.xyzs.common.pojo.XyCrmCust;
+import cn.xyzs.common.pojo.XyCrmKgcj;
 import cn.xyzs.common.pojo.XyCrmRelation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -245,6 +246,34 @@ public class XyCrmCustController {
     @RequestMapping("/getCustInfoData")
     public Map<String ,Object> getCustInfoData(String custId){
         return xyCrmCustService.getCustInfoData(custId);
+    }
+
+    /**
+     * 获取开工促进处理记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 10:27
+     * @param: [custId, startNum, endNum]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getKgcjRecord")
+    public Map<String ,Object> getKgcjRecord(String custId ,Integer startNum ,Integer endNum){
+        return xyCrmCustService.getKgcjRecord(custId,startNum,endNum);
+    }
+
+    /**
+     * 添加开工促进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 10:47
+     * @param: [xyCrmKgcj]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/addKgcjRecord")
+    public Map<String ,Object> addKgcjRecord(XyCrmKgcj xyCrmKgcj){
+        return xyCrmCustService.addKgcjRecord(xyCrmKgcj);
     }
 
 }

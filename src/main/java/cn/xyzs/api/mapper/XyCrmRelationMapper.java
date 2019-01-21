@@ -20,41 +20,19 @@ public interface XyCrmRelationMapper extends Mapper<XyCrmRelation> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT * FROM (\n" +
-            "\tSELECT\n" +
-            "\t\tC.USER_ID,\n" +
-            "\t\tC.USER_NAME,\n" +
-            "\t\tC.USER_TEL,\n" +
-            "\t\tC.USER_SEX\n" +
-            "\tFROM\n" +
-            "\t\tXY_CRM_RELATION A \n" +
-            "\tLEFT JOIN XY_USER C\n" +
-            "\tON A.LOWER_USER_ID = C.USER_ID\n" +
-            "\tWHERE\n" +
-            "\t\tA.EXPRESS = #{express,jdbcType=VARCHAR}\n" +
-            "\tSTART WITH A.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
-            "\tCONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT\n" +
-            "\t\tC.USER_ID,\n" +
-            "\t\tC.USER_NAME,\n" +
-            "\t\tC.USER_TEL,\n" +
-            "\t\tC.USER_SEX\n" +
-            "\tFROM\n" +
-            "\t\tXY_CRM_RELATION A \n" +
-            "\tLEFT JOIN XY_USER C\n" +
-            "\tON A.LOWER_USER_ID = C.USER_ID\n" +
-            "\tSTART WITH A.USER_ID IN (\n" +
-            "\t\tSELECT\n" +
-            "\t\t\tB.LOWER_USER_ID\n" +
-            "\t\tFROM\n" +
-            "\t\t\tXY_CRM_RELATION B\n" +
-            "\t\tWHERE \n" +
-            "\t\t\tB.EXPRESS = #{express,jdbcType=VARCHAR}\n" +
-            "AND\n" +
-            "\t\t\tB.USER_ID = #{userId,jdbcType=VARCHAR}" +
-            "\t)\n" +
-            "\tCONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
+            "SELECT * FROM (" +
+            "SELECT\n" +
+            "\tDISTINCT \n" +
+            "\tC.USER_ID,\n" +
+            "  C.USER_NAME,\n" +
+            "  C.USER_TEL,\n" +
+            "  C.USER_SEX\n" +
+            "FROM\n" +
+            "\tXY_CRM_RELATION A \n" +
+            "LEFT JOIN XY_USER C \n" +
+            "ON A.LOWER_USER_ID = C.USER_ID\n" +
+            "START WITH  a.USER_ID=#{userId,jdbcType=VARCHAR} and a.EXPRESS = #{express,jdbcType=VARCHAR} \n" +
+            "CONNECT BY A.USER_ID = PRIOR (case  a.is_end when 1 then A.LOWER_USER_ID else TO_NCHAR('aaa') end)" +
             ") \n" +
             "WHERE USER_NAME LIKE '%'||#{condition,jdbcType=VARCHAR}||'%'\n" +
             "OR USER_TEL = #{condition,jdbcType=VARCHAR}" +
@@ -70,32 +48,12 @@ public interface XyCrmRelationMapper extends Mapper<XyCrmRelation> {
      * @return: java.lang.Integer
      */
     @Select("<script>" +
-            "SELECT COUNT(1) FROM (\n" +
-            "\tSELECT\n" +
-            "\t\t'1'\n" +
-            "\tFROM\n" +
-            "\t\tXY_CRM_RELATION A \n" +
-            "\tWHERE\n" +
-            "\t\tA.EXPRESS = #{express,jdbcType=VARCHAR}\n" +
-            "\tSTART WITH A.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
-            "\tCONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
-            "\tUNION ALL\n" +
-            "\tSELECT\n" +
-            "\t\t'1'\n" +
-            "\tFROM\n" +
-            "\t\tXY_CRM_RELATION A \n" +
-            "\tSTART WITH A.USER_ID IN (\n" +
-            "\t\tSELECT\n" +
-            "\t\t\tB.LOWER_USER_ID\n" +
-            "\t\tFROM\n" +
-            "\t\t\tXY_CRM_RELATION B\n" +
-            "\t\tWHERE \n" +
-            "\t\t\tB.EXPRESS = #{express,jdbcType=VARCHAR}\n" +
-            "\t\tAND\n" +
-            "\t\t\tB.USER_ID = #{userId,jdbcType=VARCHAR}\n" +
-            "\t)\n" +
-            "\tCONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID\n" +
-            ")" +
+            "SELECT\n" +
+            "\tCOUNT(1)\n" +
+            "FROM\n" +
+            "\tXY_CRM_RELATION A \n" +
+            "START WITH  a.USER_ID=#{userId,jdbcType=VARCHAR} and a.EXPRESS = #{express,jdbcType=VARCHAR} \n" +
+            "CONNECT BY A.USER_ID = PRIOR (case  a.is_end when 1 then A.LOWER_USER_ID else TO_NCHAR('aaa') end)" +
             "</script>")
     public Integer getSubordinateCount(@Param("express") String express ,@Param("userId") String userId) throws SQLException;
 

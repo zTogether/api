@@ -178,32 +178,24 @@ public interface XyCrmCustMapper extends Mapper<XyCrmCust> {
                     //判断是否为首次进信息列表页
                     if ("".equals(selectFlag) || selectFlag == null || "0".equals(selectFlag)){
                         tempSql += "(" +
+                                "SELECT N'" + userId + "' LOWER_USER_ID FROM dual \n" +
+                                "UNION ALL\n" +
                                 "SELECT\n" +
-                                "\tN'"+userId+"' LOWER_USER_ID \n" +
+                                "\tA.LOWER_USER_ID \n" +
                                 "FROM\n" +
-                                "\tdual \n" +
-                                "UNION ALL\n" +
-                                "SELECT LOWER_USER_ID FROM XY_CRM_RELATION \n" +
-                                "\tWHERE USER_ID = '"+userId+"' AND EXPRESS = '"+roleId+"'\n" +
-                                "UNION ALL\n" +
-                                "SELECT \n" +
-                                "\tA.LOWER_USER_ID\n" +
-                                "FROM XY_CRM_RELATION A \n" +
-                                "START WITH A.USER_ID = (\n" +
-                                "\tSELECT LOWER_USER_ID FROM XY_CRM_RELATION \n" +
-                                "\tWHERE USER_ID = '"+userId+"' AND EXPRESS = '"+roleId+"'\n" +
-                                ")\n" +
-                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID" +
-                                ")";
+                                "\tXY_CRM_RELATION A \n" +
+                                "START WITH  a.USER_ID='" + userId + "' and a.EXPRESS = '" + roleId + "' \n" +
+                                "CONNECT BY A.USER_ID = PRIOR (case  a.is_end when 1 then A.LOWER_USER_ID else TO_NCHAR('aaa') end))";
                     } else {
                         tempSql += "(SELECT N'" + userId + "' LOWER_USER_ID FROM dual\n" +
                                 "UNION ALL\n" +
                                 "SELECT\n" +
                                 "\tA.LOWER_USER_ID\n" +
                                 "FROM\n" +
-                                "\tXY_CRM_RELATION A \n" +
-                                "START WITH A.USER_ID = '" + userId + "'\n" +
-                                "CONNECT BY A.USER_ID = PRIOR A.LOWER_USER_ID)";
+                                "\tXY_CRM_RELATION A,\n" +
+                                "\t(SELECT LOWER_USER_ID FROM XY_CRM_RELATION WHERE LOWER_USER_ID = '" + userId + "' AND IS_END = 1) B\n" +
+                                "START WITH  a.USER_ID='" + userId + "'\n" +
+                                "CONNECT BY A.USER_ID = PRIOR (case  a.is_end when 1 then A.LOWER_USER_ID else TO_NCHAR('aaa') end))";
                     }
                 }
             }
