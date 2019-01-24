@@ -276,4 +276,46 @@ public class XyCrmCustController {
         return xyCrmCustService.addKgcjRecord(xyCrmKgcj);
     }
 
+    /**
+     * 根据rowId获取开工促进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:06
+     * @param: [rowId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getKgcjRecordByRowId")
+    public Map<String ,Object> getKgcjRecordByRowId(String rowId){
+        return xyCrmCustService.getKgcjRecordByRowId(rowId);
+    }
+
+    /**
+     * 修改跟进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:25
+     * @param: [xyCrmKgcj]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/updateKgcjRecord")
+    public Map<String ,Object> updateKgcjRecord(XyCrmKgcj xyCrmKgcj){
+        return xyCrmCustService.updateKgcjRecord(xyCrmKgcj);
+    }
+
+    /**
+     * 删除跟进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:26
+     * @param: [rowId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/deleteKgcjRecord")
+    public Map<String ,Object> deleteKgcjRecord(String rowId){
+        return xyCrmCustService.deleteKgcjRecord(rowId);
+    }
+
 }

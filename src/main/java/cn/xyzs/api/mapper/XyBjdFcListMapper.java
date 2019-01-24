@@ -36,4 +36,21 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             "\txbm.BJD_CODE = #{bjdCode,jdbcType=VARCHAR}" +
             "</script>")
     public String getZj(@Param("bjdCode") String ctrCode) throws SQLException;
+
+    /**
+     * 获取辅材总计
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/23 15:12
+     * @param: []
+     * @return: java.lang.Double
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tSUM(FC_PRICE * FC_QTY)\n" +
+            "FROM \n" +
+            "\tXY_BJD_FC_LIST \n" +
+            "WHERE BJD_CODE = '201800053201'" +
+            "</script>")
+    public Double getFcZj() throws SQLException;
 }

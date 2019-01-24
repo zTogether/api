@@ -5,6 +5,7 @@ import cn.xyzs.common.pojo.XyClbZcpbTemplateList;
 import cn.xyzs.common.pojo.XyMainArea;
 import cn.xyzs.common.pojo.XyMainHouser;
 import cn.xyzs.common.pojo.XySysDistrict;
+import com.sun.corba.se.spi.ior.ObjectKey;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -30,6 +31,9 @@ public class AutoBjService {
 
     @Resource
     private XyBjdTemplateListMapper xyBjdTemplateListMapper;
+
+    @Resource
+    private XyBjdFcListMapper xyBjdFcListMapper;
 
     /**
      * 获取一键报价首页数据
@@ -94,7 +98,9 @@ public class AutoBjService {
         String msg = "系统异常";
         try {
             List<Map<String ,Object>> mbZcList = xyClbZcpbTemplateListMapper.getMbZcOrRzList(houseId,"0",startNum,endNum);
+            Integer mbZcCount = xyClbZcpbTemplateListMapper.getMbZcOrRzCount(houseId,"0");
             obj.put("mbZcList",mbZcList);
+            obj.put("mbZcCount",mbZcCount);
             code = "200";
             msg = "";
         } catch (SQLException e) {
@@ -124,7 +130,9 @@ public class AutoBjService {
         String msg = "系统异常";
         try {
             List<Map<String ,Object>> mbRzList = xyClbZcpbTemplateListMapper.getMbZcOrRzList(houseId,"1",startNum,endNum);
+            Integer mbRzCount = xyClbZcpbTemplateListMapper.getMbZcOrRzCount(houseId,"1");
             obj.put("mbRzList",mbRzList);
+            obj.put("mbRzCount",mbRzCount);
             code = "200";
             msg = "";
         } catch (SQLException e) {
@@ -154,7 +162,9 @@ public class AutoBjService {
         String msg = "系统异常";
         try {
             List<Map<String ,Object>> mbRgList = xyBjdTemplateListMapper.getMbRgList(houseId,startNum,endNum);
+            Integer mbRgCount = xyBjdTemplateListMapper.getMbRgCount(houseId);
             obj.put("mbRgList",mbRgList);
+            obj.put("mbRgCount",mbRgCount);
             code = "200";
             msg = "";
         } catch (SQLException e) {
@@ -185,6 +195,55 @@ public class AutoBjService {
         try {
             Map<String ,Object> houseInfo = xyMainHouserMapper.getHouseInfoByHouseId(houseId);
             obj.put("houseInfo",houseInfo);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取造价表数据
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/23 16:02
+     * @param: [houseId, zcArray, rzArray, rgArray]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getTotalPriceTableData(String houseId ,String []zcArray ,String []rzArray ,String []rgArray){
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            //主材总计价格
+            Double zcTotalPrice = xyClbZcpbTemplateListMapper.getMbZcOrRzZj(houseId,"0",zcArray);
+            obj.put("zcTotalPrice",zcTotalPrice);
+            //人工总计价格
+            Double rgTotalPrice = xyBjdTemplateListMapper.getMbRgZj(houseId,rgArray);
+            obj.put("rgTotalPrice",rgTotalPrice);
+            //辅材总计价格
+            Double fcTotalPrice = xyBjdFcListMapper.getFcZj();
+            obj.put("fcTotalPrice",fcTotalPrice);
+            //硬装小计
+            Double yzXj = zcTotalPrice + rgTotalPrice + fcTotalPrice;
+            obj.put("yzXj",yzXj);
+            //服务费
+            Double fwf = (fcTotalPrice + rgTotalPrice) * 1.05;
+            obj.put("fwf",fwf);
+            //软装总计价格
+            Double rzTotalPrice = xyClbZcpbTemplateListMapper.getMbZcOrRzZj(houseId,"0",rzArray);
+            obj.put("rzTotalPrice",rzTotalPrice);
+            //总计
+            Double TotalPrice = yzXj + rzTotalPrice + fwf;
+            obj.put("TotalPrice",TotalPrice);
             code = "200";
             msg = "";
         } catch (SQLException e) {

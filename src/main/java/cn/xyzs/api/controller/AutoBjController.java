@@ -89,5 +89,18 @@ public class AutoBjController {
         return autoBjService.getHouseInfo(houseId);
     }
 
+    /**
+     * 获取造价表数据
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/23 16:02
+     * @param: [houseId, zcArray, rzArray, rgArray]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getTotalPriceTableData")
+    public Map<String ,Object> getTotalPriceTableData(String houseId ,String []zcArray ,String []rzArray ,String []rgArray){
+        return autoBjService.getTotalPriceTableData(houseId,zcArray,rzArray,rgArray);
+    }
 
 }

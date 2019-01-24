@@ -3,6 +3,7 @@ package cn.xyzs.api.mapper;
 import cn.xyzs.common.pojo.XyClbZcpbTemplateList;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -43,4 +44,73 @@ public interface XyClbZcpbTemplateListMapper extends Mapper<XyClbZcpbTemplateLis
             "</script>")
     public List<Map<String ,Object>> getMbZcOrRzList(@Param("houseId") String houseId ,@Param("acOrRzFlag") String acOrRzFlag , @Param("startNum") Integer startNum ,
                                          @Param("endNum") Integer endNum) throws SQLException;
+
+    /**
+     * 获取主材或软装总记录数（flag：  0：主材；8：软装）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/23 9:41
+     * @param: [houseId, acOrRzFlag]
+     * @return: java.lang.Integer
+     */
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tCOUNT(1)\n" +
+            "FROM \n" +
+            "\tXY_CLB_ZCPB_TEMPLATE_LIST\n" +
+            "WHERE \n" +
+            "\tZCPB_MBID = (" +
+            "SELECT HOUSE_TEMPLATE_ZC_ID FROM XY_MAIN_HOUSER WHERE HOUSE_ID = #{houseId,jdbcType=VARCHAR}" +
+            ")\n" +
+            "AND\n" +
+            "\tZCPB_ZC_CODE <![CDATA[<>]]> '0'\n" +
+            "AND\n" +
+            "\tSUBSTR(ZCPB_ZC_CODE, 1, 1) = #{acOrRzFlag,jdbcType=VARCHAR}\t" +
+            "</script>")
+    public Integer getMbZcOrRzCount(@Param("houseId") String houseId ,@Param("acOrRzFlag") String acOrRzFlag ) throws SQLException;
+
+    /**
+     * 获取主材或软装的总计（flag：  0：主材；8：软装）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/23 15:36
+     * @param: [houseId, acOrRzFlag, zcArray]
+     * @return: java.lang.Double
+     */
+    @SelectProvider(type = getMbZcOrRzZj.class,method = "getMbZcOrRzZj")
+    public Double getMbZcOrRzZj(String houseId ,String acOrRzFlag ,String []zcOrRzArray) throws SQLException;
+    public class getMbZcOrRzZj{
+        public String getMbZcOrRzZj(String houseId ,String acOrRzFlag ,String []zcOrRzArray){
+            String tempSql = "";
+            tempSql = "SELECT \n" +
+                    "\tSUM(ZCPB_XJ)\n" +
+                    "FROM \n" +
+                    "\tXY_CLB_ZCPB_TEMPLATE_LIST\n" +
+                    "WHERE \n" +
+                    "\tZCPB_MBID = (\n" +
+                    "\t\tSELECT HOUSE_TEMPLATE_ZC_ID FROM XY_MAIN_HOUSER WHERE HOUSE_ID = '"+houseId+"'\n" +
+                    "\t)\n" +
+                    "AND\n" +
+                    "\tZCPB_ZC_CODE <> '0'\n";
+            if ("0".equals(acOrRzFlag)){
+                tempSql = "AND\n" +
+                        "\tSUBSTR(ZCPB_ZC_CODE, 1, 1) = '0'";
+            } else if ("1".equals(acOrRzFlag)){
+                tempSql = "AND\n" +
+                        "\tSUBSTR(ZCPB_ZC_CODE, 1, 1) = '8'";
+            }
+            if (zcOrRzArray.length > 1){
+                String tempVariable = "";
+                for (int i = 0; i < zcOrRzArray.length ; i++) {
+                    if (i == 0){
+                        tempVariable += "'"+zcOrRzArray[i]+"'";
+                    } else {
+                        tempVariable += ",'"+zcOrRzArray[i]+"'";
+                    }
+                }
+                tempSql = "AND NOT IN(tempVariable)";
+            }
+            return tempSql;
+        }
+    }
 }
