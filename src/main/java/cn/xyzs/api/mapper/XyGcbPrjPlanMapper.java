@@ -98,25 +98,22 @@ public interface XyGcbPrjPlanMapper extends Mapper<XyGcbPrjPlan> {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Select("<script>" +
-            "SELECT\n" +
-            "  p.ROW_ID,\n" +
-            "  l.ZCPB_ROWID,\n" +
-            "  l.ZCPB_MX,\n" +
-            "  l.ZCPB_QTY,\n" +
-            "  l.ZCPB_PRICE,\n" +
-            "  l.ZCPB_PP \n" +
+            "SELECT \n" +
+            "\tp.ROW_ID,l.ZCPB_ROWID,l.ZCPB_MX,l.ZCPB_QTY,l.ZCPB_PRICE,l.ZCPB_PP,l.ZCPB_STAGE ,zm.ZCPB_STATU\n" +
             "FROM\n" +
             "  XY_CLB_ZCPB_LIST l,\n" +
             "  XY_GCB_PRJ_PLAN p,\n" +
-            "  XY_GCB_PRJ_LCD_LIST t \n" +
+            "  XY_GCB_PRJ_LCD_LIST t\n" +
+            "LEFT JOIN XY_CLB_ZCPB_MAIN zm ON zm.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}\n" +
             "WHERE\n" +
             "  p.PLAN_LCDID = t.PLAN_LCDID \n" +
             "  AND t.ZCPB_ID = l.ZCPB_ID \n" +
             "  AND p.ROW_ID = #{rowId,jdbcType=VARCHAR}\n" +
-            "  AND l.ZCPB_ZC_CODE IS NOT NULL\n" +
+            "\tAND ((L.ZCPB_STAGE='A' AND zm.ZCPB_STATU LIKE '5%') OR (L.ZCPB_STAGE='B' AND zm.ZCPB_STATU LIKE '%5'))\n" +
+            "\tAND l.ZCPB_ZC_CODE IS NOT NULL\n" +
             "  and p.ctr_code=l.ctr_code" +
             "</script>")
-    List<Map<String,Object>> getLcd(String rowId) throws SQLException;
+    List<Map<String,Object>> getLcd(@Param("rowId") String rowId,@Param("ctrCode") String ctrCode) throws SQLException;
 
 
     /**
