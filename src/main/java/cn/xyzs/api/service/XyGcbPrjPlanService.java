@@ -228,13 +228,13 @@ public class XyGcbPrjPlanService {
      * @param: [rowId]
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
-    public Map<String,Object> getLcd(String rowId){
+    public Map<String,Object> getLcd(String rowId,String ctrCode){
         String code = "500";
         String msg = "系统异常";
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         try{
-            List lcdList = xyGcbPrjPlanMapper.getLcd(rowId);
+            List lcdList = xyGcbPrjPlanMapper.getLcd(rowId,ctrCode);
             obj.put("lcdList",lcdList);
             code = "200";
             msg = "成功";

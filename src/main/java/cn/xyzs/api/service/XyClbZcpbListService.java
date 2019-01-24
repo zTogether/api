@@ -65,7 +65,13 @@ public class XyClbZcpbListService {
         Map<String,Object> resultMap = new HashMap<>();
         Map<String,Object> obj = new HashMap<>();
         try{
-            List<Map<String,Object>> list = xyClbZcpbListMapper.getZcpbList(ctrCode,mlName,zcType);
+            String condition = "%";
+            if ("A".equals(zcType)){
+                condition = "5%";
+            }else if("B".equals(zcType)){
+                condition = "%5";
+            }
+            List<Map<String,Object>> list = xyClbZcpbListMapper.getZcpbList(ctrCode,mlName,zcType,condition);
             for (Map<String, Object> map : list) {
                 String value = String.valueOf(map.get("ZCPB_DC"));
                 if("11".equals(value)){
@@ -85,7 +91,7 @@ public class XyClbZcpbListService {
                 }
             }
             //选择项目的总计
-            String zj = xyClbZcpbListMapper.selectedZj(ctrCode,mlName,zcType);
+            String zj = xyClbZcpbListMapper.selectedZj(ctrCode,mlName,zcType,condition);
             obj.put("xmZj",zj);
             obj.put("zcpbList",list);
             code = "200";
