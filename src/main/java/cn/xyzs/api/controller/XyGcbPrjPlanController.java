@@ -97,8 +97,8 @@ public class XyGcbPrjPlanController {
      */
     @RequestMapping("/getLcd")
     @ResponseBody
-    public Map<String,Object> getLcd(String rowId){
-        return xyGcbPrjPlanService.getLcd(rowId);
+    public Map<String,Object> getLcd(String rowId,String ctrCode){
+        return xyGcbPrjPlanService.getLcd(rowId,ctrCode);
     }
 
     /**
