@@ -1048,4 +1048,84 @@ public class XyCrmCustService {
         return resultMap;
     }
 
+    /**
+     * 根据rowId获取开工促进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:06
+     * @param: [rowId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getKgcjRecordByRowId(String rowId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            Map<String ,Object> kgcjRecord = xyCrmKgcjMapper.getKgcjRecordByRowId(rowId);
+            obj.put("kgcjRecord",kgcjRecord);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 修改跟进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:25
+     * @param: [xyCrmKgcj]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> updateKgcjRecord(XyCrmKgcj xyCrmKgcj){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try {
+            xyCrmKgcjMapper.updateKgcjRecord(xyCrmKgcj);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 删除跟进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:26
+     * @param: [rowId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Transactional
+    public Map<String ,Object> deleteKgcjRecord(String rowId){
+        String code = "500";
+        String msg = "系统异常";
+        Map<String,Object> resultMap = new HashMap<>();
+        try {
+            xyCrmKgcjMapper.deleteKgcjRecord(rowId);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+        }
+        return resultMap;
+    }
+
 }

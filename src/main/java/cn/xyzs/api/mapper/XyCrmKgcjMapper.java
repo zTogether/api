@@ -1,9 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyCrmKgcj;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -67,4 +65,62 @@ public interface XyCrmKgcjMapper extends Mapper<XyCrmKgcj> {
             ")" +
             "</script>")
     public void addKgcjRecord(XyCrmKgcj xyCrmKgcj) throws SQLException;
+
+    /**
+     * 根据rowId获取开工促进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:04
+     * @param: [RowId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\tROW_ID, \n" +
+            "\tCUST_ID, \n" +
+            "\tOP_USER, \n" +
+            "\tUSER_NAME OP_USER_NAME,\n" +
+            "\tTO_CHAR(OP_DATE,'MM-dd HH24:mi') OP_DATE_STR, \n" +
+            "\tOP_DATE,\n" +
+            "\tMARK,\n" +
+            "\t(CASE WHEN TO_CHAR(OP_DATE,'yyyy-MM-dd') = TO_CHAR(SYSDATE,'yyyy-MM-dd') THEN '0' ELSE '1' END) IS_UPDATE\n" +
+            "FROM\n" +
+            "\tXY_CRM_KGCJ\n" +
+            "LEFT JOIN XY_USER\n" +
+            "ON OP_USER = USER_ID\n" +
+            "WHERE\n" +
+            "\tROW_ID = #{rowId,jdbcType=VARCHAR}" +
+            "</script>")
+    public Map<String ,Object> getKgcjRecordByRowId(String rowId) throws SQLException;
+
+    /**
+     * 修改跟进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:23
+     * @param: [xyCrmKgcj]
+     * @return: void
+     */
+    @Update("<script>" +
+            "UPDATE XY_CRM_KGCJ SET \n" +
+            "\tOP_DATE = SYSDATE,\n" +
+            "\tMARK = #{mark,jdbcType=VARCHAR},\n" +
+            "\tOP_USER = #{opUser,jdbcType=VARCHAR}\n" +
+            "WHERE \n" +
+            "\tROW_ID = #{rowId,jdbcType=VARCHAR}" +
+            "</script>")
+    public void updateKgcjRecord(XyCrmKgcj xyCrmKgcj) throws SQLException;
+
+    /**
+     * 删除跟进记录
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/21 14:24
+     * @param: [rowId]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_CRM_KGCJ WHERE ROW_ID = #{rowId,jdbcType=VARCHAR}" +
+            "</script>")
+    public void deleteKgcjRecord(String rowId) throws SQLException;
 }
