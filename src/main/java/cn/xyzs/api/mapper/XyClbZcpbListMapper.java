@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyClbZcpbList;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -80,6 +81,72 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
                     WHERE("ZM.ZCPB_STATU like {#condition,jdbcType=VARCHAR}");
                 }
             }}.toString();
+        }
+    }
+
+    /**
+     * 一键报价添加主材和软装
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/24 13:28
+     * @param: [houseId, zcArray, rzArray]
+     * @return: void
+     */
+    @InsertProvider(type = addAutoBjZcAndRz.class,method = "addAutoBjZcAndRz")
+    public void addAutoBjZcAndRz(String ctrCode ,String houseId ,String []zcArray ,String []rzArray) throws SQLException;
+    public class addAutoBjZcAndRz{
+        public String addAutoBjZcAndRz(String ctrCode ,String houseId ,String []zcArray ,String []rzArray){
+            String tempSql = "";
+            tempSql += "INSERT INTO XY_CLB_ZCPB_LIST (\n" +
+                    "\tSELECT \n" +
+                    "\t\tsys_guid(),\n" +
+                    "\t\t'"+ctrCode+"',\n" +
+                    "\t\tZCPB_ML, \n" +
+                    "\t\tZCPB_XH, \n" +
+                    "\t\tZCPB_TYPE, \n" +
+                    "\t\tZCPB_PP, \n" +
+                    "\t\tZCPB_DC, \n" +
+                    "\t\tZCPB_SPEC, \n" +
+                    "\t\tZCPB_UNIT, \n" +
+                    "\t\tZCPB_PRICE, \n" +
+                    "\t\tZCPB_QTY, \n" +
+                    "\t\tZCPB_XJ, \n" +
+                    "\t\tZCPB_MARK, \n" +
+                    "\t\tZCPB_ROWID, \n" +
+                    "\t\tZCPB_VERSION, \n" +
+                    "\t\tZCPB_METE, \n" +
+                    "\t\tZCPB_MX, \n" +
+                    "\t\tZCPB_STAGE, \n" +
+                    "\t\tZCPB_ZC_CODE, \n" +
+                    "\t\tZCPB_ZC_TYPE\n" +
+                    "\tFROM \n" +
+                    "\t\tXY_CLB_ZCPB_TEMPLATE_LIST\n" +
+                    "\tWHERE \n" +
+                    "\t\tZCPB_MBID = (\n" +
+                    "\t\t\tSELECT HOUSE_TEMPLATE_ZC_ID FROM XY_MAIN_HOUSER WHERE HOUSE_ID = '"+houseId+"'\n" +
+                    "\t\t)\n" +
+                    "\tAND\n" +
+                    "\t\tZCPB_ZC_CODE <> '0'\n" +
+                    "\tAND \n" +
+                    "\t\tZCPB_ROWID NOT IN('1')\n" +
+                    ")";
+            if (zcArray != null && zcArray.length > 0){
+                String tempVariable = "";
+                //主材
+                for (int i = 0; i < zcArray.length ; i++) {
+                    if (i == 0){
+                        tempVariable += "'"+zcArray[i]+"'";
+                    } else {
+                        tempVariable += ",'"+zcArray[i]+"'";
+                    }
+                }
+                //软装
+                for (int i = 0; i < rzArray.length ; i++) {
+                    tempVariable += ",'"+rzArray[i]+"'";
+                }
+                tempSql += "AND ZCPB_ROWID NOT IN("+tempVariable+")";
+            }
+            return tempSql;
         }
     }
 

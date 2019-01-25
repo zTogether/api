@@ -21,8 +21,6 @@ public interface XyClbZcpbTemplateListMapper extends Mapper<XyClbZcpbTemplateLis
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT J.*  FROM ( SELECT H.*, ROWNUM RN \n" +
-            "FROM ( \n" +
             "\tSELECT \n" +
             "\t\tA.* ,\n" +
             "\t\tB.ZC_NAME\n" +
@@ -38,12 +36,8 @@ public interface XyClbZcpbTemplateListMapper extends Mapper<XyClbZcpbTemplateLis
             "\t\tZCPB_ZC_CODE <![CDATA[<>]]> '0'\n" +
             "\tAND\n" +
             "\t\tSUBSTR(ZCPB_ZC_CODE, 1, 1) = #{acOrRzFlag,jdbcType=VARCHAR}\t\n" +
-            "\t) H \n" +
-            ")J\n" +
-            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getMbZcOrRzList(@Param("houseId") String houseId ,@Param("acOrRzFlag") String acOrRzFlag , @Param("startNum") Integer startNum ,
-                                         @Param("endNum") Integer endNum) throws SQLException;
+    public List<Map<String ,Object>> getMbZcOrRzList(@Param("houseId") String houseId ,@Param("acOrRzFlag") String acOrRzFlag ) throws SQLException;
 
     /**
      * 获取主材或软装总记录数（flag：  0：主材；8：软装）
@@ -78,12 +72,12 @@ public interface XyClbZcpbTemplateListMapper extends Mapper<XyClbZcpbTemplateLis
      * @return: java.lang.Double
      */
     @SelectProvider(type = getMbZcOrRzZj.class,method = "getMbZcOrRzZj")
-    public Double getMbZcOrRzZj(String houseId ,String acOrRzFlag ,String []zcOrRzArray) throws SQLException;
+    public double getMbZcOrRzZj(String houseId ,String acOrRzFlag ,String []zcOrRzArray) throws SQLException;
     public class getMbZcOrRzZj{
         public String getMbZcOrRzZj(String houseId ,String acOrRzFlag ,String []zcOrRzArray){
             String tempSql = "";
-            tempSql = "SELECT \n" +
-                    "\tSUM(ZCPB_XJ)\n" +
+            tempSql += "SELECT \n" +
+                    "\tNVL(SUM( ZCPB_XJ ) , 0)\n" +
                     "FROM \n" +
                     "\tXY_CLB_ZCPB_TEMPLATE_LIST\n" +
                     "WHERE \n" +
@@ -93,13 +87,13 @@ public interface XyClbZcpbTemplateListMapper extends Mapper<XyClbZcpbTemplateLis
                     "AND\n" +
                     "\tZCPB_ZC_CODE <> '0'\n";
             if ("0".equals(acOrRzFlag)){
-                tempSql = "AND\n" +
+                tempSql += "AND\n" +
                         "\tSUBSTR(ZCPB_ZC_CODE, 1, 1) = '0'";
             } else if ("1".equals(acOrRzFlag)){
-                tempSql = "AND\n" +
+                tempSql += "AND\n" +
                         "\tSUBSTR(ZCPB_ZC_CODE, 1, 1) = '8'";
             }
-            if (zcOrRzArray.length > 1){
+            if (zcOrRzArray != null && zcOrRzArray.length > 0){
                 String tempVariable = "";
                 for (int i = 0; i < zcOrRzArray.length ; i++) {
                     if (i == 0){
@@ -108,7 +102,7 @@ public interface XyClbZcpbTemplateListMapper extends Mapper<XyClbZcpbTemplateLis
                         tempVariable += ",'"+zcOrRzArray[i]+"'";
                     }
                 }
-                tempSql = "AND NOT IN(tempVariable)";
+                tempSql += "AND ZCPB_ROWID NOT IN("+tempVariable+")";
             }
             return tempSql;
         }

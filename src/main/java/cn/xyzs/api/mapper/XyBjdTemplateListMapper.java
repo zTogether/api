@@ -21,8 +21,6 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT J.*  FROM ( SELECT H.*, ROWNUM RN \n" +
-            "FROM ( \n" +
             "\tSELECT \n" +
             "\t\t* \n" +
             "\tFROM \n" +
@@ -31,12 +29,8 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
             "\t\tTEMPLATE_ID = (" +
             "SELECT HOUSE_TEMPLATE_RG_ID FROM XY_MAIN_HOUSER WHERE HOUSE_ID = #{houseId,jdbcType=VARCHAR}" +
             ")\n" +
-            "\t) H \n" +
-            ")J\n" +
-            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
             "</script>")
-    public List<Map<String ,Object>> getMbRgList(@Param("houseId") String houseId ,
-                                               @Param("startNum") Integer startNum , @Param("endNum") Integer endNum) throws SQLException;
+    public List<Map<String ,Object>> getMbRgList(@Param("houseId") String houseId ) throws SQLException;
 
     /**
      * 获取人工费项目总记录数
@@ -67,19 +61,19 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
     * @return: java.lang.Double
     */
     @SelectProvider(type = getMbRgZj.class,method = "getMbRgZj")
-    public Double getMbRgZj(String houseId ,String []rgArray) throws SQLException;
+    public double getMbRgZj(String houseId ,String []rgArray) throws SQLException;
     public class getMbRgZj{
         public String getMbRgZj(String houseId ,String []rgArray){
             String tempSql = "";
-            tempSql = "SELECT \n" +
-                    "\tSUM(RG_PRICE * RG_QTY)\n" +
+            tempSql += "SELECT \n" +
+                    "\tNVL(SUM(RG_PRICE * RG_QTY) , 0)\n" +
                     "FROM \n" +
                     "\tXY_BJD_TEMPLATE_LIST\n" +
                     "WHERE\n" +
                     "\tTEMPLATE_ID = (\n" +
                     "\t\tSELECT HOUSE_TEMPLATE_RG_ID FROM XY_MAIN_HOUSER WHERE HOUSE_ID = '"+houseId+"'\n" +
                     "\t)\n";
-            if (rgArray.length > 1){
+            if (rgArray != null && rgArray.length > 0){
                 String tempVariable = "";
                 for (int i = 0; i < rgArray.length ; i++) {
                     if (i == 0){
@@ -88,7 +82,7 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
                         tempVariable += ",'"+rgArray[i]+"'";
                     }
                 }
-                tempSql = "AND ZCPB_ROWID NOT IN(tempVariable)";
+                tempSql += "AND TEMPLATE_ROWID NOT IN("+tempVariable+")";
             }
             return tempSql;
         }

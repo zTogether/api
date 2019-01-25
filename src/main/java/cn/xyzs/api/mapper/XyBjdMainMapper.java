@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdMain;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -107,4 +108,29 @@ public interface XyBjdMainMapper extends Mapper<XyBjdMain>{
             "\tA.CTR_CODE" +
             "</script>")
     public Map<String ,Object> getNowBjdjeAndCldjeByCtrCode(String ctrCode) throws SQLException;
+
+    /**
+     * 一键报价添加报价单主表
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/24 13:55
+     * @param: [xyBjdMain]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_BJD_MAIN (\n" +
+            "\tBJD_CODE,\n" +
+            "\tCTR_CODE,\n" +
+            "\tBJD_RG_ZJ,\n" +
+            "\tBJD_FC_ZJ,\n" +
+            "\tBJD_FWF_ZJ\n" +
+            ") VALUES (\n" +
+            "\t#{bjdCode,jdbcType=VARCHAR}\n" +
+            "\t#{ctrCode,jdbcType=VARCHAR}\n" +
+            "\t#{bjdRgZj,jdbcType=VARCHAR}\n" +
+            "\t#{bjdFcZj,jdbcType=VARCHAR}\n" +
+            "\t#{bjdFwfZj,jdbcType=VARCHAR}\n" +
+            ")" +
+            "</script>")
+    public void addAutoBjdMain(XyBjdMain xyBjdMain) throws SQLException;
 }

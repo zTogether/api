@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdFcList;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -53,4 +54,37 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             "WHERE BJD_CODE = '201800053201'" +
             "</script>")
     public Double getFcZj() throws SQLException;
+
+    /**
+     * 一键报价添加辅材（测试版）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/24 13:47
+     * @param: [bjd_code]
+     * @return: void
+     */
+    @Insert("<script>" +
+            "INSERT INTO XY_BJD_FC_LIST (\n" +
+            "\tSELECT \n" +
+            "\t\t#{bjdCode,jdbcType=VARCHAR}, \n" +
+            "\t\tsys_guid(), \n" +
+            "\t\tBJD_FC_STAGE, \n" +
+            "\t\tBJD_FC_NO, \n" +
+            "\t\tFC_PRICE_CODE, \n" +
+            "\t\tFC_NAME, \n" +
+            "\t\tBRAND_NAME, \n" +
+            "\t\tFC_SPEC, \n" +
+            "\t\tFC_UNIT, \n" +
+            "\t\tFC_QTY, \n" +
+            "\t\tFC_PRICE, \n" +
+            "\t\tFC_XJ, \n" +
+            "\t\tFC_MARK, \n" +
+            "\t\tFC_YN\n" +
+            "\tFROM \n" +
+            "\t\tXY_BJD_FC_LIST \n" +
+            "\tWHERE \n" +
+            "\t\tBJD_CODE = '201800053201'\n" +
+            ")" +
+            "</script>")
+    public void addAutoBjFc(String bjdCode) throws SQLException;
 }

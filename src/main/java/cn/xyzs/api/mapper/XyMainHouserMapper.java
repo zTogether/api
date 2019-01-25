@@ -15,51 +15,22 @@ import java.util.Map;
 public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
 
     /**
-     * 根据条件获取小区的附加查询信息
+     * 根据户型获取风格
      * @Description:
      * @author: zheng shuai
-     * @date: 2019/1/18 11:21
-     * @param: [xyMainHouser]
+     * @date: 2019/1/25 12:28
+     * @param: [houseTypeId]
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
-    @SelectProvider(type = getAdditionalInfo.class,method = "getAdditionalInfo")
-    public List<Map<String ,Object>> getAdditionalInfo(XyMainHouser xyMainHouser) throws SQLException;
-    public class getAdditionalInfo{
-        public String getAdditionalInfo(XyMainHouser xyMainHouser){
-            return new SQL(){{
-                SELECT("HOUSE_ID,\n" +
-                        "\tAREA_ID,\n" +
-                        "\tCAD_COMMON_URL,\n" +
-                        "\tHOUSE_STYLE,\n" +
-                        "\tEFFECTS_URL,\n" +
-                        "\tVR_URL,\n" +
-                        "\tHOUSE_AUTHOR,\n" +
-                        "\tCREATE_TIME,\n" +
-                        "\tHOUSE_DESC,\n" +
-                        "\tLIKE_NUM, \n" +
-                        "\tCAD_DECORATION_URL,\n" +
-                        "\tFLOOR_HEIGHT, \n" +
-                        "\tFLOOR_FACT_HEIGHT,\n" +
-                        "\tHOUSE_LEVEL");
-                FROM("XY_MAIN_HOUSER");
-                if (!"".equals(xyMainHouser.getAreaId()) && !"null".equals(xyMainHouser.getAreaId())
-                        && xyMainHouser.getAreaId() != null){
-                    WHERE("AREA_ID = #{areaId,jdbcType=VARCHAR}");
-                }
-
-                if (!"".equals(xyMainHouser.getHouseStyle()) && !"null".equals(xyMainHouser.getHouseStyle())
-                        && xyMainHouser.getHouseStyle() != null){
-                    WHERE("HOUSE_STYLE = #{houseStyle,jdbcType=VARCHAR}");
-                }
-
-                if (!"".equals(xyMainHouser.getHouseLevel()) && !"null".equals(xyMainHouser.getHouseLevel())
-                        && xyMainHouser.getHouseLevel() != null){
-                    WHERE("HOUSE_LEVEL = #{houseLevel,jdbcType=VARCHAR}");
-                }
-
-            }}.toString();
-        }
-    }
+    @Select("<script>" +
+            "SELECT \n" +
+            "\tHOUSE_STYLE\n" +
+            "FROM \n" +
+            "\tXY_MAIN_HOUSER \n" +
+            "WHERE \n" +
+            "\tHOUSE_TYPE_ID = #{houseTypeId,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> getHouseStyleByHouseTypeId(String houseTypeId) throws SQLException;
 
     /**
      * 根据条件查询房屋列表
@@ -70,61 +41,50 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @SelectProvider(type = getHouseInfoByCondition.class,method = "getHouseInfoByCondition")
-    public List<Map<String ,Object>> getHouseInfoByCondition(XyMainHouser xyMainHouser, XyMainArea xyMainArea ,
-                                                             XySysDistrict xySysDistrict ,Integer startNum,
-                                                             Integer endNum) throws SQLException;
+    public List<Map<String ,Object>> getHouseInfoByCondition(String areaId ,String houseTypeId ,String houseStyle ,
+                                                             Integer startNum, Integer endNum) throws SQLException;
     public class getHouseInfoByCondition{
-        public String getHouseInfoByCondition(XyMainHouser xyMainHouser, XyMainArea xyMainArea ,
-                                              XySysDistrict xySysDistrict ,Integer startNum, Integer endNum){
+        public String getHouseInfoByCondition(String areaId ,String houseTypeId ,String houseStyle ,
+                                              Integer startNum, Integer endNum){
             String tempSql = "SELECT J.*  FROM ( SELECT H.*, ROWNUM RN  FROM (";
             tempSql += new SQL(){{
                 SELECT("A.HOUSE_ID,\n" +
-                        "\tA.AREA_ID,\n" +
+                        "\tA.HOUSE_TYPE_ID,\n" +
+                        "\tB.HOUSE_TYPE_NAME HOUSE_TYPE_NAME,\n" +
                         "\tA.CAD_COMMON_URL,\n" +
                         "\tA.HOUSE_STYLE,\n" +
                         "\tA.EFFECTS_URL,\n" +
                         "\tA.VR_URL,\n" +
-                        "\tU.USER_NAME,\n" +
                         "\tA.HOUSE_AUTHOR,\n" +
+                        "\tC.USER_NAME HOUSE_AUTHOR_NAME,\n" +
                         "\tA.CREATE_TIME,\n" +
+                        "\tROUND(TO_NUMBER(SYSDATE - A.CREATE_TIME)) DAYS,\n" +
                         "\tA.HOUSE_DESC,\n" +
-                        "\tA.LIKE_NUM, \n" +
+                        "\tA.LIKE_NUM,\n" +
                         "\tA.CAD_DECORATION_URL,\n" +
-                        "\tA.FLOOR_HEIGHT, \n" +
+                        "\tA.FLOOR_HEIGHT,\n" +
                         "\tA.FLOOR_FACT_HEIGHT,\n" +
                         "\tA.HOUSE_LEVEL,\n" +
-                        "\tROUND(TO_NUMBER(SYSDATE - A.CREATE_TIME)) days\n");
+                        "\tA.HOUSE_TEMPLATE_RG_ID,\n" +
+                        "\tA.HOUSE_TEMPLATE_ZC_ID");
                 FROM("XY_MAIN_HOUSER A");
-                LEFT_OUTER_JOIN("XY_MAIN_AREA B ON A.AREA_ID = B.AREA_ID");
-                LEFT_OUTER_JOIN("XY_SYS_DISTRICT C ON B.DISTRICT_ID = C.DISTRICT_ID");
-                LEFT_OUTER_JOIN("XY_USER U ON U.USER_ID=A.HOUSE_AUTHOR");
-                //根据市/区/县查询
-                if (!"".equals(xySysDistrict.getDistrictId()) && !"null".equals(xySysDistrict.getDistrictId())
-                        && xySysDistrict.getDistrictId() != null){
-                    WHERE("C.DISTRICT_ID IN (\n" +
-                            "\t\tSELECT '"+ xySysDistrict.getDistrictId() +"' FROM dual\n" +
-                            "\t\tUNION ALL\n" +
-                            "\t\tSELECT DISTRICT_ID FROM XY_SYS_DISTRICT WHERE PREV_DISTRICT_ID = '"+ xySysDistrict.getDistrictId() +"'\n" +
-                            "\t)");
-                }
+                LEFT_OUTER_JOIN("XY_HOUSER_TYPE B ON A.HOUSE_TYPE_ID = B.HOUSE_TYPE_ID");
+                LEFT_OUTER_JOIN("XY_USER C ON A.HOUSE_AUTHOR = C.USER_ID");
                 //根据小区查询
-                if (!"".equals(xyMainArea.getAreaId()) && !"null".equals(xyMainArea.getAreaId())
-                        && xyMainArea.getAreaId() != null){
-                    WHERE("B.AREA_ID = '"+ xyMainArea.getAreaId() +"'");
+                if (!"".equals(areaId) && !"null".equals(areaId) && areaId != null){
+                    WHERE("B.AREA_ID = '"+areaId+"'");
                 }
                 //根据户型查询
-                if (!"".equals(xyMainHouser.getHouseStyle()) && !"null".equals(xyMainHouser.getHouseStyle())
-                        && xyMainHouser.getHouseStyle() != null){
-                    WHERE("A.HOUSE_STYLE = '"+ xyMainHouser.getHouseStyle() +"'");
+                if (!"".equals(houseTypeId) && !"null".equals(houseTypeId) && houseTypeId != null){
+                    WHERE("B.HOUSE_TYPE_ID = '"+ houseTypeId +"'");
                 }
-                //根据装修等级查询
-                if (!"".equals(xyMainHouser.getHouseLevel()) && !"null".equals(xyMainHouser.getHouseLevel())
-                        && xyMainHouser.getHouseLevel() != null){
-                    WHERE("A.HOUSE_LEVEL = '"+ xyMainHouser.getHouseLevel() +"'");
+                //根据风格查询
+                if (!"".equals(houseStyle) && !"null".equals(houseStyle) && houseStyle != null){
+                    WHERE("A.HOUSE_STYLE = '"+ houseStyle +"'");
                 }
-
             }}.toString();
             tempSql += ") H) J WHERE RN BETWEEN "+ startNum +" AND "+ endNum;
+            tempSql += " ORDER BY LIKE_NUM DESC";
             return tempSql;
         }
     }
@@ -140,28 +100,29 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
     @Select("<script>" +
             "SELECT \n" +
             "\tA.HOUSE_ID,\n" +
-            "\tA.AREA_ID,\n" +
+            "\tA.HOUSE_TYPE_ID,\n" +
+            "\tB.HOUSE_TYPE_NAME HOUSE_TYPE_NAME,\n" +
             "\tA.CAD_COMMON_URL,\n" +
             "\tA.HOUSE_STYLE,\n" +
             "\tA.EFFECTS_URL,\n" +
             "\tA.VR_URL,\n" +
             "\tA.HOUSE_AUTHOR,\n" +
-            "\tB.USER_NAME HOUSE_AUTHOR_NAME,\n" +
-            "\tTO_CHAR(A.CREATE_TIME,'yyyy-MM-dd HH24:mi:ss') CREATE_TIME,\n" +
+            "\tC.USER_NAME HOUSE_AUTHOR_NAME,\n" +
+            "\tA.CREATE_TIME,\n" +
+            "\tROUND(TO_NUMBER(SYSDATE - A.CREATE_TIME)) DAYS,\n" +
             "\tA.HOUSE_DESC,\n" +
-            "\tA.LIKE_NUM, \n" +
+            "\tA.LIKE_NUM,\n" +
             "\tA.CAD_DECORATION_URL,\n" +
-            "\tA.FLOOR_HEIGHT, \n" +
+            "\tA.FLOOR_HEIGHT,\n" +
             "\tA.FLOOR_FACT_HEIGHT,\n" +
             "\tA.HOUSE_LEVEL,\n" +
-            "\tA.HOUSE_TEMPLATE_RG_ID, \n" +
+            "\tA.HOUSE_TEMPLATE_RG_ID,\n" +
             "\tA.HOUSE_TEMPLATE_ZC_ID\n" +
             "FROM \n" +
             "\tXY_MAIN_HOUSER A\n" +
-            "LEFT JOIN XY_USER B\n" +
-            "ON B.USER_ID = A.HOUSE_AUTHOR\n" +
-            "WHERE\n" +
-            "\tA.HOUSE_ID = #{houseId,jdbcType=VARCHAR}" +
+            "LEFT JOIN XY_HOUSER_TYPE B ON A.HOUSE_TYPE_ID = B.HOUSE_TYPE_ID\n" +
+            "LEFT JOIN XY_USER C ON A.HOUSE_AUTHOR = C.USER_ID\n" +
+            "WHERE HOUSE_ID = #{houseId,jdbcType=VARCHAR}" +
             "</script>")
     public Map<String ,Object> getHouseInfoByHouseId(String houseId) throws SQLException;
 }

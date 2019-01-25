@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdRgList;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -34,4 +35,65 @@ public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
             "</script>")
     public Map<String,Object> prjZongJi(@Param("ctrCode") String ctrCode, @Param("bjdCode") String bjdCode,
                                         @Param("rgStage") String rgStage) throws SQLException;
+
+
+    /**
+     * 一键报价添加人工
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/24 13:34
+     * @param: [ctrCode, houseId, rgArray]
+     * @return: void
+     */
+    @InsertProvider(type = addAutoBjRg.class,method = "addAutoBjRg")
+    public void addAutoBjRg(String ctrCode ,String houseId ,String []rgArray) throws SQLException;
+    public class addAutoBjRg{
+        public String addAutoBjRg(String ctrCode ,String houseId ,String []rgArray){
+            String tempSql = "";
+            tempSql += "INSERT INTO XY_BJD_RG_LIST (\n" +
+                    "\tBJD_CODE,\n" +
+                    "\tBJD_RG_ROWID,\n" +
+                    "\tBJD_RG_STAGE, \n" +
+                    "\tBJD_RG_NO, \n" +
+                    "\tRG_ID, \n" +
+                    "\tRG_NAME, \n" +
+                    "\tRG_UNIT, \n" +
+                    "\tRG_QTY, \n" +
+                    "\tRG_PRICE, \n" +
+                    "\tRG_XJ, \n" +
+                    "\tRG_DES\n" +
+                    ") (\n" +
+                    "\tSELECT\n" +
+                    "\t\t'"+ctrCode+"01"+"',\n" +
+                    "\t\tsys_guid(),\n" +
+                    "\t\tRG_STAGE, \n" +
+                    "\t\tTEMPLATE_NO, \n" +
+                    "\t\tRG_ID, \n" +
+                    "\t\tRG_NAME, \n" +
+                    "\t\tRG_UNIT, \n" +
+                    "\t\tRG_QTY,\n" +
+                    "\t\tRG_PRICE, \n" +
+                    "\t\tRG_QTY*RG_PRICE RG_XJ,\n" +
+                    "\t\tRG_DES\n" +
+                    "\tFROM \n" +
+                    "\t\tXY_BJD_TEMPLATE_LIST\n" +
+                    "\tWHERE\n" +
+                    "\t\tTEMPLATE_ID = (\n" +
+                    "\t\t\tSELECT HOUSE_TEMPLATE_RG_ID FROM XY_MAIN_HOUSER WHERE HOUSE_ID = '"+houseId+"'\n" +
+                    "\t\t)\n";
+            if (rgArray != null && rgArray.length > 0){
+                String tempVariable = "";
+                for (int i = 0; i < rgArray.length ; i++) {
+                    if (i == 0){
+                        tempVariable += "'"+rgArray[i]+"'";
+                    } else {
+                        tempVariable += ",'"+rgArray[i]+"'";
+                    }
+                }
+                tempSql += "AND TEMPLATE_ROWID NOT IN("+tempVariable+")";
+            }
+            tempSql += ")";
+            return tempSql;
+        }
+    }
 }

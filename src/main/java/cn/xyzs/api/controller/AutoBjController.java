@@ -1,6 +1,7 @@
 package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.AutoBjService;
+import cn.xyzs.common.pojo.XyBjdMain;
 import cn.xyzs.common.pojo.XyMainArea;
 import cn.xyzs.common.pojo.XyMainHouser;
 import cn.xyzs.common.pojo.XySysDistrict;
@@ -28,9 +29,10 @@ public class AutoBjController {
      */
     @ResponseBody
     @RequestMapping("/getFontPageData")
-    public Map<String ,Object> getFontPageData(XyMainHouser xyMainHouser, XyMainArea xyMainArea ,
-                                               XySysDistrict xySysDistrict ,String flag,Integer startNum, Integer endNum){
-        return autoBjService.getFontPageData(xyMainHouser,xyMainArea,xySysDistrict,flag,startNum,endNum);
+    public Map<String ,Object> getFontPageData(String flag ,String districtId,
+                                               String areaId ,String houseTypeId ,String houseStyle ,
+                                               Integer startNum, Integer endNum){
+        return autoBjService.getFontPageData(flag,districtId,areaId,houseTypeId,houseStyle,startNum,endNum);
     }
 
     /**
@@ -43,8 +45,8 @@ public class AutoBjController {
      */
     @ResponseBody
     @RequestMapping("/getMbZcList")
-    public Map<String ,Object> getMbZcList(String houseId ,Integer startNum , Integer endNum){
-        return autoBjService.getMbZcList(houseId,startNum,endNum);
+    public Map<String ,Object> getMbZcList(String houseId){
+        return autoBjService.getMbZcList(houseId);
     }
 
     /**
@@ -57,8 +59,8 @@ public class AutoBjController {
      */
     @ResponseBody
     @RequestMapping("/getMbRzList")
-    public Map<String ,Object> getMbRzList(String houseId ,Integer startNum , Integer endNum){
-        return autoBjService.getMbRzList(houseId,startNum,endNum);
+    public Map<String ,Object> getMbRzList(String houseId){
+        return autoBjService.getMbRzList(houseId);
     }
 
     /**
@@ -71,8 +73,8 @@ public class AutoBjController {
      */
     @ResponseBody
     @RequestMapping("/getMbRgList")
-    public Map<String ,Object> getMbRgList( String houseId,Integer startNum , Integer endNum){
-        return autoBjService.getMbRgList(houseId,startNum,endNum);
+    public Map<String ,Object> getMbRgList( String houseId){
+        return autoBjService.getMbRgList(houseId);
     }
 
     /**
@@ -101,6 +103,21 @@ public class AutoBjController {
     @RequestMapping("/getTotalPriceTableData")
     public Map<String ,Object> getTotalPriceTableData(String houseId ,String []zcArray ,String []rzArray ,String []rgArray){
         return autoBjService.getTotalPriceTableData(houseId,zcArray,rzArray,rgArray);
+    }
+
+    /**
+     * 执行一键报价添加操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/24 14:05
+     * @param: [ctrCode, houseId, rgArray, zcArray, rzArray, xyBjdMain]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/addAutoBj")
+    public Map<String ,Object> addAutoBj(String ctrCode ,String houseId ,String []rgArray ,String []zcArray ,
+                                         String []rzArray ,XyBjdMain xyBjdMain){
+        return autoBjService.addAutoBj(ctrCode,houseId,rgArray,zcArray,rzArray,xyBjdMain);
     }
 
 }
