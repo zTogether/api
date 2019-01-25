@@ -22,11 +22,11 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @Select("<script>" +
-            "SELECT ZCPB_ML FROM XY_CLB_ZCPB_LIST\n" +
-            "LEFT JOIN ON XY_CLB_ZCPB_MAIN zm ON zm.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}" +
-            "WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND ZCPB_STAGE='A' AND ZCPB_ZC_CODE IS NOT NULL\n" +
-            "GROUP BY ZCPB_XH,ZCPB_ML\n" +
-            "ORDER BY ZCPB_XH" +
+            "SELECT zl.ZCPB_ML FROM XY_CLB_ZCPB_LIST zl\n" +
+            "LEFT JOIN XY_CLB_ZCPB_MAIN zm ON zm.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}\n" +
+            "WHERE zl.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND zl.ZCPB_STAGE='A' AND zl.ZCPB_ZC_CODE IS NOT NULL\n" +
+            "GROUP BY zl.ZCPB_XH,zl.ZCPB_ML\n" +
+            "ORDER BY zl.ZCPB_XH" +
             "</script>")
     List<Map<String,Object>> getFirstMl(@Param("ctrCode") String ctrCode,@Param("zcType") String zcType)throws SQLException;
 
@@ -55,7 +55,7 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
                 }
                 if(zcType!=null&&zcType!=""){
                     WHERE("zl.ZCPB_STAGE=#{zcType,jdbcType=VARCHAR}");
-                    WHERE("ZM.ZCPB_STATU like {#condition,jdbcType=VARCHAR}");
+                    WHERE("ZM.ZCPB_STATU LIKE #{condition,jdbcType=VARCHAR}");
                 }
                 ORDER_BY("ZL.ZCPB_XH");
             }}.toString();
@@ -67,18 +67,18 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
                                   @Param("zcType") String zcType,@Param("condition") String condition)throws SQLException;
     class getZj{
         public String getZj(@Param("ctrCode") String ctrCode,@Param("mlName") String mlName,
-                            @Param("zcType") String zcType){
+                            @Param("zcType") String zcType,@Param("condition") String condition){
             return new SQL(){{
                 SELECT("SUM(ZCPB_XJ) ZJ");
-                FROM("XY_CLB_ZCPB_LIST");
+                FROM("XY_CLB_ZCPB_LIST zl");
                 LEFT_OUTER_JOIN("XY_CLB_ZCPB_MAIN zm ON zm.CTR_CODE=#{ctrCode,jdbcType=VARCHAR}");
-                WHERE("CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND ZCPB_ZC_CODE IS NOT NULL");
+                WHERE("zl.CTR_CODE=#{ctrCode,jdbcType=VARCHAR} AND zl.ZCPB_ZC_CODE IS NOT NULL");
                 if(mlName!=null&&mlName!=""){
-                    WHERE("ZCPB_ML=#{mlName,jdbcType=VARCHAR}");
+                    WHERE("zl.ZCPB_ML=#{mlName,jdbcType=VARCHAR}");
                 }
                 if(zcType!=null&&zcType!=""){
-                    WHERE("ZCPB_STAGE=#{zcType,jdbcType=VARCHAR}");
-                    WHERE("ZM.ZCPB_STATU like {#condition,jdbcType=VARCHAR}");
+                    WHERE("zl.ZCPB_STAGE=#{zcType,jdbcType=VARCHAR}");
+                    WHERE("ZM.ZCPB_STATU like #{condition,jdbcType=VARCHAR}");
                 }
             }}.toString();
         }
