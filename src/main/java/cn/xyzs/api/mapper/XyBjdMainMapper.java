@@ -118,19 +118,12 @@ public interface XyBjdMainMapper extends Mapper<XyBjdMain>{
      * @return: void
      */
     @Insert("<script>" +
-            "INSERT INTO XY_BJD_MAIN (\n" +
-            "\tBJD_CODE,\n" +
-            "\tCTR_CODE,\n" +
-            "\tBJD_RG_ZJ,\n" +
-            "\tBJD_FC_ZJ,\n" +
-            "\tBJD_FWF_ZJ\n" +
-            ") VALUES (\n" +
-            "\t#{bjdCode,jdbcType=VARCHAR}\n" +
-            "\t#{ctrCode,jdbcType=VARCHAR}\n" +
-            "\t#{bjdRgZj,jdbcType=VARCHAR}\n" +
-            "\t#{bjdFcZj,jdbcType=VARCHAR}\n" +
-            "\t#{bjdFwfZj,jdbcType=VARCHAR}\n" +
-            ")" +
+            "INSERT INTO XY_BJD_MAIN\n" +
+            "\t\t(BJD_CODE,CTR_CODE,BJD_RG_ZJ,BJD_FC_ZJ,BJD_FWF_ZJ)\n" +
+            "\t\t(SELECT BJD_CODE,#{ctrCode,jdbcType=VARCHAR},SUM(CASE WHEN STAGE_TYPE='RG'THEN STAGE_HJ END),\n" +
+            "\t\tSUM(CASE WHEN STAGE_TYPE='CL'THEN STAGE_HJ END),\n" +
+            "\t\tROUND(SUM(STAGE_HJ)*0.15,2) FROM XY_BJD_STAGE WHERE BJD_CODE=#{bjdCode,jdbcType=VARCHAR} GROUP BY BJD_CODE\n" +
+            "\t\t)" +
             "</script>")
     public void addAutoBjdMain(XyBjdMain xyBjdMain) throws SQLException;
 }

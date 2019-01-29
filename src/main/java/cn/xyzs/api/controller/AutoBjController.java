@@ -1,10 +1,8 @@
 package cn.xyzs.api.controller;
 
 import cn.xyzs.api.service.AutoBjService;
-import cn.xyzs.common.pojo.XyBjdMain;
-import cn.xyzs.common.pojo.XyMainArea;
-import cn.xyzs.common.pojo.XyMainHouser;
-import cn.xyzs.common.pojo.XySysDistrict;
+import cn.xyzs.common.pojo.*;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -115,9 +113,23 @@ public class AutoBjController {
      */
     @ResponseBody
     @RequestMapping("/addAutoBj")
-    public Map<String ,Object> addAutoBj(String ctrCode ,String houseId ,String []rgArray ,String []zcArray ,
-                                         String []rzArray ,XyBjdMain xyBjdMain){
-        return autoBjService.addAutoBj(ctrCode,houseId,rgArray,zcArray,rzArray,xyBjdMain);
+    public Map<String ,Object> addAutoBj(HttpServletRequest request , String ctrCode , String houseId , String []rgArray , String []zcArray ,
+                                         String []rzArray , XyBjdMain xyBjdMain , XyClbZcpbMain xyClbZcpbMain){
+        return autoBjService.addAutoBj(request,ctrCode,houseId,rgArray,zcArray,rzArray,xyBjdMain,xyClbZcpbMain);
+    }
+
+    /**
+     * 根据houseid获取辅材品牌
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/27 10:17
+     * @param: [xyHouseFcBrand]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getFcBrandByHouseId")
+    public Map<String ,Object> getFcBrandByHouseId(XyHouseFcBrand xyHouseFcBrand){
+        return autoBjService.getFcBrandByHouseId(xyHouseFcBrand);
     }
 
 }

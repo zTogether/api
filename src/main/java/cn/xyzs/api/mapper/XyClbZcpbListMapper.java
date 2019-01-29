@@ -99,7 +99,7 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
             String tempSql = "";
             tempSql += "INSERT INTO XY_CLB_ZCPB_LIST (\n" +
                     "\tSELECT \n" +
-                    "\t\tsys_guid(),\n" +
+                    "\t\tZCPB_MBID,\n" +
                     "\t\t'"+ctrCode+"',\n" +
                     "\t\tZCPB_ML, \n" +
                     "\t\tZCPB_XH, \n" +
@@ -112,7 +112,7 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
                     "\t\tZCPB_QTY, \n" +
                     "\t\tZCPB_XJ, \n" +
                     "\t\tZCPB_MARK, \n" +
-                    "\t\tZCPB_ROWID, \n" +
+                    "\t\tsys_guid(), \n" +
                     "\t\tZCPB_VERSION, \n" +
                     "\t\tZCPB_METE, \n" +
                     "\t\tZCPB_MX, \n" +
@@ -126,10 +126,7 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
                     "\t\t\tSELECT HOUSE_TEMPLATE_ZC_ID FROM XY_MAIN_HOUSER WHERE HOUSE_ID = '"+houseId+"'\n" +
                     "\t\t)\n" +
                     "\tAND\n" +
-                    "\t\tZCPB_ZC_CODE <> '0'\n" +
-                    "\tAND \n" +
-                    "\t\tZCPB_ROWID NOT IN('1')\n" +
-                    ")";
+                    "\t\tZCPB_ZC_CODE <> '0'\n";
             if (zcArray != null && zcArray.length > 0){
                 String tempVariable = "";
                 //主材
@@ -146,6 +143,7 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
                 }
                 tempSql += "AND ZCPB_ROWID NOT IN("+tempVariable+")";
             }
+            tempSql +=  ")";
             return tempSql;
         }
     }

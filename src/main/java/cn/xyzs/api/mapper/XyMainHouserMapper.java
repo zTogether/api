@@ -41,10 +41,10 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
      * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @SelectProvider(type = getHouseInfoByCondition.class,method = "getHouseInfoByCondition")
-    public List<Map<String ,Object>> getHouseInfoByCondition(String areaId ,String houseTypeId ,String houseStyle ,
+    public List<Map<String ,Object>> getHouseInfoByCondition(String districtId ,String areaId ,String houseTypeId ,String houseStyle ,
                                                              Integer startNum, Integer endNum) throws SQLException;
     public class getHouseInfoByCondition{
-        public String getHouseInfoByCondition(String areaId ,String houseTypeId ,String houseStyle ,
+        public String getHouseInfoByCondition(String districtId ,String areaId ,String houseTypeId ,String houseStyle ,
                                               Integer startNum, Integer endNum){
             String tempSql = "SELECT J.*  FROM ( SELECT H.*, ROWNUM RN  FROM (";
             tempSql += new SQL(){{
@@ -69,6 +69,7 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
                         "\tA.HOUSE_TEMPLATE_ZC_ID");
                 FROM("XY_MAIN_HOUSER A");
                 LEFT_OUTER_JOIN("XY_HOUSER_TYPE B ON A.HOUSE_TYPE_ID = B.HOUSE_TYPE_ID");
+                LEFT_OUTER_JOIN("XY_MAIN_AREA D ON B.AREA_ID = D.AREA_ID");
                 LEFT_OUTER_JOIN("XY_USER C ON A.HOUSE_AUTHOR = C.USER_ID");
                 //根据小区查询
                 if (!"".equals(areaId) && !"null".equals(areaId) && areaId != null){
@@ -81,6 +82,10 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
                 //根据风格查询
                 if (!"".equals(houseStyle) && !"null".equals(houseStyle) && houseStyle != null){
                     WHERE("A.HOUSE_STYLE = '"+ houseStyle +"'");
+                }
+
+                if (!"".equals(districtId) && !"null".equals(districtId) && districtId != null){
+                    WHERE("D.DISTRICT_ID = '"+ districtId +"'");
                 }
             }}.toString();
             tempSql += ") H) J WHERE RN BETWEEN "+ startNum +" AND "+ endNum;
@@ -117,10 +122,12 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
             "\tA.FLOOR_FACT_HEIGHT,\n" +
             "\tA.HOUSE_LEVEL,\n" +
             "\tA.HOUSE_TEMPLATE_RG_ID,\n" +
-            "\tA.HOUSE_TEMPLATE_ZC_ID\n" +
+            "\tA.HOUSE_TEMPLATE_ZC_ID,\n" +
+            "\tD.AREA_NAME\n" +
             "FROM \n" +
             "\tXY_MAIN_HOUSER A\n" +
             "LEFT JOIN XY_HOUSER_TYPE B ON A.HOUSE_TYPE_ID = B.HOUSE_TYPE_ID\n" +
+            "LEFT JOIN XY_MAIN_AREA D ON B.AREA_ID = D.AREA_ID\n" +
             "LEFT JOIN XY_USER C ON A.HOUSE_AUTHOR = C.USER_ID\n" +
             "WHERE HOUSE_ID = #{houseId,jdbcType=VARCHAR}" +
             "</script>")

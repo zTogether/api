@@ -3,6 +3,7 @@ package cn.xyzs.api.service;
 import cn.xyzs.api.mapper.*;
 import cn.xyzs.common.pojo.*;
 import com.sun.corba.se.spi.ior.ObjectKey;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,18 @@ public class AutoBjService {
     private XyClbZcpbListMapper xyClbZcpbListMapper;
     @Resource
     private XyBjdMainMapper xyBjdMainMapper;
+    @Resource
+    private XyClbZcpbMainMapper xyClbZcpbMainMapper;
+    @Resource
+    private XyBjdFcTempMapper xyBjdFcTempMapper;
+    @Resource
+    private XyHtInfoMapper xyHtInfoMapper;
+    @Resource
+    private XyLogMapper xyLogMapper;
+    @Resource
+    private XyBjdStageMapper xyBjdStageMapper;
+    @Resource
+    private XyHouseFcBrandMapper xyHouseFcBrandMapper;
 
     /**
      * 获取一键报价首页数据
@@ -65,6 +78,10 @@ public class AutoBjService {
                 xySysDistrict.setDistrictId("552717F82EF442CA81FAAD9AAA3C055D");
                 List<Map<String ,Object>> districtInfoList = xySysDistrictMapper.getSysDistrict(xySysDistrict);
                 obj.put("districtInfoList",districtInfoList);
+                //根据条件获取房屋信息(参数：areaId，houseTypeId，houseStyle)
+                List<Map<String ,Object>> houserInfoList = xyMainHouserMapper.getHouseInfoByCondition(null,null,
+                        null,null,startNum,endNum);
+                obj.put("houserInfoList",houserInfoList);
             } else {
                 //根据区/县获取小区(参数：districtId)
                 XyMainArea xyMainArea = new XyMainArea();
@@ -83,11 +100,11 @@ public class AutoBjService {
                     List<Map<String ,Object>> houseStyleInfoList = xyMainHouserMapper.getHouseStyleByHouseTypeId(houseTypeId);
                     obj.put("houseStyleInfoList",houseStyleInfoList);
                 }
+                //根据条件获取房屋信息(参数：areaId，houseTypeId，houseStyle)
+                List<Map<String ,Object>> houserInfoList = xyMainHouserMapper.getHouseInfoByCondition(districtId,areaId,
+                        houseTypeId,houseStyle,startNum,endNum);
+                obj.put("houserInfoList",houserInfoList);
             }
-            //根据条件获取房屋信息(参数：areaId，houseTypeId，houseStyle)
-            List<Map<String ,Object>> houserInfoList = xyMainHouserMapper.getHouseInfoByCondition(areaId,
-                    houseTypeId,houseStyle,startNum,endNum);
-            obj.put("houserInfoList",houserInfoList);
 
             code = "200";
             msg = "";
@@ -149,8 +166,8 @@ public class AutoBjService {
         String code = "500";
         String msg = "系统异常";
         try {
-            List<Map<String ,Object>> mbRzList = xyClbZcpbTemplateListMapper.getMbZcOrRzList(houseId,"1");
-            Integer mbRzCount = xyClbZcpbTemplateListMapper.getMbZcOrRzCount(houseId,"1");
+            List<Map<String ,Object>> mbRzList = xyClbZcpbTemplateListMapper.getMbZcOrRzList(houseId,"8");
+            Integer mbRzCount = xyClbZcpbTemplateListMapper.getMbZcOrRzCount(houseId,"8");
             obj.put("mbRzList",mbRzList);
             obj.put("mbRzCount",mbRzCount);
             code = "200";
@@ -245,30 +262,60 @@ public class AutoBjService {
         try {
             //主材总计价格
             double zcTotalPrice = xyClbZcpbTemplateListMapper.getMbZcOrRzZj(houseId,"0",zcArray);
-            obj.put("zcTotalPrice",zcTotalPrice);
+            obj.put("zcTotalPrice",getRound(zcTotalPrice,100));
             //人工总计价格
             double rgTotalPrice = xyBjdTemplateListMapper.getMbRgZj(houseId,rgArray);
-            obj.put("rgTotalPrice",rgTotalPrice);
+            obj.put("rgTotalPrice",getRound(rgTotalPrice,100));
             //辅材总计价格
-            double fcTotalPrice = xyBjdFcListMapper.getFcZj();
-            obj.put("fcTotalPrice",fcTotalPrice);
+            double fcTotalPrice = xyBjdTemplateListMapper.getFcZj(houseId,rgArray);
+            obj.put("fcTotalPrice",getRound(fcTotalPrice*1.06,100));
             //硬装小计
-            double yzXj = zcTotalPrice + rgTotalPrice + fcTotalPrice;
-            obj.put("yzXj",yzXj);
+            double yzXj = Double.valueOf(getRound(zcTotalPrice,100)) +
+                    Double.valueOf(getRound(rgTotalPrice,100)) +
+                    Double.valueOf(getRound(fcTotalPrice*1.06,100));
+            obj.put("yzXj",getRound(yzXj,100));
             //服务费
-            double fwf = (fcTotalPrice + rgTotalPrice) * 1.05;
-            obj.put("fwf",fwf);
+            double fwf = (Double.valueOf(getRound(fcTotalPrice,100)) + Double.valueOf(getRound(rgTotalPrice,100))) * 0.15;
+            obj.put("fwf",getRound(fwf,100));
             //软装总计价格
-            double rzTotalPrice = xyClbZcpbTemplateListMapper.getMbZcOrRzZj(houseId,"0",rzArray);
-            obj.put("rzTotalPrice",rzTotalPrice);
+            double rzTotalPrice = xyClbZcpbTemplateListMapper.getMbZcOrRzZj(houseId,"1",rzArray);
+            obj.put("rzTotalPrice",getRound(rzTotalPrice,100));
             //总计
-            double TotalPrice = yzXj + rzTotalPrice + fwf;
-            obj.put("TotalPrice",TotalPrice);
+            double TotalPrice = Double.valueOf(yzXj) + Double.valueOf(getRound(rzTotalPrice,100)) + Double.valueOf(getRound(fwf,100));
+            obj.put("TotalPrice",getRound(TotalPrice,100));
             code = "200";
             msg = "";
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code",code);
+            resultMap.put("msg",msg);
+            resultMap.put("resultData",obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据houseid获取辅材品牌
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/27 10:17
+     * @param: [xyHouseFcBrand]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String ,Object> getFcBrandByHouseId(XyHouseFcBrand xyHouseFcBrand){
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> fcBrandList = xyHouseFcBrandMapper.getFcBrandByCondition(xyHouseFcBrand);
+            obj.put("fcBrandList",fcBrandList);
+            code = "200";
+            msg = "";
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             resultMap.put("code",code);
@@ -287,34 +334,123 @@ public class AutoBjService {
      * @return: java.util.Map<java.lang.String,java.lang.Object>
      */
     @Transactional
-    public Map<String ,Object> addAutoBj(String ctrCode ,String houseId ,String []rgArray ,String []zcArray ,
-                                      String []rzArray ,XyBjdMain xyBjdMain){
+    public Map<String ,Object> addAutoBj(HttpServletRequest request ,String ctrCode ,String houseId ,String []rgArray ,String []zcArray ,
+                                      String []rzArray ,XyBjdMain xyBjdMain ,XyClbZcpbMain xyClbZcpbMain){
         Map<String, Object> resultMap = new HashMap<>();
         String code = "500";
         String msg = "系统异常";
         try {
             String bjdCode = ctrCode + "01";
             //一键报价添加辅材
-            xyBjdFcListMapper.addAutoBjFc(bjdCode);
+            xyBjdFcListMapper.addAutoBjFc(bjdCode,houseId,rgArray);
+            xyBjdFcTempMapper.addAutoBjBjdFcTemp(houseId,ctrCode);
+
             //一键报价添加人工
             xyBjdRgListMapper.addAutoBjRg(ctrCode,houseId,rgArray);
+
             //一键报价添加主材和软转
             xyClbZcpbListMapper.addAutoBjZcAndRz(ctrCode,houseId,zcArray,rzArray);
-            //一键报价添加主表
+
+            //一键报价添加主材配比主表(参数：ctrCode，opUserid，zcpbHj)
+            xyClbZcpbMain.setZcpbLx("2");
+            xyClbZcpbMain.setZcpbStatu("55");
+            xyClbZcpbMainMapper.addAutoBjZcpbMain(xyClbZcpbMain);
+
+            //一键报价添加bjdStage辅材
+            xyBjdStageMapper.addAutoBjBjdStageFc(bjdCode,houseId,rgArray);
+            //一键报价添加bjdStage人工
+            xyBjdStageMapper.addAutoBjBjdStageRg(bjdCode,houseId,rgArray);
+
+            //一键报价添加报价单主表
             xyBjdMain.setBjdCode(bjdCode);
             xyBjdMain.setCtrCode(ctrCode);
             xyBjdMainMapper.addAutoBjdMain(xyBjdMain);
+
+            //一键报价添加合同表
+            xyHtInfoMapper.addHtInfo(ctrCode);
+
+            //一键报价添加日志表
+            XyLog xyLog = new XyLog();
+            xyLog.setLogIp(getIpAddr(request));
+            xyLog.setUserId(xyClbZcpbMain.getOpUserid());
+            xyLog.setOpId("S");
+            xyLog.setLogResult("初次报价");
+            xyLogMapper.addXyLog(xyLog);
+            xyLog.setOpId("S");
+            xyLog.setUserId("B8FC8BC5D80B4D6199A9E7752711B3EB");
+            xyLog.setLogResult("报价审批通过");
+            xyLogMapper.addXyLog(xyLog);
+            xyLog.setOpId("S");
+            xyLog.setUserId(xyClbZcpbMain.getOpUserid());
+            xyLog.setLogResult("生成草稿合同");
+            xyLogMapper.addXyLog(xyLog);
+            xyLog.setUserId("B8FC8BC5D80B4D6199A9E7752711B3EB");
+            xyLog.setOpId("S");
+            xyLog.setLogResult("审核合同");
+            xyLogMapper.addXyLog(xyLog);
+
             code = "200";
             msg = "";
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             resultMap.put("code",code);
             resultMap.put("msg",msg);
         }
         return resultMap;
+    }
+
+    private String getRound(double a ,int b){
+        a = a * b;
+        int c = (int)a;
+        c = (c-(int) a)>0.5? ((int) a)+1:(int) a;
+        return String.valueOf(Double.valueOf(c)  / b);
+    }
+
+    /**
+     * 获取用户真实IP地址，不使用request.getRemoteAddr()的原因是有可能用户使用了代理软件方式避免真实IP地址,
+     * 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/12 9:50
+     * @param: [request]
+     * @return: java.lang.String
+     */
+    private String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        System.out.println("x-forwarded-for ip: " + ip);
+        if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            if( ip.indexOf(",")!=-1 ){
+                ip = ip.split(",")[0];
+            }
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+            System.out.println("Proxy-Client-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+            System.out.println("WL-Proxy-Client-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+            System.out.println("HTTP_CLIENT_IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            System.out.println("HTTP_X_FORWARDED_FOR ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+            System.out.println("X-Real-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            System.out.println("getRemoteAddr ip: " + ip);
+        }
+        System.out.println("获取客户端ip: " + ip);
+        return ip;
     }
 
 }
