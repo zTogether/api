@@ -22,7 +22,17 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
      */
     @Select("<script>" +
             "\tSELECT \n" +
-            "\t\t* \n" +
+            "\t\tTEMPLATE_ID,\n" +
+            "\t\tTEMPLATE_ROWID,\n" +
+            "\t\tRG_STAGE,\n" +
+            "\t\tTEMPLATE_NO,\n" +
+            "\t\tRG_ID,\n" +
+            "\t\tRG_NAME,\n" +
+            "\t\tRG_UNIT,\n" +
+            "\t\tRG_PRICE,\n" +
+            "\t\tRG_DES,\n" +
+            "\t\tRG_QTY,\n" +
+            "\t\tcast(RG_QTY*RG_PRICE as   decimal(10, 2)) RG_XJ" +
             "\tFROM \n" +
             "\t\tXY_BJD_TEMPLATE_LIST\n" +
             "\tWHERE\n" +
@@ -102,31 +112,30 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
     public class getFcZj{
         public String getFcZj(String houseId ,String []rgArray){
             String tempSql = "";
-            tempSql += "SELECT\n" +
-                    "\t NVL(SUM(SUM( V.SL )*V.FC_PRICE_OUT) , 0)\n" +
-                    "FROM\n" +
-                    "\t(\n" +
-                    "\tSELECT\n" +
-                    "\t\tG.RG_STAGE,\n" +
-                    "\t\tC.FC_CODE,\n" +
-                    "\t\tE.FC_PRICE_CODE,\n" +
-                    "\t\tC.FC_NAME,\n" +
-                    "\t\tC.FC_UNIT,\n" +
-                    "\t\tD.BRAND_NAME,\n" +
-                    "\t\tD.S_NAME,\n" +
-                    "\t\tD.S_VAL,\n" +
-                    "\t\tE.FC_PRICE_OUT,\n" +
-                    "\tCEIL(( CASE B.CLC_TYPE WHEN '0' THEN B.SL ELSE B.SL * A.RG_QTY END ) / C.FC_N4 ) * C.FC_N4 SL \n" +
+            tempSql += "\tSELECT\n" +
+                    "\t\tNVL(SUM(SUM( V.SL )*V.FC_PRICE_OUT) , 0)\n" +
+                    "\tFROM\n" +
+                    "\t\t(\n" +
+                    "\t\tSELECT\n" +
+                    "\t\t\tG.RG_SG_STAGE,\n" +
+                    "\t\t\tC.FC_CODE,\n" +
+                    "\t\t\tE.FC_PRICE_CODE,\n" +
+                    "\t\t\tC.FC_NAME,\n" +
+                    "\t\t\tC.FC_UNIT,\n" +
+                    "\t\t\tD.BRAND_NAME,\n" +
+                    "\t\t\tD.S_NAME,\n" +
+                    "\t\t\tD.S_VAL,\n" +
+                    "\t\t\tE.FC_PRICE_OUT,\n" +
+                    "\t\tCEIL(( CASE B.CLC_TYPE WHEN '0' THEN B.SL ELSE B.SL * A.RG_QTY END ) / C.FC_N4 ) * C.FC_N4 SL \n" +
                     "FROM\n" +
                     "\tXYZS_PLAT2.XY_BJD_TEMPLATE_LIST A,\n" +
                     "\tXYZS_PLAT2.XY_BJD_FC_MB B,\n" +
                     "\tXYZS_PLAT2.XY_CLB_FC_DB C,\n" +
                     "\tXYZS_PLAT2.XY_CLB_FC_BRAND D,\n" +
                     "\tXYZS_PLAT2.XY_CLB_FC_DB_PRICE E,\n" +
-                    "\tXYZS_TEST.XY_MAIN_HOUSER F,\n" +
+                    "\tXYZS_PLAT2.XY_MAIN_HOUSER F,\n" +
                     "\tXYZS_PLAT2.XY_GCB_RG_VER_LIST G \n" +
-                    "WHERE\n" +
-                    "\tSUBSTR( A.RG_ID, 1, 10 ) = B.RG_CODE ";
+                    "\tWHERE SUBSTR( A.RG_ID, 1, 10 ) = B.RG_CODE ";
             if (rgArray != null && rgArray.length > 0){
                 String tempVariable = "";
                 for (int i = 0; i < rgArray.length ; i++) {
@@ -136,10 +145,10 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
                         tempVariable += ",'"+rgArray[i]+"'";
                     }
                 }
-                tempSql += "AND A.TEMPLATE_ROWID NOT IN("+tempVariable+")";
+                tempSql += "\tAND A.TEMPLATE_ROWID NOT IN("+tempVariable+")";
             }
 
-            tempSql += "AND C.FC_CODE = D.FC_CODE \n" +
+            tempSql += "\tAND C.FC_CODE = D.FC_CODE \n" +
                     "\tAND D.BRAND_ID = E.BRAND_ID \n" +
                     "\tAND F.HOUSE_ID = A.TEMPLATE_ID \n" +
                     "\tAND F.HOUSE_ID = '"+houseId+"' \n" +
@@ -164,7 +173,7 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
                     "\t\t\t\tAND H.S_VAL = D.S_VAL \n" +
                     "\t\t\t)))) V \n" +
                     "GROUP BY\n" +
-                    "\tV.RG_STAGE,\n" +
+                    "\tV.RG_SG_STAGE,\n" +
                     "\tV.FC_CODE,\n" +
                     "\tV.FC_NAME,\n" +
                     "\tV.FC_UNIT,\n" +
@@ -172,7 +181,7 @@ public interface XyBjdTemplateListMapper extends Mapper<XyBjdTemplateList>{
                     "\tV.S_NAME,\n" +
                     "\tV.S_VAL,\n" +
                     "\tV.FC_PRICE_OUT,\n" +
-                    "\tV.FC_PRICE_CODE\n" +
+                    "\tV.FC_PRICE_CODE \n" +
                     "HAVING\n" +
                     "\tSUM( V.SL ) <> 0";
             return tempSql;

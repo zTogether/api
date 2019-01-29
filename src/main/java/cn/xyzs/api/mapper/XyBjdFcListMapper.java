@@ -52,66 +52,69 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
     public class addAutoBjFc{
         public String addAutoBjFc(String bjdCode ,String houseId ,String []rgArray){
             String tempSql = "";
-            tempSql += "INSERT INTO XY_BJD_FC_LIST(\n" +
-                    "\tBJD_CODE,\n" +
-                    "\tBJD_FC_ROWID,\n" +
-                    "\tBJD_FC_STAGE,\n" +
-                    "\tBJD_FC_NO,\n" +
-                    "\tFC_PRICE_CODE,\n" +
-                    "\tFC_NAME,\n" +
-                    "\tBRAND_NAME,\n" +
-                    "\tFC_UNIT,\n" +
-                    "\tFC_QTY,\n" +
-                    "\tFC_PRICE,\n" +
+            tempSql += "INSERT INTO XY_BJD_FC_LIST(" +
+                    "BJD_CODE, \n" +
+                    "\tBJD_FC_ROWID, \n" +
+                    "\tBJD_FC_STAGE, \n" +
+                    "\tBJD_FC_NO, \n" +
+                    "\tFC_PRICE_CODE, \n" +
+                    "\tFC_NAME, \n" +
+                    "\tBRAND_NAME,  \n" +
+                    "\tFC_UNIT, \n" +
+                    "\tFC_QTY, \n" +
+                    "\tFC_PRICE, \n" +
                     "\tFC_XJ,\n" +
-                    "\tFC_YN \n" +
-                    ") (\n" +
+                    "\tFC_YN" +
+                    ")(\n" +
+                    "SELECT\n" +
+                    "\t'"+bjdCode+"',\n" +
+                    "\tsys_guid (),\n" +
+                    "\t(CASE WHEN J.RG_SG_STAGE IN('31','32') THEN '30' ELSE J.RG_SG_STAGE END)RG_SG_STAGE,\n" +
+                    "\tROWNUM rn,\n" +
+                    "\tJ.FC_PRICE_CODE,\n" +
+                    "\tJ.FC_NAME,\n" +
+                    "\tJ.BRAND_NAME,\n" +
+                    "\tJ.FC_UNIT,\n" +
+                    "\tJ.SL,\n" +
+                    "\tJ.FC_PRICE_OUT,\n" +
+                    "\t( J.SL * J.FC_PRICE_OUT ) FC_XJ,\n" +
+                    "\t'1' \n" +
+                    "FROM\n" +
+                    "\t(\n" +
                     "\tSELECT\n" +
-                    "\t\t'"+bjdCode+"',\n" +
-                    "\t\tsys_guid(),\n" +
-                    "\t\tJ.RG_STAGE,\n" +
-                    "\t\tROWNUM rn,\n" +
-                    "\t\tJ.FC_PRICE_CODE,\n" +
-                    "\t\tJ.FC_NAME,\n" +
-                    "\t\tJ.BRAND_NAME,\n" +
-                    "\t\tJ.FC_UNIT,\n" +
-                    "\t\tJ.SL,\n" +
-                    "\t\tJ.FC_PRICE_OUT,\n" +
-                    "\t\t(J.SL*J.FC_PRICE_OUT) FC_XJ,\n" +
-                    "\t\t'1'\n" +
-                    "\tFROM (\n" +
+                    "\t\tV.RG_SG_STAGE,\n" +
+                    "\t\tV.FC_CODE,\n" +
+                    "\t\tV.FC_PRICE_CODE,\n" +
+                    "\t\tV.FC_NAME,\n" +
+                    "\t\tV.FC_UNIT,\n" +
+                    "\t\tV.BRAND_NAME,\n" +
+                    "\t\tV.S_NAME,\n" +
+                    "\t\tV.S_VAL,\n" +
+                    "\t\tV.FC_PRICE_OUT,\n" +
+                    "\t\tSUM( V.SL ) SL \n" +
+                    "\tFROM\n" +
+                    "\t\t(\n" +
                     "\t\tSELECT\n" +
-                    "\t\t\tV.RG_STAGE,\n" +
-                    "\t\t\tV.FC_CODE,\n" +
-                    "\t\t\tV.FC_PRICE_CODE,\n" +
-                    "\t\t\tV.FC_NAME,\n" +
-                    "\t\t\tV.FC_UNIT,\n" +
-                    "\t\t\tV.BRAND_NAME,\n" +
-                    "\t\t\tV.S_NAME,\n" +
-                    "\t\t\tV.S_VAL,\n" +
-                    "\t\t\tV.FC_PRICE_OUT,\n" +
-                    "\t\t\tSUM( V.SL ) SL\n" +
-                    "\t\tFROM (\n" +
-                    "\t\t\tSELECT\n" +
-                    "\t\t\t\tG.RG_STAGE,\n" +
-                    "\t\t\t\tC.FC_CODE,\n" +
-                    "\t\t\t\tE.FC_PRICE_CODE,\n" +
-                    "\t\t\t\tC.FC_NAME,\n" +
-                    "\t\t\t\tC.FC_UNIT,\n" +
-                    "\t\t\t\tD.BRAND_NAME,\n" +
-                    "\t\t\t\tD.S_NAME,\n" +
-                    "\t\t\t\tD.S_VAL,\n" +
-                    "\t\t\t\tE.FC_PRICE_OUT,\n" +
-                    "\t\t\t\tCEIL(( CASE B.CLC_TYPE WHEN '0' THEN B.SL ELSE B.SL * A.RG_QTY END ) / C.FC_N4 ) * C.FC_N4 SL\n" +
-                    "\t\t\tFROM\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_BJD_TEMPLATE_LIST A,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_BJD_FC_MB B,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_CLB_FC_DB C,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_CLB_FC_BRAND D,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_CLB_FC_DB_PRICE E,\n" +
-                    "\t\t\t\tXYZS_TEST.XY_MAIN_HOUSER F,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_GCB_RG_VER_LIST G\n" +
-                    "\t\t\tWHERE SUBSTR( A.RG_ID, 1, 10 ) = B.RG_CODE\n";
+                    "\t\t\tG.RG_SG_STAGE,\n" +
+                    "\t\t\tC.FC_CODE,\n" +
+                    "\t\t\tE.FC_PRICE_CODE,\n" +
+                    "\t\t\tC.FC_NAME,\n" +
+                    "\t\t\tC.FC_UNIT,\n" +
+                    "\t\t\tD.BRAND_NAME,\n" +
+                    "\t\t\tD.S_NAME,\n" +
+                    "\t\t\tD.S_VAL,\n" +
+                    "\t\t\tE.FC_PRICE_OUT,\n" +
+                    "\t\t\tCEIL(( CASE B.CLC_TYPE WHEN '0' THEN B.SL ELSE B.SL * A.RG_QTY END ) / C.FC_N4 ) * C.FC_N4 SL \n" +
+                    "\t\tFROM\n" +
+                    "\t\t\tXYZS_PLAT2.XY_BJD_TEMPLATE_LIST A,\n" +
+                    "\t\t\tXYZS_PLAT2.XY_BJD_FC_MB B,\n" +
+                    "\t\t\tXYZS_PLAT2.XY_CLB_FC_DB C,\n" +
+                    "\t\t\tXYZS_PLAT2.XY_CLB_FC_BRAND D,\n" +
+                    "\t\t\tXYZS_PLAT2.XY_CLB_FC_DB_PRICE E,\n" +
+                    "\t\t\tXYZS_PLAT2.XY_MAIN_HOUSER F,\n" +
+                    "\t\t\tXYZS_PLAT2.XY_GCB_RG_VER_LIST G \n" +
+                    "\t\tWHERE\n" +
+                    "\t\t\tSUBSTR( A.RG_ID, 1, 10 ) = B.RG_CODE ";
             if (rgArray != null && rgArray.length > 0){
                 String tempVariable = "";
                 for (int i = 0; i < rgArray.length ; i++) {
@@ -121,47 +124,50 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
                         tempVariable += ",'"+rgArray[i]+"'";
                     }
                 }
-                tempSql += "\t\t\tAND A.TEMPLATE_ROWID NOT IN("+tempVariable+")\n";
+                tempSql += "\t\t\tAND A.TEMPLATE_ROWID NOT IN("+tempVariable+")";
             }
 
-            tempSql += "\t\t\tAND C.FC_CODE = D.FC_CODE\n" +
-                    "\t\t\tAND D.BRAND_ID = E.BRAND_ID\n" +
-                    "\t\t\tAND F.HOUSE_ID = A.TEMPLATE_ID\n" +
-                    "\t\t\tAND F.HOUSE_ID = '"+houseId+"'\n" +
-                    "\t\t\tAND C.FC_ISUSED = 1\n" +
-                    "\t\t\tAND D.BRAND_ISUSED = 1\n" +
+            tempSql += "\t\t\tAND C.FC_CODE = D.FC_CODE \n" +
+                    "\t\t\tAND D.BRAND_ID = E.BRAND_ID \n" +
+                    "\t\t\tAND F.HOUSE_ID = A.TEMPLATE_ID \n" +
+                    "\t\t\tAND F.HOUSE_ID = '"+houseId+"' \n" +
+                    "\t\t\tAND C.FC_ISUSED = 1 \n" +
+                    "\t\t\tAND D.BRAND_ISUSED = 1 \n" +
                     "\t\t\tAND E.FC_PRICE_ISUSED = 1 \n" +
-                    "\t\t\tAND B.FC_CODE LIKE '%' || C.FC_CODE || '%'\n" +
+                    "\t\t\tAND B.FC_CODE LIKE '%' || C.FC_CODE || '%' \n" +
                     "\t\t\tAND G.RG_VER_CODE = F.RG_VER_CODE \n" +
-                    "\t\t\tAND G.RG_ID = A.RG_ID\n" +
+                    "\t\t\tAND G.RG_ID = A.RG_ID \n" +
                     "\t\t\tAND (\n" +
-                    "\t\t\t\tD.S_NAME IS NULL\n" +
+                    "\t\t\t\tD.S_NAME IS NULL \n" +
                     "\t\t\t\tOR (\n" +
-                    "\t\t\t\t\tD.S_NAME IS NOT NULL\n" +
+                    "\t\t\t\t\tD.S_NAME IS NOT NULL \n" +
                     "\t\t\t\t\tAND EXISTS (\n" +
-                    "\t\t\t\t\t\tSELECT\n" +
-                    "\t\t\t\t\t\t\t1\n" +
-                    "\t\t\t\t\t\tFROM\n" +
-                    "\t\t\t\t\t\t\tXYZS_TEST.XY_HOUSE_FC_BRAND H\n" +
-                    "\t\t\t\t\t\tWHERE\n" +
-                    "\t\t\t\t\t\t\th.house_id = a.template_id\n" +
-                    "\t\t\t\t\t\tAND H.S_NAME = D.S_NAME\n" +
-                    "\t\t\t\t\t\tAND H.S_VAL = D.S_VAL\n" +
-                    "\t\t\t\t\t\t)))) V\n" +
-                    "\t\t\tGROUP BY\n" +
-                    "\t\t\t\tV.RG_STAGE,\n" +
-                    "\t\t\t\tV.FC_CODE,\n" +
-                    "\t\t\t\tV.FC_NAME,\n" +
-                    "\t\t\t\tV.FC_UNIT,\n" +
-                    "\t\t\t\tV.BRAND_NAME,\n" +
-                    "\t\t\t\tV.S_NAME,\n" +
-                    "\t\t\t\tV.S_VAL,\n" +
-                    "\t\t\t\tV.FC_PRICE_OUT,\n" +
-                    "\t\t\t\tV.FC_PRICE_CODE\n" +
-                    "\t\t\tHAVING SUM( V.SL ) <> 0   \n" +
-                    "\t\t\tORDER BY V.RG_STAGE,V.BRAND_NAME,V.FC_NAME  \n" +
-                    "\t\t) J \n" +
-                    "\t)";
+                    "\t\t\t\t\tSELECT\n" +
+                    "\t\t\t\t\t\t1 \n" +
+                    "\t\t\t\t\tFROM\n" +
+                    "\t\t\t\t\t\tXYZS_TEST.XY_HOUSE_FC_BRAND H \n" +
+                    "\t\t\t\t\tWHERE\n" +
+                    "\t\t\t\t\t\th.house_id = a.template_id \n" +
+                    "\t\t\t\t\t\tAND H.S_NAME = D.S_NAME \n" +
+                    "\t\t\t\t\t\tAND H.S_VAL = D.S_VAL \n" +
+                    "\t\t\t\t\t)))) V \n" +
+                    "\t\tGROUP BY\n" +
+                    "\t\t\tV.RG_SG_STAGE,\n" +
+                    "\t\t\tV.FC_CODE,\n" +
+                    "\t\t\tV.FC_NAME,\n" +
+                    "\t\t\tV.FC_UNIT,\n" +
+                    "\t\t\tV.BRAND_NAME,\n" +
+                    "\t\t\tV.S_NAME,\n" +
+                    "\t\t\tV.S_VAL,\n" +
+                    "\t\t\tV.FC_PRICE_OUT,\n" +
+                    "\t\t\tV.FC_PRICE_CODE \n" +
+                    "\t\tHAVING\n" +
+                    "\t\t\tSUM( V.SL ) <> 0 \n" +
+                    "\t\tORDER BY\n" +
+                    "\t\t\tV.RG_SG_STAGE,\n" +
+                    "\t\t\tV.BRAND_NAME,\n" +
+                    "\t\t\tV.FC_NAME \n" +
+                    ") J )";
             return tempSql;
         }
     }
