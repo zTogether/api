@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyHtInfo;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -32,4 +33,17 @@ public interface XyHtInfoMapper extends Mapper<XyHtInfo> {
             ")" +
             "</script>")
     public void addHtInfo(String ctrCode) throws SQLException;
+
+    /**
+     * 一键报价执行删除
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 9:04
+     * @param: [ctrCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_HT_INFO WHERE CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String ctrCode) throws SQLException;
 }

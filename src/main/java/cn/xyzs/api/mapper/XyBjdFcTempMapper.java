@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdFcTemp;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -73,4 +74,17 @@ public interface XyBjdFcTempMapper extends Mapper<XyBjdFcTemp>{
             ")" +
             "</script>")
     public void addAutoBjBjdFcTemp(@Param("houseId") String houseId ,@Param("ctrCode") String ctrCode) throws SQLException;
+
+    /**
+     * 一键报价删除操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 8:58
+     * @param: [ctrCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_BJD_FC_TEMP WHERE CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String ctrCode) throws SQLException;
 }

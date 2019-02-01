@@ -56,6 +56,12 @@ public class AutoBjService {
     @Resource
     private XyHouseFcBrandMapper xyHouseFcBrandMapper;
 
+    @Resource
+    private XyCustomerInfoMapper xyCustomerInfoMapper;
+
+    @Resource
+    private XyMainHouseImgMapper xyMainHouseImgMapper;
+
     /**
      * 获取一键报价首页数据
      * @Description:
@@ -341,6 +347,19 @@ public class AutoBjService {
         String msg = "系统异常";
         try {
             String bjdCode = ctrCode + "01";
+
+            //一键报价执行删除
+            if(!"".equals(ctrCode) && !"null".equals(ctrCode) && ctrCode != null && !"undefined".equals(ctrCode)){
+                xyBjdFcListMapper.autoBjDelete(bjdCode);
+                xyBjdFcTempMapper.autoBjDelete(ctrCode);
+                xyBjdRgListMapper.autoBjDelete(bjdCode);
+                xyClbZcpbListMapper.autoBjDelete(ctrCode);
+                xyClbZcpbMainMapper.autoBjDelete(ctrCode);
+                xyBjdStageMapper.autoBjDelete(bjdCode);
+                xyBjdMainMapper.autoBjDelete(bjdCode);
+                xyHtInfoMapper.autoBjDelete(ctrCode);
+            }
+
             //一键报价添加辅材
             xyBjdFcListMapper.addAutoBjFc(bjdCode,houseId,rgArray);
             xyBjdFcTempMapper.addAutoBjBjdFcTemp(houseId,ctrCode);
@@ -452,5 +471,101 @@ public class AutoBjService {
         System.out.println("获取客户端ip: " + ip);
         return ip;
     }
+
+    /**
+     * 一键报价根据userId获取客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:37
+     * @param: [userId, roleId, startNum, endNum, roleType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String, Object> getCustomerInfoByUserId(String userId, String roleId, String startNum, String endNum, String roleType) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String, Object>> CustomerInfoList = null;
+            if ("E".equals(roleType)) {
+                CustomerInfoList = xyCustomerInfoMapper.autoBjGetCustomerInfoByRoleTypeE(userId, startNum, endNum);
+            } else if ("R".equals(roleType)) {
+                CustomerInfoList = xyCustomerInfoMapper.autoBjGetCustomerInfoByRoleTypeR(userId, roleId, startNum, endNum);
+            }
+            obj.put("CustomerInfoList", CustomerInfoList);
+            code = "200";
+            msg = "成功";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code", code);
+            resultMap.put("msg", msg);
+            resultMap.put("resultData", obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 一键报价根据userId和条件获取客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:41
+     * @param: [userId, condition, roleType, roleId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String, Object> getCuntomerInfoByCondition(String userId, String condition, String roleType, String roleId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String, Object>> CustomerInfoList = null;
+            if ("E".equals(roleType)) {
+                CustomerInfoList = xyCustomerInfoMapper.autoBjGetECuntomerInfoByCondition(userId, condition);
+            } else {
+                CustomerInfoList = xyCustomerInfoMapper.autoBjGetRCuntomerInfoByCondition(userId, condition, roleId);
+            }
+            code = "200";
+            msg = "成功";
+            obj.put("CustomerInfoList", CustomerInfoList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code", code);
+            resultMap.put("msg", msg);
+            resultMap.put("resultData", obj);
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据houseId获取图片集合
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 17:26
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    public Map<String, Object> getHouseImgListByHouseId(String houseId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> obj = new HashMap<>();
+        String code = "500";
+        String msg = "系统异常";
+        try {
+            List<Map<String ,Object>> houseImgList = xyMainHouseImgMapper.getHouseImgListByHouseId(houseId);
+            code = "200";
+            msg = "成功";
+            obj.put("houseImgList", houseImgList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            resultMap.put("code", code);
+            resultMap.put("msg", msg);
+            resultMap.put("resultData", obj);
+        }
+        return resultMap;
+    }
+
+
 
 }

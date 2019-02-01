@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdRgList;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -96,4 +97,17 @@ public interface XyBjdRgListMapper extends Mapper<XyBjdRgList> {
             return tempSql;
         }
     }
+
+    /**
+     * 一键报价执行删除操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 8:59
+     * @param: [bjdCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_BJD_RG_LIST WHERE BJD_CODE = #{bjdCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String bjdCode) throws SQLException;
 }

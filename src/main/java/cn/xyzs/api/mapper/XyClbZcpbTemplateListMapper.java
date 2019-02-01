@@ -36,6 +36,7 @@ public interface XyClbZcpbTemplateListMapper extends Mapper<XyClbZcpbTemplateLis
             "\t\tZCPB_ZC_CODE <![CDATA[<>]]> '0'\n" +
             "\tAND\n" +
             "\t\tSUBSTR(ZCPB_ZC_CODE, 1, 1) = #{acOrRzFlag,jdbcType=VARCHAR}\t\n" +
+            "\tORDER BY A.ZCPB_AREA\n" +
             "</script>")
     public List<Map<String ,Object>> getMbZcOrRzList(@Param("houseId") String houseId ,@Param("acOrRzFlag") String acOrRzFlag ) throws SQLException;
 

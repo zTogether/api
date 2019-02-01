@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdMain;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -126,4 +127,17 @@ public interface XyBjdMainMapper extends Mapper<XyBjdMain>{
             "\t\t)" +
             "</script>")
     public void addAutoBjdMain(XyBjdMain xyBjdMain) throws SQLException;
+
+    /**
+     * 一键报价删除操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 9:02
+     * @param: [bjdCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_BJD_MAIN WHERE BJD_CODE = #{bjdCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String bjdCode) throws SQLException;
 }

@@ -124,11 +124,8 @@ public interface XyInfoManageConstrMapper extends Mapper<XyInfoManageConstr> {
     String userTel(@Param("userId") String userId)throws SQLException;
 
     @Select("<script>" +
-            "SELECT * FROM\n" +
-            "(SELECT XH FROM XY_INFOMANAGE_COMP \n" +
+            "SELECT nvl(max(XH),'0') FROM XY_INFOMANAGE_COMP \n" +
             "WHERE CTR_CODE=#{ctrCode,jdbcType=VARCHAR}\n" +
-            "ORDER BY XH DESC)\n" +
-            "WHERE ROWNUM &lt; 2" +
             "</script>")
     String getCompNum(@Param("ctrCode") String ctrCode)throws SQLException;
 

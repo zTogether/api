@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdStage;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.InsertProvider;
 import tk.mybatis.mapper.common.Mapper;
@@ -55,13 +56,13 @@ public interface XyBjdStageMapper extends Mapper<XyBjdStage> {
                     "\t\t\t\tE.FC_PRICE_OUT,\n" +
                     "\t\t\t\tCEIL(( CASE B.CLC_TYPE  WHEN '0' THEN B.SL ELSE B.SL * A.RG_QTY END ) / C.FC_N4 ) * C.FC_N4 SL   \n" +
                     "\t\t\tFROM\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_BJD_TEMPLATE_LIST A,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_BJD_FC_MB B,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_CLB_FC_DB C,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_CLB_FC_BRAND D,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_CLB_FC_DB_PRICE E,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_MAIN_HOUSER F,\n" +
-                    "\t\t\t\tXYZS_PLAT2.XY_GCB_RG_VER_LIST G\n" +
+                    "\t\t\t\tXY_BJD_TEMPLATE_LIST A,\n" +
+                    "\t\t\t\tXY_BJD_FC_MB B,\n" +
+                    "\t\t\t\tXY_CLB_FC_DB C,\n" +
+                    "\t\t\t\tXY_CLB_FC_BRAND D,\n" +
+                    "\t\t\t\tXY_CLB_FC_DB_PRICE E,\n" +
+                    "\t\t\t\tXY_MAIN_HOUSER F,\n" +
+                    "\t\t\t\tXY_GCB_RG_VER_LIST G\n" +
                     "\t\t\tWHERE SUBSTR( A.RG_ID, 1, 10 ) = B.RG_CODE";
             if (rgArray != null && rgArray.length > 0){
                 String tempVariable = "";
@@ -92,7 +93,7 @@ public interface XyBjdStageMapper extends Mapper<XyBjdStage> {
                     "\t\t\t\t\t\tSELECT\n" +
                     "\t\t\t\t\t\t\t1\n" +
                     "\t\t\t\t\t\tFROM\n" +
-                    "\t\t\t\t\t\t\tXYZS_TEST.XY_HOUSE_FC_BRAND H\n" +
+                    "\t\t\t\t\t\t\tXY_HOUSE_FC_BRAND H\n" +
                     "\t\t\t\t\t\tWHERE h.house_id = a.template_id\n" +
                     "\t\t\t\t\t\tAND H.S_NAME = D.S_NAME\n" +
                     "\t\t\t\t\t\tAND H.S_VAL = D.S_VAL )))) V\n" +
@@ -146,4 +147,17 @@ public interface XyBjdStageMapper extends Mapper<XyBjdStage> {
             return tempSql;
         }
     }
+
+    /**
+     * 一键报价删除操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 9:02
+     * @param: [bjdCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_BJD_STAGE WHERE BJD_CODE = #{bjdCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String bjdCode) throws SQLException;
 }

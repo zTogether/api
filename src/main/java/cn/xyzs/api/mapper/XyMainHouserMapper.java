@@ -48,7 +48,8 @@ public interface XyMainHouserMapper extends Mapper<XyMainHouser> {
                                               Integer startNum, Integer endNum){
             String tempSql = "SELECT J.*  FROM ( SELECT H.*, ROWNUM RN  FROM (";
             tempSql += new SQL(){{
-                SELECT("A.HOUSE_ID,\n" +
+                SELECT("( SELECT Z.IMG_URL FROM XY_MAIN_HOUSE_IMG Z WHERE Z.HOUSE_ID = A.HOUSE_ID AND ROWNUM = 1 ) HOUSE_IMG," +
+                        "\tA.HOUSE_ID,\n" +
                         "\tA.HOUSE_TYPE_ID,\n" +
                         "\tB.HOUSE_TYPE_NAME HOUSE_TYPE_NAME,\n" +
                         "\tA.CAD_COMMON_URL,\n" +

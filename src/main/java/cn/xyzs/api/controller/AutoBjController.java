@@ -132,4 +132,46 @@ public class AutoBjController {
         return autoBjService.getFcBrandByHouseId(xyHouseFcBrand);
     }
 
+    /**
+     * 一键报价根据userId获取客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:37
+     * @param: [userId, roleId, startNum, endNum, roleType]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getCustomerInfoByUserId")
+    public Map<String, Object> getCustomerInfoByUserId(String userId, String roleId, String startNum, String endNum, String roleType) {
+        return autoBjService.getCustomerInfoByUserId(userId,roleId,startNum,endNum,roleType);
+    }
+
+    /**
+     * 一键报价根据userId和条件获取客户
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:41
+     * @param: [userId, condition, roleType, roleId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getCuntomerInfoByCondition")
+    public Map<String, Object> getCuntomerInfoByCondition(String userId, String condition, String roleType, String roleId) {
+        return autoBjService.getCuntomerInfoByCondition(userId,condition,roleType,roleId);
+    }
+
+    /**
+     * 根据houseId获取图片集合
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 17:26
+     * @param: [userId]
+     * @return: java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @ResponseBody
+    @RequestMapping("/getHouseImgListByHouseId")
+    public Map<String, Object> getHouseImgListByHouseId(String houseId) {
+        return autoBjService.getHouseImgListByHouseId(houseId);
+    }
+
 }

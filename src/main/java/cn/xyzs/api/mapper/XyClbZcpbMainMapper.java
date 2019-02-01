@@ -1,6 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyClbZcpbMain;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -27,4 +28,17 @@ public interface XyClbZcpbMainMapper extends Mapper<XyClbZcpbMain> {
             ")" +
             "</script>")
     public void addAutoBjZcpbMain(XyClbZcpbMain xyClbZcpbMain) throws SQLException;
+
+    /**
+     * 一键报价删除操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 9:01
+     * @param: [ctrCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_CLB_ZCPB_MAIN WHERE CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String ctrCode) throws SQLException;
 }

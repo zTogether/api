@@ -1,10 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyClbZcpbList;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -147,5 +144,18 @@ public interface XyClbZcpbListMapper extends Mapper<XyClbZcpbList> {
             return tempSql;
         }
     }
+
+    /**
+     * 一键报价删除操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 9:01
+     * @param: [ctrCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_CLB_ZCPB_LIST WHERE CTR_CODE = #{ctrCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String ctrCode) throws SQLException;
 
 }

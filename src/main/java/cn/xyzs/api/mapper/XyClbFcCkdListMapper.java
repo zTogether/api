@@ -39,7 +39,8 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
             "\txcfcl.FC_MARK, \n" +
             "\txcfcl.FC_ISWC, \n" +
             "\txcfcl.FC_ISEDIT, \n" +
-            "\txcfcl.FC_PRINT_GROUP\n" +
+            "\txcfcl.FC_PRINT_GROUP, \n" +
+            "\t(SELECT A.FC_SPEC FROM XY_CLB_FC_DB A WHERE A.FC_CODE = SUBSTR(xcfcl.FC_PRICE_ID, 1, 10)) FC_SPEC\n" +
             "FROM\n" +
             "\tXY_CLB_FC_CKD_LIST xcfcl\t\n" +
             "WHERE\n" +
@@ -100,6 +101,7 @@ public interface XyClbFcCkdListMapper extends Mapper<XyClbFcCkdList> {
      */
     @Select("<script>" +
             "SELECT B.FC_PRICE_ID,\n" +
+            "\t\t(SELECT C.FC_SPEC FROM XY_CLB_FC_DB C WHERE C.FC_CODE = SUBSTR(B.FC_PRICE_ID, 1, 10)) FC_SPEC,\n" +
             "\t\tB.FC_NAME,\n" +
             "\t\tB.FC_PP,\n" +
             "\t\tB.FC_UNIT,\n" +

@@ -1,10 +1,7 @@
 package cn.xyzs.api.mapper;
 
 import cn.xyzs.common.pojo.XyBjdFcList;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.sql.SQLException;
@@ -106,13 +103,13 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
                     "\t\t\tE.FC_PRICE_OUT,\n" +
                     "\t\t\tCEIL(( CASE B.CLC_TYPE WHEN '0' THEN B.SL ELSE B.SL * A.RG_QTY END ) / C.FC_N4 ) * C.FC_N4 SL \n" +
                     "\t\tFROM\n" +
-                    "\t\t\tXYZS_PLAT2.XY_BJD_TEMPLATE_LIST A,\n" +
-                    "\t\t\tXYZS_PLAT2.XY_BJD_FC_MB B,\n" +
-                    "\t\t\tXYZS_PLAT2.XY_CLB_FC_DB C,\n" +
-                    "\t\t\tXYZS_PLAT2.XY_CLB_FC_BRAND D,\n" +
-                    "\t\t\tXYZS_PLAT2.XY_CLB_FC_DB_PRICE E,\n" +
-                    "\t\t\tXYZS_PLAT2.XY_MAIN_HOUSER F,\n" +
-                    "\t\t\tXYZS_PLAT2.XY_GCB_RG_VER_LIST G \n" +
+                    "\t\t\tXY_BJD_TEMPLATE_LIST A,\n" +
+                    "\t\t\tXY_BJD_FC_MB B,\n" +
+                    "\t\t\tXY_CLB_FC_DB C,\n" +
+                    "\t\t\tXY_CLB_FC_BRAND D,\n" +
+                    "\t\t\tXY_CLB_FC_DB_PRICE E,\n" +
+                    "\t\t\tXY_MAIN_HOUSER F,\n" +
+                    "\t\t\tXY_GCB_RG_VER_LIST G \n" +
                     "\t\tWHERE\n" +
                     "\t\t\tSUBSTR( A.RG_ID, 1, 10 ) = B.RG_CODE ";
             if (rgArray != null && rgArray.length > 0){
@@ -145,7 +142,7 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
                     "\t\t\t\t\tSELECT\n" +
                     "\t\t\t\t\t\t1 \n" +
                     "\t\t\t\t\tFROM\n" +
-                    "\t\t\t\t\t\tXYZS_TEST.XY_HOUSE_FC_BRAND H \n" +
+                    "\t\t\t\t\t\tXY_HOUSE_FC_BRAND H \n" +
                     "\t\t\t\t\tWHERE\n" +
                     "\t\t\t\t\t\th.house_id = a.template_id \n" +
                     "\t\t\t\t\t\tAND H.S_NAME = D.S_NAME \n" +
@@ -171,4 +168,17 @@ public interface XyBjdFcListMapper extends Mapper<XyBjdFcList> {
             return tempSql;
         }
     }
+
+    /**
+     * 一键报价删除操作
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 8:57
+     * @param: [bjdCode]
+     * @return: void
+     */
+    @Delete("<script>" +
+            "DELETE FROM XY_BJD_FC_LIST WHERE BJD_CODE = #{bjdCode,jdbcType=VARCHAR}" +
+            "</script>")
+    public void autoBjDelete(String bjdCode) throws SQLException;
 }

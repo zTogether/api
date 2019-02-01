@@ -724,4 +724,291 @@ public interface XyCustomerInfoMapper extends Mapper<XyCustomerInfo> {
             "SELECT COUNT(1) FROM XY_CUSTOMER_INFO WHERE CTR_ADDR = #{ctrAddr,jdbcType=VARCHAR}" +
             "</script>")
     public Integer existsByCtrAddr(String ctrAddr) throws SQLException;
+
+    /**
+     * 一键报价查询客户（E类型）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:07
+     * @param: [userId, startNum, endNum]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT J.*  FROM ( SELECT H.*, ROWNUM RN \n" +
+            "FROM ( \n" +
+            "\tSELECT DISTINCT\n" +
+            "\t\tA.*\n" +
+            "\tFROM (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tT.CTR_CODE,\n" +
+            "\t\t\tT.CTR_NAME,\n" +
+            "\t\t\tT.CTR_TEL,\n" +
+            "\t\t\tT.CTR_ADDR,\n" +
+            "\t\t\tT.CTR_CRT_DATE,\n" +
+            "\t\t\tT.CTR_CARDID,\n" +
+            "\t\t\tT.CTR_AREA,\n" +
+            "\t\t\tU1.USER_NAME JDRY_NAME,\n" +
+            "\t\t\tU2.USER_NAME SJS_NAME,\n" +
+            "\t\t\tU3.USER_NAME GCJL_NAME,\n" +
+            "\t\t\tU4.USER_NAME CLDD_NAME,\n" +
+            "\t\t\to1.org_name FWJG,\n" +
+            "\t\t\to2.org_name SGJG \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CUSTOMER_INFO T\n" +
+            "\t\t\tLEFT JOIN XY_USER U1 ON T.CTR_WAITER = U1.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U2 ON T.Ctr_Sjs = U2.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U3 ON T.Ctr_Gcjl = U3.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U4 ON T.Ctr_Cldd = U4.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
+            "\t\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tT.CTR_WAITER = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_SJS = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_GCJL = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_CLDD = #{userId,jdbcType=VARCHAR}\n" +
+            "\t) A\n" +
+            "\tLEFT JOIN XY_BJD_MAIN B\n" +
+            "\tON A.CTR_CODE = B.CTR_CODE\n" +
+            "\tWHERE B.BJD_STAGE <![CDATA[<>]]> '3'\n" +
+            "\t) H  \n" +
+            ")J\n" +
+            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> autoBjGetCustomerInfoByRoleTypeE(@Param("userId") String userId,
+                                                                      @Param("startNum") String startNum,
+                                                                      @Param("endNum") String endNum) throws SQLException;
+
+    /**
+     * 一键报价查询客户（R类型）
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:08
+     * @param: []
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT J.*  FROM ( SELECT H.*, ROWNUM RN \n" +
+            "FROM ( \n" +
+            "\tSELECT\n" +
+            "\t\tT.CTR_CODE,\n" +
+            "\t\tT.CTR_NAME,\n" +
+            "\t\tT.CTR_TEL,\n" +
+            "\t\tT.CTR_ADDR,\n" +
+            "\t\tT.CTR_CRT_DATE,\n" +
+            "\t\tT.CTR_CARDID,\n" +
+            "\t\tT.CTR_AREA,\n" +
+            "\t\tU1.USER_NAME JDRY_NAME,\n" +
+            "\t\tU2.USER_NAME SJS_NAME,\n" +
+            "\t\tU3.USER_NAME GCJL_NAME,\n" +
+            "\t\tU4.USER_NAME CLDD_NAME,\n" +
+            "\t\to1.org_name FWJG,\n" +
+            "\t\to2.org_name SGJG \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO T\n" +
+            "\t\tLEFT JOIN XY_USER U1 ON T.CTR_WAITER = U1.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U2 ON T.Ctr_Sjs = U2.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U3 ON T.Ctr_Gcjl = U3.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U4 ON T.Ctr_Cldd = U4.USER_ID\n" +
+            "\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
+            "\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE\n" +
+            "\t\tLEFT JOIN XY_BJD_MAIN A ON T.CTR_CODE||'01' = A.BJD_CODE\n" +
+            "\tWHERE\n" +
+            "\t\tA.BJD_STAGE <![CDATA[<>]]> '3'\n" +
+            "\tAND (\n" +
+            "\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId,jdbcType=VARCHAR} ) \n" +
+            "\t\t\tAND (\n" +
+            "\t\t\t\tEXISTS (\n" +
+            "\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t1 \n" +
+            "\t\t\t\tFROM\n" +
+            "\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\tWHERE\n" +
+            "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND T.CTR_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t\tOR EXISTS (\n" +
+            "\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t1 \n" +
+            "\t\t\t\tFROM\n" +
+            "\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\tWHERE\n" +
+            "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND T.CTR_PRO_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t) \n" +
+            "\t\t) \n" +
+            "\t\tOR EXISTS (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\t1 \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_USER_RELATION D \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tD.LEADER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\tAND (\n" +
+            "\t\t\t\tD.FOLLOWER_ID = T.CTR_WAITER \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_SJS \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_GCJL \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_CLDD \n" +
+            "\t\t\t) \n" +
+            "\t\t)\n" +
+            "\t) H  \n" +
+            ")J\n" +
+            "WHERE RN BETWEEN #{startNum,jdbcType=VARCHAR} AND #{endNum,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> autoBjGetCustomerInfoByRoleTypeR(@Param("userId") String userId, @Param("roleId") String roleId,
+                                            @Param("startNum") String startNum,
+                                            @Param("endNum") String endNum) throws SQLException;
+
+    /**
+     * 一键报价根据条件获取用户(E类型)
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:29
+     * @param: [userId, condition]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tA.*\n" +
+            "\tFROM (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tT.CTR_CODE,\n" +
+            "\t\t\tT.CTR_NAME,\n" +
+            "\t\t\tT.CTR_TEL,\n" +
+            "\t\t\tT.CTR_ADDR,\n" +
+            "\t\t\tT.CTR_CRT_DATE,\n" +
+            "\t\t\tT.CTR_CARDID,\n" +
+            "\t\t\tT.CTR_AREA,\n" +
+            "\t\t\tU1.USER_NAME JDRY_NAME,\n" +
+            "\t\t\tU2.USER_NAME SJS_NAME,\n" +
+            "\t\t\tU3.USER_NAME GCJL_NAME,\n" +
+            "\t\t\tU4.USER_NAME CLDD_NAME,\n" +
+            "\t\t\to1.org_name FWJG,\n" +
+            "\t\t\to2.org_name SGJG \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_CUSTOMER_INFO T\n" +
+            "\t\t\tLEFT JOIN XY_USER U1 ON T.CTR_WAITER = U1.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U2 ON T.Ctr_Sjs = U2.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U3 ON T.Ctr_Gcjl = U3.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_USER U4 ON T.Ctr_Cldd = U4.USER_ID\n" +
+            "\t\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
+            "\t\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tT.CTR_WAITER = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_SJS = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_GCJL = #{userId,jdbcType=VARCHAR}\n" +
+            "\t\t\tOR T.CTR_CLDD = #{userId,jdbcType=VARCHAR}\n" +
+            "\t) A\n" +
+            "\tLEFT JOIN XY_BJD_MAIN B\n" +
+            "\tON A.CTR_CODE||'01' = B.BJD_CODE\n" +
+            "\tWHERE B.BJD_STAGE <![CDATA[<>]]> '3'\n" +
+            "\t) A \n" +
+            "WHERE\n" +
+            "\tA.CTR_CODE = #{condition,jdbcType=VARCHAR}\n" +
+            "\tOR A.CTR_NAME = #{condition,jdbcType=VARCHAR}\n" +
+            "\tOR A.CTR_TEL = #{condition,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> autoBjGetECuntomerInfoByCondition(@Param("userId") String userId,
+                                                                       @Param("condition") String condition) throws SQLException;
+
+    /**
+     * 一键报价根据条件获取用户(R类型)
+     * @Description:
+     * @author: zheng shuai
+     * @date: 2019/1/30 16:34
+     * @param: [userId, condition, roleId]
+     * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    @Select("<script>" +
+            "SELECT\n" +
+            "\t* \n" +
+            "FROM\n" +
+            "\t(\n" +
+            "\tSELECT\n" +
+            "\t\tT.CTR_CODE,\n" +
+            "\t\tT.CTR_NAME,\n" +
+            "\t\tT.CTR_TEL,\n" +
+            "\t\tT.CTR_ADDR,\n" +
+            "\t\tT.CTR_CRT_DATE,\n" +
+            "\t\tT.CTR_CARDID,\n" +
+            "\t\tT.CTR_AREA,\n" +
+            "\t\tU1.USER_NAME JDRY_NAME,\n" +
+            "\t\tU2.USER_NAME SJS_NAME,\n" +
+            "\t\tU3.USER_NAME GCJL_NAME,\n" +
+            "\t\tU4.USER_NAME CLDD_NAME,\n" +
+            "\t\to1.org_name FWJG,\n" +
+            "\t\to2.org_name SGJG \n" +
+            "\tFROM\n" +
+            "\t\tXY_CUSTOMER_INFO T\n" +
+            "\t\tLEFT JOIN XY_USER U1 ON T.CTR_WAITER = U1.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U2 ON T.Ctr_Sjs = U2.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U3 ON T.Ctr_Gcjl = U3.USER_ID\n" +
+            "\t\tLEFT JOIN XY_USER U4 ON T.Ctr_Cldd = U4.USER_ID\n" +
+            "\t\tLEFT JOIN XY_ORG O1 ON T.CTR_ORG = O1.ORG_CODE\n" +
+            "\t\tLEFT JOIN XY_ORG O2 ON T.Ctr_Pro_Org = O2.ORG_CODE\n" +
+            "\t\tLEFT JOIN XY_BJD_MAIN A ON T.CTR_CODE||'01' = A.BJD_CODE\n" +
+            "\tWHERE\n" +
+            "\t\tA.BJD_STAGE <![CDATA[<>]]> '3'\n" +
+            "\tAND (\n" +
+            "\t\t\tNOT EXISTS ( SELECT 1 FROM XY_USER_RELATION C WHERE C.LEADER_ID = #{userId,jdbcType=VARCHAR} ) \n" +
+            "\t\t\tAND (\n" +
+            "\t\t\t\tEXISTS (\n" +
+            "\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t1 \n" +
+            "\t\t\t\tFROM\n" +
+            "\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\tWHERE\n" +
+            "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND T.CTR_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t\tOR EXISTS (\n" +
+            "\t\t\t\tSELECT\n" +
+            "\t\t\t\t\t1 \n" +
+            "\t\t\t\tFROM\n" +
+            "\t\t\t\t\tXY_USER_ROLE_ORG A,\n" +
+            "\t\t\t\t\tXY_USER_ROLE B \n" +
+            "\t\t\t\tWHERE\n" +
+            "\t\t\t\t\tA.UR_ID = B.UR_ID \n" +
+            "\t\t\t\t\tAND B.USER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND B.ROLE_ID = #{roleId,jdbcType=VARCHAR} \n" +
+            "\t\t\t\t\tAND T.CTR_PRO_ORG LIKE A.ORG_CODE || '%' \n" +
+            "\t\t\t\t) \n" +
+            "\t\t\t) \n" +
+            "\t\t) \n" +
+            "\t\tOR EXISTS (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\t1 \n" +
+            "\t\tFROM\n" +
+            "\t\t\tXY_USER_RELATION D \n" +
+            "\t\tWHERE\n" +
+            "\t\t\tD.LEADER_ID = #{userId,jdbcType=VARCHAR} \n" +
+            "\t\t\tAND (\n" +
+            "\t\t\t\tD.FOLLOWER_ID = T.CTR_WAITER \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_SJS \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_GCJL \n" +
+            "\t\t\t\tOR D.FOLLOWER_ID = T.CTR_CLDD \n" +
+            "\t\t\t) \n" +
+            "\t\t)\n" +
+            "\t) temptable \n" +
+            "WHERE\n" +
+            "\ttemptable.CTR_CODE = #{condition,jdbcType=VARCHAR}\n" +
+            "\tOR temptable.CTR_NAME = #{condition,jdbcType=VARCHAR}\n" +
+            "\tOR temptable.CTR_TEL = #{condition,jdbcType=VARCHAR}" +
+            "</script>")
+    public List<Map<String ,Object>> autoBjGetRCuntomerInfoByCondition(@Param("userId") String userId,
+                                                                       @Param("condition") String condition,
+                                                                       @Param("roleId") String roleId) throws SQLException;
 }
